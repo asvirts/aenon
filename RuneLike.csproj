@@ -1,0 +1,10 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AssemblyName>RuneLike</AssemblyName>
+    <RootNamespace>RuneLike</RootNamespace>
+    <BaseOutputPath>$(ProjectDir).godot/mono/temp/bin</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(ProjectDir).godot/mono/temp/obj</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

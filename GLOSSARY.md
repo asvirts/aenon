@@ -34,11 +34,23 @@ _Avoid_: hero, disciple, chosen one
 A person in a settlement who buys goods and sells supplies and gear.
 _Avoid_: merchant, shopkeeper
 
+**Biblical figure**:
+John, Jesus, someone in the traveling company, or another person the Gospels place in an episode. An ordinary person is not a biblical figure.
+_Avoid_: NPC, quest giver
+
+**Traveling company**:
+The Twelve, Mary Magdalene, Joanna, and Susanna, who are with Jesus.
+_Avoid_: party, entourage
+
 ## Encounters
 
 **Set scene**:
 An encounter with a biblical figure whose outcome is the one the Gospel tells. It plays once in the Season, and only as a quest's attend step.
 _Avoid_: cutscene, quest giver
+
+**Acquaintance**:
+A wilderness meeting with Jesus and the traveling company, marked by one encouraging line from him.
+_Avoid_: set scene, quest
 
 **Quest**:
 Work given by one ordinary person in a settlement, made of ordered steps in that settlement's level band. It is once or repeatable.

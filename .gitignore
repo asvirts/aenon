@@ -4,3 +4,5 @@
 # NOTE: RuneLike.sln/.csproj ARE committed so anyone can `dotnet build` right after clone.
 # OS
 .DS_Store
+# Node
+node_modules/

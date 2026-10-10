@@ -11,10 +11,18 @@ export type Hostile = {
   defeatGrant: number
 }
 
+export type ScriptureObject = {
+  id: string
+  placeId: string
+  reference: string
+  scriptureExperience: number
+}
+
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
   hostiles: readonly Hostile[]
+  scriptureObjects: readonly ScriptureObject[]
 }
 
 export type ExperienceCurve = (experience: number) => number

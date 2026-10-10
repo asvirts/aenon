@@ -49,8 +49,12 @@ The Adventurer's list of started quests, each with one current line.
 _Avoid_: reference journal, quest log
 
 **Adventurer level**:
-The Adventurer's level from once-quest experience, beside the fourteen skills. The level bands are successive spans of it.
+The level shared by the four combat skills. The level bands are successive spans of it. It rises from once quests, defeats, and a smaller grant for the other ten skills, inside the place's band, except a first Scripture reading, which pays at any level.
 _Avoid_: skill, skill level, level band, total level
+
+**Combat skill**:
+Attack, Strength, Defence, or Hitpoints. Each is the Adventurer level.
+_Avoid_: stance, combat style
 
 **Scripture object**:
 A period object or person tied to an NIV passage the Adventurer can read.
@@ -109,12 +113,12 @@ _Avoid_: blueprint, scroll
 ## Skills
 
 **Skill**:
-A discipline the Adventurer trains by doing it. The skills are Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking.
+One of the fourteen disciplines: Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking. The four combat skills are the Adventurer level. The other ten rise by doing the work.
 _Avoid_: profession, stat, Crafting, Smithing
 
 **Skill level**:
-How far the Adventurer has trained one skill.
-_Avoid_: Adventurer level, level band
+The level of one skill. A combat skill's level is the Adventurer level. Any other skill's level is how far the Adventurer has trained it.
+_Avoid_: level band
 
 **Hunting**:
 The gather of meat, hide, and bone from a wild animal.

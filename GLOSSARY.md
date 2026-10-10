@@ -66,6 +66,10 @@ _Avoid_: equipment, loadout, item
 Weapon, shield, head, body, legs, or feet.
 _Avoid_: paperdoll, equipment slot
 
+**Weapon kind**:
+Sword or mace, each one-handed or two-handed.
+_Avoid_: weapon class
+
 **Armor weight**:
 Heavy, medium, or cloth, worn on head, body, legs, and feet.
 _Avoid_: armor class, tier
@@ -75,12 +79,28 @@ The extra a legendary piece carries beyond its Strength or Defence.
 _Avoid_: proc, enchantment, affix
 
 **Rarity**:
-One of five grades of gear or a special find: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).
+One of five grades of gear, a special find, fish, or food: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).
 _Avoid_: quality, tier
+
+**Special find**:
+A legendary material of one level band, distinct from fish and from gear.
+_Avoid_: token, reagent
 
 **Everyday good**:
 A tradable good with no rarity.
 _Avoid_: common, gear, white item
+
+**Fish**:
+A catch with a rarity.
+_Avoid_: food
+
+**Food**:
+A meal made from fish, meat, and herbs, carrying the fish's rarity.
+_Avoid_: potion, ration
+
+**Recipe**:
+A known pattern for one piece of gear or one food.
+_Avoid_: blueprint, scroll
 
 ## Skills
 

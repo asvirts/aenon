@@ -100,7 +100,7 @@ _Avoid_: armor class, tier
 
 **Special effect**:
 The extra a legendary piece carries beyond its Strength or Defence.
-_Avoid_: proc, enchantment, affix
+_Avoid_: proc, enchantment, affix, meal buff
 
 **Rarity**:
 One of five grades of gear, a special find, fish, or food: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).
@@ -119,8 +119,12 @@ A catch with a rarity.
 _Avoid_: food
 
 **Food**:
-A meal made from fish, meat, and herbs, carrying the fish's rarity.
+A meal made from fish, meat, and herbs, carrying the fish's rarity. A legendary meal also carries a meal buff.
 _Avoid_: potion, ration
+
+**Meal buff**:
+The temporary extra a legendary meal grants when eaten: added Defence the fight reads, or a faster walk.
+_Avoid_: potion, special effect
 
 **Recipe**:
 A known pattern for one piece of gear or one food.

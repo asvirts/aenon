@@ -44,6 +44,32 @@ export type Spot = {
   skillExperience: number
 }
 
+export type Person = {
+  id: string
+  placeId: string
+  kind: "ordinary" | "biblical-figure"
+  vendor?: boolean
+}
+
+export type QuestStep =
+  | { kind: "hold"; goodId: string; count: number; line: string }
+  | { kind: "return"; goodId: string; count: number; line: string }
+
+export type QuestDefinition = {
+  id: string
+  giverId: string
+  repeatable: boolean
+  finishedLine: string
+  requiredQuestIds?: readonly string[]
+  adventurerLevel?: number
+  skills?: readonly { skill: string; level: number }[]
+  steps: readonly QuestStep[]
+  reward: {
+    coin: number
+    goods: readonly { id: string; count: number }[]
+  }
+}
+
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
@@ -52,6 +78,8 @@ export type SeasonDefinition = {
   scriptureObjects: readonly ScriptureObject[]
   packSize: number
   spots: readonly Spot[]
+  people?: readonly Person[]
+  quests?: readonly QuestDefinition[]
 }
 
 export type ExperienceCurve = (experience: number) => number

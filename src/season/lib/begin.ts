@@ -1,5 +1,5 @@
 import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
-import type { ExperienceCurve, PackEntry } from "./types.ts"
+import type { ExperienceCurve, LevelBand, PackEntry } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -45,6 +45,20 @@ export type ReferenceFiling = {
   bibleId: typeof nivBibleId
 }
 
+export type QuestProgress = {
+  questId: string
+  stepIndex: number
+  finished: boolean
+  finishedOnce: boolean
+}
+
+export type QuestJournalEntry = {
+  questId: string
+  band: LevelBand
+  line: string
+  finished: boolean
+}
+
 export type SeasonState = {
   placeId: string
   adventurerExperience: number
@@ -60,7 +74,7 @@ export type SeasonState = {
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
-  questJournal: readonly []
+  questProgress: readonly QuestProgress[]
 }
 
 export type Adventurer = {
@@ -80,7 +94,7 @@ export type Adventurer = {
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
-  questJournal: readonly []
+  questJournal: readonly QuestJournalEntry[]
 }
 
 function emptyWorn(): Record<GearSlot, null> {
@@ -109,11 +123,15 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     mealBuff: null,
     referenceJournal: [],
     playedSetScenes: [],
-    questJournal: [],
+    questProgress: [],
   }
 }
 
-export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): Adventurer {
+export function presentAdventurer(
+  state: SeasonState,
+  curve: ExperienceCurve,
+  questJournal: readonly QuestJournalEntry[],
+): Adventurer {
   const adventurerLevel = readAdventurerLevel(curve, state.adventurerExperience)
   const combatLevels = {} as Record<CombatSkill, number>
   for (const skill of combatSkills) combatLevels[skill] = adventurerLevel
@@ -140,7 +158,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     mealBuff: state.mealBuff,
     referenceJournal: state.referenceJournal.map((filing) => ({ ...filing })),
     playedSetScenes: [...state.playedSetScenes],
-    questJournal: [...state.questJournal],
+    questJournal: questJournal.map((entry) => ({ ...entry })),
   }
 }
 

@@ -1,4 +1,4 @@
-import { readAdventurerLevel } from "./experience.ts"
+import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
 import type { ExperienceCurve } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
@@ -38,6 +38,13 @@ export type Fight = {
 
 export type Outing = "open" | "closed"
 
+export const nivBibleId = 111 as const
+
+export type ReferenceFiling = {
+  reference: string
+  bibleId: typeof nivBibleId
+}
+
 export type SeasonState = {
   placeId: string
   adventurerExperience: number
@@ -51,7 +58,7 @@ export type SeasonState = {
   fight: Fight | null
   fallenHostiles: readonly string[]
   mealBuff: null
-  referenceJournal: readonly []
+  referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
   questJournal: readonly []
 }
@@ -71,7 +78,7 @@ export type Adventurer = {
   fight: Fight | null
   fallenHostiles: readonly string[]
   mealBuff: null
-  referenceJournal: readonly []
+  referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
   questJournal: readonly []
 }
@@ -113,7 +120,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
   const trained = {} as Record<TrainedSkill, TrainedSkillState>
   for (const skill of trainedSkills) {
     const experience = state.trainedExperience[skill]
-    trained[skill] = { experience, level: curve(experience) }
+    trained[skill] = { experience, level: readTrainedLevel(curve, experience) }
   }
 
   return {
@@ -131,7 +138,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     fight: state.fight === null ? null : { ...state.fight },
     fallenHostiles: [...state.fallenHostiles],
     mealBuff: state.mealBuff,
-    referenceJournal: [...state.referenceJournal],
+    referenceJournal: state.referenceJournal.map((filing) => ({ ...filing })),
     playedSetScenes: [...state.playedSetScenes],
     questJournal: [...state.questJournal],
   }

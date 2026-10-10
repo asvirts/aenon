@@ -1,5 +1,14 @@
-import { copyState, initialState, presentAdventurer, type Adventurer, type Fight, type SeasonState } from "./lib/begin.ts"
-import { holdAdventurerExperience } from "./lib/experience.ts"
+import {
+  copyState,
+  initialState,
+  presentAdventurer,
+  trainedSkills,
+  type Adventurer,
+  type Fight,
+  type ReferenceFiling,
+  type SeasonState,
+} from "./lib/begin.ts"
+import { holdAdventurerExperience, holdTrainedExperience } from "./lib/experience.ts"
 import {
   enterPlace,
   faceHostile,
@@ -10,6 +19,7 @@ import {
   type StepBackResult,
   type SwingResult,
 } from "./lib/fight.ts"
+import { readScripture, type ReadResult } from "./lib/scripture.ts"
 import {
   requireDefeatGrants,
   requireHostilesInWilderness,
@@ -20,9 +30,10 @@ import {
 } from "./lib/definition.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
 
-export type { ExperienceCurve, Hostile, LevelBand, Place, SeasonDefinition } from "./lib/types.ts"
-export type { Adventurer, Fight, SeasonState }
+export type { ExperienceCurve, Hostile, LevelBand, Place, ScriptureObject, SeasonDefinition } from "./lib/types.ts"
+export type { Adventurer, Fight, ReferenceFiling, SeasonState }
 export type { EnterResult, FaceResult, StepBackResult, SwingResult }
+export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 
 export type Season = {
   adventurer: () => Adventurer
@@ -31,6 +42,7 @@ export type Season = {
   face: (hostileId: string) => FaceResult
   stepBack: () => StepBackResult
   swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
+  read: (scriptureObjectId: string) => ReadResult
 }
 
 export type SeasonLoad =
@@ -55,6 +67,9 @@ export function loadSeason(
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
+  for (const skill of trainedSkills) {
+    seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curve)
+  }
 
   return {
     ok: true,
@@ -66,6 +81,7 @@ export function loadSeason(
       stepBack: () => stepBack(seasonState),
       swing: (rollDamage, rollHostileDamage) =>
         swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
+      read: (scriptureObjectId) => readScripture(seasonState, definition, curve, scriptureObjectId),
     },
   }
 }

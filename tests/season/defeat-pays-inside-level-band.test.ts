@@ -16,6 +16,7 @@ function definition(smallerGrant: number, hostiles: readonly Hostile[] = []): Se
     smallerGrant,
     defeatLoss: 0,
     hostiles,
+    scriptureObjects: [],
   }
 }
 
@@ -57,6 +58,7 @@ describe("a defeat pays inside its level band", () => {
         smallerGrant: 1,
         defeatLoss: 0,
         hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+        scriptureObjects: [],
       },
       onePointPerLevel,
     )
@@ -96,6 +98,7 @@ describe("a defeat pays inside its level band", () => {
         smallerGrant: 1,
         defeatLoss: 0,
         hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+        scriptureObjects: [],
       },
       onePointPerLevel,
     )
@@ -380,6 +383,7 @@ function wildDefinition(options: WildOptions): SeasonDefinition {
         defeatGrant: options.defeatGrant,
       },
     ],
+    scriptureObjects: [],
   }
 }
 

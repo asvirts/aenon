@@ -45,3 +45,33 @@ _Avoid_: Bible item, bookcase, lore pickup
 **Rarity**:
 One of five grades of gear or a special find: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).
 _Avoid_: quality, tier
+
+## Skills
+
+**Skill**:
+A discipline the Adventurer trains by doing it. The skills are Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking.
+_Avoid_: profession, stat, Crafting, Smithing
+
+**Hunting**:
+The gather of meat, hide, and bone from a wild animal.
+_Avoid_: Leatherworking
+
+**Leatherworking**:
+The hide-and-bone gear skill.
+_Avoid_: Hunting, Crafting
+
+**Blacksmithing**:
+The ore-and-wood gear skill.
+_Avoid_: Smithing, Crafting
+
+**Tailoring**:
+The cloth gear skill.
+_Avoid_: Crafting
+
+**Herbalism**:
+The herb gather.
+_Avoid_: Harvesting
+
+**Harvesting**:
+The fiber gather, such as flax.
+_Avoid_: Herbalism, Woodcutting

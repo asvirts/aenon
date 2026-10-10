@@ -56,6 +56,10 @@ _Avoid_: skill, skill level, level band, total level
 Attack, Strength, Defence, or Hitpoints. Each is the Adventurer level.
 _Avoid_: stance, combat style
 
+**Current Hitpoints**:
+The Adventurer's present pool of Hitpoints, bounded by the Hitpoints skill.
+_Avoid_: health, HP, life
+
 **Scripture object**:
 A period object or person tied to an NIV passage the Adventurer can read.
 _Avoid_: Bible item, bookcase, lore pickup

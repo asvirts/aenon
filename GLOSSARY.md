@@ -37,7 +37,7 @@ _Avoid_: merchant, shopkeeper
 ## Encounters
 
 **Set scene**:
-An encounter with a biblical figure, played once in the Season, whose outcome is the one the Gospel tells.
+An encounter with a biblical figure whose outcome is the one the Gospel tells. It plays once in the Season, and only as a quest's attend step.
 _Avoid_: cutscene, quest giver
 
 **Quest**:

@@ -33,18 +33,38 @@ _Avoid_: merchant, shopkeeper
 ## Encounters
 
 **Set scene**:
-An encounter with a biblical figure whose outcome is the one the Gospel tells.
+An encounter with a biblical figure, played once in the Season, whose outcome is the one the Gospel tells.
 _Avoid_: cutscene, quest giver
+
+**Quest**:
+Work given by one ordinary person in a settlement, made of ordered steps in that settlement's level band. It is once or repeatable.
+_Avoid_: mission, campaign, side quest
+
+**Quest journal**:
+The Adventurer's list of started quests, each with one current line.
+_Avoid_: reference journal, quest log
+
+**Adventurer level**:
+The Adventurer's level from once-quest experience, beside the fourteen skills.
+_Avoid_: skill, level band, total level
 
 **Scripture object**:
 A period object or person tied to an NIV passage the Adventurer can read.
 _Avoid_: Bible item, bookcase, lore pickup
+
+**Reference journal**:
+The filed NIV passages the Adventurer has read.
+_Avoid_: Quest journal, Bible
 
 ## Goods
 
 **Rarity**:
 One of five grades of gear or a special find: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).
 _Avoid_: quality, tier
+
+**Everyday good**:
+A tradable good with no rarity.
+_Avoid_: common, gear, white item
 
 ## Skills
 

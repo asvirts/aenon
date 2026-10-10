@@ -1,8 +1,9 @@
 import type { ExperienceCurve, LevelBand } from "./types.ts"
 
 export const adventurerLevelCap = 60
+const skillLevelCap = 99
 
-const defeatSpans = {
+const bandSpans = {
   low: { minLevel: 1, maxLevel: 19, ceiling: 20 },
   middle: { minLevel: 21, maxLevel: 39, ceiling: 40 },
   high: { minLevel: 41, maxLevel: 59, ceiling: adventurerLevelCap },
@@ -25,23 +26,39 @@ export function experienceForLevel(curve: ExperienceCurve, level: number): numbe
   return high
 }
 
-export function holdAdventurerExperience(experience: number, curve: ExperienceCurve): number {
-  const cap = experienceForLevel(curve, adventurerLevelCap)
+function holdExperience(experience: number, curve: ExperienceCurve, capLevel: number): number {
+  const cap = experienceForLevel(curve, capLevel)
   return experience > cap ? cap : experience
 }
 
-export function readAdventurerLevel(curve: ExperienceCurve, experience: number): number {
+function readCappedLevel(curve: ExperienceCurve, experience: number, capLevel: number): number {
   const level = curve(experience)
-  return level > adventurerLevelCap ? adventurerLevelCap : level
+  return level > capLevel ? capLevel : level
 }
 
-export function experienceAfterDefeat(
+export function holdAdventurerExperience(experience: number, curve: ExperienceCurve): number {
+  return holdExperience(experience, curve, adventurerLevelCap)
+}
+
+export function readAdventurerLevel(curve: ExperienceCurve, experience: number): number {
+  return readCappedLevel(curve, experience, adventurerLevelCap)
+}
+
+export function holdSkillExperience(experience: number, curve: ExperienceCurve): number {
+  return holdExperience(experience, curve, skillLevelCap)
+}
+
+export function readSkillLevel(curve: ExperienceCurve, experience: number): number {
+  return readCappedLevel(curve, experience, skillLevelCap)
+}
+
+export function experienceInsideBand(
   experience: number,
   curve: ExperienceCurve,
   band: LevelBand,
   grant: number,
 ): number {
-  const span = defeatSpans[band]
+  const span = bandSpans[band]
   const level = readAdventurerLevel(curve, experience)
   if (level < span.minLevel || level > span.maxLevel) return holdAdventurerExperience(experience, curve)
   return holdAdventurerExperience(

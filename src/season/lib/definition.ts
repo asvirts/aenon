@@ -5,6 +5,9 @@ export type DefinitionFailure =
   | "aenon-not-low-band-settlement"
   | "smaller-grant-not-positive"
   | "defeat-grant-not-greater-than-smaller-grant"
+  | "higher-band-spot-level-not-greater"
+  | "hunting-has-no-spot"
+  | "spot-place-missing"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

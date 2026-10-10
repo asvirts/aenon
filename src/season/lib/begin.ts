@@ -1,5 +1,5 @@
-import { readAdventurerLevel } from "./experience.ts"
-import type { ExperienceCurve } from "./types.ts"
+import { readAdventurerLevel, readSkillLevel } from "./experience.ts"
+import type { ExperienceCurve, PackEntry } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -41,7 +41,7 @@ export type SeasonState = {
   trainedExperience: Record<TrainedSkill, number>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: "closed"
@@ -61,7 +61,7 @@ export type Adventurer = {
   trainedSkills: Record<TrainedSkill, TrainedSkillState>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: "closed"
@@ -110,7 +110,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
   const trained = {} as Record<TrainedSkill, TrainedSkillState>
   for (const skill of trainedSkills) {
     const experience = state.trainedExperience[skill]
-    trained[skill] = { experience, level: curve(experience) }
+    trained[skill] = { experience, level: readSkillLevel(curve, experience) }
   }
 
   return {
@@ -121,7 +121,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     trainedSkills: trained,
     currentHitpoints: state.currentHitpoints,
     coin: state.coin,
-    pack: [...state.pack],
+    pack: state.pack.map((entry) => ({ ...entry })),
     worn: { ...state.worn },
     lastSettlementId: state.lastSettlementId,
     outing: state.outing,

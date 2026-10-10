@@ -17,8 +17,8 @@ Traversable land that is not a settlement: lake, river, hills, mountains, and va
 _Avoid_: overworld, path
 
 **Level band**:
-A place's rank by distance from Aenon. Quests, enemies, and goods in that place share it.
-_Avoid_: zone level, difficulty tier
+A place's rank by distance from Aenon. Quests, enemies, and goods there share it, and a higher band is stronger.
+_Avoid_: zone level, difficulty tier, tier
 
 ## People
 
@@ -57,6 +57,22 @@ The filed NIV passages the Adventurer has read.
 _Avoid_: Quest journal, Bible
 
 ## Goods
+
+**Gear**:
+A piece worn in a gear slot, with a rarity and a level band.
+_Avoid_: equipment, loadout, item
+
+**Gear slot**:
+Weapon, shield, head, body, legs, or feet.
+_Avoid_: paperdoll, equipment slot
+
+**Armor weight**:
+Heavy, medium, or cloth, worn on head, body, legs, and feet.
+_Avoid_: armor class, tier
+
+**Special effect**:
+The extra a legendary piece carries beyond its Strength or Defence.
+_Avoid_: proc, enchantment, affix
 
 **Rarity**:
 One of five grades of gear or a special find: common (white), uncommon (green), rare (blue), epic (purple), legendary (orange).

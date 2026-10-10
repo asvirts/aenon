@@ -1,6 +1,10 @@
 import type { SeasonDefinition } from "./types.ts"
 
-export type DefinitionFailure = "missing-aenon" | "aenon-not-low-band-settlement"
+export type DefinitionFailure =
+  | "missing-aenon"
+  | "aenon-not-low-band-settlement"
+  | "smaller-grant-not-positive"
+  | "defeat-grant-not-greater-than-smaller-grant"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,
@@ -11,4 +15,25 @@ export function requireLowBandAenon(
     return { ok: false, reason: "aenon-not-low-band-settlement" }
   }
   return { ok: true, placeId: aenon.id }
+}
+
+export function requirePositiveSmallerGrant(
+  definition: SeasonDefinition,
+): { ok: true } | { ok: false; reason: DefinitionFailure } {
+  if (!(definition.smallerGrant > 0) || !Number.isFinite(definition.smallerGrant)) {
+    return { ok: false, reason: "smaller-grant-not-positive" }
+  }
+  return { ok: true }
+}
+
+export function requireDefeatGrants(
+  definition: SeasonDefinition,
+): { ok: true } | { ok: false; reason: DefinitionFailure } {
+  for (const hostile of definition.hostiles) {
+    const grant = hostile.defeatGrant
+    if (!Number.isInteger(grant) || !(grant > definition.smallerGrant)) {
+      return { ok: false, reason: "defeat-grant-not-greater-than-smaller-grant" }
+    }
+  }
+  return { ok: true }
 }

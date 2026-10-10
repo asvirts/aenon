@@ -1,3 +1,4 @@
+import { readAdventurerLevel } from "./experience.ts"
 import type { ExperienceCurve } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
@@ -29,6 +30,11 @@ export const gearSlots = ["weapon", "shield", "head", "body", "legs", "feet"] as
 
 export type GearSlot = (typeof gearSlots)[number]
 
+export type Fight = {
+  hostileId: string
+  hostileHitpoints: number
+}
+
 export type SeasonState = {
   placeId: string
   adventurerExperience: number
@@ -39,7 +45,8 @@ export type SeasonState = {
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: "closed"
-  fight: null
+  fight: Fight | null
+  fallenHostiles: readonly string[]
   mealBuff: null
   referenceJournal: readonly []
   playedSetScenes: readonly []
@@ -58,7 +65,8 @@ export type Adventurer = {
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: "closed"
-  fight: null
+  fight: Fight | null
+  fallenHostiles: readonly string[]
   mealBuff: null
   referenceJournal: readonly []
   playedSetScenes: readonly []
@@ -87,6 +95,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     lastSettlementId: placeId,
     outing: "closed",
     fight: null,
+    fallenHostiles: [],
     mealBuff: null,
     referenceJournal: [],
     playedSetScenes: [],
@@ -95,7 +104,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
 }
 
 export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): Adventurer {
-  const adventurerLevel = curve(state.adventurerExperience)
+  const adventurerLevel = readAdventurerLevel(curve, state.adventurerExperience)
   const combatLevels = {} as Record<CombatSkill, number>
   for (const skill of combatSkills) combatLevels[skill] = adventurerLevel
   const trained = {} as Record<TrainedSkill, TrainedSkillState>
@@ -116,7 +125,8 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     worn: { ...state.worn },
     lastSettlementId: state.lastSettlementId,
     outing: state.outing,
-    fight: state.fight,
+    fight: state.fight === null ? null : { ...state.fight },
+    fallenHostiles: [...state.fallenHostiles],
     mealBuff: state.mealBuff,
     referenceJournal: [...state.referenceJournal],
     playedSetScenes: [...state.playedSetScenes],

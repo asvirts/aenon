@@ -14,6 +14,7 @@ export type Hostile = {
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
+  defeatLoss: number
   hostiles: readonly Hostile[]
 }
 

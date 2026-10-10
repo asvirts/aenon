@@ -14,6 +14,7 @@ function definition(smallerGrant: number, hostiles: readonly Hostile[] = []): Se
   return {
     places: [{ id: "aenon", kind: "settlement", band: "low" }],
     smallerGrant,
+    defeatLoss: 0,
     hostiles,
   }
 }
@@ -54,6 +55,7 @@ describe("a defeat pays inside its level band", () => {
           { id: "jordan", kind: "wilderness", band: "low" },
         ],
         smallerGrant: 1,
+        defeatLoss: 0,
         hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
       },
       onePointPerLevel,
@@ -68,24 +70,38 @@ describe("a defeat pays inside its level band", () => {
 
     const faced = season.face("wolf")
     assert.deepEqual(faced, { ok: true })
-    assert.deepEqual(season.adventurer().fight, { hostileId: "wolf", hostileHitpoints: 5 })
+    assert.deepEqual(season.adventurer().fight, {
+      hostileId: "wolf",
+      hostileHitpoints: 5,
+      phase: "facing",
+    })
 
     const before = season.adventurer()
     const swung = season.swing(() => 2)
     assert.deepEqual(swung, { ok: true, damage: 2, hostileFell: false })
     assert.deepEqual(season.adventurer(), {
       ...before,
-      fight: { hostileId: "wolf", hostileHitpoints: 3 },
+      fight: { hostileId: "wolf", hostileHitpoints: 3, phase: "underway" },
     })
   })
 
   it("refuses to face a hostile outside that hostile's wilderness", () => {
-    const season = loadWild({
-      band: "low",
-      placeId: "jordan",
-      hitpoints: 5,
-      defeatGrant: 4,
-    })
+    const loaded = loadSeason(
+      {
+        places: [
+          { id: "aenon", kind: "settlement", band: "low" },
+          { id: "jordan", kind: "wilderness", band: "low" },
+          { id: "hills", kind: "wilderness", band: "middle" },
+        ],
+        smallerGrant: 1,
+        defeatLoss: 0,
+        hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+      },
+      onePointPerLevel,
+    )
+    if (!loaded.ok) throw new Error(loaded.reason)
+    const season = loaded.season
+    assert.deepEqual(season.enter("hills"), { ok: true })
     const before = season.adventurer()
     const faced = season.face("wolf")
     assert.deepEqual(faced, { ok: false, reason: "not-present" })
@@ -288,7 +304,11 @@ describe("a defeat pays inside its level band", () => {
     const first = season.swing(() => 2)
     assert.deepEqual(first, { ok: true, damage: 2, hostileFell: false })
     assert.equal(season.adventurer().adventurerExperience, 0)
-    assert.deepEqual(season.adventurer().fight, { hostileId: "wolf", hostileHitpoints: 3 })
+    assert.deepEqual(season.adventurer().fight, {
+      hostileId: "wolf",
+      hostileHitpoints: 3,
+      phase: "underway",
+    })
 
     const second = season.swing(() => 3)
     assert.deepEqual(second, { ok: true, damage: 3, hostileFell: true })
@@ -351,6 +371,7 @@ function wildDefinition(options: WildOptions): SeasonDefinition {
       { id: options.placeId, kind: "wilderness", band: options.band },
     ],
     smallerGrant: options.smallerGrant ?? 1,
+    defeatLoss: 0,
     hostiles: [
       {
         id: "wolf",

@@ -5,6 +5,8 @@ export type DefinitionFailure =
   | "aenon-not-low-band-settlement"
   | "smaller-grant-not-positive"
   | "defeat-grant-not-greater-than-smaller-grant"
+  | "hostile-not-in-wilderness"
+  | "defeat-loss-not-non-negative"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,
@@ -33,6 +35,27 @@ export function requireDefeatGrants(
     const grant = hostile.defeatGrant
     if (!Number.isInteger(grant) || !(grant > definition.smallerGrant)) {
       return { ok: false, reason: "defeat-grant-not-greater-than-smaller-grant" }
+    }
+  }
+  return { ok: true }
+}
+
+export function requireNonNegativeDefeatLoss(
+  definition: SeasonDefinition,
+): { ok: true } | { ok: false; reason: DefinitionFailure } {
+  if (!Number.isInteger(definition.defeatLoss) || definition.defeatLoss < 0) {
+    return { ok: false, reason: "defeat-loss-not-non-negative" }
+  }
+  return { ok: true }
+}
+
+export function requireHostilesInWilderness(
+  definition: SeasonDefinition,
+): { ok: true } | { ok: false; reason: DefinitionFailure } {
+  for (const hostile of definition.hostiles) {
+    const place = definition.places.find((candidate) => candidate.id === hostile.placeId)
+    if (!place || place.kind !== "wilderness") {
+      return { ok: false, reason: "hostile-not-in-wilderness" }
     }
   }
   return { ok: true }

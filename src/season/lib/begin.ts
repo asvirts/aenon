@@ -33,7 +33,10 @@ export type GearSlot = (typeof gearSlots)[number]
 export type Fight = {
   hostileId: string
   hostileHitpoints: number
+  phase: "facing" | "underway"
 }
+
+export type Outing = "open" | "closed"
 
 export type SeasonState = {
   placeId: string
@@ -44,7 +47,7 @@ export type SeasonState = {
   pack: readonly []
   worn: Record<GearSlot, null>
   lastSettlementId: string
-  outing: "closed"
+  outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
   mealBuff: null
@@ -64,7 +67,7 @@ export type Adventurer = {
   pack: readonly []
   worn: Record<GearSlot, null>
   lastSettlementId: string
-  outing: "closed"
+  outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
   mealBuff: null

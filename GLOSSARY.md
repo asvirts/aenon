@@ -16,6 +16,10 @@ _Avoid_: zone, map node
 Traversable land that is not a settlement: lake, river, hills, mountains, and valleys.
 _Avoid_: overworld, path
 
+**Spot**:
+A fixed place where a gathering skill other than Hunting is practiced.
+_Avoid_: node, resource
+
 **Level band**:
 A place's rank by distance from Aenon. Quests, enemies, and goods there share it, and a higher band is stronger.
 _Avoid_: zone level, difficulty tier, tier
@@ -45,8 +49,8 @@ The Adventurer's list of started quests, each with one current line.
 _Avoid_: reference journal, quest log
 
 **Adventurer level**:
-The Adventurer's level from once-quest experience, beside the fourteen skills.
-_Avoid_: skill, level band, total level
+The Adventurer's level from once-quest experience, beside the fourteen skills. The level bands are successive spans of it.
+_Avoid_: skill, skill level, level band, total level
 
 **Scripture object**:
 A period object or person tied to an NIV passage the Adventurer can read.
@@ -107,6 +111,10 @@ _Avoid_: blueprint, scroll
 **Skill**:
 A discipline the Adventurer trains by doing it. The skills are Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking.
 _Avoid_: profession, stat, Crafting, Smithing
+
+**Skill level**:
+How far the Adventurer has trained one skill.
+_Avoid_: Adventurer level, level band
 
 **Hunting**:
 The gather of meat, hide, and bone from a wild animal.

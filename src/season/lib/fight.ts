@@ -1,5 +1,5 @@
 import type { SeasonState } from "./begin.ts"
-import { experienceAfterDefeat } from "./experience.ts"
+import { experienceInsideBand } from "./experience.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
 
 export type EnterResult = { ok: true } | { ok: false; reason: "not-present" | "fight-underway" }
@@ -85,7 +85,7 @@ export function swingAtHostile(
     ? definition.places.find((candidate) => candidate.id === hostile.placeId)
     : undefined
   if (hostile && place) {
-    state.adventurerExperience = experienceAfterDefeat(
+    state.adventurerExperience = experienceInsideBand(
       state.adventurerExperience,
       curve,
       place.band,

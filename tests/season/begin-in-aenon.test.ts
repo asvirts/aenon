@@ -16,6 +16,8 @@ const aenonOnly: SeasonDefinition = {
   defeatLoss: 0,
   hostiles: [],
   scriptureObjects: [],
+  packSize: 1,
+  spots: [],
 }
 
 function beginInAenon() {
@@ -127,7 +129,15 @@ describe("begin in Aenon", () => {
 
   it("fails to load a definition with no Aenon", () => {
     const empty = loadSeason(
-      { places: [], smallerGrant: 1, defeatLoss: 0, hostiles: [], scriptureObjects: [] },
+      {
+        places: [],
+        smallerGrant: 1,
+        defeatLoss: 0,
+        hostiles: [],
+        scriptureObjects: [],
+        packSize: 1,
+        spots: [],
+      },
       onePointPerLevel,
     )
     assert.deepEqual(empty, { ok: false, reason: "missing-aenon" })
@@ -139,6 +149,8 @@ describe("begin in Aenon", () => {
         defeatLoss: 0,
         hostiles: [],
         scriptureObjects: [],
+        packSize: 1,
+        spots: [],
       },
       onePointPerLevel,
     )
@@ -160,6 +172,8 @@ describe("begin in Aenon", () => {
           defeatLoss: 0,
           hostiles: [],
           scriptureObjects: [],
+          packSize: 1,
+          spots: [],
         },
         onePointPerLevel,
       )
@@ -173,6 +187,8 @@ describe("begin in Aenon", () => {
         defeatLoss: 0,
         hostiles: [],
         scriptureObjects: [],
+        packSize: 1,
+        spots: [],
       },
       onePointPerLevel,
     )

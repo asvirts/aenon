@@ -3,7 +3,7 @@ import type { ExperienceCurve, LevelBand } from "./types.ts"
 export const adventurerLevelCap = 60
 export const trainedSkillLevelCap = 99
 
-const defeatSpans = {
+const bandSpans = {
   low: { minLevel: 1, maxLevel: 19, ceiling: 20 },
   middle: { minLevel: 21, maxLevel: 39, ceiling: 40 },
   high: { minLevel: 41, maxLevel: 59, ceiling: adventurerLevelCap },
@@ -52,13 +52,16 @@ export function readTrainedLevel(curve: ExperienceCurve, experience: number): nu
   return readLevel(curve, experience, trainedSkillLevelCap)
 }
 
-export function experienceAfterDefeat(
+export const holdSkillExperience = holdTrainedExperience
+export const readSkillLevel = readTrainedLevel
+
+export function experienceInsideBand(
   experience: number,
   curve: ExperienceCurve,
   band: LevelBand,
   grant: number,
 ): number {
-  const span = defeatSpans[band]
+  const span = bandSpans[band]
   const level = readAdventurerLevel(curve, experience)
   if (level < span.minLevel || level > span.maxLevel) return holdAdventurerExperience(experience, curve)
   return holdAdventurerExperience(

@@ -9,6 +9,8 @@ const aenonReading: SeasonDefinition = {
   smallerGrant: 2,
   defeatLoss: 0,
   hostiles: [],
+  packSize: 1,
+  spots: [],
   scriptureObjects: [
     {
       id: "river-stone",
@@ -80,6 +82,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 2,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "river-stone", placeId: "aenon", reference: "John 3:23", scriptureExperience: 4 },
         { id: "road-marker", placeId: "aenon", reference: "John 3:23", scriptureExperience: 9 },
@@ -156,6 +160,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 2,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "shore-stone", placeId: "lake", reference: "John 6:1", scriptureExperience: 4 },
       ],
@@ -320,6 +326,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 2,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "shore-stone", placeId: "lake", reference: "John 6:1", scriptureExperience: 4 },
       ],
@@ -351,6 +359,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 2,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "river-stone", placeId: "aenon", reference: "John 3:23", scriptureExperience: 4 },
         { id: "hill-shrine", placeId: "aenon", reference: "Luke 3:3", scriptureExperience: 3 },
@@ -390,6 +400,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 2,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "river-stone", placeId: "aenon", reference: "John 3:23", scriptureExperience: 4 },
         { id: "shore-stone", placeId: "lake", reference: "John 3:23", scriptureExperience: 9 },
@@ -504,6 +516,8 @@ describe("the first reading files the passage", () => {
       smallerGrant: 50,
       defeatLoss: 0,
       hostiles: [],
+      packSize: 1,
+      spots: [],
       scriptureObjects: [
         { id: "river-stone", placeId: "aenon", reference: "John 3:23", scriptureExperience: 25 },
       ],
@@ -542,6 +556,8 @@ const jordanReading: SeasonDefinition = {
   smallerGrant: 2,
   defeatLoss: 0,
   hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 3 }],
+  packSize: 1,
+  spots: [],
   scriptureObjects: [
     { id: "river-stone", placeId: "jordan", reference: "John 3:23", scriptureExperience: 4 },
   ],
@@ -552,6 +568,8 @@ const wideGrant: SeasonDefinition = {
   smallerGrant: 5,
   defeatLoss: 0,
   hostiles: [],
+  packSize: 1,
+  spots: [],
   scriptureObjects: [
     { id: "river-stone", placeId: "aenon", reference: "John 3:23", scriptureExperience: 4 },
   ],

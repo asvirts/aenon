@@ -19,6 +19,7 @@ import {
   type StepBackResult,
   type SwingResult,
 } from "./lib/fight.ts"
+import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
 import {
   requireDefeatGrants,
@@ -30,10 +31,23 @@ import {
 } from "./lib/definition.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
 
-export type { ExperienceCurve, Hostile, LevelBand, Place, ScriptureObject, SeasonDefinition } from "./lib/types.ts"
+export type {
+  ExperienceCurve,
+  GatheringSkill,
+  Good,
+  Hostile,
+  LevelBand,
+  PackEntry,
+  Place,
+  ScriptureObject,
+  SeasonDefinition,
+  Spot,
+  SpotSkill,
+} from "./lib/types.ts"
 export type { Adventurer, Fight, ReferenceFiling, SeasonState }
 export type { EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
+export type { GatherResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -43,6 +57,7 @@ export type Season = {
   stepBack: () => StepBackResult
   swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
   read: (scriptureObjectId: string) => ReadResult
+  gather: (spotId: string) => GatherResult
 }
 
 export type SeasonLoad =
@@ -64,6 +79,8 @@ export function loadSeason(
   if (!defeatLoss.ok) return defeatLoss
   const wildernessHostiles = requireHostilesInWilderness(definition)
   if (!wildernessHostiles.ok) return wildernessHostiles
+  const gatheringSpots = requireGatheringSpots(definition)
+  if (!gatheringSpots.ok) return gatheringSpots
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -82,6 +99,7 @@ export function loadSeason(
       swing: (rollDamage, rollHostileDamage) =>
         swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
       read: (scriptureObjectId) => readScripture(seasonState, definition, curve, scriptureObjectId),
+      gather: (spotId) => gatherAtSpot(seasonState, definition, curve, spotId),
     },
   }
 }

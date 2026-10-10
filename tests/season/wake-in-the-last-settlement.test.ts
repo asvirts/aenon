@@ -21,6 +21,8 @@ const roads: SeasonDefinition = {
   defeatLoss: 0,
   hostiles: [],
   scriptureObjects: [],
+  packSize: 1,
+  spots: [],
 }
 
 describe("wake in the last settlement", () => {

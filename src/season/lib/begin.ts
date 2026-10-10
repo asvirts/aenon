@@ -1,5 +1,5 @@
 import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
-import type { ExperienceCurve } from "./types.ts"
+import type { ExperienceCurve, PackEntry } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -51,7 +51,7 @@ export type SeasonState = {
   trainedExperience: Record<TrainedSkill, number>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: Outing
@@ -71,7 +71,7 @@ export type Adventurer = {
   trainedSkills: Record<TrainedSkill, TrainedSkillState>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: Outing
@@ -131,7 +131,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     trainedSkills: trained,
     currentHitpoints: state.currentHitpoints,
     coin: state.coin,
-    pack: [...state.pack],
+    pack: state.pack.map((entry) => ({ ...entry })),
     worn: { ...state.worn },
     lastSettlementId: state.lastSettlementId,
     outing: state.outing,

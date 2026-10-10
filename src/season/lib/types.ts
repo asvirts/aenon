@@ -18,12 +18,40 @@ export type ScriptureObject = {
   scriptureExperience: number
 }
 
+export type GatheringSkill = "Woodcutting" | "Mining" | "Fishing" | "Herbalism" | "Harvesting"
+
+export type SpotSkill = GatheringSkill | "Hunting"
+
+export type StackableKind = "everyday" | "material" | "fish" | "food"
+
+export type Good =
+  | { kind: StackableKind; id: string }
+  | { kind: "special-find"; id: string; band: LevelBand }
+  | { kind: "gear"; id: string }
+
+export type PackEntry =
+  | { kind: StackableKind; id: string; count: number }
+  | { kind: "special-find"; band: LevelBand; count: number }
+  | { kind: "gear"; id: string }
+
+export type Spot = {
+  id: string
+  skill: SpotSkill
+  requiredLevel: number
+  placeId: string
+  good: Good
+  count: number
+  skillExperience: number
+}
+
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
   defeatLoss: number
   hostiles: readonly Hostile[]
   scriptureObjects: readonly ScriptureObject[]
+  packSize: number
+  spots: readonly Spot[]
 }
 
 export type ExperienceCurve = (experience: number) => number

@@ -117,13 +117,25 @@ export type Person = {
   placeId: string
   kind: "ordinary" | "biblical-figure"
   vendor?: boolean
+  figure?: "john"
 }
 
-export type QuestStep =
-  | { kind: "hold"; goodId: string; count: number; line: string }
-  | { kind: "defeat"; hostileId: string; line: string }
-  | { kind: "mark"; mark: string; line: string }
-  | { kind: "return"; goodId: string; count: number; line: string }
+export type SetSceneFigure = "john" | "jesus"
+
+export type SetScene = {
+  id: string
+  placeId: string
+  figure: SetSceneFigure
+  standing?: readonly string[]
+}
+
+export type QuestStep = (
+  | { kind: "hold"; goodId: string; count: number }
+  | { kind: "defeat"; hostileId: string }
+  | { kind: "mark"; mark: string }
+  | { kind: "return"; goodId: string; count: number }
+  | { kind: "attend"; sceneId: string }
+) & { line: string; spotId?: string }
 
 export type QuestDefinition = {
   id: string
@@ -193,6 +205,7 @@ export type SeasonDefinition = {
   spots: readonly Spot[]
   people?: readonly Person[]
   quests?: readonly QuestDefinition[]
+  setScenes?: readonly SetScene[]
   gear?: readonly Gear[]
   stations?: readonly Station[]
   gearPieces?: readonly GearPiece[]

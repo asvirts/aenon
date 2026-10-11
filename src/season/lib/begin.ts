@@ -67,6 +67,16 @@ export type QuestJournalEntry = {
   finished: boolean
 }
 
+export type PlayingScene = {
+  kind: "set-scene"
+  sceneId: string
+}
+
+export type PresentPerson = {
+  personId: string
+  placeId: string
+}
+
 export type SeasonState = {
   placeId: string
   adventurerExperience: number
@@ -83,7 +93,8 @@ export type SeasonState = {
   pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
-  playedSetScenes: readonly []
+  playedSetScenes: readonly string[]
+  playingSceneId: string | null
   questProgress: readonly QuestProgress[]
 }
 
@@ -105,7 +116,9 @@ export type Adventurer = {
   pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
-  playedSetScenes: readonly []
+  playedSetScenes: readonly string[]
+  playingScene: PlayingScene | null
+  present: readonly PresentPerson[]
   questJournal: readonly QuestJournalEntry[]
 }
 
@@ -137,6 +150,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     mealBuff: null,
     referenceJournal: [],
     playedSetScenes: [],
+    playingSceneId: null,
     questProgress: [],
   }
 }
@@ -145,6 +159,7 @@ export function presentAdventurer(
   state: SeasonState,
   curve: ExperienceCurve,
   questJournal: readonly QuestJournalEntry[],
+  present: readonly PresentPerson[],
 ): Adventurer {
   const adventurerLevel = readAdventurerLevel(curve, state.adventurerExperience)
   const combatLevels = {} as Record<CombatSkill, number>
@@ -174,6 +189,9 @@ export function presentAdventurer(
     mealBuff: state.mealBuff,
     referenceJournal: state.referenceJournal.map((filing) => ({ ...filing })),
     playedSetScenes: [...state.playedSetScenes],
+    playingScene:
+      state.playingSceneId === null ? null : { kind: "set-scene", sceneId: state.playingSceneId },
+    present: present.map((person) => ({ ...person })),
     questJournal: questJournal.map((entry) => ({ ...entry })),
   }
 }

@@ -2,9 +2,11 @@ import type { HuntMaterial, SeasonState } from "./begin.ts"
 import { experienceInsideBand, holdTrainedExperience } from "./experience.ts"
 import type { ExperienceCurve, Hostile, PackEntry, SeasonDefinition } from "./types.ts"
 
-export type HuntResult = { ok: true } | { ok: false; reason: "no-carcass" | "pack-full" | "fight-underway" }
+export type HuntResult =
+  | { ok: true }
+  | { ok: false; reason: "no-carcass" | "pack-full" | "fight-underway" | "scene-playing" }
 
-export type PickUpResult = { ok: true } | { ok: false; reason: "pack-full" | "not-present" }
+export type PickUpResult = { ok: true } | { ok: false; reason: "pack-full" | "not-present" | "scene-playing" }
 
 export type DroppedGear = { id: string }
 

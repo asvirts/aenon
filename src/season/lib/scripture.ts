@@ -21,7 +21,7 @@ export type ReadingGrants = {
 
 export type ReadResult =
   | { ok: true; presentation: PassagePresentation; grants: ReadingGrants }
-  | { ok: false; reason: "not-present" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "fight-underway" | "scene-playing" }
 
 export function readScripture(
   state: SeasonState,

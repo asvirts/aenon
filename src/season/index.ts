@@ -30,18 +30,22 @@ import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import { makePiece, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import {
+  finishScene,
   lookAtPerson,
   presentQuestJournal,
   reportMark,
   requireQuests,
+  resolveAttendance,
   resolveReadySteps,
   speakToPerson,
+  type FinishResult,
   type LookResult,
   type QuestLoadFailure,
   type ReportResult,
   type SpeakResult,
 } from "./lib/quest.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
+import { presentHere, travelingCompany } from "./lib/scene.ts"
 import {
   requireDefeatGrants,
   requireHostilesInWilderness,
@@ -83,8 +87,9 @@ export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scrip
 export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
 export type { TakeOffResult, WearResult }
-export type { LookResult, QuestLoadFailure, ReportResult, SpeakResult }
+export type { FinishResult, LookResult, QuestLoadFailure, ReportResult, SpeakResult }
 export type { MakeResult }
+export { travelingCompany }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -102,6 +107,7 @@ export type Season = {
   look: (personId: string) => LookResult
   speak: (personId: string) => SpeakResult
   report: (mark: string) => ReportResult
+  finish: () => FinishResult
   hunt: () => HuntResult
   pickUp: (gearId: string) => PickUpResult
   wear: (pieceId: string) => WearResult
@@ -143,27 +149,51 @@ export function loadSeason(
     seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curve)
   }
   resolveReadySteps(seasonState, definition)
+  resolveAttendance(seasonState, definition)
+  const blockedByScene = (): { ok: false; reason: "scene-playing" } | undefined =>
+    seasonState.playingSceneId === null ? undefined : { ok: false, reason: "scene-playing" }
 
   return {
     ok: true,
     season: {
-      adventurer: () => presentAdventurer(seasonState, curve, presentQuestJournal(seasonState, definition)),
+      adventurer: () =>
+        presentAdventurer(
+          seasonState,
+          curve,
+          presentQuestJournal(seasonState, definition),
+          presentHere(seasonState, definition),
+        ),
       exportState: () => copyState(seasonState),
-      enter: (placeId) => enterPlace(seasonState, definition, placeId),
-      face: (hostileId) => faceHostile(seasonState, definition, hostileId),
-      stepBack: () => stepBack(seasonState),
-      swing: (rollDamage, rollHostileDamage, rollDrop) =>
-        swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop),
-      read: (scriptureObjectId) => readScripture(seasonState, definition, curve, scriptureObjectId),
-      gather: (spotId) => gatherAtSpot(seasonState, definition, curve, spotId),
-      look: (personId) => lookAtPerson(seasonState, definition, curve, personId),
-      speak: (personId) => speakToPerson(seasonState, definition, curve, personId),
-      report: (mark) => reportMark(seasonState, definition, mark),
-      hunt: () => hunt(seasonState, definition, curve),
-      pickUp: (gearId) => pickUp(seasonState, definition, gearId),
-      wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
-      takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
-      make: (stationId, recipeId) => makePiece(seasonState, definition, curve, stationId, recipeId),
+      enter: (placeId) => {
+        const blocked = blockedByScene()
+        if (blocked) return blocked
+        const entered = enterPlace(seasonState, definition, placeId)
+        if (!entered.ok) return entered
+        const scene = resolveAttendance(seasonState, definition)
+        return scene ? { ok: true, scene } : entered
+      },
+      face: (hostileId) => blockedByScene() ?? faceHostile(seasonState, definition, hostileId),
+      stepBack: () => blockedByScene() ?? stepBack(seasonState),
+      swing: (rollDamage, rollHostileDamage, rollDrop) => {
+        const blocked = blockedByScene()
+        if (blocked) return blocked
+        const swung = swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop)
+        if (swung.ok) resolveAttendance(seasonState, definition)
+        return swung
+      },
+      read: (scriptureObjectId) =>
+        blockedByScene() ?? readScripture(seasonState, definition, curve, scriptureObjectId),
+      gather: (spotId) => blockedByScene() ?? gatherAtSpot(seasonState, definition, curve, spotId),
+      look: (personId) => blockedByScene() ?? lookAtPerson(seasonState, definition, curve, personId),
+      speak: (personId) => blockedByScene() ?? speakToPerson(seasonState, definition, curve, personId),
+      report: (mark) => blockedByScene() ?? reportMark(seasonState, definition, mark),
+      finish: () => finishScene(seasonState, definition),
+      hunt: () => blockedByScene() ?? hunt(seasonState, definition, curve),
+      pickUp: (gearId) => blockedByScene() ?? pickUp(seasonState, definition, gearId),
+      wear: (pieceId) => blockedByScene() ?? wearPiece(seasonState, definition, pieceId),
+      takeOff: (slot) => blockedByScene() ?? takeOffPiece(seasonState, definition, slot),
+      make: (stationId, recipeId) =>
+        blockedByScene() ?? makePiece(seasonState, definition, curve, stationId, recipeId),
     },
   }
 }

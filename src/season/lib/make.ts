@@ -60,6 +60,7 @@ export type MakeResult =
       ok: false
       reason:
         | "fight-underway"
+        | "scene-playing"
         | "skill-too-low"
         | "wrong-station"
         | "wrong-band"

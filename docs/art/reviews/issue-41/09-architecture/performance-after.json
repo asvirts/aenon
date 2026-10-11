@@ -1,23 +1,23 @@
 [
   {
     "activeMeshes": 133,
-    "averageFps": 119.99760004814208,
+    "averageFps": 76.3663987847168,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 129,
-    "frameCount": 1200,
+    "frameCount": 764,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 9.800000011920927,
+    "p95FrameMs": 17.200000047683716,
     "renderSize": {
       "height": 514,
       "width": 914
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.000199999988078,
+    "sampleSeconds": 10.004399999976158,
     "shot": {
       "inCombat": false,
       "name": "aenon-near",
@@ -35,27 +35,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.007399999976158
+    "warmupSeconds": 5.002
   },
   {
     "activeMeshes": 485,
-    "averageFps": 119.9992006710072,
+    "averageFps": 71.93094629138876,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 471,
-    "frameCount": 1201,
+    "frameCount": 720,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 9.799999952316284,
+    "p95FrameMs": 18.100000023841854,
     "renderSize": {
       "height": 514,
       "width": 914
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.008400000035763,
+    "sampleSeconds": 10.00960000002384,
     "shot": {
       "inCombat": false,
       "name": "aenon-far",
@@ -73,27 +73,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.003299999952317
+    "warmupSeconds": 5.009300000011921
   },
   {
     "activeMeshes": 144,
-    "averageFps": 117.79764404655737,
+    "averageFps": 63.15642206892302,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 832,
-    "frameCount": 1178,
+    "frameCount": 632,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 16,
+    "p95FrameMs": 29.799999952316284,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.000200000047684,
+    "sampleSeconds": 10.006899999976158,
     "shot": {
       "inCombat": false,
       "name": "aenon-near",
@@ -111,27 +111,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.002399999976158
+    "warmupSeconds": 5.013600000023842
   },
   {
     "activeMeshes": 508,
-    "averageFps": 115.298847011255,
+    "averageFps": 62.09689515524224,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 1331,
-    "frameCount": 1153,
+    "frameCount": 621,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 15.699999988079073,
+    "p95FrameMs": 28.100000023841854,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.000100000023842,
+    "sampleSeconds": 10.0005,
     "shot": {
       "inCombat": false,
       "name": "aenon-far",
@@ -149,27 +149,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.009599999964237
+    "warmupSeconds": 5.014300000011921
   },
   {
     "activeMeshes": 144,
-    "averageFps": 113.82715062319409,
+    "averageFps": 42.67567486537761,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 840,
-    "frameCount": 1139,
+    "frameCount": 427,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 15.700000047683716,
+    "p95FrameMs": 34.59999996423721,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.006400000035764,
+    "sampleSeconds": 10.00569999998808,
     "shot": {
       "inCombat": false,
       "name": "aenon-near",
@@ -187,27 +187,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.004399999976158
+    "warmupSeconds": 5.015300000011921
   },
   {
     "activeMeshes": 508,
-    "averageFps": 80.03512763687722,
+    "averageFps": 34.837640623159956,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 1339,
-    "frameCount": 802,
+    "frameCount": 349,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 21.19999998807907,
+    "p95FrameMs": 40,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.020600000023842,
+    "sampleSeconds": 10.017900000035764,
     "shot": {
       "inCombat": false,
       "name": "aenon-far",
@@ -225,27 +225,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.0106000000238415
+    "warmupSeconds": 5.027199999988079
   },
   {
     "activeMeshes": 144,
-    "averageFps": 91.75228880992822,
+    "averageFps": 42.91288683966432,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 2910,
-    "frameCount": 918,
+    "frameCount": 430,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 16.30000001192093,
+    "p95FrameMs": 30.5,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.00519999998808,
+    "sampleSeconds": 10.020300000011922,
     "shot": {
       "inCombat": false,
       "name": "aenon-near",
@@ -263,27 +263,27 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.004099999964237
+    "warmupSeconds": 5.022600000023842
   },
   {
     "activeMeshes": 508,
-    "averageFps": 82.66443033395667,
+    "averageFps": 26.88763168951898,
     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
     "drawCalls": 3844,
-    "frameCount": 828,
+    "frameCount": 269,
     "gpu": {
       "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
       "vendor": "Google Inc. (Apple)",
       "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
     },
     "hardwareConcurrency": 15,
-    "p95FrameMs": 18.30000001192093,
+    "p95FrameMs": 42.30000001192093,
     "renderSize": {
       "height": 720,
       "width": 1280
     },
     "requestedSeconds": 10,
-    "sampleSeconds": 10.016400000035762,
+    "sampleSeconds": 10.004599999964237,
     "shot": {
       "inCombat": false,
       "name": "aenon-far",
@@ -301,6 +301,6 @@
       "height": 720,
       "width": 1280
     },
-    "warmupSeconds": 5.000399999976159
+    "warmupSeconds": 5.013800000011921
   }
 ]

@@ -1,11 +1,58 @@
 {
-  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
   "origin": "http://127.0.0.1:5203",
-  "method": "Script-free page baseline, four canonical aenon-near preset changes, then review reload. No save contents retained. Reload was also checked in a fresh review tab after full settlement.",
-  "beforeEntries": 0,
-  "afterPresetsUnchanged": true,
-  "afterReloadUnchanged": true,
-  "afterReloadReady": {
+  "baselineMethod": "Script-free page before entering review mode",
+  "beforeEntryCount": 0,
+  "afterEntryCount": 0,
+  "byteIdentical": true,
+  "alsoMatchesEarlierEmptyBaseline": true,
+  "settledPresetChecks": [
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  ],
+  "reloadState": {
     "busy": null,
     "settled": true,
     "shot": {
@@ -20,5 +67,5 @@
       "zoom": 22
     }
   },
-  "limitation": "This browser-origin check began empty; populated-save protection is covered by review protocol unit tests."
+  "afterMethod": "Waited for reloaded review scene settled=true, then navigated back to script-free page and read native localStorage."
 }

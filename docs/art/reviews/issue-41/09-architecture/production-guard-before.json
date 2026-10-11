@@ -1,28 +1,1144 @@
 {
-  "gameReady": true,
-  "lighting": {
-    "aoOutput": null,
-    "aoSamples": 0,
-    "bloom": false,
-    "cascades": 0,
-    "environmentReady": true,
-    "exposure": 1.35,
-    "fxaa": true,
-    "prePassSamples": 0,
-    "quality": "medium",
-    "samples": 1,
-    "shadowFrustum": 73,
-    "shadowMapSize": {
-      "height": 1024,
-      "width": 1024
-    },
-    "shadows": "ShadowGenerator",
-    "toneMapping": "ACES"
-  },
-  "mainPageResourceOrigins": [
-    "http://127.0.0.1:5234"
-  ],
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
   "measure": "undefined",
   "quality": "medium",
+  "ready": true,
+  "resources": [
+    {
+      "encodedBodySize": 500,
+      "name": "http://127.0.0.1:5243/assets/performanceConfigurator-UtxC_Odd.js",
+      "transferSize": 800
+    },
+    {
+      "encodedBodySize": 1102,
+      "name": "http://127.0.0.1:5243/assets/observable.pure-H-M_hi7F.js",
+      "transferSize": 1402
+    },
+    {
+      "encodedBodySize": 1031,
+      "name": "http://127.0.0.1:5243/assets/math.scalar.functions-BWXNux-o.js",
+      "transferSize": 1331
+    },
+    {
+      "encodedBodySize": 364,
+      "name": "http://127.0.0.1:5243/assets/engineStore-B_7KzytD.js",
+      "transferSize": 664
+    },
+    {
+      "encodedBodySize": 80,
+      "name": "http://127.0.0.1:5243/assets/typeStore-Cu_sj2zM.js",
+      "transferSize": 380
+    },
+    {
+      "encodedBodySize": 79298,
+      "name": "http://127.0.0.1:5243/assets/game-BUd90KOZ.js",
+      "transferSize": 79598
+    },
+    {
+      "encodedBodySize": 16027,
+      "name": "http://127.0.0.1:5243/assets/math.vector.pure-DflB6eDL.js",
+      "transferSize": 16327
+    },
+    {
+      "encodedBodySize": 629,
+      "name": "http://127.0.0.1:5243/assets/devTools-Bh3wKyVb.js",
+      "transferSize": 929
+    },
+    {
+      "encodedBodySize": 2926,
+      "name": "http://127.0.0.1:5243/assets/math.color.pure-jz9t-uBg.js",
+      "transferSize": 3226
+    },
+    {
+      "encodedBodySize": 1066,
+      "name": "http://127.0.0.1:5243/assets/webRequest-dqz0dHXK.js",
+      "transferSize": 1366
+    },
+    {
+      "encodedBodySize": 826,
+      "name": "http://127.0.0.1:5243/assets/logger-CuBYPcDK.js",
+      "transferSize": 1126
+    },
+    {
+      "encodedBodySize": 256,
+      "name": "http://127.0.0.1:5243/assets/domManagement-BqltO0ki.js",
+      "transferSize": 556
+    },
+    {
+      "encodedBodySize": 180,
+      "name": "http://127.0.0.1:5243/assets/precisionDate-Uyb-ubD0.js",
+      "transferSize": 480
+    },
+    {
+      "encodedBodySize": 4447,
+      "name": "http://127.0.0.1:5243/assets/tools.functions-DFtwUXi6.js",
+      "transferSize": 4747
+    },
+    {
+      "encodedBodySize": 603,
+      "name": "http://127.0.0.1:5243/assets/halfFloat-Ce77JD5z.js",
+      "transferSize": 903
+    },
+    {
+      "encodedBodySize": 157,
+      "name": "http://127.0.0.1:5243/assets/guid-BXdVC_j_.js",
+      "transferSize": 457
+    },
+    {
+      "encodedBodySize": 10279,
+      "name": "http://127.0.0.1:5243/assets/tools.pure-nRKmVnaF.js",
+      "transferSize": 10579
+    },
+    {
+      "encodedBodySize": 1583,
+      "name": "http://127.0.0.1:5243/assets/decorators-D3kDnvNy.js",
+      "transferSize": 1883
+    },
+    {
+      "encodedBodySize": 2089,
+      "name": "http://127.0.0.1:5243/assets/math.size-B4xBO4Vj.js",
+      "transferSize": 2389
+    },
+    {
+      "encodedBodySize": 437,
+      "name": "http://127.0.0.1:5243/assets/smartArray-BRfcgNbX.js",
+      "transferSize": 737
+    },
+    {
+      "encodedBodySize": 469,
+      "name": "http://127.0.0.1:5243/assets/shaderStore-D-XQlhUT.js",
+      "transferSize": 769
+    },
+    {
+      "encodedBodySize": 2051,
+      "name": "http://127.0.0.1:5243/assets/internalTexture-CIqq8xFB.js",
+      "transferSize": 2351
+    },
+    {
+      "encodedBodySize": 4033,
+      "name": "http://127.0.0.1:5243/assets/lightConstants-BJeMAAtg.js",
+      "transferSize": 4333
+    },
+    {
+      "encodedBodySize": 2486,
+      "name": "http://127.0.0.1:5243/assets/buffer.pure--YP7ZMLx.js",
+      "transferSize": 2786
+    },
+    {
+      "encodedBodySize": 14669,
+      "name": "http://127.0.0.1:5243/assets/abstractEngine.pure-QXfq3118.js",
+      "transferSize": 14969
+    },
+    {
+      "encodedBodySize": 17059,
+      "name": "http://127.0.0.1:5243/assets/thinEngine.pure-C-16tivH.js",
+      "transferSize": 17359
+    },
+    {
+      "encodedBodySize": 760,
+      "name": "http://127.0.0.1:5243/assets/pointerEvents-boMPhNg3.js",
+      "transferSize": 1060
+    },
+    {
+      "encodedBodySize": 357,
+      "name": "http://127.0.0.1:5243/assets/keyboardEvents-CGYiptFb.js",
+      "transferSize": 657
+    },
+    {
+      "encodedBodySize": 768,
+      "name": "http://127.0.0.1:5243/assets/math.plane-URv9-mpa.js",
+      "transferSize": 1068
+    },
+    {
+      "encodedBodySize": 4943,
+      "name": "http://127.0.0.1:5243/assets/sceneComponent-PfXmK13O.js",
+      "transferSize": 5243
+    },
+    {
+      "encodedBodySize": 7559,
+      "name": "http://127.0.0.1:5243/assets/animation.pure-DZvxnPTv.js",
+      "transferSize": 7859
+    },
+    {
+      "encodedBodySize": 1128,
+      "name": "http://127.0.0.1:5243/assets/preload-helper-mJ2wAMMC.js",
+      "transferSize": 1428
+    },
+    {
+      "encodedBodySize": 4467,
+      "name": "http://127.0.0.1:5243/assets/easing-MRq6cQGu.js",
+      "transferSize": 4767
+    },
+    {
+      "encodedBodySize": 34549,
+      "name": "http://127.0.0.1:5243/assets/scene.pure-Bgo_pTuT.js",
+      "transferSize": 34849
+    },
+    {
+      "encodedBodySize": 3839,
+      "name": "http://127.0.0.1:5243/assets/baseTexture.pure-DD1jDgvK.js",
+      "transferSize": 4139
+    },
+    {
+      "encodedBodySize": 5448,
+      "name": "http://127.0.0.1:5243/assets/texture.pure-DhkHhjz_.js",
+      "transferSize": 5748
+    },
+    {
+      "encodedBodySize": 12762,
+      "name": "http://127.0.0.1:5243/assets/animationGroup.pure-BHf62vzt.js",
+      "transferSize": 13062
+    },
+    {
+      "encodedBodySize": 5607,
+      "name": "http://127.0.0.1:5243/assets/effectRenderer.pure-BQpZadN7.js",
+      "transferSize": 5907
+    },
+    {
+      "encodedBodySize": 8188,
+      "name": "http://127.0.0.1:5243/assets/postProcess.pure-CHvvV-xg.js",
+      "transferSize": 8488
+    },
+    {
+      "encodedBodySize": 27795,
+      "name": "http://127.0.0.1:5243/assets/renderTargetTexture.pure-BIIFTcfT.js",
+      "transferSize": 28095
+    },
+    {
+      "encodedBodySize": 3494,
+      "name": "http://127.0.0.1:5243/assets/webAudioBaseSubGraph-Dt0pq0Kf.js",
+      "transferSize": 3794
+    },
+    {
+      "encodedBodySize": 3630,
+      "name": "http://127.0.0.1:5243/assets/spatialWebAudio-DdjhT40c.js",
+      "transferSize": 3930
+    },
+    {
+      "encodedBodySize": 55730,
+      "name": "http://127.0.0.1:5243/assets/brdfTextureTools-az2NqzJ_.js",
+      "transferSize": 56030
+    },
+    {
+      "encodedBodySize": 612,
+      "name": "http://127.0.0.1:5243/assets/packingFunctions-CYllaKEW.js",
+      "transferSize": 912
+    },
+    {
+      "encodedBodySize": 479,
+      "name": "http://127.0.0.1:5243/assets/abstractSoundSource-vjAm2svO.js",
+      "transferSize": 779
+    },
+    {
+      "encodedBodySize": 901,
+      "name": "http://127.0.0.1:5243/assets/abstractSoundInstance-B5C_WUCX.js",
+      "transferSize": 1201
+    },
+    {
+      "encodedBodySize": 685,
+      "name": "http://127.0.0.1:5243/assets/bonesDeclaration-eZsb-J1W.js",
+      "transferSize": 985
+    },
+    {
+      "encodedBodySize": 928,
+      "name": "http://127.0.0.1:5243/assets/bakedVertexAnimation-7XIMgH6x.js",
+      "transferSize": 1228
+    },
+    {
+      "encodedBodySize": 556,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexGlobalDeclaration-CKZ3fsoN.js",
+      "transferSize": 856
+    },
+    {
+      "encodedBodySize": 741,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexDeclaration-4aMxOx2b.js",
+      "transferSize": 1041
+    },
+    {
+      "encodedBodySize": 933,
+      "name": "http://127.0.0.1:5243/assets/instancesDeclaration-CJBvtBV5.js",
+      "transferSize": 1233
+    },
+    {
+      "encodedBodySize": 349,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexGlobal-CjrOq831.js",
+      "transferSize": 649
+    },
+    {
+      "encodedBodySize": 602,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertex-ogcMWae3.js",
+      "transferSize": 902
+    },
+    {
+      "encodedBodySize": 883,
+      "name": "http://127.0.0.1:5243/assets/instancesVertex-C-FoRQR1.js",
+      "transferSize": 1183
+    },
+    {
+      "encodedBodySize": 650,
+      "name": "http://127.0.0.1:5243/assets/packingFunctions-Zjmt0YZ0.js",
+      "transferSize": 950
+    },
+    {
+      "encodedBodySize": 508,
+      "name": "http://127.0.0.1:5243/assets/bonesVertex-pbyGCQQC.js",
+      "transferSize": 808
+    },
+    {
+      "encodedBodySize": 851,
+      "name": "http://127.0.0.1:5243/assets/bakedVertexAnimationDeclaration-C-g0vyVW.js",
+      "transferSize": 1151
+    },
+    {
+      "encodedBodySize": 602,
+      "name": "http://127.0.0.1:5243/assets/bonesDeclaration-SX_sSZ8J.js",
+      "transferSize": 902
+    },
+    {
+      "encodedBodySize": 493,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexGlobalDeclaration-5vBrbEWU.js",
+      "transferSize": 793
+    },
+    {
+      "encodedBodySize": 794,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexDeclaration-DQ2pBC2E.js",
+      "transferSize": 1094
+    },
+    {
+      "encodedBodySize": 365,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertexGlobal-DuIqJiFY.js",
+      "transferSize": 665
+    },
+    {
+      "encodedBodySize": 363,
+      "name": "http://127.0.0.1:5243/assets/instancesDeclaration-DsiFqYXH.js",
+      "transferSize": 663
+    },
+    {
+      "encodedBodySize": 828,
+      "name": "http://127.0.0.1:5243/assets/morphTargetsVertex-DCuAuKMQ.js",
+      "transferSize": 1128
+    },
+    {
+      "encodedBodySize": 393,
+      "name": "http://127.0.0.1:5243/assets/instancesVertex-Dty6qjVO.js",
+      "transferSize": 693
+    },
+    {
+      "encodedBodySize": 542,
+      "name": "http://127.0.0.1:5243/assets/bonesVertex-CDLHrzx0.js",
+      "transferSize": 842
+    },
+    {
+      "encodedBodySize": 650,
+      "name": "http://127.0.0.1:5243/assets/bakedVertexAnimation-CP3BNGXM.js",
+      "transferSize": 950
+    },
+    {
+      "encodedBodySize": 3215,
+      "name": "http://127.0.0.1:5243/assets/constants-_wyaM_ID.js",
+      "transferSize": 3515
+    },
+    {
+      "encodedBodySize": 484,
+      "name": "http://127.0.0.1:5243/assets/fresnelFunction-FdYlYPwE.js",
+      "transferSize": 784
+    },
+    {
+      "encodedBodySize": 2796,
+      "name": "http://127.0.0.1:5243/assets/cubemapToSphericalPolynomial-kiJO6xQ_.js",
+      "transferSize": 3096
+    },
+    {
+      "encodedBodySize": 2220,
+      "name": "http://127.0.0.1:5243/assets/helperFunctions-DHdJUWHO.js",
+      "transferSize": 2520
+    },
+    {
+      "encodedBodySize": 4879,
+      "name": "http://127.0.0.1:5243/assets/dumpTools.pure-PXNfL8XC.js",
+      "transferSize": 5179
+    },
+    {
+      "encodedBodySize": 279,
+      "name": "http://127.0.0.1:5243/assets/meshUboDeclaration-BATNZvmb.js",
+      "transferSize": 579
+    },
+    {
+      "encodedBodySize": 436,
+      "name": "http://127.0.0.1:5243/assets/sceneUboDeclaration-B96Tfx7b.js",
+      "transferSize": 736
+    },
+    {
+      "encodedBodySize": 481,
+      "name": "http://127.0.0.1:5243/assets/decalFragment-CvBK6CMD.js",
+      "transferSize": 781
+    },
+    {
+      "encodedBodySize": 558,
+      "name": "http://127.0.0.1:5243/assets/flowGraphInteger.pure-CZmJgkLp.js",
+      "transferSize": 858
+    },
+    {
+      "encodedBodySize": 736,
+      "name": "http://127.0.0.1:5243/assets/flowGraphAssetsContext-WtUyuDAI.js",
+      "transferSize": 1036
+    },
+    {
+      "encodedBodySize": 930,
+      "name": "http://127.0.0.1:5243/assets/flowGraphExecutionBlock-Bzxv07GA.js",
+      "transferSize": 1230
+    },
+    {
+      "encodedBodySize": 3319,
+      "name": "http://127.0.0.1:5243/assets/flowGraphBlock-BhsRuQUy.js",
+      "transferSize": 3619
+    },
+    {
+      "encodedBodySize": 159,
+      "name": "http://127.0.0.1:5243/assets/flowGraphExecutionBlockWithOutSignal-DF_MgX8i.js",
+      "transferSize": 459
+    },
+    {
+      "encodedBodySize": 669,
+      "name": "http://127.0.0.1:5243/assets/flowGraphAsyncExecutionBlock-B2lKtr62.js",
+      "transferSize": 969
+    },
+    {
+      "encodedBodySize": 682,
+      "name": "http://127.0.0.1:5243/assets/utils-CLq_UU0_.js",
+      "transferSize": 982
+    },
+    {
+      "encodedBodySize": 689,
+      "name": "http://127.0.0.1:5243/assets/flowGraphEventBlock-8cKiOVI8.js",
+      "transferSize": 989
+    },
+    {
+      "encodedBodySize": 321,
+      "name": "http://127.0.0.1:5243/assets/flowGraphDelayRegistry-Dd3murvx.js",
+      "transferSize": 621
+    },
+    {
+      "encodedBodySize": 927,
+      "name": "http://127.0.0.1:5243/assets/flowGraphRichTypes.pure-DMzJXadt.js",
+      "transferSize": 1227
+    },
+    {
+      "encodedBodySize": 968,
+      "name": "http://127.0.0.1:5243/assets/flowGraphCachedOperationBlock-Ctkj6Ydh.js",
+      "transferSize": 1268
+    },
+    {
+      "encodedBodySize": 302,
+      "name": "http://127.0.0.1:5243/assets/flowGraphUnaryOperationBlock-CDxdryrd.js",
+      "transferSize": 602
+    },
+    {
+      "encodedBodySize": 372,
+      "name": "http://127.0.0.1:5243/assets/flowGraphBinaryOperationBlock-8F1wZr72.js",
+      "transferSize": 672
+    },
+    {
+      "encodedBodySize": 1822,
+      "name": "http://127.0.0.1:5243/assets/flowGraphPlayAnimationBlock.pure-DqiARl5F.js",
+      "transferSize": 2122
+    },
+    {
+      "encodedBodySize": 442,
+      "name": "http://127.0.0.1:5243/assets/flowGraphKeyboardEventBlock-BK9HAPng.js",
+      "transferSize": 742
+    },
+    {
+      "encodedBodySize": 2342,
+      "name": "http://127.0.0.1:5243/assets/helperFunctions-D8vur8CW.js",
+      "transferSize": 2642
+    },
+    {
+      "encodedBodySize": 607,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneFragmentDeclaration-M3T9Lap-.js",
+      "transferSize": 907
+    },
+    {
+      "encodedBodySize": 804,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneFragment-CXLYb7ZJ.js",
+      "transferSize": 1104
+    },
+    {
+      "encodedBodySize": 752,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneVertexDeclaration-BYIpTPFm.js",
+      "transferSize": 1052
+    },
+    {
+      "encodedBodySize": 652,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneVertex-DwkrJYmX.js",
+      "transferSize": 952
+    },
+    {
+      "encodedBodySize": 613,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneFragmentDeclaration-Dztv0IA8.js",
+      "transferSize": 913
+    },
+    {
+      "encodedBodySize": 906,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneFragment-CWY7C38Z.js",
+      "transferSize": 1206
+    },
+    {
+      "encodedBodySize": 794,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneVertexDeclaration-B8LM6QZj.js",
+      "transferSize": 1094
+    },
+    {
+      "encodedBodySize": 802,
+      "name": "http://127.0.0.1:5243/assets/clipPlaneVertex-DfQm2Zia.js",
+      "transferSize": 1102
+    },
+    {
+      "encodedBodySize": 330,
+      "name": "http://127.0.0.1:5243/assets/sceneVertexDeclaration-CluTp-RC.js",
+      "transferSize": 630
+    },
+    {
+      "encodedBodySize": 222,
+      "name": "http://127.0.0.1:5243/assets/meshVertexDeclaration-CPlGPeEg.js",
+      "transferSize": 522
+    },
+    {
+      "encodedBodySize": 364,
+      "name": "http://127.0.0.1:5243/assets/sceneUboDeclaration-B5VhSG0v.js",
+      "transferSize": 664
+    },
+    {
+      "encodedBodySize": 345,
+      "name": "http://127.0.0.1:5243/assets/meshUboDeclaration-BmNu2KU_.js",
+      "transferSize": 645
+    },
+    {
+      "encodedBodySize": 764,
+      "name": "http://127.0.0.1:5243/assets/clusteredLightingFunctions-BFCOODPn.js",
+      "transferSize": 1064
+    },
+    {
+      "encodedBodySize": 792,
+      "name": "http://127.0.0.1:5243/assets/clusteredLightingFunctions-DNqaoQCj.js",
+      "transferSize": 1092
+    },
+    {
+      "encodedBodySize": 698,
+      "name": "http://127.0.0.1:5243/assets/backgroundUboDeclaration-ClJLip40.js",
+      "transferSize": 998
+    },
+    {
+      "encodedBodySize": 231,
+      "name": "http://127.0.0.1:5243/assets/fogVertexDeclaration-CiHbVcSR.js",
+      "transferSize": 531
+    },
+    {
+      "encodedBodySize": 371,
+      "name": "http://127.0.0.1:5243/assets/logDepthDeclaration-BpsZdJ7z.js",
+      "transferSize": 671
+    },
+    {
+      "encodedBodySize": 590,
+      "name": "http://127.0.0.1:5243/assets/lightVxUboDeclaration-C0zImfsf.js",
+      "transferSize": 890
+    },
+    {
+      "encodedBodySize": 332,
+      "name": "http://127.0.0.1:5243/assets/fogVertex-D0bmc4KF.js",
+      "transferSize": 632
+    },
+    {
+      "encodedBodySize": 376,
+      "name": "http://127.0.0.1:5243/assets/logDepthVertex-DSD5XdGw.js",
+      "transferSize": 676
+    },
+    {
+      "encodedBodySize": 544,
+      "name": "http://127.0.0.1:5243/assets/shadowsVertex-D6v7o28N.js",
+      "transferSize": 844
+    },
+    {
+      "encodedBodySize": 511,
+      "name": "http://127.0.0.1:5243/assets/imageProcessingDeclaration-C3mO05-O.js",
+      "transferSize": 811
+    },
+    {
+      "encodedBodySize": 1047,
+      "name": "http://127.0.0.1:5243/assets/reflectionFunction-C2zo31eT.js",
+      "transferSize": 1347
+    },
+    {
+      "encodedBodySize": 1070,
+      "name": "http://127.0.0.1:5243/assets/lightUboDeclaration-invEuN9e.js",
+      "transferSize": 1370
+    },
+    {
+      "encodedBodySize": 1838,
+      "name": "http://127.0.0.1:5243/assets/ltcHelperFunctions-D8BySwCQ.js",
+      "transferSize": 2138
+    },
+    {
+      "encodedBodySize": 2002,
+      "name": "http://127.0.0.1:5243/assets/lightsFragmentFunctions-DLwHFax8.js",
+      "transferSize": 2302
+    },
+    {
+      "encodedBodySize": 494,
+      "name": "http://127.0.0.1:5243/assets/fogFragmentDeclaration-B3hbo39x.js",
+      "transferSize": 794
+    },
+    {
+      "encodedBodySize": 1621,
+      "name": "http://127.0.0.1:5243/assets/imageProcessingFunctions-C15fM41T.js",
+      "transferSize": 1921
+    },
+    {
+      "encodedBodySize": 3281,
+      "name": "http://127.0.0.1:5243/assets/lightFragment-BkT__YJ5.js",
+      "transferSize": 3581
+    },
+    {
+      "encodedBodySize": 3926,
+      "name": "http://127.0.0.1:5243/assets/shadowsFragmentFunctions-CyvG9jhk.js",
+      "transferSize": 4226
+    },
+    {
+      "encodedBodySize": 312,
+      "name": "http://127.0.0.1:5243/assets/logDepthFragment-CxtJswLx.js",
+      "transferSize": 612
+    },
+    {
+      "encodedBodySize": 326,
+      "name": "http://127.0.0.1:5243/assets/fogFragment-C9E3EVJj.js",
+      "transferSize": 626
+    },
+    {
+      "encodedBodySize": 721,
+      "name": "http://127.0.0.1:5243/assets/backgroundUboDeclaration-i4MsxPq1.js",
+      "transferSize": 1021
+    },
+    {
+      "encodedBodySize": 221,
+      "name": "http://127.0.0.1:5243/assets/fogVertexDeclaration-Bb9kDbrL.js",
+      "transferSize": 521
+    },
+    {
+      "encodedBodySize": 519,
+      "name": "http://127.0.0.1:5243/assets/lightVxFragmentDeclaration-Cn2ZeppL.js",
+      "transferSize": 819
+    },
+    {
+      "encodedBodySize": 529,
+      "name": "http://127.0.0.1:5243/assets/lightVxUboDeclaration-CQiAoKfZ.js",
+      "transferSize": 829
+    },
+    {
+      "encodedBodySize": 361,
+      "name": "http://127.0.0.1:5243/assets/logDepthDeclaration-Dh136csG.js",
+      "transferSize": 661
+    },
+    {
+      "encodedBodySize": 217,
+      "name": "http://127.0.0.1:5243/assets/fogVertex-B90wzaBe.js",
+      "transferSize": 517
+    },
+    {
+      "encodedBodySize": 309,
+      "name": "http://127.0.0.1:5243/assets/logDepthVertex-D5IUM6qd.js",
+      "transferSize": 609
+    },
+    {
+      "encodedBodySize": 1001,
+      "name": "http://127.0.0.1:5243/assets/shadowsVertex-CdnfwHqg.js",
+      "transferSize": 1301
+    },
+    {
+      "encodedBodySize": 974,
+      "name": "http://127.0.0.1:5243/assets/imageProcessingDeclaration-eTCZRCGL.js",
+      "transferSize": 1274
+    },
+    {
+      "encodedBodySize": 991,
+      "name": "http://127.0.0.1:5243/assets/reflectionFunction-C0UTcqMV.js",
+      "transferSize": 1291
+    },
+    {
+      "encodedBodySize": 935,
+      "name": "http://127.0.0.1:5243/assets/lightFragmentDeclaration-BfzJFvAK.js",
+      "transferSize": 1235
+    },
+    {
+      "encodedBodySize": 941,
+      "name": "http://127.0.0.1:5243/assets/lightUboDeclaration-0GW0xpMZ.js",
+      "transferSize": 1241
+    },
+    {
+      "encodedBodySize": 1532,
+      "name": "http://127.0.0.1:5243/assets/ltcHelperFunctions-DS3Utz6C.js",
+      "transferSize": 1832
+    },
+    {
+      "encodedBodySize": 1819,
+      "name": "http://127.0.0.1:5243/assets/lightsFragmentFunctions-CrErKaBy.js",
+      "transferSize": 2119
+    },
+    {
+      "encodedBodySize": 1869,
+      "name": "http://127.0.0.1:5243/assets/imageProcessingFunctions-YjY3YzNA.js",
+      "transferSize": 2169
+    },
+    {
+      "encodedBodySize": 3950,
+      "name": "http://127.0.0.1:5243/assets/shadowsFragmentFunctions-BBZeOHdF.js",
+      "transferSize": 4250
+    },
+    {
+      "encodedBodySize": 937,
+      "name": "http://127.0.0.1:5243/assets/fogFragmentDeclaration--w8QPs2M.js",
+      "transferSize": 1237
+    },
+    {
+      "encodedBodySize": 294,
+      "name": "http://127.0.0.1:5243/assets/fogFragment-CKCGTcJi.js",
+      "transferSize": 594
+    },
+    {
+      "encodedBodySize": 270,
+      "name": "http://127.0.0.1:5243/assets/logDepthFragment-C5lxT4l1.js",
+      "transferSize": 570
+    },
+    {
+      "encodedBodySize": 434,
+      "name": "http://127.0.0.1:5243/assets/vertexColorMixing-DPW6Is9y.js",
+      "transferSize": 734
+    },
+    {
+      "encodedBodySize": 3110,
+      "name": "http://127.0.0.1:5243/assets/lightFragment-CbTUC3ac.js",
+      "transferSize": 3410
+    },
+    {
+      "encodedBodySize": 664,
+      "name": "http://127.0.0.1:5243/assets/pbrUboDeclaration-BPdnc_7Y.js",
+      "transferSize": 964
+    },
+    {
+      "encodedBodySize": 239,
+      "name": "http://127.0.0.1:5243/assets/mainUVVaryingDeclaration-B_7d0nc3.js",
+      "transferSize": 539
+    },
+    {
+      "encodedBodySize": 1515,
+      "name": "http://127.0.0.1:5243/assets/samplerVertexImplementation-CEwsh6W2.js",
+      "transferSize": 1815
+    },
+    {
+      "encodedBodySize": 394,
+      "name": "http://127.0.0.1:5243/assets/bumpVertexDeclaration-I4Guxw_q.js",
+      "transferSize": 694
+    },
+    {
+      "encodedBodySize": 567,
+      "name": "http://127.0.0.1:5243/assets/harmonicsFunctions-YM-AdJck.js",
+      "transferSize": 867
+    },
+    {
+      "encodedBodySize": 4301,
+      "name": "http://127.0.0.1:5243/assets/pbrBRDFFunctions-DxfbxN23.js",
+      "transferSize": 4601
+    },
+    {
+      "encodedBodySize": 1513,
+      "name": "http://127.0.0.1:5243/assets/vertexPullingDeclaration-bSzsf5ND.js",
+      "transferSize": 1813
+    },
+    {
+      "encodedBodySize": 699,
+      "name": "http://127.0.0.1:5243/assets/bumpVertex-DRq4BZvD.js",
+      "transferSize": 999
+    },
+    {
+      "encodedBodySize": 550,
+      "name": "http://127.0.0.1:5243/assets/objectIdFunctions-B7azwFhh.js",
+      "transferSize": 850
+    },
+    {
+      "encodedBodySize": 562,
+      "name": "http://127.0.0.1:5243/assets/vertexColorMixing-UCrnwszu.js",
+      "transferSize": 862
+    },
+    {
+      "encodedBodySize": 2630,
+      "name": "http://127.0.0.1:5243/assets/oitFragment-BX3jW996.js",
+      "transferSize": 2930
+    },
+    {
+      "encodedBodySize": 546,
+      "name": "http://127.0.0.1:5243/assets/meshBlendTagFragmentOutput-DphJWeHM.js",
+      "transferSize": 846
+    },
+    {
+      "encodedBodySize": 7851,
+      "name": "http://127.0.0.1:5243/assets/pbrDebug-BrRjjwX-.js",
+      "transferSize": 8151
+    },
+    {
+      "encodedBodySize": 729,
+      "name": "http://127.0.0.1:5243/assets/samplerFragmentDeclaration-CEHqUfAO.js",
+      "transferSize": 1029
+    },
+    {
+      "encodedBodySize": 273,
+      "name": "http://127.0.0.1:5243/assets/subSurfaceScatteringFunctions-kzIx-1Od.js",
+      "transferSize": 573
+    },
+    {
+      "encodedBodySize": 881,
+      "name": "http://127.0.0.1:5243/assets/pbrIBLFunctions-b8fwQKtH.js",
+      "transferSize": 1181
+    },
+    {
+      "encodedBodySize": 2504,
+      "name": "http://127.0.0.1:5243/assets/hdrFilteringFunctions-Da1yugu7.js",
+      "transferSize": 2804
+    },
+    {
+      "encodedBodySize": 1238,
+      "name": "http://127.0.0.1:5243/assets/bumpFragmentMainFunctions-D-SkF7GB.js",
+      "transferSize": 1538
+    },
+    {
+      "encodedBodySize": 884,
+      "name": "http://127.0.0.1:5243/assets/bumpFragmentFunctions-DBY65jvy.js",
+      "transferSize": 1184
+    },
+    {
+      "encodedBodySize": 229,
+      "name": "http://127.0.0.1:5243/assets/mainUVVaryingDeclaration-BBamQlxR.js",
+      "transferSize": 529
+    },
+    {
+      "encodedBodySize": 1031,
+      "name": "http://127.0.0.1:5243/assets/bumpFragment-CxYyYLpf.js",
+      "transferSize": 1331
+    },
+    {
+      "encodedBodySize": 675,
+      "name": "http://127.0.0.1:5243/assets/pbrUboDeclaration--xFZEw0i.js",
+      "transferSize": 975
+    },
+    {
+      "encodedBodySize": 1069,
+      "name": "http://127.0.0.1:5243/assets/samplerVertexImplementation-DUwTGCgo.js",
+      "transferSize": 1369
+    },
+    {
+      "encodedBodySize": 536,
+      "name": "http://127.0.0.1:5243/assets/harmonicsFunctions-Cc7pbAzt.js",
+      "transferSize": 836
+    },
+    {
+      "encodedBodySize": 4124,
+      "name": "http://127.0.0.1:5243/assets/pbrBRDFFunctions-BCNINF-p.js",
+      "transferSize": 4424
+    },
+    {
+      "encodedBodySize": 341,
+      "name": "http://127.0.0.1:5243/assets/bumpVertexDeclaration-Cb04kLz9.js",
+      "transferSize": 641
+    },
+    {
+      "encodedBodySize": 522,
+      "name": "http://127.0.0.1:5243/assets/bumpVertex-CWhdIpqj.js",
+      "transferSize": 822
+    },
+    {
+      "encodedBodySize": 875,
+      "name": "http://127.0.0.1:5243/assets/prePassDeclaration-UpIxofH8.js",
+      "transferSize": 1175
+    },
+    {
+      "encodedBodySize": 573,
+      "name": "http://127.0.0.1:5243/assets/objectIdFunctions-532nR7xV.js",
+      "transferSize": 873
+    },
+    {
+      "encodedBodySize": 2555,
+      "name": "http://127.0.0.1:5243/assets/oitFragment-B_qmRcLR.js",
+      "transferSize": 2855
+    },
+    {
+      "encodedBodySize": 6232,
+      "name": "http://127.0.0.1:5243/assets/pbrDebug-BqaGz1G1.js",
+      "transferSize": 6532
+    },
+    {
+      "encodedBodySize": 675,
+      "name": "http://127.0.0.1:5243/assets/samplerFragmentDeclaration-3yaLawFX.js",
+      "transferSize": 975
+    },
+    {
+      "encodedBodySize": 262,
+      "name": "http://127.0.0.1:5243/assets/subSurfaceScatteringFunctions-D1w5631e.js",
+      "transferSize": 562
+    },
+    {
+      "encodedBodySize": 881,
+      "name": "http://127.0.0.1:5243/assets/pbrIBLFunctions-CSlJv7qb.js",
+      "transferSize": 1181
+    },
+    {
+      "encodedBodySize": 390,
+      "name": "http://127.0.0.1:5243/assets/decalFragment-DYiNNNYb.js",
+      "transferSize": 690
+    },
+    {
+      "encodedBodySize": 1218,
+      "name": "http://127.0.0.1:5243/assets/bumpFragmentMainFunctions-DGQe1pIX.js",
+      "transferSize": 1518
+    },
+    {
+      "encodedBodySize": 845,
+      "name": "http://127.0.0.1:5243/assets/bumpFragmentFunctions-BKQoojZ_.js",
+      "transferSize": 1145
+    },
+    {
+      "encodedBodySize": 2547,
+      "name": "http://127.0.0.1:5243/assets/hdrFilteringFunctions-Dw0rQ8Bu.js",
+      "transferSize": 2847
+    },
+    {
+      "encodedBodySize": 937,
+      "name": "http://127.0.0.1:5243/assets/bumpFragment-COQ64DYF.js",
+      "transferSize": 1237
+    },
+    {
+      "encodedBodySize": 1053,
+      "name": "http://127.0.0.1:5243/assets/openpbrUboDeclaration-DsEnzkeE.js",
+      "transferSize": 1353
+    },
+    {
+      "encodedBodySize": 1026,
+      "name": "http://127.0.0.1:5243/assets/openpbrUboDeclaration-CbPGRvOI.js",
+      "transferSize": 1326
+    },
+    {
+      "encodedBodySize": 4140,
+      "name": "http://127.0.0.1:5243/assets/openpbrSubsurfaceLayerData-DpsV2wgM.js",
+      "transferSize": 4440
+    },
+    {
+      "encodedBodySize": 363,
+      "name": "http://127.0.0.1:5243/assets/sceneFragmentDeclaration-ql3RpL9u.js",
+      "transferSize": 663
+    },
+    {
+      "encodedBodySize": 3894,
+      "name": "http://127.0.0.1:5243/assets/openpbrSubsurfaceLayerData-DZgp0Qa4.js",
+      "transferSize": 4194
+    },
+    {
+      "encodedBodySize": 246,
+      "name": "http://127.0.0.1:5243/assets/pointCloudVertex-CmkEsLzf.js",
+      "transferSize": 546
+    },
+    {
+      "encodedBodySize": 536,
+      "name": "http://127.0.0.1:5243/assets/defaultUboDeclaration-DVoEMIF5.js",
+      "transferSize": 836
+    },
+    {
+      "encodedBodySize": 551,
+      "name": "http://127.0.0.1:5243/assets/defaultUboDeclaration-C53xcSdv.js",
+      "transferSize": 851
+    },
+    {
+      "encodedBodySize": 840,
+      "name": "http://127.0.0.1:5243/assets/geometryRenderingFragment-BoxdRBy7.js",
+      "transferSize": 1140
+    },
+    {
+      "encodedBodySize": 783,
+      "name": "http://127.0.0.1:5243/assets/geometryRenderingFragment-DZg0Y277.js",
+      "transferSize": 1083
+    },
+    {
+      "encodedBodySize": 4789,
+      "name": "http://127.0.0.1:5243/assets/game-3QjX9W1S.css",
+      "transferSize": 5089
+    },
+    {
+      "encodedBodySize": 2753,
+      "name": "http://127.0.0.1:5243/assets/screenSpaceRayTrace-BZRnp6Bu.js",
+      "transferSize": 3053
+    },
+    {
+      "encodedBodySize": 212,
+      "name": "http://127.0.0.1:5243/assets/kernelBlurVaryingDeclaration-DP2Wr9Oc.js",
+      "transferSize": 512
+    },
+    {
+      "encodedBodySize": 222,
+      "name": "http://127.0.0.1:5243/assets/kernelBlurVaryingDeclaration-g2Ge9lzd.js",
+      "transferSize": 522
+    },
+    {
+      "encodedBodySize": 468,
+      "name": "http://127.0.0.1:5243/assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js",
+      "transferSize": 768
+    },
+    {
+      "encodedBodySize": 614,
+      "name": "http://127.0.0.1:5243/assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js",
+      "transferSize": 914
+    },
+    {
+      "encodedBodySize": 2914,
+      "name": "http://127.0.0.1:5243/assets/screenSpaceRayTrace-Z74_Mvl0.js",
+      "transferSize": 3214
+    },
+    {
+      "encodedBodySize": 622,
+      "name": "http://127.0.0.1:5243/assets/mrtFragmentDeclaration-BZpfWb0R.js",
+      "transferSize": 922
+    },
+    {
+      "encodedBodySize": 3140,
+      "name": "http://127.0.0.1:5243/assets/khronosTextureContainer2-BrNnAMFK.js",
+      "transferSize": 3440
+    },
+    {
+      "encodedBodySize": 1257781,
+      "name": "http://127.0.0.1:5243/assets/glTF-B3Ns1G-h.js",
+      "transferSize": 1258081
+    },
+    {
+      "encodedBodySize": 651,
+      "name": "http://127.0.0.1:5243/assets/noise.fragment-DEbzbasH.js",
+      "transferSize": 951
+    },
+    {
+      "encodedBodySize": 1577,
+      "name": "http://127.0.0.1:5243/assets/ktxTextureLoader-WJ1eYg9a.js",
+      "transferSize": 1877
+    },
+    {
+      "encodedBodySize": 90322,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/grass-color.ktx2",
+      "transferSize": 90622
+    },
+    {
+      "encodedBodySize": 50992,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/dirt-color.ktx2",
+      "transferSize": 51292
+    },
+    {
+      "encodedBodySize": 84303,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/stones-color.ktx2",
+      "transferSize": 84603
+    },
+    {
+      "encodedBodySize": 50214,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/sand-color.ktx2",
+      "transferSize": 50514
+    },
+    {
+      "encodedBodySize": 79011,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/mud-color.ktx2",
+      "transferSize": 79311
+    },
+    {
+      "encodedBodySize": 81216,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/rock-color.ktx2",
+      "transferSize": 81516
+    },
+    {
+      "encodedBodySize": 323883,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/grass-normal.ktx2",
+      "transferSize": 324183
+    },
+    {
+      "encodedBodySize": 270832,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/dirt-normal.ktx2",
+      "transferSize": 271132
+    },
+    {
+      "encodedBodySize": 302533,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/stones-normal.ktx2",
+      "transferSize": 302833
+    },
+    {
+      "encodedBodySize": 283563,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/sand-normal.ktx2",
+      "transferSize": 283863
+    },
+    {
+      "encodedBodySize": 330761,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/mud-normal.ktx2",
+      "transferSize": 331061
+    },
+    {
+      "encodedBodySize": 286809,
+      "name": "http://127.0.0.1:5243/game-assets/terrain/rock-normal.ktx2",
+      "transferSize": 287109
+    },
+    {
+      "encodedBodySize": 284496,
+      "name": "http://127.0.0.1:5243/game-assets/house-painted.glb",
+      "transferSize": 284796
+    },
+    {
+      "encodedBodySize": 565,
+      "name": "http://127.0.0.1:5243/assets/envTextureLoader-BEyddKWy.js",
+      "transferSize": 865
+    },
+    {
+      "encodedBodySize": 7896,
+      "name": "http://127.0.0.1:5243/decoders/meshoptimizer-1.2.0/meshopt_decoder.js",
+      "transferSize": 8196
+    },
+    {
+      "encodedBodySize": 563276,
+      "name": "http://127.0.0.1:5243/game-assets/environment/qwantani-puresky.env",
+      "transferSize": 563576
+    },
+    {
+      "encodedBodySize": 0,
+      "name": "http://127.0.0.1:5243/favicon.ico",
+      "transferSize": 300
+    },
+    {
+      "encodedBodySize": 1213396,
+      "name": "http://127.0.0.1:5243/art-sample/olive.glb",
+      "transferSize": 1213696
+    },
+    {
+      "encodedBodySize": 646956,
+      "name": "http://127.0.0.1:5243/game-assets/adventurer.glb",
+      "transferSize": 647256
+    },
+    {
+      "encodedBodySize": 723464,
+      "name": "http://127.0.0.1:5243/game-assets/john.glb",
+      "transferSize": 723764
+    },
+    {
+      "encodedBodySize": 431080,
+      "name": "http://127.0.0.1:5243/game-assets/wolf.glb",
+      "transferSize": 431380
+    },
+    {
+      "encodedBodySize": 684716,
+      "name": "http://127.0.0.1:5243/game-assets/merchant.glb",
+      "transferSize": 685016
+    },
+    {
+      "encodedBodySize": 693984,
+      "name": "http://127.0.0.1:5243/game-assets/bandit.glb",
+      "transferSize": 694284
+    }
+  ],
   "reviewShot": "undefined"
 }

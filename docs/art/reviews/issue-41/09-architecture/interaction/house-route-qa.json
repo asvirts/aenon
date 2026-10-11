@@ -1,24 +1,21 @@
 {
-  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
-  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
-  "method": "Normal production build, fresh save fixture imported through Settings. Browser operator clicked the Merchant label, captured read-only status samples and a 30-second canvas video. Independent CLI analysis checks every sampled position and consecutive segment with the unchanged production navigation; independent image inspection verifies complete-house fade and restoration.",
+  "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "method": "Normal integrated production game, fresh fixture imported through Settings, then actual Merchant label click. Independent analysis checks all sampled positions, consecutive segments and queued routes against unchanged production navigation. Identical checks are memoized; all raw samples remain retained.",
   "fixture": "house-close-import.json",
   "samples": "house-route-samples.json",
-  "video": "house-route.webm",
-  "sampleCount": 304,
-  "movingSampleCount": 43,
+  "sampleCount": 1879,
+  "movingSampleCount": 42,
   "merchantTargetSampleCount": 42,
   "start": {
     "x": -6,
     "z": 197.5
   },
   "final": {
-    "x": -8.15572916927467,
-    "z": 205.8812101200353
+    "x": -8.162142120133671,
+    "z": 205.87360587576657
   },
-  "totalSampledDistanceMetres": 13.0584509569382,
-  "simulationTimeAtFirstSample": 43.66139999997687,
-  "simulationTimeAtLastSample": 61.20809999996517,
+  "totalSampledDistanceMetres": 13.087240664341905,
   "firstObservedQueuedRoute": [
     {
       "x": -9.772619516686095,
@@ -37,17 +34,18 @@
       "z": 206.11709083237432
     }
   ],
-  "westDetourMinimumX": -9.772076356741875,
+  "firstPausedArrivalSampleIndex": 43,
   "directStartToMerchantTraversable": false,
   "allSampledPositionsWalkable": true,
-  "all303ConsecutiveSampleSegmentsTraversable": true,
+  "allConsecutiveSampleSegmentsTraversable": true,
+  "consecutiveSegmentCount": 1878,
   "allQueuedRouteSegmentsTraversable": true,
   "invalidPositionIndices": [],
   "invalidConsecutiveSegmentIndices": [],
   "invalidQueuedRouteSampleIndices": [],
   "merchantTradeOpened": {
     "operatorObserved": true,
-    "image": "merchant-opened.png",
+    "image": "merchant-reached.png",
     "finalPaused": true,
     "finalRouteEmpty": true,
     "finalTargetCleared": true
@@ -55,19 +53,16 @@
   "occlusion": {
     "fadedImage": "whole-house-faded.png",
     "clearImage": "whole-house-clear.png",
-    "independentImageReview": "Whole house including roof, walls, ladder, courtyard wall and awning is translucent at the imported close start; Adventurer remains visible. After routing around the house and closing trade, the same building is opaque again.",
+    "independentImageReview": "Whole house roof, walls, ladder, courtyard and awning visibly translucent while Adventurer remains visible at close start. The same assembly is opaque after detour and closing trade. Both integrated images independently inspected at full size.",
     "result": "pass"
   },
-  "limitations": "Sampled geometry checks supplement browser movement; the short video is canvas-only and does not include DOM labels/panels. Separate PNG records retain those UI states. The distant initial fixture was not occluded and its image is named route-start-distant.png; it is not fade evidence.",
-  "result": "pass",
-  "videoMetadata": {
-    "codec": "vp9",
-    "dimensions": [
-      1280,
-      720
-    ],
-    "framesPerSecond": 20,
-    "durationSeconds": 30.413988,
-    "verifiedWith": "ffprobe"
-  }
+  "video": {
+    "file": "house-route.webm",
+    "editRecord": "house-route-video-edit.json",
+    "durationSeconds": 6.496,
+    "canvasOnly": true,
+    "trimmedLongIdle": true
+  },
+  "limitations": "Sampling supplements actual browser movement. The video omits DOM panels; separate PNG retains Merchant dialog. Full 188.55-second video is preserved locally; the first 6.5 seconds are retained by stream copying without re-encoding. Timing cutoff is approximately arrival plus 2 seconds, because samples have no wall-clock timestamps.",
+  "result": "pass"
 }

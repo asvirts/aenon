@@ -1,6 +1,6 @@
 {
-  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
-  "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
   "canonicalBefore": 32,
   "canonicalAfter": 32,
   "supplementalBefore": 8,
@@ -8,8 +8,8 @@
   "frames": [
     {
       "file": "before/aenon-far-high.png",
-      "sha256": "7819a63ff39b73d71afb645aa9c06ece0809b7daf8ededd562941e3134388d13",
-      "bytes": 741657,
+      "sha256": "072bfa7eccbe85f826f6216898093f0212c73d5f5e4ec73a344b5764019df62b",
+      "bytes": 1452934,
       "dimensions": [
         1280,
         720
@@ -17,8 +17,8 @@
     },
     {
       "file": "before/aenon-far-low.png",
-      "sha256": "012e318425f0c7f74a04ca486bae2c0503acdf213bdec7234b73940c76e4191f",
-      "bytes": 680575,
+      "sha256": "1b639cfd4e445d5a03d535ebb2158848b794b66773c7fc6a2925f5842d899dcf",
+      "bytes": 1198798,
       "dimensions": [
         1280,
         720
@@ -26,8 +26,8 @@
     },
     {
       "file": "before/aenon-far-medium.png",
-      "sha256": "5f8e2287546824e669989df6d6356a28e52aa46d58fb0ce0b72fab43ce3195e3",
-      "bytes": 720783,
+      "sha256": "3aaa182768fc878825efc96508a32bd8dee353925353ee7a322f6d4513a40aa4",
+      "bytes": 1416409,
       "dimensions": [
         1280,
         720
@@ -35,8 +35,8 @@
     },
     {
       "file": "before/aenon-far-ultra.png",
-      "sha256": "c6b548cc30edaca9d025dd2a73c99fa9223e9605988f74a1154a2c02c16f545d",
-      "bytes": 743020,
+      "sha256": "9c59c88f3fbe395636e78a5ca9b9fac2311eb0f617e8bd39d0e914b0f9427752",
+      "bytes": 1449459,
       "dimensions": [
         1280,
         720
@@ -44,8 +44,8 @@
     },
     {
       "file": "before/aenon-near-high.png",
-      "sha256": "1a3228f227df1debb365ea4c31d944312dc3a06fd196731f12170f5ac2e0bda6",
-      "bytes": 452234,
+      "sha256": "0ef9efc31defb44933aed5df2bd121ad5b142675f21c4bbfe40702abf73a946d",
+      "bytes": 1731253,
       "dimensions": [
         1280,
         720
@@ -53,8 +53,8 @@
     },
     {
       "file": "before/aenon-near-low.png",
-      "sha256": "81eb65622cff86fc82bcf41d71cd1089bbcf8216d4c1886fcf48cd822d599766",
-      "bytes": 423423,
+      "sha256": "cfe74d0f567a9aaa05ef3383dad730b0b0983b1efd4f9bf43a2e5cd56134c313",
+      "bytes": 1452903,
       "dimensions": [
         1280,
         720
@@ -62,8 +62,8 @@
     },
     {
       "file": "before/aenon-near-medium.png",
-      "sha256": "d181ec9b42470748eca7bd2a60995f737fb80d0a59cc6fd9356be52371411cee",
-      "bytes": 428465,
+      "sha256": "bd9d6af6900f627f6fdfb0c40491063fb41e6bdb2c98946d9747167d4678e3b8",
+      "bytes": 1641601,
       "dimensions": [
         1280,
         720
@@ -71,8 +71,8 @@
     },
     {
       "file": "before/aenon-near-ultra.png",
-      "sha256": "9ddb154130f9ec636350b13d442fb6fe60e9e8f84bd3ee9cc69f615fadb557b0",
-      "bytes": 447590,
+      "sha256": "c56cf4d29a47c39e9f47c92b256f41c4dedda0d0528c31d1af750e30985e9b20",
+      "bytes": 1730421,
       "dimensions": [
         1280,
         720
@@ -80,8 +80,8 @@
     },
     {
       "file": "before/aenon-riverbank-high.png",
-      "sha256": "c846950a9852f2a201a2359976138f174a3e6f425a376cadd1e201d4ebf6da2f",
-      "bytes": 723061,
+      "sha256": "56253b1432f544e01eb92b58477462934fb60126904308f216e815b43a19ef78",
+      "bytes": 1503068,
       "dimensions": [
         1280,
         720
@@ -89,8 +89,8 @@
     },
     {
       "file": "before/aenon-riverbank-low.png",
-      "sha256": "860798a4f65963bb4d7b1a4436bddde9b519a76454779c68286283d8ffaa7a4a",
-      "bytes": 678205,
+      "sha256": "bc29e95d2a6f8967a0725e1c03619962562d0342e64c3fd780f66f6ffe20d77d",
+      "bytes": 1254085,
       "dimensions": [
         1280,
         720
@@ -98,8 +98,8 @@
     },
     {
       "file": "before/aenon-riverbank-medium.png",
-      "sha256": "d907d9d01c95996918e98b4af8f404e8519d9bdc18cc3b2d0c8c6fbd1889cbf8",
-      "bytes": 705426,
+      "sha256": "0578f9c42f8ca79e4b8d9c810b8ab53f686326cd4b392e03b7f59a8805d22613",
+      "bytes": 1429229,
       "dimensions": [
         1280,
         720
@@ -107,8 +107,8 @@
     },
     {
       "file": "before/aenon-riverbank-ultra.png",
-      "sha256": "f91334fa192b781636bfa77e5b938afa3b6bfb7b6638dcdbf817cfd5ed0c88e1",
-      "bytes": 716972,
+      "sha256": "6f1061c33ece0e6f5a97d40457469a9041d538eb89138252374a985d608eb228",
+      "bytes": 1500150,
       "dimensions": [
         1280,
         720
@@ -116,8 +116,8 @@
     },
     {
       "file": "before/aenon-square-high.png",
-      "sha256": "650ef1c3f0c2a381ecf76e77b577006750dd15b2eb3e18438441f82365000bd5",
-      "bytes": 629025,
+      "sha256": "69ab1544e0fd7633ac24b15efa528efc1f8bc903263cce2cdc9d5b5b9ea104b0",
+      "bytes": 1633170,
       "dimensions": [
         1280,
         720
@@ -125,8 +125,8 @@
     },
     {
       "file": "before/aenon-square-low.png",
-      "sha256": "058a25cdb6831cf32699f9a5b2c45aff5d86c30fe4ede1a19db1d529583d90d3",
-      "bytes": 585432,
+      "sha256": "7d126f0af7b4b92067bea40e2592d4bf0f2b4b2bff2bbe8c53e45ac92a8962cb",
+      "bytes": 1341475,
       "dimensions": [
         1280,
         720
@@ -134,8 +134,8 @@
     },
     {
       "file": "before/aenon-square-medium.png",
-      "sha256": "6a5d394b06f8e03eeea855b77893fd73d6e24faf8ab902e34da97b922b837aa5",
-      "bytes": 602745,
+      "sha256": "8e4087f2ff8ccb1edb41a93ed2da20c9ce23b82be9eee5ec116140e120f7df08",
+      "bytes": 1528621,
       "dimensions": [
         1280,
         720
@@ -143,8 +143,8 @@
     },
     {
       "file": "before/aenon-square-ultra.png",
-      "sha256": "42f64b14c0cbaaf7ee1894a5adac06d73f1b5c081ba02e5d66cb0fde5ba58cfc",
-      "bytes": 623928,
+      "sha256": "85593129d9fa1abd3ef201c2c9cc6777277e5f055ae7e361a6061fac4752e17d",
+      "bytes": 1630383,
       "dimensions": [
         1280,
         720
@@ -152,8 +152,8 @@
     },
     {
       "file": "before/fight-high.png",
-      "sha256": "d063d17879b92d66d5636be6b5a329a8e862e1433b4a4ec104c83bdf1c80ddaa",
-      "bytes": 327818,
+      "sha256": "9dc7746914e68c5667ddfc252c8291fb1e816629b7b2105d329b3aab8240898e",
+      "bytes": 1460337,
       "dimensions": [
         1280,
         720
@@ -161,8 +161,8 @@
     },
     {
       "file": "before/fight-low.png",
-      "sha256": "eb5f1d306a1063c10a30738284eab4e00c883f32a6cb91efed7c5e09603df45d",
-      "bytes": 271510,
+      "sha256": "5fecf04f988c9f5d8c1d044edb047fe43efb20fca394e56aeb2ff33f788e2b1e",
+      "bytes": 1195838,
       "dimensions": [
         1280,
         720
@@ -170,8 +170,8 @@
     },
     {
       "file": "before/fight-medium.png",
-      "sha256": "1f63adfe0510e1d91725263b53713d0912c34fae4de3cdee1bf3b1355080d5df",
-      "bytes": 300101,
+      "sha256": "9ecd21a6c2f4a223b9f367a783e3222b5de412c8c1e698f8b40cc63b3b0365cb",
+      "bytes": 1388695,
       "dimensions": [
         1280,
         720
@@ -179,8 +179,8 @@
     },
     {
       "file": "before/fight-ultra.png",
-      "sha256": "7aa3481443fdb294348538c489ea11dda919a9d21c62eac66c505ff8477e7132",
-      "bytes": 326772,
+      "sha256": "c69709e5e768fe0c6529ab9eb984e42f1a237092e1b04b09b3f44060f1ff6e9b",
+      "bytes": 1460134,
       "dimensions": [
         1280,
         720
@@ -188,8 +188,8 @@
     },
     {
       "file": "before/jordan-bridge-high.png",
-      "sha256": "c7e1c309bb9d8ee02dd7c9f832fdf9c7621e64f6ea37e61eeeb61a8b53673430",
-      "bytes": 480657,
+      "sha256": "bddc5c508d2468cf967c30152810515aa994fc9ef984f052b2a4150200fbb0e0",
+      "bytes": 1313749,
       "dimensions": [
         1280,
         720
@@ -197,8 +197,8 @@
     },
     {
       "file": "before/jordan-bridge-low.png",
-      "sha256": "4836d4451843422f0d028fbfeb82a771a885fb5c29c388016cef496403111605",
-      "bytes": 433431,
+      "sha256": "d8b26c1aa0bdda0dddabd7eeda6c4d378fc61753c6f9057d1b0f6814154efba0",
+      "bytes": 1071203,
       "dimensions": [
         1280,
         720
@@ -206,8 +206,8 @@
     },
     {
       "file": "before/jordan-bridge-medium.png",
-      "sha256": "7ffea7ce5aebb118b7c1854c3a21cfedcfc02d9a24f2d827efaf1ee1373d09ac",
-      "bytes": 487325,
+      "sha256": "c6e6ecc019e869d8ef7cd79bfdf34a9288e3f595ee55e83a7ef14db27438ef87",
+      "bytes": 1294510,
       "dimensions": [
         1280,
         720
@@ -215,8 +215,8 @@
     },
     {
       "file": "before/jordan-bridge-ultra.png",
-      "sha256": "f5a39d0270343ced0416a56c9a1f68e0c7ce3a865ef24932b0615d8e4c4bd05a",
-      "bytes": 476301,
+      "sha256": "24049836b2dc7575c61b445a519786fd8f44c9c42db3aa5d1f445b6239c8a2c9",
+      "bytes": 1312898,
       "dimensions": [
         1280,
         720
@@ -224,8 +224,8 @@
     },
     {
       "file": "before/scythopolis-market-high.png",
-      "sha256": "48dc1f2061213b38d3deb6c1e637ded78ecb8939089bc1507578215cedab476f",
-      "bytes": 482905,
+      "sha256": "5ed7cc60638f6bc16f1194e704c53f200815849c1892bd84656bc927d2657727",
+      "bytes": 1491971,
       "dimensions": [
         1280,
         720
@@ -233,8 +233,8 @@
     },
     {
       "file": "before/scythopolis-market-low.png",
-      "sha256": "cd49d53926c439f6475c7a89ed1739559095cfb84e556f073510a390fb2a1513",
-      "bytes": 423269,
+      "sha256": "67e3ebbde425ea239dd64f80b37e5a41a50b8705955870aec07d09458c9b67b2",
+      "bytes": 1231161,
       "dimensions": [
         1280,
         720
@@ -242,8 +242,8 @@
     },
     {
       "file": "before/scythopolis-market-medium.png",
-      "sha256": "7d2d9f75864a3c900e47e2946f493794c40f8a9a2ef01c2228fd268409f0c437",
-      "bytes": 480863,
+      "sha256": "9d521bafefce75d0b7e2a0272d46e52e1c43675d1d86294c9ced3031900728fa",
+      "bytes": 1427792,
       "dimensions": [
         1280,
         720
@@ -251,8 +251,8 @@
     },
     {
       "file": "before/scythopolis-market-ultra.png",
-      "sha256": "2e9d6277ef27bf3f76033ac0a5280a1662d97fba3c02d1638cfe570b98fea15e",
-      "bytes": 472341,
+      "sha256": "7b2cb12fd13d349548ee39d360ee712afa5476b1733c8632aa54196985b69e28",
+      "bytes": 1485819,
       "dimensions": [
         1280,
         720
@@ -260,8 +260,8 @@
     },
     {
       "file": "before/sea-shore-high.png",
-      "sha256": "11e0542972378d3b155c020dc6d9b6b47ea8067a4584f4894c15a537fc1e603f",
-      "bytes": 637831,
+      "sha256": "3e8140fba8a824331d7ac8b1f644c7b781a0b7bb7991475b2fbfe7298088594e",
+      "bytes": 1270074,
       "dimensions": [
         1280,
         720
@@ -269,8 +269,8 @@
     },
     {
       "file": "before/sea-shore-low.png",
-      "sha256": "4197b85df3ab3f39e48e35111dda9f6bea7e0c7e30d47b271b9db536d8d66f64",
-      "bytes": 594410,
+      "sha256": "a16164fd05b76360db472b4580e530c2406e05b639795586f71594ac43bf306d",
+      "bytes": 1086068,
       "dimensions": [
         1280,
         720
@@ -278,8 +278,8 @@
     },
     {
       "file": "before/sea-shore-medium.png",
-      "sha256": "2cb5ad14c889436872c6fe8636fb0181d4a9432cc3344841fb3515f55790c380",
-      "bytes": 619245,
+      "sha256": "2a3a2d65f3992d4f8b00013b851a08143a7b6dacb46ff84f40a4406faae43806",
+      "bytes": 1233999,
       "dimensions": [
         1280,
         720
@@ -287,8 +287,8 @@
     },
     {
       "file": "before/sea-shore-ultra.png",
-      "sha256": "194371e1a30a7df76a587ebaee34ead66c89b4ad793fdc1a9432548ce4e07119",
-      "bytes": 634470,
+      "sha256": "5b224e6ef11eb56fa1f9b0255f5e4640fd7d6dd05aa4fe2bc5548d1d3f7c953d",
+      "bytes": 1268041,
       "dimensions": [
         1280,
         720
@@ -296,8 +296,8 @@
     },
     {
       "file": "after/aenon-far-high.png",
-      "sha256": "423ed5c46b8349c0609cb6fbcc431682de9164ab4d2fcd6a5f97fcad0b0d7420",
-      "bytes": 722036,
+      "sha256": "effbad2f5d36d6ff4384bb5920f07b644c479e4437ed1ffbbc9a44f01e51f910",
+      "bytes": 1446564,
       "dimensions": [
         1280,
         720
@@ -305,8 +305,8 @@
     },
     {
       "file": "after/aenon-far-low.png",
-      "sha256": "f757f6fdad9f8d9f6136712b69735b2ddfce372b765f93cdccfdc14522445ec0",
-      "bytes": 650511,
+      "sha256": "59318466e30651048f77fad64e944e5f3c6f688573f6396090ab6bbeb236dd13",
+      "bytes": 1179483,
       "dimensions": [
         1280,
         720
@@ -314,8 +314,8 @@
     },
     {
       "file": "after/aenon-far-medium.png",
-      "sha256": "681fc6e6ec334b40fb40db98df8a5c39383a96408e2fc25497a587878a895866",
-      "bytes": 699101,
+      "sha256": "00d8c3bb3711fab2aa1a3c2ac3e36faa93786da672cdbebea45e9caf410f56b4",
+      "bytes": 1409380,
       "dimensions": [
         1280,
         720
@@ -323,8 +323,8 @@
     },
     {
       "file": "after/aenon-far-ultra.png",
-      "sha256": "1c49341ad82768574018f17097223d94b0b87c22fa155050ba076d5e7b4fa8d0",
-      "bytes": 721903,
+      "sha256": "2f5b0fbd306e81f7cb5b3c0c921c38d6dd4e95734d5874d6526e98879d16fc11",
+      "bytes": 1443846,
       "dimensions": [
         1280,
         720
@@ -332,8 +332,8 @@
     },
     {
       "file": "after/aenon-near-high.png",
-      "sha256": "fb2819607c166947731f66bd3533f65b88f84e29d6b8028457021094cb89d4ab",
-      "bytes": 452894,
+      "sha256": "82a92f1337a0bf8bcc24272f718cb0c415d578f1db70cd4dd134a7d29e026ca4",
+      "bytes": 1736438,
       "dimensions": [
         1280,
         720
@@ -341,8 +341,8 @@
     },
     {
       "file": "after/aenon-near-low.png",
-      "sha256": "8d1e199640ca1092ede7b19bfb4202372b6c78091eae922ad95fc906387a75f7",
-      "bytes": 419585,
+      "sha256": "f6f7bb589d32eee24188c5df4cd181e93101def86caf438f64a5b135ae6b989c",
+      "bytes": 1452262,
       "dimensions": [
         1280,
         720
@@ -350,8 +350,8 @@
     },
     {
       "file": "after/aenon-near-medium.png",
-      "sha256": "18dae47601192c51590648874b34d12f73ef6dfe2689c1edf2bbc54abeb5504e",
-      "bytes": 435064,
+      "sha256": "ec88649de06ea963d6467f05f064518e690629db5671b59468238852603427ec",
+      "bytes": 1647123,
       "dimensions": [
         1280,
         720
@@ -359,8 +359,8 @@
     },
     {
       "file": "after/aenon-near-ultra.png",
-      "sha256": "0b19d2ff82e69daf12288cd4fac47c71fbf03ff921c83e911fdd20817a86cc21",
-      "bytes": 448236,
+      "sha256": "197e9d1bdf20b3ba55af381b4b1e7ec8265cfba359778bb653796bc0b19e8e05",
+      "bytes": 1735327,
       "dimensions": [
         1280,
         720
@@ -368,8 +368,8 @@
     },
     {
       "file": "after/aenon-riverbank-high.png",
-      "sha256": "b35903aa99e4eea582f4e82847af597ff29db8839848ac4751cba593703e769c",
-      "bytes": 729291,
+      "sha256": "d69e31ff40161036d8554a1ab285e8494fc4df76f9acc873946bcf55e4f7c77d",
+      "bytes": 1518075,
       "dimensions": [
         1280,
         720
@@ -377,8 +377,8 @@
     },
     {
       "file": "after/aenon-riverbank-low.png",
-      "sha256": "ffe5f79d588c11aef42440489d6425cabe9f695857631fdc0723ea58258c557e",
-      "bytes": 668772,
+      "sha256": "c2aa0d172b23959af8fb1f0a77d71b002cb18840b9182b3d5f740ef4cac5b25f",
+      "bytes": 1254463,
       "dimensions": [
         1280,
         720
@@ -386,8 +386,8 @@
     },
     {
       "file": "after/aenon-riverbank-medium.png",
-      "sha256": "32743bd0d9cdcd72c45a969e6576e4c1519fee0a8d24511f94e5ba0d9635ac32",
-      "bytes": 714165,
+      "sha256": "bc08fdce57c3616abe46b0df65534cab2a520f13d04d1134f72d3aedcf738bfc",
+      "bytes": 1443555,
       "dimensions": [
         1280,
         720
@@ -395,8 +395,8 @@
     },
     {
       "file": "after/aenon-riverbank-ultra.png",
-      "sha256": "77026b22908eaeb90426d9093f7b1f79a99c4bf7f0dcf58be936c294a468c165",
-      "bytes": 724344,
+      "sha256": "2ba4c2f571e4bcb81b0ec309713ea5942645a23e1f373509ba5a8b6b5f2cc71b",
+      "bytes": 1515838,
       "dimensions": [
         1280,
         720
@@ -404,8 +404,8 @@
     },
     {
       "file": "after/aenon-square-high.png",
-      "sha256": "eb382fcc4e4ffea55181533c481b1d01668c979b1f5987d358a085c17ccd327d",
-      "bytes": 625186,
+      "sha256": "fdad33ffd59c7365236c5f98ea38efbbf01b912750e2953cfb4756c881cd9757",
+      "bytes": 1644160,
       "dimensions": [
         1280,
         720
@@ -413,8 +413,8 @@
     },
     {
       "file": "after/aenon-square-low.png",
-      "sha256": "6b00fe9f3cbf3c108e326207d53a20058d2a87016be29dbbbc669005f2ce4917",
-      "bytes": 568931,
+      "sha256": "e6796b1cbe1151163da0af94066a9ce1855969870cd30629d9afaa36fc6c93e6",
+      "bytes": 1335879,
       "dimensions": [
         1280,
         720
@@ -422,8 +422,8 @@
     },
     {
       "file": "after/aenon-square-medium.png",
-      "sha256": "5870f67bd02bf421a724a648a471d684da28838264fb9260b9ac0ea9a29282ea",
-      "bytes": 604072,
+      "sha256": "346d28403fea7e0d1d794234c75b9329e7d3213c99c498049cfe57edb83e2434",
+      "bytes": 1539770,
       "dimensions": [
         1280,
         720
@@ -431,8 +431,8 @@
     },
     {
       "file": "after/aenon-square-ultra.png",
-      "sha256": "ce12ebecbc465b7b8271277cb37198739c5bf004f6fd6fca4b7849eeba3fa83a",
-      "bytes": 620484,
+      "sha256": "e34f70628a955e3d011dcf1578305e04a30b99806a78f2b15a676f315682c2c6",
+      "bytes": 1641397,
       "dimensions": [
         1280,
         720
@@ -440,8 +440,8 @@
     },
     {
       "file": "after/fight-high.png",
-      "sha256": "fa62ecc0cc5786cfbeceeace5e9558a6940963cae791527ca820270e4a8b20be",
-      "bytes": 327954,
+      "sha256": "d5658ab4a3a47de88a6123e96e895b331fd7a03b34d3b1949a5325b7c0a93c0f",
+      "bytes": 1460302,
       "dimensions": [
         1280,
         720
@@ -449,8 +449,8 @@
     },
     {
       "file": "after/fight-low.png",
-      "sha256": "2001c6ec69653c14986a47203c7026645f61057feac778de287f2cd3d4f38970",
-      "bytes": 271572,
+      "sha256": "6a02367ead39ba3186eccf9bd62b376827b638f52e8f28343324bbef8b2c5566",
+      "bytes": 1196047,
       "dimensions": [
         1280,
         720
@@ -458,8 +458,8 @@
     },
     {
       "file": "after/fight-medium.png",
-      "sha256": "26d21312b9731f780fe48d067ce1dd7ef8d2e99b283df65aea0c8bfcbc331fa0",
-      "bytes": 300209,
+      "sha256": "b6c97429aa759a8fd2838ad483497a1a8b3b075fcc08ba6c102414a8c8f5f831",
+      "bytes": 1388817,
       "dimensions": [
         1280,
         720
@@ -467,8 +467,8 @@
     },
     {
       "file": "after/fight-ultra.png",
-      "sha256": "e6865941d03be8440bb0c290eb11da316c13021e2bacdacf90367592d44e63bf",
-      "bytes": 326563,
+      "sha256": "6483e84852c2160b129356fc160a508801d7832b4ff4b0b7e4746d91fac5d9f4",
+      "bytes": 1459973,
       "dimensions": [
         1280,
         720
@@ -476,8 +476,8 @@
     },
     {
       "file": "after/jordan-bridge-high.png",
-      "sha256": "ecb8e26bad18579f288397438322c4e0ad620b24914f48928eb88034a804fc85",
-      "bytes": 585552,
+      "sha256": "6400c16b0605223c6a1237248147fb7bd7a04b62dbd23f9cca2a63ed4b3a69b1",
+      "bytes": 1396506,
       "dimensions": [
         1280,
         720
@@ -485,8 +485,8 @@
     },
     {
       "file": "after/jordan-bridge-low.png",
-      "sha256": "02b43a5a7ef9a0d7631a17abc033f7bbe44f63c9ecf0e25e9e1a23f0ad95cf5d",
-      "bytes": 516023,
+      "sha256": "c1b0c3cb8681e4a81b5a8f70cd8a150254e5441f824c353cde2283cfa5696fc1",
+      "bytes": 1141410,
       "dimensions": [
         1280,
         720
@@ -494,8 +494,8 @@
     },
     {
       "file": "after/jordan-bridge-medium.png",
-      "sha256": "6e6af4c72c1ca73fa2a2d224440be511d0efd3bf91e897611cbb463a49dfa20d",
-      "bytes": 582330,
+      "sha256": "5044e451fe54ca33694402d0439409b8f88bd6e9548b6b9098164960a68736d4",
+      "bytes": 1360853,
       "dimensions": [
         1280,
         720
@@ -503,8 +503,8 @@
     },
     {
       "file": "after/jordan-bridge-ultra.png",
-      "sha256": "64424b9d43517e4fe9dcb383015381774c3d530e24e0fb52e2d8633249a4adcb",
-      "bytes": 584019,
+      "sha256": "8a7492278e234de395f2e0de925cd3a3cf52f01070ad3f4ef399325ca25cf9d5",
+      "bytes": 1396620,
       "dimensions": [
         1280,
         720
@@ -512,8 +512,8 @@
     },
     {
       "file": "after/scythopolis-market-high.png",
-      "sha256": "874ba7379ecbe411265c1a20ba449baa3f3bafbc49799c2fe5328fa56f2727c4",
-      "bytes": 493340,
+      "sha256": "b245ae03e253ae2ce4403d6a2622aaa70bf6a9a49a2025efb1421c1e6ad32529",
+      "bytes": 1529520,
       "dimensions": [
         1280,
         720
@@ -521,8 +521,8 @@
     },
     {
       "file": "after/scythopolis-market-low.png",
-      "sha256": "17f1ae31bd033a10df3cea5e63310806ad0d61c5356365d6b308146f064e9ee2",
-      "bytes": 415619,
+      "sha256": "640c1e452dbc89e9ffa09059524e07fa9668e7ba57437b70fe177f80342bee93",
+      "bytes": 1251362,
       "dimensions": [
         1280,
         720
@@ -530,8 +530,8 @@
     },
     {
       "file": "after/scythopolis-market-medium.png",
-      "sha256": "19ce064e11163decc36bb7be1ec5c7889eb31bf30090aa232fae145275e3976d",
-      "bytes": 480940,
+      "sha256": "ef53d5086f7083bbf5e742898e15f0e1616f9e07b8d57197fb740a243859a895",
+      "bytes": 1451081,
       "dimensions": [
         1280,
         720
@@ -539,8 +539,8 @@
     },
     {
       "file": "after/scythopolis-market-ultra.png",
-      "sha256": "37c0ff3474a8b549992661c1257b6d6f67033654107371301c3b2bc4a465f6f3",
-      "bytes": 484377,
+      "sha256": "9a5f14af8e5baaa7ecf319fc0f10bf9f5c42bd091a217cc28034cd239f20d261",
+      "bytes": 1526044,
       "dimensions": [
         1280,
         720
@@ -548,8 +548,8 @@
     },
     {
       "file": "after/sea-shore-high.png",
-      "sha256": "a4910148d50e9b11e5552c0238f25c31772ca9b173cdf05e48266b2d0b4d653f",
-      "bytes": 656402,
+      "sha256": "fd14111c284890dfb03a97f319141860a5ac22f6fedd1fab12dad046156e4472",
+      "bytes": 1296286,
       "dimensions": [
         1280,
         720
@@ -557,8 +557,8 @@
     },
     {
       "file": "after/sea-shore-low.png",
-      "sha256": "7f1c46c8d9a4508f31a377af3a0d7b7bc31b719047c7232acb9909e944849775",
-      "bytes": 606125,
+      "sha256": "2ca9fb22acc4a9d0957227667224c3afdff2e6a1cf78fc0d50df3f415dbd8288",
+      "bytes": 1101663,
       "dimensions": [
         1280,
         720
@@ -566,8 +566,8 @@
     },
     {
       "file": "after/sea-shore-medium.png",
-      "sha256": "97e7953324bf3f191b9a3bdf2044d613be96a182b3d60506eb967f62236faf20",
-      "bytes": 637816,
+      "sha256": "bb3baef63e09aa9242b6a53a2f442c5d950a35fdf3f1bec3125627c1d941c651",
+      "bytes": 1258170,
       "dimensions": [
         1280,
         720
@@ -575,8 +575,8 @@
     },
     {
       "file": "after/sea-shore-ultra.png",
-      "sha256": "b01ed24e52bd566fbe1e7983579d4f5cd27a05a4663c811d866dc28a00b3f9dc",
-      "bytes": 652824,
+      "sha256": "53891dacce4e866b50414b08d860806bc164ec03a5bb42464a451b334947437a",
+      "bytes": 1294053,
       "dimensions": [
         1280,
         720
@@ -584,8 +584,8 @@
     },
     {
       "file": "supplemental/before/pella-high.png",
-      "sha256": "49ce6fd985a5bb8c3ada13d17d3702436d51d1c5e813005f9ed730d20bf4612c",
-      "bytes": 572761,
+      "sha256": "ed6c148d1efb9e9f447017ce454d90875f874a6b187b8025729d090cd19e92ae",
+      "bytes": 1429687,
       "dimensions": [
         1280,
         720
@@ -593,8 +593,8 @@
     },
     {
       "file": "supplemental/before/pella-low.png",
-      "sha256": "912a90707c58df38ed4147a114ebb67bb646b7b4d2d1627f96ffebf21931261f",
-      "bytes": 523616,
+      "sha256": "a531cc01ae9b6759ce5c8d1dadb87984374b39cc8280218988a8485027187428",
+      "bytes": 1168383,
       "dimensions": [
         1280,
         720
@@ -602,8 +602,8 @@
     },
     {
       "file": "supplemental/before/pella-medium.png",
-      "sha256": "ef50c51f33e791b65a03bdbc1617fc242e61c244ab9d3f41eb48c170ad701194",
-      "bytes": 554782,
+      "sha256": "edfd87f4c39ce6ed121bd551207452e0c5590435dbf0945d1b316ba83e628058",
+      "bytes": 1394868,
       "dimensions": [
         1280,
         720
@@ -611,8 +611,8 @@
     },
     {
       "file": "supplemental/before/pella-ultra.png",
-      "sha256": "06d5f18e13b93b00f6d4a0c5d63b4aca38c40a7615ee1805f9005690ac9df99e",
-      "bytes": 567143,
+      "sha256": "a0ca500bfc956af286c2fc176acbc4516fd745c2adf189f9b49fdbf83c256543",
+      "bytes": 1424622,
       "dimensions": [
         1280,
         720
@@ -620,8 +620,8 @@
     },
     {
       "file": "supplemental/before/salim-high.png",
-      "sha256": "c79e83692cbf2f9f3640b3df44bb75651b2b245d6dfd7563b1e55c4f7743374a",
-      "bytes": 518250,
+      "sha256": "d82c1b1b836d7cbcca5d8c89770f3b66d626045a3250a0b78b23dc3cd415b2cb",
+      "bytes": 1390171,
       "dimensions": [
         1280,
         720
@@ -629,8 +629,8 @@
     },
     {
       "file": "supplemental/before/salim-low.png",
-      "sha256": "8be6c46ea3b804bc8479311d989d6d166628e01acf8e5b9ade28e98c1471a6dc",
-      "bytes": 451681,
+      "sha256": "62e32582a4bccacbb861789d761ec3f466a6c4bc6dabdeccdfbf901b6e177f09",
+      "bytes": 1138784,
       "dimensions": [
         1280,
         720
@@ -638,8 +638,8 @@
     },
     {
       "file": "supplemental/before/salim-medium.png",
-      "sha256": "30d12d8679e2c86a7d68bbb056cb81fce419dbaebd1bdbbf819ab52504c8c440",
-      "bytes": 494538,
+      "sha256": "8453c8584b920cb92019a886c5e54996c4d8eb5566ec0fd0731a4a7689f66faf",
+      "bytes": 1366272,
       "dimensions": [
         1280,
         720
@@ -647,8 +647,8 @@
     },
     {
       "file": "supplemental/before/salim-ultra.png",
-      "sha256": "ec606306b99f14aea460dddacef009f20a998fb5ff035641bf4065bd26286beb",
-      "bytes": 517576,
+      "sha256": "91628d4ddcd1c25b4166e43bdcab939a13872886f37cc41f5d9ab686b170bd9a",
+      "bytes": 1387585,
       "dimensions": [
         1280,
         720
@@ -656,8 +656,8 @@
     },
     {
       "file": "supplemental/after/pella-high.png",
-      "sha256": "a84c53f3912b63182f88a25fef3e5a3b831b76409c43dcec11a93f95a74b261e",
-      "bytes": 538774,
+      "sha256": "fbb25a6b2cac5a463f97dc8e09ed7d0005d9d4154a05cd6b55a759bca4a7ee50",
+      "bytes": 1414261,
       "dimensions": [
         1280,
         720
@@ -665,8 +665,8 @@
     },
     {
       "file": "supplemental/after/pella-low.png",
-      "sha256": "15e8e649d9013f9b6055ffb31a1b2ce156b000bd99ffd5e4ca11a03ed177e0a2",
-      "bytes": 482797,
+      "sha256": "3fac1e376e687ba09be0090ad5129a0555d0b14eabf3c7b0dda2103b59097683",
+      "bytes": 1142641,
       "dimensions": [
         1280,
         720
@@ -674,8 +674,8 @@
     },
     {
       "file": "supplemental/after/pella-medium.png",
-      "sha256": "d5db0beb24cae810730b1708862d24244e878468523461504032d12b95fd8a06",
-      "bytes": 525549,
+      "sha256": "2b9f5a54a278424e8ee8a72920e17e254160edefd2c3f02094afc2a566a41a1a",
+      "bytes": 1384500,
       "dimensions": [
         1280,
         720
@@ -683,8 +683,8 @@
     },
     {
       "file": "supplemental/after/pella-ultra.png",
-      "sha256": "5a5c10a36050df9d15219175eba86e654938f871d2ab6c059444e54d033ec9e7",
-      "bytes": 537236,
+      "sha256": "4089fe11c93df1ddc45b1fbb452adfb4e34a2eeb506aed1d3387a6126856a52b",
+      "bytes": 1412752,
       "dimensions": [
         1280,
         720
@@ -692,8 +692,8 @@
     },
     {
       "file": "supplemental/after/salim-high.png",
-      "sha256": "fe6b36c662da27c989f4e4080086c9d07d3b6363504a3b05f3d3cdb94016e1ea",
-      "bytes": 494902,
+      "sha256": "7c5e3b18a0dc67d00d7453ac9949f9cbfca2a54dc54a2496720465bf50c3276d",
+      "bytes": 1385328,
       "dimensions": [
         1280,
         720
@@ -701,8 +701,8 @@
     },
     {
       "file": "supplemental/after/salim-low.png",
-      "sha256": "d87a14fbe237092fdb48d343671dfeddd04db5a7ebf08518a94babf394f12076",
-      "bytes": 421975,
+      "sha256": "bcbb1352bdbfab039eb688b7d970e775f33845698f9c529e9fdd8051231422bc",
+      "bytes": 1123605,
       "dimensions": [
         1280,
         720
@@ -710,8 +710,8 @@
     },
     {
       "file": "supplemental/after/salim-medium.png",
-      "sha256": "38743940446da133d5bf616fe1a29c2ab37c0bac3dae3d0143c90cd1fdbd997c",
-      "bytes": 470443,
+      "sha256": "310a805051795088c82451bc7d6f7181be96009d9fc0e67386ecf4768e036e6d",
+      "bytes": 1362000,
       "dimensions": [
         1280,
         720
@@ -719,8 +719,8 @@
     },
     {
       "file": "supplemental/after/salim-ultra.png",
-      "sha256": "070c0fed8e5a369804ca3d0b9456065dbbd63167e7916e5a77b33898ce86303f",
-      "bytes": 494306,
+      "sha256": "8de30a2826e8fe43494fab9cd2e3b15c50f4f262c910e4300fb8054a19b1dee2",
+      "bytes": 1383736,
       "dimensions": [
         1280,
         720

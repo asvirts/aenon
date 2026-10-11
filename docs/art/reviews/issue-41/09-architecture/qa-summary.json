@@ -1,25 +1,23 @@
 {
-  "status": "implementation and recorded engineering/browser checks complete; reporter visual approval pending",
-  "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
-  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+  "status": "Integrated source, visual, interaction, storage and production checks complete, with measured performance limits; reporter visual approval pending",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
   "checks": {
     "tests": {
-      "passed": 599,
+      "passed": 600,
       "failed": 0,
       "suites": 49
     },
     "typecheck": "pass",
     "productionBuild": "pass",
-    "buildWarning": "Existing Vite chunk-size advisory",
-    "oliveRegression": "actual imported olive meshes use baseline Mesh clones with shared geometry and independent visibility/enabled state; focused9 tests passed",
-    "recordedSourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
     "logs": [
       "checks/npm-test.log",
       "checks/typecheck.log",
-      "checks/build.log",
-      "checks/architecture-occlusion-focused.log"
+      "checks/build.log"
     ],
-    "logNormalization": "Only trailing line whitespace and final blank lines removed from retained command output."
+    "buildWarning": "Existing Vite large-chunk advisory",
+    "logNormalization": "Trailing whitespace only"
   },
   "assets": {
     "models": 11,
@@ -34,12 +32,7 @@
     "beforeFrames": 32,
     "afterFrames": 32,
     "timingRowsBefore": 8,
-    "timingRowsAfter": 8,
-    "viewport": [
-      1280,
-      720
-    ],
-    "devicePixelRatio": 1
+    "timingRowsAfter": 8
   },
   "supplementalEvidence": {
     "towns": [
@@ -52,106 +45,98 @@
       "high",
       "ultra"
     ],
-    "before": "8 captured with fixture-only patch and explicit aliases",
-    "after": "8 final frames captured and independently inspected"
+    "before": "8 approved-ground frames captured",
+    "after": "8 integrated frames captured and inspected"
   },
-  "independentSourceReview": "No actionable findings in original implementation or 53dbff6..f11de68 corrections. Follow-up db6f9dc source review confirms explicit clone default restores existing olive behavior; actual imported-asset regression verifies independent visibility and enable state with shared geometry. Source reviewer did not own browser QA.",
-  "unchangedContracts": [
-    "src/season",
-    "src/game3d/content.ts",
-    "src/game3d/region.ts",
-    "src/game3d/regionNavigation.ts",
-    "src/game3d/terrain.ts",
-    "src/game3d/storage.ts",
-    "src/game3d/persistence.ts"
-  ],
   "pending": [],
+  "isolatedEvidence": "Historical isolated records are labeled under isolated/ and fully archived at /tmp/aenon-58-isolated-db6f9dc; original complete package remains in Git at 8504b8c.",
   "reporterVisualApproval": "pending",
-  "visualFindings": [
-    {
-      "severity": "blocking",
-      "sourceCommit": "f11de682b9b59eacd6ad0a956d0f14a613105876",
-      "description": "Olive geometry disappears in Low/Medium/Ultra after captures while shadows remain on Medium/Ultra; baseline images retain the trees. High renders them.",
-      "sourceCause": "world.ts staticModel passes doNotInstantiate:false for non-architecture files; installed Babylon default is true, so olives accidentally changed from clones to instances.",
-      "requiredFix": "Restore doNotInstantiate:true for all static models and recapture final evidence.",
-      "record": "diagnostics/rejected-f11de68-tree-visibility-ultra.png",
-      "status": "resolved in source and all 40 corrected final captures; rejected image retained as diagnostic only",
-      "fixCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b"
-    }
-  ],
   "independentVisualReview": {
-    "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
     "canonicalFrames": 32,
-    "supplementalFrames": 8,
-    "method": "Local contact-sheet inspection of captured PNGs; browser operator separately verified live interactions.",
-    "result": "Olives visible across all four presets; readable bridge masonry, dry boat floor, coherent civic/domestic assemblies, and multiple house variants in Salim/Pella. No additional actionable visual finding.",
-    "limitations": "Contact-sheet inspection is separate from reporter visual approval and does not establish live route, occlusion, save, or performance acceptance."
+    "townFrames": 8,
+    "result": "No actionable finding in all 40 integrated frames. Olive meshes remain visible across all 4 presets; bridge masonry, dry moored boat floor, civic and domestic variants remain coherent with approved ground.",
+    "method": "Local contact sheets; separate from live browser interactions and reporter visual verdict."
+  },
+  "beforeAfterStateComparison": {
+    "record": "state-comparison.json",
+    "all40Equal": true
   },
   "repeatability": {
     "record": "repeatability.json",
     "all32RepeatStatesEqual": true,
-    "all32CanonicalBaselineStatesEqual": true,
-    "all8SupplementalBaselineStatesEqual": true,
-    "pixelThreshold": 8,
-    "differentPixelPercentRange": [
-      0.0007595486111111111,
-      0.1824001736111111
+    "pixelDifferencePercentRange": [
+      0.0006510416666666667,
+      0.20160590277777776
     ],
-    "byteIdenticalPngPairs": 0
+    "byteIdenticalPngCount": 0
   },
   "performance": {
-    "before": "performance-before.json",
-    "after": "performance-after.json",
-    "afterRows": 8,
-    "lowNearAverageFps": 119.99760004814208,
-    "lowFarAverageFps": 119.9992006710072,
+    "record": "performance-after.json",
+    "integrationSourceReview": "performance-integration-review.json",
     "lowAtLeast30FpsOnMeasuredHardware": true,
+    "lowAverageFps": [
+      76.3663987847168,
+      71.93094629138876
+    ],
+    "highAndUltraBelow60Fps": true,
+    "ultraFarBelow30Fps": true,
+    "causeEstablished": false,
     "ordinaryLaptopMeasured": false,
-    "limitation": "One 10-second completed-frame sample per preset/zoom on M5 Pro; no sustained, ordinary-laptop or causal performance claim."
+    "sustainedPerformanceMeasured": false,
+    "baselineRecord": "performance-before.json",
+    "baselineRefreshRecord": "performance-baseline-refresh.json",
+    "historicalBaselineRecord": "performance-before-approved-earlier.json",
+    "comparison": "Fresh approved ground and integrated architecture are within 3.7% average FPS in seven of eight rows; Medium near is 10.39% lower in the integrated sample. Single short samples do not establish repeatability or causation.",
+    "averageFpsChangePercentRange": [
+      -10.38954752405148,
+      1.7641054934530498
+    ],
+    "baselineAlsoBelow60FpsOnHighAndUltra": true,
+    "baselineAlsoBelow30FpsOnUltraFar": true
   },
   "productionTransfer": {
     "record": "production-transfer-after.json",
-    "networkLog": "production-network-after.jsonl",
-    "encodedBytes": 11386392,
-    "responses": 303,
-    "headerAllowanceBytes": 90900,
-    "estimatedTransferredMB": 11.477292,
+    "requests": "production-network-after.jsonl",
+    "estimatedTransferredMB": 13.718658,
+    "encodedBytes": 13623558,
+    "responses": 317,
+    "rawArithmeticVerified": true,
+    "every304UrlHasFull200BodyInSameRun": true,
     "under40MB": true,
-    "rawArithmeticRecomputed": true,
-    "notModifiedResponses": 50,
-    "everyNotModifiedUrlHas200BodyInSameRun": true,
-    "failedRequests": [
-      {
-        "path": "/favicon.ico",
-        "status": 404
-      }
-    ],
-    "guardRecord": "production-guard-after.json"
+    "onlyFailedRequest": "/favicon.ico 404"
   },
   "productionGuard": {
+    "record": "production-guard-after.json",
     "ready": true,
+    "quality": "medium",
     "reviewShot": "undefined",
     "measure": "undefined",
-    "architectureShot": "undefined",
-    "quality": "medium"
+    "architectureShot": "undefined"
   },
   "interaction": {
     "record": "interaction/house-route-qa.json",
     "normalProductionSettingsImport": true,
-    "merchantClickToActOpenedTrade": true,
-    "sampleCount": 304,
-    "movingSamples": 43,
-    "allSampledPositionsAnd303SegmentsTraversable": true,
-    "wholeHouseFadeAndClear": "pass; full-size images independently inspected",
+    "merchantLabelClickOpenedTrade": true,
+    "sampleCount": 1879,
+    "movingSamples": 42,
+    "all1879PointsAnd1878ConsecutiveSegmentsClear": true,
+    "allQueuedRoutesClear": true,
+    "compoundFadeAndClear": "pass; integrated full-size images independently inspected",
     "video": "interaction/house-route.webm",
-    "videoSeconds": 30.413988,
-    "videoCanvasOnly": true
+    "videoDurationSeconds": 6.496,
+    "rawVideoRetained": "/tmp/aenon-58-integrated-house-route-4cee146-full.webm",
+    "videoTrimRecord": "interaction/house-route-video-edit.json"
   },
   "storageIsolation": {
     "record": "storage-isolation.json",
-    "beforeEntries": 0,
-    "afterFourPresetsUnchanged": true,
-    "afterSettledReloadUnchanged": true,
-    "limitation": "Browser origin began empty. Populated-save protection is covered by automated tests; no claim of a populated-save browser check."
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "beforeEntryCount": 0,
+    "afterEntryCount": 0,
+    "byteIdentical": true,
+    "allFourPresetsSettled": true,
+    "reloadSettled": true,
+    "temporaryProbeRemoved": true,
+    "limitation": "Empty-origin no-write evidence; this run does not itself exercise an existing populated save."
   }
 }

@@ -1,0 +1,24 @@
+{
+  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "origin": "http://127.0.0.1:5203",
+  "method": "Script-free page baseline, four canonical aenon-near preset changes, then review reload. No save contents retained. Reload was also checked in a fresh review tab after full settlement.",
+  "beforeEntries": 0,
+  "afterPresetsUnchanged": true,
+  "afterReloadUnchanged": true,
+  "afterReloadReady": {
+    "busy": null,
+    "settled": true,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  "limitation": "This browser-origin check began empty; populated-save protection is covered by review protocol unit tests."
+}

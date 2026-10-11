@@ -1,11 +1,11 @@
 {
-  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
-  "method": "Fresh localhost origin logging proxy; encoded response body bytes plus an estimated 300 header bytes per response; includes decoder workers. Frozen before subsequent QA navigation.",
-  "encodedBytes": 11386392,
-  "responses": 303,
-  "headerAllowanceBytes": 90900,
-  "estimatedTransferredBytes": 11477292,
-  "estimatedTransferredMB": 11.477292,
+  "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "method": "Fresh origin logging proxy; encoded bodies plus estimated300 header bytes per response, decoder traffic included; frozen before further QA.",
+  "encodedBytes": 13623558,
+  "responses": 317,
+  "headerAllowanceBytes": 95100,
+  "estimatedTransferredBytes": 13718658,
+  "estimatedTransferredMB": 13.718658,
   "statuses": [
     200,
     304,

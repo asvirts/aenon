@@ -3,7 +3,8 @@
     "name": "salim",
     "preset": "low",
     "baselineAlias": "aenon-square",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-square",
@@ -20,7 +21,8 @@
     "name": "pella",
     "preset": "low",
     "baselineAlias": "aenon-riverbank",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-riverbank",
@@ -37,7 +39,8 @@
     "name": "salim",
     "preset": "medium",
     "baselineAlias": "aenon-square",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-square",
@@ -54,7 +57,8 @@
     "name": "pella",
     "preset": "medium",
     "baselineAlias": "aenon-riverbank",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-riverbank",
@@ -71,7 +75,8 @@
     "name": "salim",
     "preset": "high",
     "baselineAlias": "aenon-square",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-square",
@@ -88,7 +93,8 @@
     "name": "pella",
     "preset": "high",
     "baselineAlias": "aenon-riverbank",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-riverbank",
@@ -105,7 +111,8 @@
     "name": "salim",
     "preset": "ultra",
     "baselineAlias": "aenon-square",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-square",
@@ -122,7 +129,8 @@
     "name": "pella",
     "preset": "ultra",
     "baselineAlias": "aenon-riverbank",
-    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentApprovedCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
     "state": {
       "inCombat": false,
       "name": "aenon-riverbank",

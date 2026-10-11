@@ -1,0 +1,15 @@
+{
+  "source": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+  "runtimeEquivalentBase": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "reason": "Older approved-ground timing differed sharply from current integrated architecture measurements. Fresh same-session approved-ground samples obtained with all other game tabs closed and heavy jobs stopped.",
+  "origin": "http://127.0.0.1:5240/?review=1",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "dpr": 1
+  },
+  "protocol": "5-second warmup then 10-second sample; near/far for each preset",
+  "oldEvidence": "performance-before-approved-earlier.json",
+  "newEvidence": "performance-before.json",
+  "interpretation": "The refreshed baseline also runs much slower than its historical measurement. The historical gap therefore cannot be attributed to architecture alone. No cause for the session difference is established."
+}

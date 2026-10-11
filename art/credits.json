@@ -1,0 +1,247 @@
+{
+  "assets": [
+    {
+      "files": [
+        "public/art-sample/adventurer.glb"
+      ],
+      "category": "Original models",
+      "title": "Adventurer (art study)",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_sample.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/art-sample/house.glb"
+      ],
+      "category": "Original models",
+      "title": "Limestone house (art study)",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_sample.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/art-sample/olive.glb"
+      ],
+      "category": "Original models",
+      "title": "Olive tree (art study)",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_sample.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/game-assets/adventurer.glb"
+      ],
+      "category": "Original models",
+      "title": "Adventurer",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/game-assets/bandit.glb"
+      ],
+      "category": "Original models",
+      "title": "Bandit",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/game-assets/john.glb"
+      ],
+      "category": "Original models",
+      "title": "John the Baptist",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/game-assets/merchant.glb"
+      ],
+      "category": "Original models",
+      "title": "Vendor and villagers",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "public/game-assets/wolf.glb"
+      ],
+      "category": "Original models",
+      "title": "Wolf",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Modeled and exported for The Season by the repository’s Blender script. Registered existing shipped asset; no change during intake."
+    },
+    {
+      "files": [
+        "src/game3d/terrain.ts"
+      ],
+      "category": "Original procedural art",
+      "title": "Regional terrain, water and brushwork",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/src/game3d/terrain.ts",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Painted at runtime with TypeScript and Canvas; procedural geometry and water shader authored for The Season."
+    },
+    {
+      "files": [
+        "src/art-sample/environment.ts"
+      ],
+      "category": "Original procedural art",
+      "title": "Art study terrain, water and brushwork",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/src/art-sample/environment.ts",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Painted at runtime with TypeScript and Canvas; procedural geometry and water shader authored for The Season."
+    },
+    {
+      "files": [
+        "src/game3d/world.ts"
+      ],
+      "category": "Original procedural art",
+      "title": "Regional scenery, props and worn Gear",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/src/game3d/world.ts",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Original runtime geometry and materials for settlement details, gathering props, shoreline docks, boats, held tools and worn Gear."
+    },
+    {
+      "files": [
+        "public/game-assets/house-painted.glb"
+      ],
+      "category": "Original models",
+      "title": "Limestone house — compressed runtime model",
+      "author": "The Season contributors",
+      "authorUrl": "https://github.com/asvirts/aenon",
+      "source": "https://github.com/asvirts/aenon/blob/main/scripts/art/prepare-compression-sample.mjs",
+      "license": "original",
+      "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
+      "retrieved": "2026-10-11",
+      "changes": "Original Blender house and 11 painted colour textures preserved. Added a subtle original procedural limestone normal map, then pruned, deduplicated, resampled and compressed geometry with meshopt; colour textures use ETC1S KTX2 and the normal map uses UASTC KTX2. Raw input retained in art/source/house-painted.glb."
+    }
+  ],
+  "software": [
+    {
+      "files": [
+        "public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js",
+        "public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js.map",
+        "public/decoders/babylon-9.30.0/LICENSE.md"
+      ],
+      "category": "Decoder software",
+      "title": "Babylon.js KTX2 decoder 9.30.0",
+      "author": "Babylon.js contributors",
+      "authorUrl": "https://www.babylonjs.com",
+      "source": "https://registry.npmjs.org/babylonjs-ktx2decoder/-/babylonjs-ktx2decoder-9.30.0.tgz",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://github.com/BabylonJS/Babylon.js/blob/9.30.0/packages/public/umd/babylonjs-ktx2decoder/license.md",
+      "retrieved": "2026-10-11",
+      "changes": "Unmodified files copied from the official 9.30.0 npm package; served from the game origin.",
+      "vendorLicenseFile": "public/decoders/babylon-9.30.0/LICENSE.md"
+    },
+    {
+      "files": [
+        "public/decoders/babylon-9.30.0/msc_basis_transcoder.js",
+        "public/decoders/babylon-9.30.0/msc_basis_transcoder.wasm",
+        "public/decoders/babylon-9.30.0/uastc_astc.wasm",
+        "public/decoders/babylon-9.30.0/uastc_bc7.wasm",
+        "public/decoders/babylon-9.30.0/uastc_r8_unorm.wasm",
+        "public/decoders/babylon-9.30.0/uastc_rg8_unorm.wasm",
+        "public/decoders/babylon-9.30.0/uastc_rgba8_srgb_v2.wasm",
+        "public/decoders/babylon-9.30.0/uastc_rgba8_unorm_v2.wasm",
+        "public/decoders/babylon-9.30.0/WASM-LICENSE.md"
+      ],
+      "category": "Decoder software",
+      "title": "KTX2 Basis and UASTC transcoders",
+      "author": "Babylon.js, Khronos Group, Binomial and bundled contributors",
+      "authorUrl": "https://github.com/KhronosGroup/KTX-Software",
+      "source": "https://github.com/BabylonJS/Babylon.js/tree/9.30.0/packages/tools/babylonServer/public/ktx2Transcoders/1",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://github.com/BabylonJS/Babylon.js/blob/9.30.0/packages/public/%40babylonjs/ktx2decoder/wasm/license.md",
+      "retrieved": "2026-10-11",
+      "changes": "Unmodified upstream JavaScript and WASM, self-hosted with every GPU fallback. The vendor licence was copied from the same Babylon.js tag.",
+      "vendorLicenseFile": "public/decoders/babylon-9.30.0/WASM-LICENSE.md",
+      "notes": "Apache-2.0 package with bundled MIT, BSD-3-Clause, Zlib and Ericsson ETCSLA components. Full copyright notices and all component terms are retained in WASM-LICENSE.md; the Apache label does not replace those terms."
+    },
+    {
+      "files": [
+        "public/decoders/babylon-9.30.0/zstddec.wasm"
+      ],
+      "category": "Decoder software",
+      "title": "Zstandard decoder for UASTC KTX2",
+      "author": "Don McCurdy; Yann Collet and Facebook, Inc.",
+      "authorUrl": "https://github.com/donmccurdy/zstddec",
+      "source": "https://raw.githubusercontent.com/BabylonJS/Babylon.js/9.30.0/packages/tools/babylonServer/public/zstddec.wasm",
+      "license": "BSD-3-Clause",
+      "licenseUrl": "https://github.com/BabylonJS/Babylon.js/blob/9.30.0/packages/public/%40babylonjs/ktx2decoder/wasm/license.md",
+      "retrieved": "2026-10-11",
+      "changes": "Unmodified Babylon.js 9.30.0 distribution of the Zstandard WASM decoder, served locally.",
+      "vendorLicenseFile": "public/decoders/babylon-9.30.0/WASM-LICENSE.md",
+      "notes": "The Zstandard licence and copyright are in the final section of the retained vendor notice."
+    },
+    {
+      "files": [
+        "public/decoders/meshoptimizer-1.2.0/meshopt_decoder.js",
+        "public/decoders/meshoptimizer-1.2.0/LICENSE.md"
+      ],
+      "category": "Decoder software",
+      "title": "meshoptimizer decoder 1.2.0",
+      "author": "Arseny Kapoulkine",
+      "authorUrl": "https://github.com/zeux",
+      "source": "https://github.com/zeux/meshoptimizer/tree/v1.2/js",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/zeux/meshoptimizer/blob/v1.2/LICENSE.md",
+      "retrieved": "2026-10-11",
+      "changes": "Copied unchanged from npm meshoptimizer@1.2.0; meshopt_decoder.cjs renamed to .js for browser script loading. Self-hosted with the upstream licence.",
+      "vendorLicenseFile": "public/decoders/meshoptimizer-1.2.0/LICENSE.md"
+    }
+  ]
+}

@@ -12,7 +12,8 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "resolveJsonModule": true
   },
   "include": ["api/**/*.ts", "src/**/*.ts", "tests/**/*.ts"]
 }

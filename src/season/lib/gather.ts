@@ -33,7 +33,7 @@ export function requireGatheringSpots(
 
 export type GatherResult =
   | { ok: true }
-  | { ok: false; reason: "not-present" | "skill-too-low" | "pack-full" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "skill-too-low" | "pack-full" | "fight-underway" | "scene-playing" }
 
 export function gatherAtSpot(
   state: SeasonState,

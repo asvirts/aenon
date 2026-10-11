@@ -14,6 +14,7 @@ import {
   readAdventurerLevel,
 } from "./experience.ts"
 import { packAfterGoods } from "./pack.ts"
+import type { PlayingScene } from "./begin.ts"
 import type { ExperienceCurve, LevelBand, PackEntry, Person, QuestDefinition, SeasonDefinition } from "./types.ts"
 
 export type OfferedQuest = {
@@ -29,7 +30,7 @@ export type LookResult =
       offeredQuests: readonly OfferedQuest[]
       currentLine: string | null
     }
-  | { ok: false; reason: "not-present" }
+  | { ok: false; reason: "not-present" | "scene-playing" }
 
 export type QuestLoadFailure =
   | "biblical-figure-as-giver"
@@ -44,6 +45,7 @@ export type QuestLoadFailure =
   | "repeatable-skill-experience"
   | "repeatable-gear"
   | "repeatable-defeat"
+  | "step-outside-band"
 
 export function requireQuests(
   definition: SeasonDefinition,
@@ -84,6 +86,8 @@ export function requireQuests(
     if (quest.repeatable && quest.steps.some((step) => step.kind === "defeat")) {
       return { ok: false, reason: "repeatable-defeat" }
     }
+    const outside = stepOutsideQuestBand(definition, quest)
+    if (outside) return outside
     for (const requiredId of quest.requiredQuestIds ?? []) {
       const required = questById(definition, requiredId)
       const requiredSettlement = required ? settlementOf(definition, required.giverId) : undefined
@@ -93,6 +97,33 @@ export function requireQuests(
     }
   }
   return { ok: true }
+}
+
+function stepOutsideQuestBand(
+  definition: SeasonDefinition,
+  quest: QuestDefinition,
+): { ok: false; reason: "step-outside-band" } | undefined {
+  const band = bandOfQuest(definition, quest)
+  for (const step of quest.steps) {
+    if (step.kind === "attend") {
+      const scene = (definition.setScenes ?? []).find((candidate) => candidate.id === step.sceneId)
+      const place = definition.places.find((candidate) => candidate.id === scene?.placeId)
+      if (!place || place.band !== band) return { ok: false, reason: "step-outside-band" }
+    }
+    if (step.kind === "defeat") {
+      const hostile = definition.hostiles.find((candidate) => candidate.id === step.hostileId)
+      if (hostile) {
+        const place = definition.places.find((candidate) => candidate.id === hostile.placeId)
+        if (!place || place.band !== band) return { ok: false, reason: "step-outside-band" }
+      }
+    }
+    if (step.spotId !== undefined) {
+      const spot = definition.spots.find((candidate) => candidate.id === step.spotId)
+      const place = definition.places.find((candidate) => candidate.id === spot?.placeId)
+      if (!place || place.band !== band) return { ok: false, reason: "step-outside-band" }
+    }
+  }
+  return undefined
 }
 
 function questById(definition: SeasonDefinition, questId: string): QuestDefinition | undefined {
@@ -119,12 +150,26 @@ function settlementOf(definition: SeasonDefinition, giverId: string): string | u
 }
 
 export type SpeakResult =
-  | { ok: true; action: "start" | "repeat" | "turn-in"; questId: string; line: string }
-  | { ok: false; reason: "not-present" | "not-offered" | "step-not-ready" | "pack-full" }
+  | {
+      ok: true
+      action: "start" | "repeat" | "turn-in"
+      questId: string
+      line: string
+      scene?: PlayingScene
+    }
+  | { ok: true; kind: "short-word" }
+  | {
+      ok: false
+      reason: "not-present" | "not-offered" | "step-not-ready" | "pack-full" | "second-jesus-scene" | "scene-playing"
+    }
 
 export type ReportResult =
-  | { ok: true; questId: string; line: string }
-  | { ok: false; reason: "step-not-ready" }
+  | { ok: true; questId: string; line: string; scene?: PlayingScene }
+  | { ok: false; reason: "step-not-ready" | "second-jesus-scene" | "scene-playing" }
+
+export type FinishResult =
+  | { ok: true; sceneId: string }
+  | { ok: false; reason: "scene-not-playing" }
 
 export function lookAtPerson(
   state: SeasonState,
@@ -167,6 +212,15 @@ function isOffered(
   curve: ExperienceCurve,
   quest: QuestDefinition,
 ): boolean {
+  return meetsOfferRules(state, definition, curve, quest) && !openingWouldOpenSecondJesus(state, definition, quest)
+}
+
+function meetsOfferRules(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  curve: ExperienceCurve,
+  quest: QuestDefinition,
+): boolean {
   if (inProgressForGiver(state, definition, quest.giverId)) return false
   const progress = state.questProgress.find((entry) => entry.questId === quest.id)
   if (progress?.finished && !quest.repeatable) return false
@@ -178,6 +232,14 @@ function isOffered(
     const required = state.questProgress.find((entry) => entry.questId === requiredId)
     return required?.finishedOnce === true
   })
+}
+
+function openingWouldOpenSecondJesus(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  quest: QuestDefinition,
+): boolean {
+  return stepsWouldOpenSecondJesus(state, definition, quest, 0)
 }
 
 const bandBounds = {
@@ -250,19 +312,80 @@ function lineOf(definition: SeasonDefinition, progress: QuestProgress): string |
 }
 
 export function reportMark(state: SeasonState, definition: SeasonDefinition, mark: string): ReportResult {
-  let reported: { questId: string; line: string } | undefined
-  const questProgress = state.questProgress.map((progress) => {
-    if (progress.finished) return progress
+  const ready = state.questProgress.flatMap((progress) => {
+    if (progress.finished) return []
     const quest = questById(definition, progress.questId)
     const step = quest?.steps[progress.stepIndex]
-    if (!quest || step?.kind !== "mark" || step.mark !== mark) return progress
-    const next = stepPastCurrent(state, quest, progress)
-    reported ??= { questId: quest.id, line: lineOf(definition, next) ?? quest.finishedLine }
+    if (!quest || step?.kind !== "mark" || step.mark !== mark) return []
+    return [{ quest, progress }]
+  })
+  if (ready.length === 0) return { ok: false, reason: "step-not-ready" }
+  if (ready.some(({ quest, progress }) => completingWouldOpenSecondJesus(state, definition, quest, progress))) {
+    return { ok: false, reason: "second-jesus-scene" }
+  }
+  let reported: { questId: string; line: string } | undefined
+  const questProgress = state.questProgress.map((progress) => {
+    const match = ready.find((candidate) => candidate.progress === progress)
+    if (!match) return progress
+    const next = stepPastCurrent(state, definition, match.quest, progress)
+    reported ??= { questId: match.quest.id, line: lineOf(definition, next) ?? match.quest.finishedLine }
     return next
   })
   if (!reported) return { ok: false, reason: "step-not-ready" }
+  const filed = reported
   state.questProgress = questProgress
-  return { ok: true, questId: reported.questId, line: reported.line }
+  const scene = resolveAttendance(state, definition)
+  const progress = state.questProgress.find((entry) => entry.questId === filed.questId)
+  const quest = questById(definition, filed.questId)
+  const line = (progress && lineOf(definition, progress)) || quest?.finishedLine || filed.line
+  return scene ? { ok: true, questId: filed.questId, line, scene } : { ok: true, questId: filed.questId, line }
+}
+
+function completingWouldOpenSecondJesus(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  quest: QuestDefinition,
+  progress: QuestProgress,
+): boolean {
+  return stepsWouldOpenSecondJesus(state, definition, quest, progress.stepIndex + 1)
+}
+
+function stepsWouldOpenSecondJesus(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  quest: QuestDefinition,
+  index: number,
+): boolean {
+  while (index < quest.steps.length) {
+    const step = quest.steps[index]
+    if (!step) return false
+    if (step.kind === "attend") return blocksSecondJesusScene(state, definition, step.sceneId)
+    if (step.kind === "hold" && countOf(state.pack, step.goodId) >= step.count) {
+      index += 1
+      continue
+    }
+    if (step.kind === "defeat" && state.fallenHostiles.includes(step.hostileId)) {
+      index += 1
+      continue
+    }
+    return false
+  }
+  return false
+}
+
+function blocksSecondJesusScene(state: SeasonState, definition: SeasonDefinition, sceneId: string): boolean {
+  const scene = (definition.setScenes ?? []).find((candidate) => candidate.id === sceneId)
+  if (!scene || scene.figure !== "jesus" || state.playedSetScenes.includes(sceneId)) return false
+  return state.questProgress.some((progress) => {
+    if (progress.finished) return false
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (step?.kind !== "attend" || step.sceneId === sceneId || state.playedSetScenes.includes(step.sceneId)) {
+      return false
+    }
+    const other = (definition.setScenes ?? []).find((candidate) => candidate.id === step.sceneId)
+    return other?.figure === "jesus"
+  })
 }
 
 export function speakToPerson(
@@ -273,12 +396,24 @@ export function speakToPerson(
 ): SpeakResult {
   const person = personHere(state, definition, personId)
   if (!person) return { ok: false, reason: "not-present" }
+  if (person.kind === "biblical-figure" && person.figure === "john") {
+    return { ok: true, kind: "short-word" }
+  }
 
   const underway = inProgressForGiver(state, definition, person.id)
   if (underway) return speakToCurrentStep(state, definition, curve, underway)
 
   const quest = offeredFor(state, definition, curve, person.id)[0]
-  if (!quest || quest.steps.length === 0) return { ok: false, reason: "not-offered" }
+  if (!quest || quest.steps.length === 0) {
+    const blocked = (definition.quests ?? []).some(
+      (candidate) =>
+        candidate.giverId === person.id &&
+        candidate.steps.length > 0 &&
+        meetsOfferRules(state, definition, curve, candidate) &&
+        openingWouldOpenSecondJesus(state, definition, candidate),
+    )
+    return blocked ? { ok: false, reason: "second-jesus-scene" } : { ok: false, reason: "not-offered" }
+  }
 
   const previous = state.questProgress.find((entry) => entry.questId === quest.id)
   const progress: QuestProgress = {
@@ -287,11 +422,16 @@ export function speakToPerson(
     finished: false,
     finishedOnce: previous?.finishedOnce ?? false,
   }
-  advanceReadySteps(state, quest, progress)
+  advanceReadySteps(state, definition, quest, progress)
   state.questProgress = previous
     ? state.questProgress.map((entry) => (entry.questId === quest.id ? progress : entry))
     : [...state.questProgress, progress]
-  return { ok: true, action: "start", questId: quest.id, line: lineOf(definition, progress) ?? quest.finishedLine }
+  const scene = resolveAttendance(state, definition)
+  const current = state.questProgress.find((entry) => entry.questId === quest.id) ?? progress
+  const line = lineOf(definition, current) ?? quest.finishedLine
+  return scene
+    ? { ok: true, action: "start", questId: quest.id, line, scene }
+    : { ok: true, action: "start", questId: quest.id, line }
 }
 
 function speakToCurrentStep(
@@ -371,24 +511,33 @@ function packAfterReturn(
 
 function stepPastCurrent(
   state: SeasonState,
+  definition: SeasonDefinition,
   quest: QuestDefinition,
   progress: QuestProgress,
 ): QuestProgress {
+  if (completingWouldOpenSecondJesus(state, definition, quest, progress)) return progress
   const next = { ...progress, stepIndex: progress.stepIndex + 1 }
-  advanceReadySteps(state, quest, next)
+  advanceReadySteps(state, definition, quest, next)
   return next
 }
 
-function advanceReadySteps(state: SeasonState, quest: QuestDefinition, progress: QuestProgress): void {
+function advanceReadySteps(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  quest: QuestDefinition,
+  progress: QuestProgress,
+): void {
   while (progress.stepIndex < quest.steps.length) {
     const step = quest.steps[progress.stepIndex]
     if (!step) return
     if (step.kind === "hold") {
       if (countOf(state.pack, step.goodId) < step.count) return
+      if (completingWouldOpenSecondJesus(state, definition, quest, progress)) return
       progress.stepIndex += 1
       continue
     }
     if (step.kind === "defeat" && state.fallenHostiles.includes(step.hostileId)) {
+      if (completingWouldOpenSecondJesus(state, definition, quest, progress)) return
       progress.stepIndex += 1
       continue
     }
@@ -413,8 +562,72 @@ export function completeCurrentDefeat(
     const quest = questById(definition, progress.questId)
     const step = quest?.steps[progress.stepIndex]
     if (!quest || step?.kind !== "defeat" || step.hostileId !== hostileId) return progress
-    return stepPastCurrent(state, quest, progress)
+    return stepPastCurrent(state, definition, quest, progress)
   })
+}
+
+export function finishScene(state: SeasonState, definition: SeasonDefinition): FinishResult {
+  const sceneId = state.playingSceneId
+  if (sceneId === null) return { ok: false, reason: "scene-not-playing" }
+  state.playingSceneId = null
+  if (!state.playedSetScenes.includes(sceneId)) {
+    state.playedSetScenes = [...state.playedSetScenes, sceneId]
+  }
+  state.questProgress = state.questProgress.map((progress) => {
+    if (progress.finished) return progress
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (!quest || step?.kind !== "attend" || step.sceneId !== sceneId) return progress
+    return stepPastCurrent(state, definition, quest, progress)
+  })
+  resolveReadySteps(state, definition)
+  resolveAttendance(state, definition)
+  return { ok: true, sceneId }
+}
+
+export function resolveAttendance(state: SeasonState, definition: SeasonDefinition): PlayingScene | null {
+  if (state.playingSceneId !== null) return { kind: "set-scene", sceneId: state.playingSceneId }
+  const limit = state.questProgress.reduce((sum, progress) => {
+    const quest = questById(definition, progress.questId)
+    return sum + (quest?.steps.length ?? 1)
+  }, 1)
+  for (let guard = 0; guard < limit; guard++) {
+    if (completePlayedAttendsHere(state, definition)) continue
+    return startUnplayedAttendHere(state, definition)
+  }
+  return null
+}
+
+function completePlayedAttendsHere(state: SeasonState, definition: SeasonDefinition): boolean {
+  let completed = false
+  const questProgress = state.questProgress.map((progress) => {
+    if (progress.finished) return progress
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (!quest || step?.kind !== "attend" || !state.playedSetScenes.includes(step.sceneId)) return progress
+    const scene = (definition.setScenes ?? []).find((candidate) => candidate.id === step.sceneId)
+    if (!scene || scene.placeId !== state.placeId) return progress
+    const next = stepPastCurrent(state, definition, quest, progress)
+    if (next.stepIndex === progress.stepIndex) return progress
+    completed = true
+    return next
+  })
+  if (completed) state.questProgress = questProgress
+  return completed
+}
+
+function startUnplayedAttendHere(state: SeasonState, definition: SeasonDefinition): PlayingScene | null {
+  for (const progress of state.questProgress) {
+    if (progress.finished) continue
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (!quest || step?.kind !== "attend" || state.playedSetScenes.includes(step.sceneId)) continue
+    const scene = (definition.setScenes ?? []).find((candidate) => candidate.id === step.sceneId)
+    if (!scene || scene.placeId !== state.placeId) continue
+    state.playingSceneId = scene.id
+    return { kind: "set-scene", sceneId: scene.id }
+  }
+  return null
 }
 
 export function resolveReadySteps(state: SeasonState, definition: SeasonDefinition): void {
@@ -423,7 +636,7 @@ export function resolveReadySteps(state: SeasonState, definition: SeasonDefiniti
     const quest = questById(definition, progress.questId)
     if (!quest) return progress
     const next = { ...progress }
-    advanceReadySteps(state, quest, next)
+    advanceReadySteps(state, definition, quest, next)
     return next
   })
 }

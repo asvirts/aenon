@@ -74,7 +74,7 @@ export function requireCaches(
 
 export type OpenCacheResult =
   | { ok: true }
-  | { ok: false; reason: "not-present" | "already-open" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "already-open" | "fight-underway" | "scene-playing" }
 
 export function openCache(
   state: SeasonState,
@@ -99,7 +99,7 @@ export type BuyGood = { kind: "everyday"; id: string } | { kind: "gear"; id: str
 
 export type BuyResult =
   | { ok: true }
-  | { ok: false; reason: "not-present" | "not-for-sale" | "cannot-afford" | "pack-full" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "not-for-sale" | "cannot-afford" | "pack-full" | "fight-underway" | "scene-playing" }
 
 export function buyFromVendor(
   state: SeasonState,
@@ -153,7 +153,7 @@ export type SellGood =
 
 export type SellResult =
   | { ok: true }
-  | { ok: false; reason: "not-present" | "not-for-sale" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "not-for-sale" | "fight-underway" | "scene-playing" }
 
 export function sellToVendor(
   state: SeasonState,

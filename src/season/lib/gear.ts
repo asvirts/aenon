@@ -1,9 +1,9 @@
 import type { SeasonState } from "./begin.ts"
 import { gearSlots, type GearSlot, type SeasonDefinition, type SpecialEffect } from "./types.ts"
 
-export type WearResult = { ok: true } | { ok: false; reason: "not-present" | "pack-full" }
+export type WearResult = { ok: true } | { ok: false; reason: "not-present" | "pack-full" | "scene-playing" }
 
-export type TakeOffResult = { ok: true } | { ok: false; reason: "not-present" | "pack-full" }
+export type TakeOffResult = { ok: true } | { ok: false; reason: "not-present" | "pack-full" | "scene-playing" }
 
 export function wearPiece(state: SeasonState, definition: SeasonDefinition, pieceId: string): WearResult {
   const piece = (definition.gear ?? []).find((candidate) => candidate.id === pieceId)

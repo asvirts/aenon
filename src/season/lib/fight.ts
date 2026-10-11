@@ -11,17 +11,19 @@ export type Blow = {
   defence: number
 }
 
-export type EnterResult = { ok: true } | { ok: false; reason: "not-present" | "fight-underway" }
+export type EnterResult =
+  | { ok: true; scene?: { kind: "set-scene"; sceneId: string } }
+  | { ok: false; reason: "not-present" | "fight-underway" | "scene-playing" }
 
 export type FaceResult =
   | { ok: true }
-  | { ok: false; reason: "not-present" | "peaceful-place" | "no-hitpoints" | "fight-underway" }
+  | { ok: false; reason: "not-present" | "peaceful-place" | "no-hitpoints" | "fight-underway" | "scene-playing" }
 
 export type SwingResult =
   | { ok: true; damage: number; hostileFell: boolean }
-  | { ok: false; reason: "not-facing" }
+  | { ok: false; reason: "not-facing" | "scene-playing" }
 
-export type StepBackResult = { ok: true } | { ok: false; reason: "not-facing" | "fight-underway" }
+export type StepBackResult = { ok: true } | { ok: false; reason: "not-facing" | "fight-underway" | "scene-playing" }
 
 export function enterPlace(
   state: SeasonState,

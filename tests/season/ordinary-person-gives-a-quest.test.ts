@@ -581,8 +581,10 @@ describe("an ordinary person gives a quest", () => {
     const started = load(definition)
     const state = started.exportState()
     state.placeId = "cana"
+    state.adventurerExperience = 19
     const season = load(definition, state)
     assert.equal(season.adventurer().placeId, "cana")
+    assert.equal(season.adventurer().adventurerLevel, 20)
     assert.deepEqual(season.look("miller"), {
       ok: true,
       presence: { personId: "miller", placeId: "cana" },

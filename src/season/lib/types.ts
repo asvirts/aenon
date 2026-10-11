@@ -67,6 +67,12 @@ export type QuestDefinition = {
   reward: {
     coin: number
     goods: readonly { id: string; count: number }[]
+    adventurerExperience?: number
+    skillExperience?: { skill: string; experience: number }
+    gear?: readonly {
+      id: string
+      rarity: "common" | "uncommon" | "rare" | "epic" | "legendary"
+    }[]
   }
 }
 

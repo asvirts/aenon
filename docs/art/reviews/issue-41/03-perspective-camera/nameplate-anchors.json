@@ -1,0 +1,846 @@
+[
+  {
+    "shot": "aenon-square",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(995.393px, 506.489px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(453.707px, 473.268px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(120.63px, 291.064px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(1089.09px, 181.973px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(539.332px, 114.264px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(97.993px, 138.877px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(1111.48px, 263.672px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(450.625px, 93.494px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(383.33px, 192.148px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(518.306px, 258.356px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-near",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "herb-patch",
+        "transform": "translate(267.596px, 586.426px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(211.031px, 79.4721px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(427.069px, 182.152px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-far",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "timber-stand",
+        "transform": "translate(434.83px, 181.99px) translate(-50%, -100%)"
+      },
+      {
+        "id": "river-fish",
+        "transform": "translate(806.897px, 428.793px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(551.267px, 413.951px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(372.243px, 324.461px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(872.971px, 267.646px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(585.891px, 227.916px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(352.294px, 242.624px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(881.764px, 310.605px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(534.535px, 211.58px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-loom",
+        "transform": "translate(294.859px, 291.947px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-rack",
+        "transform": "translate(212.742px, 219.984px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(503.738px, 270.89px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(577.357px, 307.678px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-riverbank",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(363.636px, 607.513px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(580.94px, 247.114px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(43.3218px, 171.2px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(591.545px, 334.839px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "jordan-bridge",
+    "preset": "low",
+    "labels": []
+  },
+  {
+    "shot": "scythopolis-market",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "scythopolis-woodcutting",
+        "transform": "translate(1213.2px, 149.262px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "sea-shore",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "reading-capernaum-roof",
+        "transform": "translate(501.162px, 140.117px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-capernaum",
+        "transform": "translate(511.64px, 70.0617px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-mining",
+        "transform": "translate(425.746px, 322.404px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-harvesting",
+        "transform": "translate(114.182px, 283.776px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-fishing",
+        "transform": "translate(758.782px, 326.808px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-vendor",
+        "transform": "translate(345.021px, 150.18px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-tanning-rack",
+        "transform": "translate(116.789px, 239.507px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-hearth",
+        "transform": "translate(233.55px, 265.323px) translate(-50%, -100%)"
+      },
+      {
+        "id": "port-capernaum",
+        "transform": "translate(640.002px, 338.615px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "fight",
+    "preset": "low",
+    "labels": [
+      {
+        "id": "salim-threat-0",
+        "transform": "translate(690.859px, 365.984px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-square",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(995.482px, 506.489px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(453.664px, 473.268px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(120.506px, 291.064px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(1089.2px, 181.973px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(539.309px, 114.264px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(97.8626px, 138.877px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(1111.59px, 263.672px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(450.581px, 93.494px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(383.269px, 192.148px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(518.278px, 258.356px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-near",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "herb-patch",
+        "transform": "translate(267.508px, 586.426px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(210.929px, 79.4721px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(427.02px, 182.152px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-far",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "timber-stand",
+        "transform": "translate(434.781px, 181.99px) translate(-50%, -100%)"
+      },
+      {
+        "id": "river-fish",
+        "transform": "translate(806.939px, 428.793px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(551.246px, 413.951px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(372.179px, 324.461px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(873.028px, 267.646px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(585.878px, 227.916px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(352.224px, 242.624px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(881.824px, 310.605px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(534.51px, 211.58px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-loom",
+        "transform": "translate(294.776px, 291.947px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-rack",
+        "transform": "translate(212.639px, 219.984px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(503.705px, 270.89px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(577.342px, 307.678px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-riverbank",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(363.568px, 607.513px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(580.926px, 247.114px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(43.1765px, 171.2px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(591.533px, 334.839px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "jordan-bridge",
+    "preset": "medium",
+    "labels": []
+  },
+  {
+    "shot": "scythopolis-market",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "scythopolis-woodcutting",
+        "transform": "translate(1213.34px, 149.262px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "sea-shore",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "reading-capernaum-roof",
+        "transform": "translate(501.127px, 140.117px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-capernaum",
+        "transform": "translate(511.607px, 70.0617px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-mining",
+        "transform": "translate(425.693px, 322.404px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-harvesting",
+        "transform": "translate(114.053px, 283.776px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-fishing",
+        "transform": "translate(758.809px, 326.808px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-vendor",
+        "transform": "translate(344.948px, 150.18px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-tanning-rack",
+        "transform": "translate(116.66px, 239.507px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-hearth",
+        "transform": "translate(233.449px, 265.323px) translate(-50%, -100%)"
+      },
+      {
+        "id": "port-capernaum",
+        "transform": "translate(640px, 338.615px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "fight",
+    "preset": "medium",
+    "labels": [
+      {
+        "id": "salim-threat-0",
+        "transform": "translate(690.871px, 365.984px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-square",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(995.482px, 506.489px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(453.664px, 473.268px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(120.506px, 291.064px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(1089.2px, 181.973px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(539.309px, 114.264px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(97.8626px, 138.877px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(1111.59px, 263.672px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(450.581px, 93.494px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(383.269px, 192.148px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(518.278px, 258.356px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-near",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "herb-patch",
+        "transform": "translate(267.508px, 586.426px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(210.929px, 79.4721px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(427.02px, 182.152px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-far",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "timber-stand",
+        "transform": "translate(434.781px, 181.99px) translate(-50%, -100%)"
+      },
+      {
+        "id": "river-fish",
+        "transform": "translate(806.939px, 428.793px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(551.246px, 413.951px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(372.179px, 324.461px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(873.028px, 267.646px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(585.878px, 227.916px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(352.224px, 242.624px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(881.824px, 310.605px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(534.51px, 211.58px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-loom",
+        "transform": "translate(294.776px, 291.947px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-rack",
+        "transform": "translate(212.639px, 219.984px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(503.705px, 270.89px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(577.342px, 307.678px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-riverbank",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(363.568px, 607.513px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(580.926px, 247.114px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(43.1765px, 171.2px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(591.533px, 334.839px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "jordan-bridge",
+    "preset": "high",
+    "labels": []
+  },
+  {
+    "shot": "scythopolis-market",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "scythopolis-woodcutting",
+        "transform": "translate(1213.34px, 149.262px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "sea-shore",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "reading-capernaum-roof",
+        "transform": "translate(501.127px, 140.117px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-capernaum",
+        "transform": "translate(511.607px, 70.0617px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-mining",
+        "transform": "translate(425.693px, 322.404px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-harvesting",
+        "transform": "translate(114.053px, 283.776px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-fishing",
+        "transform": "translate(758.809px, 326.808px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-vendor",
+        "transform": "translate(344.948px, 150.18px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-tanning-rack",
+        "transform": "translate(116.66px, 239.507px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-hearth",
+        "transform": "translate(233.449px, 265.323px) translate(-50%, -100%)"
+      },
+      {
+        "id": "port-capernaum",
+        "transform": "translate(640px, 338.615px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "fight",
+    "preset": "high",
+    "labels": [
+      {
+        "id": "salim-threat-0",
+        "transform": "translate(690.871px, 365.984px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-square",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(995.482px, 506.489px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(453.664px, 473.268px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(120.506px, 291.064px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(1089.2px, 181.973px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(539.309px, 114.264px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(97.8626px, 138.877px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(1111.59px, 263.672px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(450.581px, 93.494px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(383.269px, 192.148px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(518.278px, 258.356px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-near",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "herb-patch",
+        "transform": "translate(267.508px, 586.426px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(210.929px, 79.4721px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(427.02px, 182.152px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-far",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "timber-stand",
+        "transform": "translate(434.781px, 181.99px) translate(-50%, -100%)"
+      },
+      {
+        "id": "river-fish",
+        "transform": "translate(806.939px, 428.793px) translate(-50%, -100%)"
+      },
+      {
+        "id": "herb-patch",
+        "transform": "translate(551.246px, 413.951px) translate(-50%, -100%)"
+      },
+      {
+        "id": "flax-patch",
+        "transform": "translate(372.179px, 324.461px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(873.028px, 267.646px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(585.878px, 227.916px) translate(-50%, -100%)"
+      },
+      {
+        "id": "potter",
+        "transform": "translate(352.224px, 242.624px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(881.824px, 310.605px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-forge",
+        "transform": "translate(534.51px, 211.58px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-loom",
+        "transform": "translate(294.776px, 291.947px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-rack",
+        "transform": "translate(212.639px, 219.984px) translate(-50%, -100%)"
+      },
+      {
+        "id": "village-hearth",
+        "transform": "translate(503.705px, 270.89px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-john-witness",
+        "transform": "translate(577.342px, 307.678px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "aenon-riverbank",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "river-fish",
+        "transform": "translate(363.568px, 607.513px) translate(-50%, -100%)"
+      },
+      {
+        "id": "john",
+        "transform": "translate(580.926px, 247.114px) translate(-50%, -100%)"
+      },
+      {
+        "id": "merchant",
+        "transform": "translate(43.1765px, 171.2px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reeds",
+        "transform": "translate(591.533px, 334.839px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "jordan-bridge",
+    "preset": "ultra",
+    "labels": []
+  },
+  {
+    "shot": "scythopolis-market",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "scythopolis-woodcutting",
+        "transform": "translate(1213.34px, 149.262px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "sea-shore",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "reading-capernaum-roof",
+        "transform": "translate(501.127px, 140.117px) translate(-50%, -100%)"
+      },
+      {
+        "id": "reading-capernaum",
+        "transform": "translate(511.607px, 70.0617px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-mining",
+        "transform": "translate(425.693px, 322.404px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-harvesting",
+        "transform": "translate(114.053px, 283.776px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-fishing",
+        "transform": "translate(758.809px, 326.808px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-vendor",
+        "transform": "translate(344.948px, 150.18px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-tanning-rack",
+        "transform": "translate(116.66px, 239.507px) translate(-50%, -100%)"
+      },
+      {
+        "id": "capernaum-hearth",
+        "transform": "translate(233.449px, 265.323px) translate(-50%, -100%)"
+      },
+      {
+        "id": "port-capernaum",
+        "transform": "translate(640px, 338.615px) translate(-50%, -100%)"
+      }
+    ]
+  },
+  {
+    "shot": "fight",
+    "preset": "ultra",
+    "labels": [
+      {
+        "id": "salim-threat-0",
+        "transform": "translate(690.871px, 365.984px) translate(-50%, -100%)"
+      }
+    ]
+  }
+]

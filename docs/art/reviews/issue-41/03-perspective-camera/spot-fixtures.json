@@ -1,0 +1,138 @@
+[
+  {
+    "corner": "top-left",
+    "placeId": "jordan",
+    "position": {
+      "x": -4.849897230798177,
+      "z": 150.99345037846092
+    },
+    "radius": 22,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 80,
+    "y": 180
+  },
+  {
+    "corner": "bottom-right",
+    "placeId": "jordan",
+    "position": {
+      "x": -27.39585978119477,
+      "z": 157.82387045274075
+    },
+    "radius": 22,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 1200,
+    "y": 620
+  },
+  {
+    "corner": "top-right",
+    "placeId": "jordan",
+    "position": {
+      "x": -17.393366483582298,
+      "z": 169.1220763923483
+    },
+    "radius": 22,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 1040,
+    "y": 80
+  },
+  {
+    "corner": "bottom-left",
+    "placeId": "jordan",
+    "position": {
+      "x": -15.527254272747072,
+      "z": 145.55362918269103
+    },
+    "radius": 22,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 80,
+    "y": 620
+  },
+  {
+    "corner": "top-left",
+    "placeId": "jordan",
+    "position": {
+      "x": -168.6238185084821,
+      "z": 172.3162270434472
+    },
+    "radius": 44,
+    "spot": {
+      "id": "salim-mining",
+      "name": "Salim stone outcrop",
+      "x": -196,
+      "z": 180
+    },
+    "x": 80,
+    "y": 180
+  },
+  {
+    "corner": "bottom-right",
+    "placeId": "jordan",
+    "position": {
+      "x": -36.91133533855641,
+      "z": 159.8254845620734
+    },
+    "radius": 44,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 1200,
+    "y": 620
+  },
+  {
+    "corner": "top-right",
+    "placeId": "jordan",
+    "position": {
+      "x": 0.15168704402251265,
+      "z": 241.11407269284567
+    },
+    "radius": 44,
+    "spot": {
+      "id": "herb-patch",
+      "name": "Wild herbs",
+      "x": -1,
+      "z": 213
+    },
+    "x": 1040,
+    "y": 80
+  },
+  {
+    "corner": "bottom-left",
+    "placeId": "jordan",
+    "position": {
+      "x": -13.758563969983229,
+      "z": 136.00504451459568
+    },
+    "radius": 44,
+    "spot": {
+      "id": "ore-vein",
+      "name": "Copper outcrop",
+      "x": -18,
+      "z": 155
+    },
+    "x": 80,
+    "y": 620
+  }
+]

@@ -1,0 +1,218 @@
+{
+  "occluded": {
+    "meshes": [
+      {
+        "name": "village-house-2|AenonHouse_primitive0",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive1",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive2",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive3",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive4",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive5",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive6",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive7",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive8",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive9",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive10",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive11",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive12",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive13",
+        "visibility": 0.23
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive14",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-potters-bench",
+        "visibility": 0.23
+      },
+      {
+        "name": "aenon-roof-water-store",
+        "visibility": 0.23
+      }
+    ],
+    "position": {
+      "x": -33.0301266719109,
+      "z": 198.9807499501751
+    }
+  },
+  "clear": {
+    "meshes": [
+      {
+        "name": "village-house-2|AenonHouse_primitive0",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive1",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive2",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive3",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive4",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive5",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive6",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive7",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive8",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive9",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive10",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive11",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive12",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive13",
+        "visibility": 1
+      },
+      {
+        "name": "village-house-2|AenonHouse_primitive14",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-fired-water-jar",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-jar-neck",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-potters-bench",
+        "visibility": 1
+      },
+      {
+        "name": "aenon-roof-water-store",
+        "visibility": 1
+      }
+    ],
+    "position": {
+      "x": -37.01316495952324,
+      "z": 198.97705641113976
+    }
+  }
+}

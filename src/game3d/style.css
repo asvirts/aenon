@@ -172,4 +172,4 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .place-chip.selected { background: #637049; color: #fff9e9; border-color: #637049; }
 .item-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .scripture-passage .label { font-size: .65em; vertical-align: super; margin-right: .35em; color: #7a805f; }
-#minimap { cursor: pointer; }
+#minimap { cursor: pointer; pointer-events: auto; }

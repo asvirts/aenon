@@ -1,0 +1,107 @@
+{
+  "productionCommit": "8be0484c9f05e5e77f30444d33fc8ecffc09aee6",
+  "origin": "http://127.0.0.1:5215",
+  "firstLoadRequests": 228,
+  "encodedBodyBytes": 6988650,
+  "headerAllowancePerResponse": 300,
+  "estimatedTransferBytes": 7057050,
+  "method": "Fresh-origin production navigation through a transparent localhost HTTP logging proxy. Includes worker requests and within-load cache revalidations. Estimate adds the Resource Timing standard 300-byte header allowance per response.",
+  "gameReady": true,
+  "mainPageResourceOrigins": [
+    "http://127.0.0.1:5215"
+  ],
+  "measure": "undefined",
+  "reviewShot": "undefined",
+  "decoderResponses": [
+    {
+      "path": "/decoders/meshoptimizer-1.2.0/meshopt_decoder.js",
+      "status": 200,
+      "encodedBytes": 7896,
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/babylon.ktx2Decoder.js",
+      "status": 200,
+      "encodedBytes": 6780,
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/babylon.ktx2Decoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/babylon.ktx2Decoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/babylon.ktx2Decoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.wasm",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.wasm",
+      "status": 200,
+      "encodedBytes": 455582,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.wasm",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.wasm",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.js",
+      "status": 200,
+      "encodedBytes": 15828,
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/msc_basis_transcoder.js",
+      "status": 304,
+      "encodedBytes": 0,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/zstddec.wasm",
+      "status": 200,
+      "encodedBytes": 29232,
+      "contentEncoding": null
+    },
+    {
+      "path": "/decoders/babylon-9.30.0/uastc_astc.wasm",
+      "status": 200,
+      "encodedBytes": 12212,
+      "contentEncoding": null
+    }
+  ]
+}

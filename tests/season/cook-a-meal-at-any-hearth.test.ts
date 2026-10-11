@@ -10,6 +10,14 @@ import {
 
 const onePointPerLevel: ExperienceCurve = (experience) => experience + 1
 
+const restoreShares = {
+  common: 0.2,
+  uncommon: 0.4,
+  rare: 0.6,
+  epic: 0.8,
+  legendary: 1,
+}
+
 describe("cook a meal at any hearth", () => {
   it("cooks a meal at a hearth from fish, meat, and herbs", () => {
     const definition: SeasonDefinition = {
@@ -23,6 +31,7 @@ describe("cook a meal at any hearth", () => {
       stations: [{ id: "aenon-hearth", kind: "hearth", placeId: "aenon" }],
       fish: [{ id: "bream", rarity: "common" }],
       foods: [{ id: "bream-meal", rarity: "common" }],
+      restoreShares,
       cookingRecipes: [
         {
           id: "bream-meal-recipe",
@@ -262,7 +271,7 @@ describe("cook a meal at any hearth", () => {
   it("cooks a legendary fish into that meal and leaves the meal with no level band", () => {
     const definition = cookingAt("aenon", "low", {
       fish: { id: "musht", rarity: "legendary" },
-      food: { id: "musht-meal", rarity: "legendary" },
+      food: { id: "musht-meal", rarity: "legendary", mealBuff: { kind: "faster-pace" } },
       fishCount: 1,
       meatCount: 2,
       herbCount: 1,
@@ -320,6 +329,7 @@ describe("cook a meal at any hearth", () => {
       ],
       fish: [{ id: "bream", rarity: "epic" }],
       foods: [{ id: "bream-meal", rarity: "epic" }],
+      restoreShares,
       cookingRecipes: [
         {
           id: "bream-meal-recipe",
@@ -811,6 +821,7 @@ function hearthAt(
     stations: [{ id: "hearth", kind: "hearth", placeId }],
     fish: [{ id: "bream", rarity: "uncommon" }],
     foods: [{ id: "bream-meal", rarity: "uncommon" }],
+    restoreShares,
     cookingRecipes: [
       {
         id: "meal-recipe",
@@ -874,6 +885,7 @@ function twoHearths(): SeasonDefinition {
       { id: "bream-meal", rarity: "common" },
       { id: "musht-meal", rarity: "rare" },
     ],
+    restoreShares,
     cookingRecipes: [
       meal("plain-meal-recipe", 1, "bream", "bream-meal", 1),
       meal("bream-meal-recipe", 1, "bream", "bream-meal", 2),
@@ -888,7 +900,11 @@ function cookingAt(
   band: "low" | "middle" | "high",
   input: {
     fish: { id: string; rarity: "common" | "uncommon" | "rare" | "epic" | "legendary" }
-    food: { id: string; rarity: "common" | "uncommon" | "rare" | "epic" | "legendary" }
+    food: {
+      id: string
+      rarity: "common" | "uncommon" | "rare" | "epic" | "legendary"
+      mealBuff?: { kind: "added-defence"; amount: number } | { kind: "faster-pace" }
+    }
     fishCount: number
     meatCount: number
     herbCount: number
@@ -914,6 +930,7 @@ function cookingAt(
     stations: [{ id: "hearth", kind: "hearth", placeId }],
     fish: [input.fish],
     foods: [input.food],
+    restoreShares,
     cookingRecipes: [
       {
         id: input.recipeId ?? "meal-recipe",

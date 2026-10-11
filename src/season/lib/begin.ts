@@ -1,5 +1,5 @@
 import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
-import { gearSlots, type ExperienceCurve, type GearSlot, type LevelBand, type PackEntry } from "./types.ts"
+import { gearSlots, type ExperienceCurve, type GearSlot, type LevelBand, type MealBuff, type PackEntry } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -98,13 +98,15 @@ export type SeasonState = {
   fallenHostiles: readonly string[]
   carcasses: readonly Carcass[]
   pickups: readonly Pickup[]
-  mealBuff: null
+  mealBuff: MealBuff | null
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly string[]
   playingSceneId: string | null
   questProgress: readonly QuestProgress[]
   openedCaches: readonly string[]
 }
+
+export type Pace = "walk" | "faster"
 
 export type Adventurer = {
   placeId: string
@@ -122,12 +124,19 @@ export type Adventurer = {
   fallenHostiles: readonly string[]
   carcasses: readonly Carcass[]
   pickups: readonly Pickup[]
-  mealBuff: null
+  mealBuff: MealBuff | null
+  pace: Pace
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly string[]
   playingScene: PlayingScene | null
   present: readonly PresentPerson[]
   questJournal: readonly QuestJournalEntry[]
+}
+
+function copyMealBuff(mealBuff: MealBuff | null): MealBuff | null {
+  if (mealBuff === null) return null
+  if (mealBuff.kind === "added-defence") return { kind: "added-defence", amount: mealBuff.amount }
+  return { kind: "faster-pace" }
 }
 
 function presentFight(fight: Fight): Fight {
@@ -200,7 +209,8 @@ export function presentAdventurer(
     fallenHostiles: [...state.fallenHostiles],
     carcasses: state.carcasses.map((carcass) => ({ ...carcass })),
     pickups: state.pickups.map((pickup) => ({ ...pickup })),
-    mealBuff: state.mealBuff,
+    mealBuff: copyMealBuff(state.mealBuff),
+    pace: state.mealBuff?.kind === "faster-pace" ? "faster" : "walk",
     referenceJournal: state.referenceJournal.map((filing) => ({ ...filing })),
     playedSetScenes: [...state.playedSetScenes],
     playingScene:

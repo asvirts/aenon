@@ -107,9 +107,22 @@ export type Fish = {
   rarity: Rarity
 }
 
+export type MealBuff =
+  | { kind: "added-defence"; amount: number }
+  | { kind: "faster-pace" }
+
 export type Food = {
   id: string
   rarity: Rarity
+  mealBuff?: MealBuff
+}
+
+export type RestoreShares = {
+  common: number
+  uncommon: number
+  rare: number
+  epic: number
+  legendary: number
 }
 
 export type CookingRecipe = {
@@ -273,6 +286,7 @@ export type SeasonDefinition = {
   fish?: readonly Fish[]
   foods?: readonly Food[]
   cookingRecipes?: readonly CookingRecipe[]
+  restoreShares?: RestoreShares
 }
 
 export type ExperienceCurve = (experience: number) => number

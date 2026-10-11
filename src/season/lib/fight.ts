@@ -33,10 +33,12 @@ export function enterPlace(
   const place = definition.places.find((candidate) => candidate.id === placeId)
   if (!place) return { ok: false, reason: "not-present" }
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
-  if (place.id !== state.placeId) clearCarcasses(state)
+  const arrived = place.id !== state.placeId
+  if (arrived) clearCarcasses(state)
   state.fight = null
   state.placeId = place.id
   if (place.kind === "settlement") {
+    if (arrived) state.mealBuff = null
     state.lastSettlementId = place.id
     state.outing = "closed"
   } else if (state.outing === "closed") {
@@ -120,7 +122,7 @@ export function swingAtHostile(
       hostileDamage = rollHostileDamage({
         accuracy: hostile?.accuracy ?? 0,
         strength: hostile?.strength ?? 0,
-        defence: level + gear.defence,
+        defence: level + gear.defence + addedDefence(state),
       })
     }
     state.fight = {
@@ -155,9 +157,14 @@ export function swingAtHostile(
   return { ok: true, damage, hostileFell: true }
 }
 
+function addedDefence(state: SeasonState): number {
+  return state.mealBuff?.kind === "added-defence" ? state.mealBuff.amount : 0
+}
+
 function wakeInLastSettlement(state: SeasonState, defeatLoss: number): void {
   state.placeId = state.lastSettlementId
   state.currentHitpoints = 0
+  state.mealBuff = null
   state.coin = Math.max(0, state.coin - defeatLoss)
   state.outing = "closed"
   state.fight = null

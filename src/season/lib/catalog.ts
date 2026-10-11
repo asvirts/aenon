@@ -18,7 +18,17 @@ export function requireGearCatalog(definition: SeasonDefinition): CatalogCheck {
   if (!strength.ok) return strength
   const weight = requireArmorWeight(gear)
   if (!weight.ok) return weight
-  return requireArmorDefence(gear)
+  const defence = requireArmorDefence(gear)
+  if (!defence.ok) return defence
+  return requireSpecialEffects(gear)
+}
+
+function requireSpecialEffects(gear: readonly Gear[]): CatalogCheck {
+  for (const piece of gear) {
+    const count = piece.effects?.length ?? 0
+    if (piece.rarity === "legendary" ? count !== 1 : count > 0) return { ok: false, reason: "special-effect" }
+  }
+  return { ok: true }
 }
 
 function requireNonPositiveArmorAccuracy(gear: readonly Gear[]): CatalogCheck {

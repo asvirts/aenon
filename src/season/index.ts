@@ -11,6 +11,7 @@ import {
   type QuestProgress,
   type ReferenceFiling,
   type SeasonState,
+  type StoredBurn,
 } from "./lib/begin.ts"
 import { requireGearCatalog } from "./lib/catalog.ts"
 import { holdAdventurerExperience, holdTrainedExperience } from "./lib/experience.ts"
@@ -65,6 +66,7 @@ export type {
   LevelBand,
   MaterialCost,
   PackEntry,
+  SpecialEffect,
   Person,
   Place,
   QuestDefinition,
@@ -77,7 +79,7 @@ export type {
   StationKind,
 } from "./lib/types.ts"
 export type { GearSlot }
-export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
+export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState, StoredBurn }
 export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }

@@ -1,5 +1,5 @@
 import type { SeasonState } from "./begin.ts"
-import { gearSlots, type GearSlot, type SeasonDefinition } from "./types.ts"
+import { gearSlots, type GearSlot, type SeasonDefinition, type SpecialEffect } from "./types.ts"
 
 export type WearResult = { ok: true } | { ok: false; reason: "not-present" | "pack-full" }
 
@@ -26,10 +26,11 @@ type WornGear = {
   accuracyModifier: number
   strengthModifier: number
   defence: number
+  effects: SpecialEffect[]
 }
 
 export function wornGear(state: SeasonState, definition: SeasonDefinition): WornGear {
-  const worn: WornGear = { accuracyModifier: 0, strengthModifier: 0, defence: 0 }
+  const worn: WornGear = { accuracyModifier: 0, strengthModifier: 0, defence: 0, effects: [] }
   const gear = definition.gear ?? []
   for (const slot of gearSlots) {
     const id = state.worn[slot]
@@ -39,6 +40,8 @@ export function wornGear(state: SeasonState, definition: SeasonDefinition): Worn
     worn.accuracyModifier += piece.accuracyModifier
     if (piece.slot === "weapon") worn.strengthModifier += piece.strengthModifier
     else worn.defence += piece.defence
+    const effect = piece.effects?.[0]
+    if (piece.rarity === "legendary" && piece.effects?.length === 1 && effect) worn.effects.push(effect)
   }
   return worn
 }

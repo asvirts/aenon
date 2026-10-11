@@ -70,6 +70,7 @@ describe("the fight reads the worn gear", () => {
       rarity: "legendary",
       accuracyModifier: 4,
       strengthModifier: 9,
+      effects: [{ kind: "stun" }],
     }
     const lowCommon = { ...roundShield, id: "jordan-shield", band: "low", rarity: "common" } satisfies Gear
     const season = carry([highLegendary.id, lowCommon.id], [highLegendary, lowCommon])
@@ -733,6 +734,7 @@ function weapon(
     rarity,
     accuracyModifier,
     strengthModifier,
+    ...(rarity === "legendary" ? { effects: [{ kind: "stun" as const }] } : {}),
   } satisfies Gear
 }
 
@@ -752,6 +754,7 @@ function plate(
     rarity,
     accuracyModifier: 0,
     defence,
+    ...(rarity === "legendary" ? { effects: [{ kind: "stun" as const }] } : {}),
   } satisfies Gear
 }
 

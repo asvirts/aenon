@@ -154,6 +154,12 @@ export type WeaponHold = "one-handed" | "two-handed"
 
 export type WeaponKind = "sword" | "mace"
 
+export type SpecialEffect =
+  | { kind: "second-hit" }
+  | { kind: "stun" }
+  | { kind: "burn"; damage: number; exchanges: number }
+  | { kind: "heal"; amount: number }
+
 export type Gear =
   | {
       id: string
@@ -164,6 +170,7 @@ export type Gear =
       rarity: Rarity
       accuracyModifier: number
       strengthModifier: number
+      effects?: readonly SpecialEffect[]
     }
   | {
       id: string
@@ -172,6 +179,7 @@ export type Gear =
       rarity: Rarity
       accuracyModifier: number
       defence: number
+      effects?: readonly SpecialEffect[]
     }
   | {
       id: string
@@ -181,6 +189,7 @@ export type Gear =
       rarity: Rarity
       accuracyModifier: number
       defence: number
+      effects?: readonly SpecialEffect[]
     }
 
 export type SeasonDefinition = {

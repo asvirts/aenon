@@ -21,6 +21,7 @@ export type DefinitionFailure =
   | "recipe-piece-wrong"
   | "station-not-in-settlement"
   | "recipe-piece-missing"
+  | "special-effect"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

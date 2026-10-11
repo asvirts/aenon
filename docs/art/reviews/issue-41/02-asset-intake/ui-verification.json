@@ -1,0 +1,23 @@
+{
+  "mouseCredits": true,
+  "keyboardCredits": true,
+  "escapeClose": true,
+  "buttonClose": true,
+  "pauseStart": {
+    "paused": true,
+    "time": 56.03999999982214
+  },
+  "pauseEnd": {
+    "paused": true,
+    "time": 56.03999999982214
+  },
+  "simulatedController": {
+    "closed": true,
+    "focused": "Credits",
+    "paused": true,
+    "resumed": true,
+    "settings": "World settings",
+    "title": "Credits"
+  },
+  "physicalControllerTested": false
+}

@@ -113,7 +113,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     return root
   }
   await Promise.all(houses.map(async (house, i) => {
-    const root = await staticModel('/art-sample/house.glb', `village-house-${i}`, house, house.scale, house.rotation)
+    const root = await staticModel('/game-assets/house-painted.glb', `village-house-${i}`, house, house.scale, house.rotation)
     const place = regionPlaces.filter(place => place.kind === 'settlement').reduce((a, b) => Math.hypot(a.x - house.x, a.z - house.z) < Math.hypot(b.x - house.x, b.z - house.z) ? a : b)
     decorateHouse(root, place.id, i)
   }))

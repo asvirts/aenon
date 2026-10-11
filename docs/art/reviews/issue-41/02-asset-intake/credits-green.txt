@@ -1,0 +1,16 @@
+▶ shipped art provenance
+  ✔ registers every shipped file exactly once and keeps generated CREDITS.md current (8.956833ms)
+  ✔ goes red for an unregistered file and green once registered and regenerated (1.604417ms)
+  ✔ also scans future shipped directories and rejects duplicate and missing files (1.3735ms)
+  ✔ rejects excluded art licences and requires CC-BY attribution (2.08025ms)
+  ✔ requires the AI tool, plan, terms URL and exact prompt (1.871666ms)
+  ✔ requires a committed vendor licence and valid dates and links (1.25325ms)
+✔ shipped art provenance (17.752375ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79.703625

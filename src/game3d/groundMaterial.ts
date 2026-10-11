@@ -108,7 +108,10 @@ vec3 grassPigment=mix(vec3(.20,.27,.06),groundColor(ground_grassColor,grassUV,ma
 float grassLight=dot(grassPigment,vec3(.2126,.7152,.0722));
 vec3 lush=grassPigment*vec3(.62,1.10,.69);
 vec3 dry=mix(grassPigment,grassLight*vec3(1.40,1.01,.40),.90);
-vec3 dirt=groundColor(ground_dirtColor,dirtUV,patches)*vec3(1.36,1.15,.89);
+vec3 dirtPigment=groundColor(ground_dirtColor,dirtUV,patches);
+float dirtLight=dot(dirtPigment,vec3(.2126,.7152,.0722));
+// Quiet the source's rust red so the orange attack warning remains distinct on roads.
+vec3 dirt=mix(dirtPigment,dirtLight*vec3(1.32,1.12,.70),.78)*1.24;
 vec3 stones=groundColor(ground_stonesColor,stoneUV,macro)*vec3(1.04,1.02,.94);
 vec3 sand=groundColor(ground_sandColor,bankUV,patches)*vec3(.99,1.03,.93);
 vec3 mud=groundColor(ground_mudColor,bankUV,macro)*vec3(.76,.85,.76);

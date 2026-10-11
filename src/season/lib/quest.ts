@@ -7,7 +7,13 @@ import {
   type SeasonState,
   type TrainedSkill,
 } from "./begin.ts"
-import { readAdventurerLevel } from "./experience.ts"
+import {
+  experienceForLevel,
+  holdAdventurerExperience,
+  holdTrainedExperience,
+  readAdventurerLevel,
+} from "./experience.ts"
+import { packAfterGoods } from "./pack.ts"
 import type { ExperienceCurve, LevelBand, PackEntry, Person, QuestDefinition, SeasonDefinition } from "./types.ts"
 
 export type OfferedQuest = {
@@ -33,6 +39,10 @@ export type QuestLoadFailure =
   | "more-than-one-skill"
   | "giver-not-in-settlement"
   | "unknown-skill"
+  | "combat-skill-experience"
+  | "repeatable-adventurer-experience"
+  | "repeatable-skill-experience"
+  | "repeatable-gear"
 
 export function requireQuests(
   definition: SeasonDefinition,
@@ -54,6 +64,22 @@ export function requireQuests(
     if (unknownSkill) return { ok: false, reason: "unknown-skill" }
     const trainedRequirements = (quest.skills ?? []).filter((requirement) => isTrainedSkill(requirement.skill))
     if (trainedRequirements.length > 1) return { ok: false, reason: "more-than-one-skill" }
+    const rewardSkill = quest.reward.skillExperience?.skill
+    if (rewardSkill && isCombatSkill(rewardSkill)) {
+      return { ok: false, reason: "combat-skill-experience" }
+    }
+    if (rewardSkill && !isTrainedSkill(rewardSkill)) {
+      return { ok: false, reason: "unknown-skill" }
+    }
+    if (quest.repeatable && quest.reward.adventurerExperience !== undefined) {
+      return { ok: false, reason: "repeatable-adventurer-experience" }
+    }
+    if (quest.repeatable && quest.reward.skillExperience) {
+      return { ok: false, reason: "repeatable-skill-experience" }
+    }
+    if (quest.repeatable && (quest.reward.gear ?? []).length > 0) {
+      return { ok: false, reason: "repeatable-gear" }
+    }
     for (const requiredId of quest.requiredQuestIds ?? []) {
       const required = questById(definition, requiredId)
       const requiredSettlement = required ? settlementOf(definition, required.giverId) : undefined
@@ -136,12 +162,41 @@ function isOffered(
   if (inProgressForGiver(state, definition, quest.giverId)) return false
   const progress = state.questProgress.find((entry) => entry.questId === quest.id)
   if (progress?.finished && !quest.repeatable) return false
-  if (readAdventurerLevel(curve, state.adventurerExperience) < requiredAdventurerLevel(quest)) return false
+  const level = readAdventurerLevel(curve, state.adventurerExperience)
+  if (level < offerFloor(bandOfQuest(definition, quest))) return false
+  if (level < requiredAdventurerLevel(quest)) return false
   if (!meetsTrainedSkill(state, curve, quest)) return false
   return (quest.requiredQuestIds ?? []).every((requiredId) => {
     const required = state.questProgress.find((entry) => entry.questId === requiredId)
     return required?.finishedOnce === true
   })
+}
+
+const bandBounds = {
+  low: { floor: 1, ceiling: 20 },
+  middle: { floor: 20, ceiling: 40 },
+  high: { floor: 40, ceiling: 60 },
+} as const
+
+function experienceAfterQuestGrant(
+  experience: number,
+  curve: ExperienceCurve,
+  band: LevelBand,
+  grant: number,
+): number {
+  const bounds = bandBounds[band]
+  const level = readAdventurerLevel(curve, experience)
+  if (grant <= 0 || level < bounds.floor || level >= bounds.ceiling) {
+    return holdAdventurerExperience(experience, curve)
+  }
+  return holdAdventurerExperience(
+    Math.min(experience + grant, experienceForLevel(curve, bounds.ceiling)),
+    curve,
+  )
+}
+
+function offerFloor(band: LevelBand): number {
+  return bandBounds[band].floor
 }
 
 function requiredAdventurerLevel(quest: QuestDefinition): number {
@@ -196,7 +251,7 @@ export function speakToPerson(
   if (!person) return { ok: false, reason: "not-present" }
 
   const underway = inProgressForGiver(state, definition, person.id)
-  if (underway) return speakToCurrentStep(state, definition, underway)
+  if (underway) return speakToCurrentStep(state, definition, curve, underway)
 
   const quest = offeredFor(state, definition, curve, person.id)[0]
   if (!quest || quest.steps.length === 0) return { ok: false, reason: "not-offered" }
@@ -218,21 +273,31 @@ export function speakToPerson(
 function speakToCurrentStep(
   state: SeasonState,
   definition: SeasonDefinition,
+  curve: ExperienceCurve,
   progress: QuestProgress,
 ): SpeakResult {
   const quest = questById(definition, progress.questId)
   const step = quest?.steps[progress.stepIndex]
   if (quest && step?.kind === "return") {
-    const packed = packAfterReturn(
-      state.pack,
-      step.goodId,
-      step.count,
-      quest.reward.goods,
-      definition.packSize,
-    )
+    const packed = packAfterReturn(state.pack, step.goodId, step.count, quest.reward, definition.packSize)
     if (!packed.ok) return { ok: false, reason: packed.reason }
     state.pack = packed.pack
     state.coin += quest.reward.coin
+    if (!quest.repeatable) {
+      state.adventurerExperience = experienceAfterQuestGrant(
+        state.adventurerExperience,
+        curve,
+        bandOfQuest(definition, quest),
+        quest.reward.adventurerExperience ?? 0,
+      )
+      const skillReward = quest.reward.skillExperience
+      if (skillReward && isTrainedSkill(skillReward.skill)) {
+        state.trainedExperience[skillReward.skill] = holdTrainedExperience(
+          state.trainedExperience[skillReward.skill] + skillReward.experience,
+          curve,
+        )
+      }
+    }
     state.questProgress = state.questProgress.map((entry) =>
       entry.questId === quest.id ? { ...entry, finished: true, finishedOnce: true } : entry,
     )
@@ -245,7 +310,7 @@ function packAfterReturn(
   pack: SeasonState["pack"],
   goodId: string,
   count: number,
-  goods: readonly { id: string; count: number }[],
+  reward: QuestDefinition["reward"],
   packSize: number,
 ): { ok: true; pack: SeasonState["pack"] } | { ok: false; reason: "step-not-ready" | "pack-full" } {
   if (countOf(pack, goodId) < count) return { ok: false, reason: "step-not-ready" }
@@ -265,18 +330,19 @@ function packAfterReturn(
     }
     next.push({ ...entry })
   }
-  for (const good of goods) {
+  let packed: SeasonState["pack"] = next
+  for (const good of reward.goods) {
     if (good.count <= 0) continue
-    const index = next.findIndex((entry) => entry.kind === "everyday" && entry.id === good.id)
-    const existing = index >= 0 ? next[index] : undefined
-    if (existing && existing.kind === "everyday") {
-      next[index] = { kind: "everyday", id: existing.id, count: existing.count + good.count }
-      continue
-    }
-    if (next.length >= packSize) return { ok: false, reason: "pack-full" }
-    next.push({ kind: "everyday", id: good.id, count: good.count })
+    const withGood = packAfterGoods(packed, packSize, { kind: "everyday", id: good.id }, good.count)
+    if (!withGood) return { ok: false, reason: "pack-full" }
+    packed = withGood
   }
-  return { ok: true, pack: next }
+  for (const piece of reward.gear ?? []) {
+    const withGear = packAfterGoods(packed, packSize, { kind: "gear", id: piece.id }, 1)
+    if (!withGear) return { ok: false, reason: "pack-full" }
+    packed = withGear
+  }
+  return { ok: true, pack: packed }
 }
 
 function advanceReadyHolds(state: SeasonState, quest: QuestDefinition, progress: QuestProgress): void {

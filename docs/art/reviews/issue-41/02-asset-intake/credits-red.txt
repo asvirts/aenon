@@ -1,0 +1,62 @@
+▶ shipped art provenance
+  ✖ registers every shipped file exactly once and keeps generated CREDITS.md current (8.869042ms)
+  ✔ goes red for an unregistered file and green once registered and regenerated (2.03475ms)
+  ✔ also scans future shipped directories and rejects duplicate and missing files (1.784875ms)
+  ✔ rejects excluded art licences and requires CC-BY attribution (2.212583ms)
+  ✔ requires the AI tool, plan, terms URL and exact prompt (2.068125ms)
+  ✔ requires a committed vendor licence and valid dates and links (1.387583ms)
+✖ shipped art provenance (19.115333ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 340.237834
+
+✖ failing tests:
+
+test at tests/game3d/credits.test.ts:21:3
+✖ registers every shipped file exactly once and keeps generated CREDITS.md current (8.869042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'public/decoders/babylon-9.30.0/LICENSE.md: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/WASM-LICENSE.md: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js.map: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/msc_basis_transcoder.js: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/msc_basis_transcoder.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_astc.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_bc7.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_r8_unorm.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_rg8_unorm.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_rgba8_srgb_v2.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/uastc_rgba8_unorm_v2.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/babylon-9.30.0/zstddec.wasm: expected exactly one credit entry, found 0',
+  +   'public/decoders/meshoptimizer-1.2.0/LICENSE.md: expected exactly one credit entry, found 0',
+  +   'public/decoders/meshoptimizer-1.2.0/meshopt_decoder.js: expected exactly one credit entry, found 0',
+  +   'public/game-assets/house-painted.glb: expected exactly one credit entry, found 0',
+  +   'CREDITS.md is stale; run npm run credits'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///Users/asvirts/.codex/worktrees/graphics-asset-intake/aenon/tests/game3d/credits.test.ts:22:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at node:internal/test_runner/test:1887:71
+      at node:internal/per_context/primordials:504:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:478:3)
+      at node:internal/per_context/primordials:504:9
+      at Array.map (<anonymous>) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'public/decoders/babylon-9.30.0/LICENSE.md: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/WASM-LICENSE.md: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/babylon.ktx2Decoder.js.map: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/msc_basis_transcoder.js: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/msc_basis_transcoder.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_astc.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_bc7.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_r8_unorm.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_rg8_unorm.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_rgba8_srgb_v2.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/uastc_rgba8_unorm_v2.wasm: expected exactly one credit entry, found 0', 'public/decoders/babylon-9.30.0/zstddec.wasm: expected exactly one credit entry, found 0', 'public/decoders/meshoptimizer-1.2.0/LICENSE.md: expected exactly one credit entry, found 0', 'public/decoders/meshoptimizer-1.2.0/meshopt_decoder.js: expected exactly one credit entry, found 0', 'public/game-assets/house-painted.glb: expected exactly one credit entry, found 0', 'CREDITS.md is stale; run npm run credits' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -6,6 +6,7 @@ import { sceneNarratives, personStories, passageMetadata } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
+import { creditGroups } from './credits.ts'
 import type { Gear, MaterialCost, SeasonDefinition, SellGood } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
@@ -145,7 +146,7 @@ export function createUI(options: UIOptions) {
   const body = get('#game-panel-body')
   const close = get<HTMLButtonElement>('.panel-close')
   const navigation = get('.game-navigation')
-  const titles: Record<Panel, string> = { gear: 'Gear & provisions', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
+  const titles: Record<Panel, string> = { gear: 'Gear & provisions', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
   for (const [panel, label, symbol] of [['map', 'Map', '⌖'], ['gear', 'Gear', '◇'], ['journal', 'Journal', '☷'], ['skills', 'Skills', '✧'], ['trade', 'Trade', '◈'], ['scripture', 'Scripture', '▤'], ['settings', 'Settings', '⚙']] as const) {
     const control = button('', () => openPanel(panel), 'nav-button')
     control.append(node('span', 'nav-symbol', symbol), node('span', '', label))
@@ -312,7 +313,7 @@ export function createUI(options: UIOptions) {
     get('#game-panel-title').textContent = contextId && ['person', 'trade', 'craft'].includes(currentPanel) ? objectName(contextId) : titles[currentPanel]
     get('#game-panel-eyebrow').textContent = snapshot.inCombat ? 'Fight paused · threats remain' : 'A moment of stillness'
     get('.game-panel-footer').textContent = snapshot.adventurer.playingScene ? 'World paused · Finish the encounter to return to the world' : 'World paused · Close to return to the world'
-    const renderers: Record<Panel, () => void> = { gear: gearPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, map: mapPanel, travel: travelPanel }
+    const renderers: Record<Panel, () => void> = { gear: gearPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, credits: creditsPanel, map: mapPanel, travel: travelPanel }
     renderers[currentPanel]()
   }
   function gearPanel(): void {
@@ -541,7 +542,35 @@ export function createUI(options: UIOptions) {
       body.replaceChildren(heading(reference), description('Passage unavailable', 'conversation-line'), description(error instanceof Error ? error.message : 'The live passage service could not be reached.'), description('No reading reward was granted. You can open the passage on Bible.com or try again here.', 'panel-note'), button('Try again', () => { void showPassage(reference, scriptureId) }), external)
     }
   }
+  function creditsPanel(): void {
+    const link = (label: string, href: string): HTMLAnchorElement => {
+      const element = node('a', '', label)
+      element.href = href; element.target = '_blank'; element.rel = 'noopener noreferrer'
+      return element
+    }
+    body.append(description('The artists and open-source projects behind The Season.'), button('Back to Settings', () => openPanel('settings'), 'game-button secondary'))
+    for (const [category, entries] of creditGroups()) {
+      body.append(heading(category))
+      for (const entry of entries) {
+        const article = node('article', 'credit-entry')
+        const title = node('h4'); title.append(link(entry.title, entry.source))
+        const byline = node('p', 'small-note')
+        byline.append('By ', entry.authorUrl ? link(entry.author, entry.authorUrl) : entry.author, ' · ', link(entry.license === 'original' ? 'Original work' : entry.license, entry.licenseUrl))
+        article.append(title, byline)
+        if (entry.attribution) article.append(description(entry.attribution, 'credit-attribution'))
+        article.append(description(entry.changes, 'small-note'))
+        if (entry.notes) article.append(description(entry.notes, 'small-note'))
+        if (entry.ai) {
+          const details = description(`Created with ${entry.ai.tool} (${entry.ai.plan}). `, 'small-note')
+          details.append(link('Tool terms', entry.ai.termsUrl))
+          article.append(details, description(`Prompt: ${entry.ai.prompt}`, 'small-note'))
+        }
+        body.append(article)
+      }
+    }
+  }
   function settingsPanel(): void {
+    body.append(button('Credits', () => openPanel('credits'), 'game-button secondary'))
     const label = node('label', 'setting-label', 'Visual quality')
     label.htmlFor = 'game-quality'
     const select = node('select'); select.id = 'game-quality'

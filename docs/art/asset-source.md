@@ -54,8 +54,10 @@ Materials use glTF-compatible Principled base colors, roughness, and embedded
 original 128 × 128 painted-noise image tiles for stone, wood, and woven cloth.
 Foliage uses modeled folded leaf geometry and two-sided materials, without alpha
 texture sorting. No Blender-only procedural shader is required at runtime.
-The sample's sources do not use an AI-generated texture yet; any later AI concept
-or texture work must be original to this game and separately recorded here.
+The sample's sources do not use an AI-generated texture. Later imports follow
+[ADR 0023](../adr/0023-licensed-third-party-and-ai-art-with-credits.md) and are
+recorded in `art/credits.json`. See [asset intake](asset-intake.md) for licensing,
+credits, compression, and the optimized original house used by the main world.
 
 Review the exported models in the actual game camera, including movement, before
 calling the sample visually approved. Asset generation or successful glTF import

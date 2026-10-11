@@ -27,8 +27,8 @@
     },
     {
       "file": "house-assembly.glb",
-      "bytes": 118696,
-      "sha256": "1fd9a4e4142c7798c0fc706a916d6482570860ddbc83f81859c0e678f53a7041",
+      "bytes": 118504,
+      "sha256": "740d0a79f721636af7e3651403f41209ee2687ccce1c0dc19d23e5e92e01ca10",
       "images": [
         {
           "image": "Stylized_Wood_Planks_002_normal",
@@ -70,8 +70,8 @@
     },
     {
       "file": "house-colonnade.glb",
-      "bytes": 131304,
-      "sha256": "34fdb1ae7412bec7cd59cc50f783192047cb8afe1abc166845a41f95731c04dd",
+      "bytes": 131664,
+      "sha256": "fb33187d2264221c5cc2db927f9e05451d02114ec8d43e83bebda27620ebcd63",
       "images": [
         {
           "image": "Stylized_Wood_Planks_002_normal",
@@ -421,7 +421,7 @@
     {
       "file": "timber-dock.glb",
       "bytes": 19976,
-      "sha256": "f75a8439a56d4ff239f5f689e14572aa239356698a23f889635543919d6eeed8",
+      "sha256": "5142d29dd1a92cb02b277a944eefd341e074b92247e6bb7ebce6a956e1155b42",
       "images": [
         {
           "image": "Stylized_Wood_Planks_002_normal",
@@ -445,7 +445,7 @@
     }
   ],
   "uniqueTextures": 22,
-  "modelBytes": 945184,
+  "modelBytes": 945352,
   "textureBytes": 3165861,
-  "totalBytes": 4111045
+  "totalBytes": 4111213
 }

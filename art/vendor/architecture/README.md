@@ -58,10 +58,14 @@ group. The continuous bridge deck is 4.8m wide and its Jordan top is y=.595, 2.5
 above the existing y=.57 collision terrain. Subsequent road bridges add 5mm
 per ordinal (tops .600–.610) so the overlapping Kishon crossings do not share
 coplanar decks. This removes their previous striping without changing traversal.
-Its rail-side arch supports are render geometry only. Dock deck top remains
-local y=.155, and fishing boat keel/gunwale bracket the unchanged local waterline.
+Its rail-side arch supports are render geometry only. Bridge UVs repeat at metre
+scale after longitudinal placement so masonry does not stretch into stripes.
+Dock deck top remains local y=.155; visual piers turn and extend from the original
+ashore landing anchors to the water. Moored boats float at y=.026 and their full
+hulls clear the bank, while picking and boarding keep the original landing ID and
+position. Traveling boats retain the original journey transform.
 
-Final optimized payload: **4,111,045 bytes** including 11 GLBs and 22 unique shared
+Final optimized payload: **4,111,213 bytes** including 11 GLBs and 22 unique shared
 KTX2 files (previous embedded form: 9,979,264 bytes before the workshop height
 correction). Largest GLB: **193,340 bytes**. Every GLB is below the 1 MB model
 budget. Browser first-playable transfer must still be measured for the integrated

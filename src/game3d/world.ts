@@ -225,7 +225,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   const travelingBoat = new TransformNode('Adventurer-lake-boat', scene); architecture.boat(travelingBoat); register(travelingBoat.getChildMeshes()); travelingBoat.setEnabled(false)
   for (const port of ports) {
     const dock = new TransformNode(`landing-${port.placeId}`, scene); setPosition(dock, port); scenery.push(dock)
-    architecture.dock(dock)
+    architecture.dock(dock, port)
     register(dock.getChildMeshes())
   }
   for (const placement of bridgePlacements()) {
@@ -273,7 +273,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
         for (const x of [-.27, .27]) box(root, 'chest-band', [.06, .56, .495], [x, .3, 0], iron)
         break
       case 'boat':
-        architecture.boat(root)
+        architecture.mooredBoat(root, object)
         break
       case 'signpost':
         cylinder(root, 'road-sign-post', 1.75, .1, [0, .87, 0], wood)

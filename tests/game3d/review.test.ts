@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { curves, definition, layout, navigation } from '../../src/game3d/content.ts'
 import { canTraverseRegion, findRegionPath } from '../../src/game3d/regionNavigation.ts'
-import { createShotGame, frameSampler, holdReviewGame, resetReviewActors, reviewShots } from '../../src/game3d/review.ts'
+import { architectureShots, createShotGame, frameSampler, holdReviewGame, resetReviewActors, reviewShots } from '../../src/game3d/review.ts'
 import { memoryStorage, openStorage } from '../../src/game3d/storage.ts'
 import { importGameSave, loadGameSave, restartGameSave, SAVE_KEY, saveGame } from '../../src/game3d/persistence.ts'
 import type { GameOptions } from '../../src/game3d/types.ts'
@@ -15,6 +15,17 @@ const options: GameOptions = {
 const counters = { drawCalls: 100, activeMeshes: 75, triangles: 2000 }
 
 describe('graphics review fixtures', () => {
+  it('adds walkable Salim and Pella architecture fixtures outside the canonical eight', () => {
+    assert.equal(Object.keys(reviewShots).length, 8)
+    for (const name of ['salim', 'pella'] as const) {
+      const game = holdReviewGame(createShotGame(options, name)), before = game.snapshot()
+      game.advance(60)
+      assert.deepEqual(game.snapshot(), before)
+      assert.deepEqual(before.position, architectureShots[name].position)
+      assert.equal(game.exportSave().season.placeId, name)
+      assert.equal(before.inCombat, false)
+    }
+  })
   it('recreates each shot independently of prior play, with one engaged camp fight', () => {
     assert.equal(Object.keys(reviewShots).length, 8)
     for (const name of Object.keys(reviewShots) as (keyof typeof reviewShots)[]) {

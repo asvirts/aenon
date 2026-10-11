@@ -173,7 +173,10 @@ def house(kind):
         box('courtyard-wall',(.25,1.58,.62),(x,2.45,.31),'limestone')
         box('courtyard-coping',(.31,1.66,.09),(x,2.45,.665),'cap')
     for x in [-1.98,1.98]:box('courtyard-front-return',(1.7,.24,.58),(x,3.15,.29),wall)
-    imported('anker','Ladder B.fbx',(.7,.27,3.55),(2.44,1.86,.02),math.pi/2)
+    # Civic bodies have an indented front corner: its ladder would appear
+    # detached above the portico. Lean it against the solid rear wall instead.
+    ladder=(1.85,-2.63,.02) if kind>=4 else (2.44,1.86,.02)
+    imported('anker','Ladder B.fbx',(.7,.27,3.55),ladder,math.pi/2)
     if kind<4:
         imported('anker','Awning A.fbx' if kind%2==0 else 'Awning B.fbx',(2.65,1.28,2.5),(-1.1,2.46,0),math.pi/2)
         cloth('courtyard-shade-canopy',-1.1,2.46,2.58,2.7,1.3,'indigo' if kind%2==0 else 'linen')
@@ -252,7 +255,9 @@ def dock():
     for x in [-.78,.78]:box('dock-bearing-beam',(.17,2.55,.18),(x,.1,-.035),'darkwood')
     for x in [-.97,.97]:
         for y in [-.9,.9]:
-            lathe('mooring-pile',[(.08,-.335),(.07,.785)],(x,y,0),'darkwood',10)
+            # Tiberias's unchanged shore anchor is 1.08m above the water.
+            # Full piles reach the bed there as well as at the lower landings.
+            lathe('mooring-pile',[(.08,-1.6),(.07,.785)],(x,y,0),'darkwood',10)
             for z in [.29,.36]:lathe('pile-rope-binding',[(.095,z),(.095,z+.027)],(x,y,0),'rope',12)
     export('timber-dock')
 

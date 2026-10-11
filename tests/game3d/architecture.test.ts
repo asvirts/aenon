@@ -6,7 +6,8 @@ import { createHash } from 'node:crypto'
 import { LoadAssetContainerAsync, Mesh, NullEngine, Scene, TransformNode, Vector3 } from '@babylonjs/core'
 import '@babylonjs/loaders/glTF/index.js'
 import { bridgePlacements, domesticHouseAssets, houseAsset, createArchitecture } from '../../src/game3d/architecture.ts'
-import { bridgeAt, heightAt } from '../../src/game3d/terrain.ts'
+import { bridgeAt, heightAt, waterDistance } from '../../src/game3d/terrain.ts'
+import { ports } from '../../src/game3d/region.ts'
 import { playerOcclusionRays } from '../../src/game3d/camera.ts'
 import { occlusionGroup, updateOcclusionGroups } from '../../src/game3d/occlusion.ts'
 
@@ -121,4 +122,50 @@ it('ships decoded meshopt geometry and hash-deduplicated KTX2 textures with comp
     }
   }
   assert.equal((await readdir(new URL('public/game-assets/architecture/textures/', root))).length, hashes.size, 'one physical texture per unique payload; no orphaned textures')
+})
+
+it('keeps metre-scale bridge UVs independent when different crossings stretch shared geometry', async t => {
+  const engine = new NullEngine(); t.after(() => engine.dispose())
+  const scene = new Scene(engine); scene.useRightHandedSystem = true
+  const architecture = await createArchitecture(scene, filename => source(scene, filename.split('/').at(-1)!.replace('.glb', '')))
+  const short = new TransformNode('short', scene), long = new TransformNode('long', scene)
+  architecture.bridge(short, 1); architecture.bridge(long, 10)
+  const meshes = (parent: TransformNode) => parent.getChildTransformNodes().find(node => node.name.endsWith('|stone-bridge-span'))!.getChildMeshes().filter(mesh => mesh.getTotalVertices())
+  for (const [index, a] of meshes(short).entries()) {
+    const b = meshes(long)[index]!, normal = a.getVerticesData('normal')!, uv = a.getVerticesData('uv')!, stretched = b.getVerticesData('uv')!
+    assert.notEqual((a as Mesh).geometry, (b as Mesh).geometry)
+    for (let vertex = 0; vertex < normal.length / 3; vertex++) {
+      const axis = [Math.abs(normal[vertex * 3]!), Math.abs(normal[vertex * 3 + 1]!), Math.abs(normal[vertex * 3 + 2]!)].indexOf(Math.max(...normal.slice(vertex * 3, vertex * 3 + 3).map(Math.abs)))
+      for (let coordinate = 0; coordinate < 2; coordinate++) {
+        const factor = axis === 0 && coordinate === 0 || axis === 1 && coordinate === 1 ? 10 : 1
+        assert.ok(Math.abs(stretched[vertex * 2 + coordinate]! - uv[vertex * 2 + coordinate]! * factor) < .00001)
+      }
+    }
+  }
+})
+
+it('floats each complete moored hull beside its landing while preserving the original interaction anchor', async t => {
+  const engine = new NullEngine(); t.after(() => engine.dispose())
+  const scene = new Scene(engine); scene.useRightHandedSystem = true
+  const architecture = await createArchitecture(scene, filename => source(scene, filename.split('/').at(-1)!.replace('.glb', '')))
+  for (const port of ports) {
+    const root = new TransformNode(`port-${port.placeId}`, scene)
+    root.position.set(port.x, heightAt(port.x, port.z), port.z)
+    const anchor = root.position.clone(), boat = architecture.mooredBoat(root, port), dock = architecture.dock(root, port)
+    assert.ok(root.position.equals(anchor), 'boarding and labels retain the authored landing point')
+    assert.ok(Math.hypot(boat.position.x, boat.position.z) > 1.5)
+    assert.ok(dock.scaling.z > 1, 'pier reaches water even at inland landing anchors')
+    const dockMinimum = Math.min(...dock.getChildMeshes().filter(mesh => mesh.getTotalVertices()).map(mesh => {
+      mesh.computeWorldMatrix(true); return mesh.getBoundingInfo().boundingBox.minimumWorld.y
+    }))
+    assert.ok(dockMinimum < -.5, 'mooring piles reach below water even at the elevated Tiberias shore anchor')
+    for (const mesh of boat.getChildMeshes()) {
+      const vertices = mesh.getVerticesData('position'); if (!vertices) continue
+      const matrix = mesh.computeWorldMatrix(true)
+      for (let i = 0; i < vertices.length; i += 3) {
+        const point = Vector3.TransformCoordinates(Vector3.FromArray(vertices, i), matrix)
+        assert.ok(waterDistance(point.x, point.z) < -.25, `${port.placeId}: hull overlaps the bank`)
+      }
+    }
+  }
 })

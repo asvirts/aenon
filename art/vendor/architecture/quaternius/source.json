@@ -1,0 +1,21 @@
+{
+  "source": "https://quaternius.itch.io/medieval-village-megakit",
+  "retrieved": "2026-10-11",
+  "archiveSha256": "e60dea67c10f30dccccfbff92a7933f5ea5cfe99be0e2a0fa5118cceabeec5c4",
+  "archiveBytes": 161003471,
+  "license": "CC0-1.0",
+  "files": [
+    {
+      "name": "Door_1_Flat.fbx",
+      "sha256": "005faeb66d248874d7644053af41a114a4cf670394f32cb547a1bb4acea3604e"
+    },
+    {
+      "name": "License_Standard.txt",
+      "sha256": "ec6fd5004514cb0515a7dc1065f474644d31698861597b32e1745945ffec71de"
+    },
+    {
+      "name": "Prop_Crate.fbx",
+      "sha256": "3c3dc336b1fda289ecd5558936345eb3fb67fb147cac791c08ded7e7dbfed9e6"
+    }
+  ]
+}

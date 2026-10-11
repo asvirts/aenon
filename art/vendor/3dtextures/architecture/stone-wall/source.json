@@ -1,0 +1,31 @@
+{
+  "source": "https://3dtextures.me/2024/06/18/stylized-stone-wall-002/",
+  "folder": "https://drive.google.com/drive/folders/1fx7UqWdkFEddCWiZ6qw-brXznBCoQgpu?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Stone_Wall_002_basecolor.png",
+      "id": "1NbT-enoZeAP4pFgdO3gPHV3GdBVJA1Z-",
+      "download": "https://drive.google.com/uc?export=download&id=1NbT-enoZeAP4pFgdO3gPHV3GdBVJA1Z-",
+      "bytes": 945726,
+      "sha256": "67a57cc6663e87e30e2cc8d1b356471d03cceec7e1f62fe1e91282115ec71471"
+    },
+    {
+      "name": "Stylized_Stone_Wall_002_normal.png",
+      "id": "1wJgIDPeJ580isK725w5sRFacZxBVkmXl",
+      "download": "https://drive.google.com/uc?export=download&id=1wJgIDPeJ580isK725w5sRFacZxBVkmXl",
+      "bytes": 644316,
+      "sha256": "dcbfdbc1772b4142d46e98924c104ed1860aee639b524abd7057ba574c6e650c"
+    },
+    {
+      "name": "Stylized_Stone_Wall_002_roughness.png",
+      "id": "1d_kX3UuobU0xZhcQxx6KnPS4F8tX7rF2",
+      "download": "https://drive.google.com/uc?export=download&id=1d_kX3UuobU0xZhcQxx6KnPS4F8tX7rF2",
+      "bytes": 250543,
+      "sha256": "b49ee156cfbd28f066bdff1d566bd32925da0bd6505ef0a6e43d52d5c932201a"
+    }
+  ]
+}

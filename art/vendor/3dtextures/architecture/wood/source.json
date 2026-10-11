@@ -1,0 +1,31 @@
+{
+  "source": "https://3dtextures.me/2024/07/19/stylized-wood-planks-002/",
+  "folder": "https://drive.google.com/drive/folders/17SkbsrpxC23y8_4lB5qRT661N_WmcJgZ?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Wood_Planks_002_basecolor.png",
+      "id": "1J2LVyVfXrQ2TNeieBuLIuAER9XPJ73K6",
+      "download": "https://drive.google.com/uc?export=download&id=1J2LVyVfXrQ2TNeieBuLIuAER9XPJ73K6",
+      "bytes": 1437346,
+      "sha256": "7d8f27be61e6ca045fbf62b858b49560f4cf7c8b7e98d2a2950aca5508e7716e"
+    },
+    {
+      "name": "Stylized_Wood_Planks_002_normal.png",
+      "id": "1G6lReU8TDc260zb7Lxdjn4vQnp3Mf7PT",
+      "download": "https://drive.google.com/uc?export=download&id=1G6lReU8TDc260zb7Lxdjn4vQnp3Mf7PT",
+      "bytes": 1776078,
+      "sha256": "c5dfaa5de667a1043e20fa1899a31912de4622ad0915b2bd5a7bdf214101b183"
+    },
+    {
+      "name": "Stylized_Wood_Planks_002_roughness.png",
+      "id": "1tR6yIwpcv01V5ySKl-eMDSwS_cWZvrv5",
+      "download": "https://drive.google.com/uc?export=download&id=1tR6yIwpcv01V5ySKl-eMDSwS_cWZvrv5",
+      "bytes": 6537,
+      "sha256": "71beace7048cd4b76333122342bfffa19e99511abb7a40ab3ac1b69e06fb530c"
+    }
+  ]
+}

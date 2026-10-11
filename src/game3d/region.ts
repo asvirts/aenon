@@ -1,4 +1,5 @@
 import type { LevelBand } from '../season/lib/types.ts'
+import { LOW_BAND_PLACES } from './lowBand.ts'
 
 export type RegionPassage = { reference: string; usfm: string; context: string }
 export type RegionSupply = 'wood' | 'ore' | 'herbs' | 'flax' | 'hide' | 'bone' | 'meat'
@@ -117,26 +118,26 @@ const lakeScene: RegionScene = {
 /** Approximate playable geography, not an archaeological reconstruction or a claim of exact event sites. */
 export const regionPlaces: RegionPlace[] = [
   {
-    id: 'aenon', name: 'Aenon', kind: 'settlement', band: 'low', x: -8, z: 4, radius: 22,
+    id: 'aenon', name: 'Aenon', kind: 'settlement', band: 'low', ...LOW_BAND_PLACES.aenon,
     character: 'Limestone homes, olive shade, shallow springs, and a busy pottery hearth beside the Jordan.',
     passage: { reference: 'John 1:29', usfm: 'JHN.1.29', context: 'John’s witness to Jesus, remembered beside the place where he continues to baptize.' },
     giver: { name: 'Miriam', supplies: ['wood', 'herbs'], trade: 'Potter', lines: ['Keep the kiln burning for water jars needed by the arriving families.', 'Make the river path safe enough for neighbors carrying jars.', 'Leave the kiln for a moment and attend to John beside the water.'] },
     scene: johnWitness, scenes: [johnWitness],
   },
   {
-    id: 'salim', name: 'Salim', kind: 'settlement', band: 'low', x: -45, z: -8, radius: 16,
+    id: 'salim', name: 'Salim', kind: 'settlement', band: 'low', ...LOW_BAND_PLACES.salim,
     character: 'Garden walls, spring channels, flax drying on frames, and a shaded place for travelers to rest.',
     passage: { reference: 'John 3:23', usfm: 'JHN.3.23', context: 'The Gospel names Salim when it locates John’s baptizing at nearby Aenon.' },
     giver: { name: 'Tamar', supplies: ['flax', 'herbs'], trade: 'Spring keeper', lines: ['Bind fresh fiber around the leaking baskets used at the spring.', 'Clear the track used by people fetching water before dusk.', 'Prepare herbs for a neighbor who has given her courtyard to weary travelers.'] },
   },
   {
-    id: 'scythopolis', name: 'Scythopolis', kind: 'settlement', band: 'low', x: -5, z: -80, radius: 18,
+    id: 'scythopolis', name: 'Scythopolis', kind: 'settlement', band: 'low', ...LOW_BAND_PLACES.scythopolis,
     character: 'A broad trading road, stone columns, awnings, weighing stones, and wagons approaching the valley crossing.',
     passage: { reference: '1 Samuel 31:10-13', usfm: '1SA.31.10-13', context: 'A memory of Beth Shan, the older biblical name associated with this place; these events do not replay in the Season.' },
     giver: { name: 'Damaris', supplies: ['wood', 'flax'], trade: 'Market steward', lines: ['Supply sound wood for a broken market stall before the next caravan.', 'Drive bandits away from the crossing used by the valley traders.', 'Bring flax for clean coverings while we repair the common market shelter.'] },
   },
   {
-    id: 'pella', name: 'Pella', kind: 'settlement', band: 'low', x: 70, z: -75, radius: 17,
+    id: 'pella', name: 'Pella', kind: 'settlement', band: 'low', ...LOW_BAND_PLACES.pella,
     character: 'Eastern terraces, terracotta jars, hillside gardens, and a small colonnaded square overlooking the valley.',
     passage: { reference: 'Proverbs 11:25', usfm: 'PRO.11.25', context: 'Wisdom about generosity, recalled by a water carrier. This is a thematic reading, not a claim that a Gospel episode occurred at Pella.' },
     giver: { name: 'Eliab', supplies: ['wood', 'herbs'], trade: 'Water carrier', lines: ['Bring wood to mend the carrier’s yoke so water can reach the highest terrace.', 'Protect the lower garden track from animals troubling the workers.', 'Gather herbs for the shared meal offered to people who cannot climb to the market.'] },
@@ -232,7 +233,7 @@ export const regionPlaces: RegionPlace[] = [
     giver: { name: 'Petros', supplies: ['wood', 'flax'], trade: 'Landing keeper', lines: ['Bring timber for the shelter beside the steep landing road.', 'Make the eastern descent safer for people carrying market goods.', 'Supply fiber for ropes shared between the town carriers and the boat crews.'] },
   },
   {
-    id: 'jordan', name: 'Jordan', kind: 'wilderness', band: 'low', x: 0, z: -35, radius: 28,
+    id: 'jordan', name: 'Jordan', kind: 'wilderness', band: 'low', ...LOW_BAND_PLACES.jordan,
     character: 'Reeds, tamarisk shade, shallow fords, river clay, and trails winding between the springs and the valley.',
     passage: { reference: 'Joshua 4:1-7', usfm: 'JOS.4.1-7', context: 'River stones recall Israel’s crossing. This is a memory, not the claim that Aenon is the exact crossing site.' },
   },
@@ -302,4 +303,4 @@ export const ports: { placeId: string; x: number; z: number; destinationIds: str
   { placeId: 'hippus', x: 106, z: -269, destinationIds: ['tiberias', 'magdala', 'capernaum', 'bethsaida'] },
 ]
 
-export const regionBounds = { minX: -254, maxX: 181, minZ: -426, maxZ: 35 }
+export const regionBounds = { minX: -270, maxX: 280, minZ: -426, maxZ: 260 }

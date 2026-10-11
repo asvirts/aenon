@@ -1,5 +1,7 @@
 import { gearSlots } from '../season/lib/types.ts'
 import { regionPlaces, regionRoads, regionBounds, ports } from './region.ts'
+import { lake, riverCenter, riverHalfWidth } from './terrain.ts'
+import { cameraZoom } from './view.ts'
 import { sceneNarratives, personStories, passageMetadata } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
@@ -122,7 +124,7 @@ export function createUI(options: UIOptions) {
   let craftingRarity = 'all'
   let contextId: string | undefined
   let currentQuality = options.quality ?? 'high'
-  let zoomDistance = options.zoom ?? 17
+  let zoomDistance = options.zoom ?? cameraZoom.default
   let performanceText = 'Measuring…'
   let saveMessage = 'Progress is saved in this browser.'
   let saveBlocked = false
@@ -132,7 +134,7 @@ export function createUI(options: UIOptions) {
   let dialogueLine = ''
   const root = node('div', 'game-ui')
   root.id = 'game-ui'
-  root.innerHTML = `<header class="game-masthead"><div class="game-brand"><h1>The Season</h1><p id="game-place">Aenon <span>·</span> The Jordan valley</p></div><div class="adventurer-status"><div class="status-line"><strong>Adventurer <span id="game-level">1</span></strong><span id="game-coin">0 coin</span></div><div class="hitpoints-track" role="progressbar" aria-label="Current Hitpoints" id="hitpoints-bar"><span id="hitpoints-fill"></span></div><div class="status-line small"><span id="hitpoints-text"></span><span id="combat-status">At peace</span></div></div></header><nav class="game-navigation" aria-label="Game panels"></nav><aside class="game-map"><div class="map-title"><span id="map-place">Aenon</span><span>↑ N</span></div><canvas id="minimap" width="168" height="124" aria-label="Local map with the Adventurer’s position"></canvas><p>Galilee &amp; the Jordan</p></aside><div id="game-notice" class="game-notice" role="status" aria-live="polite"></div><div class="target-status" id="target-status" hidden><span id="target-kind"></span><strong id="target-name"></strong><span id="target-detail"></span><div class="activity-track" id="activity-track" hidden><span id="activity-fill"></span></div></div><div class="technique-bar" aria-label="Weapon techniques"></div><div class="game-controls-hint">Click to move &amp; act <span>·</span> WASD to run <span>·</span> Scroll to zoom <span>·</span> Esc to cancel</div><div class="paused-label" id="game-paused" hidden>Ⅱ World paused</div><div class="game-modal" id="game-panel" hidden><section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-panel-title"><header class="game-panel-heading"><div><p class="eyebrow" id="game-panel-eyebrow">A moment of stillness</p><h2 id="game-panel-title"></h2></div><button class="panel-close" type="button" aria-label="Close panel">×</button></header><div id="game-panel-body" class="game-panel-body"></div><footer class="game-panel-footer">World paused <span>·</span> Close to return to the world</footer></section></div>`
+  root.innerHTML = `<header class="game-masthead"><div class="game-brand"><h1>The Season</h1><p id="game-place">Aenon <span>·</span> The Jordan valley</p></div><div class="adventurer-status"><div class="status-line"><strong>Adventurer <span id="game-level">1</span></strong><span id="game-coin">0 coin</span></div><div class="hitpoints-track" role="progressbar" aria-label="Current Hitpoints" id="hitpoints-bar"><span id="hitpoints-fill"></span></div><div class="status-line small"><span id="hitpoints-text"></span><span id="combat-status">At peace</span></div></div></header><nav class="game-navigation" aria-label="Game panels"></nav><aside class="game-map"><div class="map-title"><span id="map-place">Aenon</span><span>↑ N</span></div><canvas id="minimap" width="168" height="124" aria-label="Local map with the Adventurer’s position"></canvas><p>Galilee &amp; the Jordan</p></aside><div id="game-notice" class="game-notice" role="status" aria-live="polite"></div><div class="target-status" id="target-status" hidden><span id="target-kind"></span><strong id="target-name"></strong><span id="target-detail"></span><div class="activity-track" id="activity-track" hidden><span id="activity-fill"></span></div></div><div class="technique-bar" aria-label="Weapon techniques"></div><div class="game-controls-hint">Click to move &amp; act <span>·</span> WASD to run <span>·</span> Scroll to zoom <span>·</span> Esc to cancel <span>·</span> Controller: left stick runs <span>·</span> A acts <span>·</span> Start opens settings</div><div class="paused-label" id="game-paused" hidden>Ⅱ World paused</div><div class="game-modal" id="game-panel" hidden><section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-panel-title"><header class="game-panel-heading"><div><p class="eyebrow" id="game-panel-eyebrow">A moment of stillness</p><h2 id="game-panel-title"></h2></div><button class="panel-close" type="button" aria-label="Close panel">×</button></header><div id="game-panel-body" class="game-panel-body"></div><footer class="game-panel-footer">World paused <span>·</span> Close to return to the world</footer></section></div>`
   document.body.append(root)
   const get = <T extends HTMLElement = HTMLElement>(selector: string): T => {
     const found = root.querySelector<T>(selector)
@@ -262,9 +264,15 @@ export function createUI(options: UIOptions) {
     body.append(description('A connected region to explore. Click a place below to inspect it and plan a walk. Boats leave from the five lake landings.'))
     const chart = node('canvas', 'region-chart'); chart.width = 690; chart.height = 570; chart.setAttribute('aria-label', 'Map of eighteen settlements and eight wilderness places')
     const ctx = chart.getContext('2d')!, width = regionBounds.maxX - regionBounds.minX, height = regionBounds.maxZ - regionBounds.minZ
-    const x = (value: number) => (value - regionBounds.minX) / width * chart.width, z = (value: number) => (value - regionBounds.minZ) / height * chart.height
+    const scale = Math.min((chart.width - 36) / width, (chart.height - 36) / height)
+    const x = (value: number) => (value - regionBounds.minX) * scale + (chart.width - width * scale) / 2
+    const z = (value: number) => (value - regionBounds.minZ) * scale + (chart.height - height * scale) / 2
     ctx.fillStyle = '#ded4b4'; ctx.fillRect(0, 0, chart.width, chart.height)
-    ctx.fillStyle = '#729d9a'; ctx.beginPath(); ctx.ellipse(x(55), z(-310), 62 / width * chart.width, 68 / height * chart.height, 0, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#729d9a'; ctx.beginPath(); ctx.ellipse(x(lake.x), z(lake.z), lake.radiusX * scale, lake.radiusZ * scale, 0, 0, Math.PI * 2); ctx.fill()
+    ctx.beginPath()
+    for (let north = regionBounds.minZ; north <= regionBounds.maxZ; north += 2) { const west = x(riverCenter(north) - riverHalfWidth(north)); if (north === regionBounds.minZ) ctx.moveTo(west, z(north)); else ctx.lineTo(west, z(north)) }
+    for (let north = regionBounds.maxZ; north >= regionBounds.minZ; north -= 2) ctx.lineTo(x(riverCenter(north) + riverHalfWidth(north)), z(north))
+    ctx.closePath(); ctx.fill()
     ctx.strokeStyle = '#8a805e'; ctx.lineWidth = 2
     for (const road of regionRoads) { const a = regionPlaces.find(p => p.id === road.from)!, b = regionPlaces.find(p => p.id === road.to)!; ctx.beginPath(); ctx.moveTo(x(a.x), z(a.z)); ctx.lineTo(x(b.x), z(b.z)); ctx.stroke() }
     ctx.font = '12px Georgia'; ctx.textAlign = 'center'
@@ -542,9 +550,12 @@ export function createUI(options: UIOptions) {
     select.addEventListener('change', () => { currentQuality = select.value as Quality; options.onQuality(currentQuality) })
     body.append(label, select, description('Choose a level of detail that runs smoothly on your device.'))
     const zoomLabel = node('label', 'setting-label', 'Camera distance'); zoomLabel.htmlFor = 'game-zoom'
-    const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = '10'; zoom.max = '24'; zoom.step = '1'; zoom.value = String(zoomDistance)
+    const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = String(cameraZoom.min); zoom.max = String(cameraZoom.max); zoom.step = '1'; zoom.value = String(zoomDistance)
     zoom.addEventListener('input', () => { zoomDistance = Number(zoom.value); options.onZoom(zoomDistance) })
-    body.append(zoomLabel, zoom, row('Live performance', 'Current device only; hardware and resolution affect results.', node('output', 'performance-output', performanceText)), heading('Your Season'))
+    body.append(zoomLabel, zoom, row('Live performance', 'Current device only; hardware and resolution affect results.', node('output', 'performance-output', performanceText)), heading('Controller'))
+    const connectedPads = typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function' ? [] : [...navigator.getGamepads()].filter((pad): pad is Gamepad => pad !== null)
+    const controllerName = connectedPads[0]?.id?.trim()
+    body.append(description(controllerName ? `${controllerName.slice(0, 64)} connected. Left stick runs, A acts, X strikes, Y guards, RB repositions, B cancels, Start opens settings.` : 'No controller detected. Connect a gamepad, press any button, then reopen settings.', 'small-note'), heading('Your Season'))
     body.append(description(saveMessage, saveBlocked ? 'panel-note warning' : 'panel-description'))
     const controls = node('div', 'save-controls')
     controls.append(button(saveBlocked ? 'Export original save' : 'Export save', options.onSaveExport))

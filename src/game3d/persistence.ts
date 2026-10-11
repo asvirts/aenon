@@ -1,14 +1,14 @@
 import type { SeasonDefinition, SeasonState } from '../season/index.ts'
 import { trainedSkills } from '../season/lib/begin.ts'
 import { gearSlots } from '../season/lib/types.ts'
-import type { SavedGame, WorldLayout } from './types.ts'
+import type { Point, SavedGame, WorldLayout } from './types.ts'
 
 export const SAVE_KEY = 'aenon-season-save-v3'
 export const LEGACY_SAVE_KEY = 'aenon-season-save-v2'
 export const BACKUP_PREFIX = 'aenon-season-save-v3-backup-'
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 export type SaveResult = { ok: boolean; warning?: string; blocked?: boolean; backupKey?: string }
-export type LoadedSave = { saved?: SavedGame; legacy?: SeasonState; warning?: string; blocked?: boolean }
+export type LoadedSave = { saved?: SavedGame; legacy?: SeasonState; warning?: string; blocked?: boolean; backupKey?: string }
 
 const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
 const text = (v: unknown): v is string => typeof v === 'string' && v.length > 0 && v.length < 2000
@@ -57,6 +57,9 @@ function stateProblem(value: unknown, definition?: SeasonDefinition): string | u
 
 export function validateGameSave(value: unknown, definition?: SeasonDefinition, layout?: WorldLayout): string | undefined {
   if (!record(value) || value.version !== 3) return 'This is not a supported 3D Season save.'
+  const revision = value.layoutRevision === undefined ? 1 : value.layoutRevision
+  if (!integer(revision) || revision < 1 || revision > 2 || (layout && revision > (layout.revision ?? 1))) return 'The saved world layout revision is not supported by this Season.'
+  if (layout && (layout.revision ?? 1) !== revision && !(revision === 1 && layout.revision === 2)) return 'The saved world layout cannot be migrated to this Season.'
   const problem = stateProblem(value.season, definition)
   if (problem) return problem
   const runtime = value.runtime
@@ -102,14 +105,94 @@ export function validateGameSave(value: unknown, definition?: SeasonDefinition, 
 function parse(raw: string): unknown { return JSON.parse(raw) as unknown }
 const preserve = (problem: string) => `${problem} Your original save has been preserved. Export it before restoring a backup or starting a new Season.`
 
+// Revision 2 enlarges the low-band settlements and moves their content. Keep this
+// historical list explicit: deriving it from future bands could move unrelated saves.
+const relocatedPlaces = new Set(['aenon', 'salim', 'scythopolis', 'pella', 'jordan'])
+const relocatedHostiles = new Set(['wolf', 'wolf-east', 'bandit', 'salim-threat-0', 'scythopolis-threat-0', 'pella-threat-0', 'gilboa-threat-0', 'gilboa-threat-1', 'gilboa-threat-2'])
+
+function migrateLayout(saved: SavedGame, definition?: SeasonDefinition, layout?: WorldLayout): SavedGame {
+  if (!layout || (saved.layoutRevision ?? 1) === (layout.revision ?? 1)) return saved
+  if ((saved.layoutRevision ?? 1) !== 1 || layout.revision !== 2) throw new Error('No supported world layout migration is available.')
+  const migrated = structuredClone(saved)
+  const { season, runtime } = migrated
+  const objects = new Map(layout.objects.map(object => [object.id, object]))
+  const spawn = (placeId: string): Point => {
+    const position = layout.spawns[placeId]
+    if (!position || layout.placeAt(position) !== placeId) throw new Error(`The migration has no safe arrival for ${placeId}.`)
+    return { x: position.x, z: position.z }
+  }
+  const hostileHome = (id: string) => {
+    const object = objects.get(id)
+    if (!object || object.kind !== 'hostile') throw new Error(`The migration cannot locate the encounter ${id}.`)
+    return object
+  }
+  const journey = runtime.journey && layout.journeys?.find(candidate => candidate.id === runtime.journey!.id)
+  const overtaken = (position: Point, placeId: string) => layout.placeAt(position) !== placeId && relocatedPlaces.has(layout.placeAt(position))
+  const relocatePlayer = relocatedPlaces.has(season.placeId) || (!journey && overtaken(runtime.position, season.placeId)) || Boolean(journey && (relocatedPlaces.has(journey.fromPlaceId) || relocatedPlaces.has(journey.toPlaceId)))
+  if (relocatePlayer) {
+    runtime.position = spawn(season.lastSettlementId)
+    season.placeId = season.lastSettlementId
+    season.fight = null
+    season.outing = 'closed'
+    // The move is recovery from changed geometry, not a defeat or a completed visit.
+    // Preserve Hitpoints, possessions, buffs, acquaintance and quest history.
+    if (season.playingSceneId && definition?.setScenes?.find(scene => scene.id === season.playingSceneId)?.placeId !== season.placeId) season.playingSceneId = null
+    delete runtime.journey
+    runtime.pendingTechnique = null
+  } else if (runtime.pendingTechnique?.targetId && relocatedHostiles.has(runtime.pendingTechnique.targetId)) {
+    runtime.pendingTechnique = null
+  }
+  if (season.fight && relocatedHostiles.has(season.fight.hostileId)) season.fight = null
+  for (const hostile of runtime.hostiles) {
+    if (!relocatedHostiles.has(hostile.id)) continue
+    const home = hostileHome(hostile.id)
+    hostile.x = home.x; hostile.z = home.z
+    if (hostile.status !== 'dead') hostile.status = 'idle'
+    hostile.windup = 0; hostile.attackPoint = null
+  }
+  for (const carcass of runtime.carcasses) {
+    if (!relocatedHostiles.has(carcass.hostileId)) continue
+    const home = hostileHome(carcass.hostileId)
+    carcass.x = home.x; carcass.z = home.z
+  }
+  for (const carcass of season.carcasses) {
+    if (relocatedHostiles.has(carcass.hostileId)) carcass.placeId = hostileHome(carcass.hostileId).placeId
+  }
+  for (const pickup of [...runtime.pickups ?? [], ...runtime.goodsPickups ?? []]) {
+    if (relocatedPlaces.has(pickup.placeId) || overtaken(pickup, pickup.placeId)) Object.assign(pickup, spawn(pickup.placeId))
+  }
+  migrated.layoutRevision = 2
+  return migrated
+}
+
+function prepareSave(value: unknown, definition?: SeasonDefinition, layout?: WorldLayout): { saved?: SavedGame; problem?: string; migrated?: boolean } {
+  const problem = validateGameSave(value, definition, layout)
+  if (problem) return { problem }
+  try {
+    const saved = migrateLayout(value as SavedGame, definition, layout)
+    return { saved, migrated: saved !== value, problem: validateGameSave(saved, definition, layout) }
+  } catch (error) { return { problem: error instanceof Error ? error.message : 'The world layout migration failed.' } }
+}
+
 export function loadGameSave(storage: SaveStorage, definition?: SeasonDefinition, layout?: WorldLayout): LoadedSave {
   try {
     const raw = storage.getItem(SAVE_KEY)
     if (raw !== null) {
       let value: unknown
       try { value = parse(raw) } catch { return { blocked: true, warning: preserve('The 3D save could not be read.') } }
-      const problem = validateGameSave(value, definition, layout)
-      return problem ? { blocked: true, warning: preserve(problem) } : { saved: value as SavedGame }
+      const prepared = prepareSave(value, definition, layout)
+      if (prepared.problem || !prepared.saved) return { blocked: true, warning: preserve(prepared.problem ?? 'The save could not be prepared.') }
+      if (!prepared.migrated) return { saved: prepared.saved }
+      let backupKey: string | undefined
+      try {
+        backupKey = backup(storage, raw)
+        const replacement = JSON.stringify(prepared.saved)
+        storage.setItem(SAVE_KEY, replacement)
+        if (storage.getItem(SAVE_KEY) !== replacement) throw new Error('Migration readback failed')
+        return { saved: prepared.saved, backupKey, warning: 'Your progress has moved to the expanded world. Affected Adventurers return safely to their last settlement with their possessions and progress retained. The original save has a verified backup.' }
+      } catch {
+        return { blocked: true, backupKey, warning: backupKey ? 'The world layout migration could not be saved. Your original save remains in its verified backup; export it before recovery.' : 'The world layout migration could not create a verified backup. Your original save is unchanged; export it before recovery.' }
+      }
     }
     const legacyRaw = storage.getItem(LEGACY_SAVE_KEY)
     if (legacyRaw === null) return {}
@@ -121,12 +204,12 @@ export function loadGameSave(storage: SaveStorage, definition?: SeasonDefinition
 }
 
 export function saveGame(storage: SaveStorage, saved: SavedGame, definition?: SeasonDefinition, layout?: WorldLayout): SaveResult {
-  const problem = validateGameSave(saved, definition, layout)
-  if (problem) return { ok: false, blocked: true, warning: preserve(problem) }
+  const prepared = prepareSave(saved, definition, layout)
+  if (prepared.problem || !prepared.saved) return { ok: false, blocked: true, warning: preserve(prepared.problem ?? 'The save could not be prepared.') }
   const current = loadGameSave(storage, definition, layout)
   if (current.blocked) return { ok: false, blocked: true, warning: current.warning }
   try {
-    const raw = JSON.stringify(saved)
+    const raw = JSON.stringify(prepared.saved)
     storage.setItem(SAVE_KEY, raw)
     if (storage.getItem(SAVE_KEY) !== raw) throw new Error('Readback failed')
     return { ok: true }
@@ -147,25 +230,27 @@ function backup(storage: SaveStorage, raw: string): string {
 export function importGameSave(storage: SaveStorage, raw: string, definition?: SeasonDefinition, layout?: WorldLayout): SaveResult {
   let value: unknown
   try { value = parse(raw) } catch { return { ok: false, warning: 'That file is not valid JSON. Your current save is unchanged.' } }
-  const problem = validateGameSave(value, definition, layout)
-  if (problem) return { ok: false, warning: `${problem} Your current save is unchanged.` }
+  const prepared = prepareSave(value, definition, layout)
+  if (prepared.problem || !prepared.saved) return { ok: false, warning: `${prepared.problem ?? 'The save could not be prepared.'} Your current save is unchanged.` }
   try {
     const current = storage.getItem(SAVE_KEY)
     const backupKey = current === null ? undefined : backup(storage, current)
-    storage.setItem(SAVE_KEY, raw)
-    if (storage.getItem(SAVE_KEY) !== raw) throw new Error('Import readback failed')
-    return { ok: true, backupKey }
+    const migrationBackupKey = prepared.migrated ? backup(storage, raw) : undefined
+    const replacement = prepared.migrated ? JSON.stringify(prepared.saved) : raw
+    storage.setItem(SAVE_KEY, replacement)
+    if (storage.getItem(SAVE_KEY) !== replacement) throw new Error('Import readback failed')
+    return { ok: true, backupKey: backupKey ?? migrationBackupKey, ...(prepared.migrated ? { warning: 'The imported progress has moved to the expanded world. Its original file and the previous save have been retained in verified backups where applicable.' } : {}) }
   } catch { return { ok: false, warning: 'Import failed. Replacement is attempted only after the existing 3D save has a verified backup.' } }
 }
 
 /** The new state is required so a malformed legacy key cannot silently become active again. */
 export function restartGameSave(storage: SaveStorage, fresh: SavedGame, definition?: SeasonDefinition, layout?: WorldLayout): SaveResult {
-  const problem = validateGameSave(fresh, definition, layout)
-  if (problem) return { ok: false, warning: problem }
+  const prepared = prepareSave(fresh, definition, layout)
+  if (prepared.problem || !prepared.saved) return { ok: false, warning: prepared.problem ?? 'The fresh save could not be prepared.' }
   try {
     const previous = storage.getItem(SAVE_KEY)
     const backupKey = previous === null ? undefined : backup(storage, previous)
-    const raw = JSON.stringify(fresh)
+    const raw = JSON.stringify(prepared.saved)
     storage.setItem(SAVE_KEY, raw)
     if (storage.getItem(SAVE_KEY) !== raw) throw new Error('Restart readback failed')
     return { ok: true, backupKey }

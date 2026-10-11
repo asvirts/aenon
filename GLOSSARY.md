@@ -76,6 +76,14 @@ _Avoid_: spell, combat skill, special effect
 An animal or bandit encountered as an opponent in the wilderness. An ordinary hostile can return after defeat, while a story-specific encounter retains its authored outcome.
 _Avoid_: biblical figure
 
+**Camp**:
+A few ordinary hostiles gathered at one wilderness landmark.
+_Avoid_: pack, patrol, spawn
+
+**Cache**:
+A chest in the wilderness that the Adventurer can open once in the Season.
+_Avoid_: secret, treasure
+
 **Fight**:
 The Adventurer's active melee danger from engaged or pursuing hostiles. It ends when every threat has fallen or disengaged, or the Adventurer is defeated.
 _Avoid_: paired exchange, selected target

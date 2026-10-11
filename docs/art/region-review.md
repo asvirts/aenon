@@ -52,3 +52,7 @@ The build's Babylon/glTF chunk remains about 5.9 MB before gzip (about 1.26 MB c
 ## Final automated checks
 
 After the navigation, waypoint and save-handoff repairs, `npm test` passed all 497 tests in 36 suites with no failures or skips. `npm run typecheck`, `npm run build` and `git diff --check` passed. The built browser target loaded `game-CBQaWwjO.js`. Known warnings are Node’s experimental localStorage notice and Vite’s large chunk warning. No browser console warning or error was observed during the production encounter check.
+
+## Low-band scale pass
+
+Issue #42 expands the four low-band settlements and the Jordan wilderness while preserving the northern region. See [the low-band scale review](low-band-scale-review.md) for before/after coordinates and travel times, save migration, screenshots, and playable acceptance evidence.

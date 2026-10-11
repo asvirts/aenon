@@ -2,9 +2,12 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { layout, navigation } from '../../src/game3d/content.ts'
 import { canTraverseRegion, findRegionPath } from '../../src/game3d/regionNavigation.ts'
+import { regionPlaces } from '../../src/game3d/region.ts'
 
 test('resuming the Tiberias road outside Salim does not reenter Salim and rearm the acquaintance', () => {
-  const start = { x: -50.1534, z: -23.1572 }, goal = layout.spawns.tiberias!
+  const salim = regionPlaces.find(place => place.id === 'salim')!, gilboa = regionPlaces.find(place => place.id === 'gilboa')!
+  const fraction = (salim.radius + 4) / Math.hypot(gilboa.x - salim.x, gilboa.z - salim.z)
+  const start = { x: salim.x + (gilboa.x - salim.x) * fraction, z: salim.z + (gilboa.z - salim.z) * fraction }, goal = layout.spawns.tiberias!
   assert.notEqual(layout.placeAt(start), 'salim')
   const route = findRegionPath(start, goal, navigation)
   assert.ok(route)

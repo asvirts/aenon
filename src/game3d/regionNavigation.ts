@@ -1,6 +1,6 @@
 import { canTraverse, findPath, isWalkable } from '../art-sample/navigation.ts'
 import type { Bounds, NavigationConfig, Obstacle, Point } from '../art-sample/navigation.ts'
-import { regionPlaces, regionRoads } from './region.ts'
+import { regionBounds, regionPlaces, regionRoads } from './region.ts'
 
 const routeCache = new WeakMap<NavigationConfig, Map<string, Point[] | null>>()
 
@@ -9,7 +9,7 @@ const overlaps = (obstacle: Obstacle, bounds: Bounds, pad: number) => obstacle.k
   : obstacle.maxX + pad >= bounds.minX && obstacle.minX - pad <= bounds.maxX && obstacle.maxZ + pad >= bounds.minZ && obstacle.minZ - pad <= bounds.maxZ
 
 function bounded(start: Point, goal: Point, config: NavigationConfig, padding: number): NavigationConfig {
-  const limits = config.bounds ?? { minX: -230, maxX: 170, minZ: -415, maxZ: 30 }
+  const limits = config.bounds ?? regionBounds
   const bounds = {
     minX: Math.max(limits.minX, Math.min(start.x, goal.x) - padding),
     maxX: Math.min(limits.maxX, Math.max(start.x, goal.x) + padding),
@@ -39,6 +39,22 @@ export function findRegionPath(start: Point, goal: Point, config: NavigationConf
 
 function localRoute(start: Point, goal: Point, config: NavigationConfig): Point[] | null {
   if (canTraverseRegion(start, goal, config)) return start.x === goal.x && start.z === goal.z ? [] : [{ ...goal }]
+  // The expanded southern roads can exceed 200 units. A house near one end
+  // should require a local detour, not a fine search along the entire road.
+  // Midpoints still use the full body footprint, and every resulting leg is swept.
+  const length = Math.hypot(goal.x - start.x, goal.z - start.z)
+  if (length > 40) {
+    const middle = { x: (start.x + goal.x) / 2, z: (start.z + goal.z) / 2 }
+    const sideways = { x: -(goal.z - start.z) / length, z: (goal.x - start.x) / length }
+    const point = [0, 2, -2, 4, -4, 8, -8]
+      .map(offset => ({ x: middle.x + sideways.x * offset, z: middle.z + sideways.z * offset }))
+      .find(candidate => isWalkable(candidate, bounded(candidate, candidate, config, 1)))
+    if (point) {
+      const first = localRoute(start, point, config)
+      const last = first && localRoute(point, goal, config)
+      if (last) return [...first, ...last]
+    }
+  }
   for (const padding of [8, 22, 42]) {
     const route = findPath(start, goal, bounded(start, goal, config, padding))
     if (route) return route

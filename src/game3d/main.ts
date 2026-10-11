@@ -9,7 +9,9 @@ import { createUI } from './ui.ts'
 import { createWorld } from './world.ts'
 import { regionPlaces, regionRoads } from './region.ts'
 import { lake } from './terrain.ts'
+import { cameraZoom } from './view.ts'
 import type { GameSnapshot, Panel } from './types.ts'
+import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
 import './style.css'
 import './world.css'
 
@@ -43,10 +45,118 @@ async function boot() {
   const environment = createEnvironment(scene, 110)
   loadingDetail.textContent = 'Preparing the village, riverbank, and their inhabitants…'
   const world = await createWorld(scene, id => { if (!game.snapshot().paused) { keys.clear(); game.interact(id) } })
-  let shadows: ShadowGenerator | null = null, zoom = 14
+  let shadows: ShadowGenerator | null = null, zoom = cameraZoom.default
   const savedQuality = (() => { try { return storage.getItem('aenon-graphics-quality') } catch { return null } })()
   let quality: Quality = qualities.includes(savedQuality as Quality) ? savedQuality as Quality : navigator.hardwareConcurrency <= 4 ? 'low' : 'high'
   const keys = new Set<string>()
+  let priorGamepadButtons: readonly boolean[] | null = null
+  let gamepadWasMoving = false
+  let gamepadWelcomed = false
+  let gamepadLabel: string | null = null
+  function readGamepad(): Gamepad | null {
+    if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null
+    for (const pad of navigator.getGamepads()) if (pad && pad.connected !== false) return pad
+    return null
+  }
+  function gamepadCandidates(snapshot: GameSnapshot): { id: string; x: number; z: number }[] {
+    const candidates: { id: string; x: number; z: number }[] = []
+    for (const hostile of snapshot.hostiles) if (hostile.status !== 'dead') candidates.push({ id: hostile.id, x: hostile.x, z: hostile.z })
+    for (const carcass of snapshot.carcasses) candidates.push({ id: carcass.id, x: carcass.x, z: carcass.z })
+    for (const pickup of snapshot.pickups) candidates.push({ id: pickup.id, x: pickup.x, z: pickup.z })
+    for (const pickup of snapshot.goodsPickups ?? []) candidates.push({ id: pickup.id, x: pickup.x, z: pickup.z })
+    const visible = snapshot.visiblePeople
+    for (const object of layout.objects) {
+      if (object.kind === 'hostile') continue
+      if (object.kind === 'spot') { if (!snapshot.spots.some(spot => spot.id === object.id && spot.stock > 0)) continue }
+      else if (object.kind === 'person') { if (visible && !visible.includes(object.id)) continue }
+      candidates.push({ id: object.id, x: object.x, z: object.z })
+    }
+    return candidates
+  }
+  function movePanelFocus(delta: 1 | -1): void {
+    const controls = [...document.querySelectorAll<HTMLElement>('#game-panel button:not(:disabled), #game-panel a[href], #game-panel input:not(:disabled), #game-panel select:not(:disabled), #game-panel textarea:not(:disabled)')].filter(element => element.offsetParent !== null)
+    if (!controls.length) return
+    const index = controls.indexOf(document.activeElement as HTMLElement)
+    controls[(index < 0 ? (delta > 0 ? 0 : controls.length - 1) : index + delta + controls.length) % controls.length].focus()
+  }
+  function stepPanelValue(delta: 1 | -1): boolean {
+    const active = document.activeElement
+    if (active instanceof HTMLSelectElement && active.options.length) {
+      active.selectedIndex = (active.selectedIndex + delta + active.options.length) % active.options.length
+      active.dispatchEvent(new Event('change', { bubbles: true }))
+      return true
+    }
+    if (active instanceof HTMLInputElement && active.type === 'range') {
+      const min = Number(active.min || 0), max = Number(active.max || 100)
+      active.value = String(Math.max(min, Math.min(max, Number(active.value || 0) + delta)))
+      active.dispatchEvent(new Event('input', { bubbles: true }))
+      return true
+    }
+    return false
+  }
+  function activatePanelControl(): void {
+    const active = document.activeElement
+    if (active instanceof HTMLButtonElement || active instanceof HTMLAnchorElement) { active.click(); return }
+    stepPanelValue(1)
+  }
+  function applyZoom(next: number): void {
+    zoom = Math.max(cameraZoom.min, Math.min(cameraZoom.max, next))
+    ui.setZoom(zoom); resize()
+  }
+  function pollGamepad(snapshot: GameSnapshot, dt: number): void {
+    if (typeof document !== 'undefined' && document.hidden) return
+    const pad = readGamepad()
+    if (!pad) {
+      if (priorGamepadButtons) ui.notice('Controller disconnected. Keyboard and mouse remain ready.')
+      priorGamepadButtons = null
+      gamepadWelcomed = false
+      gamepadLabel = null
+      if (gamepadWasMoving) { gamepadWasMoving = false; if (keys.size === 0) game.moveInput(0, 0) }
+      return
+    }
+    if (!gamepadWelcomed) {
+      gamepadWelcomed = true
+      gamepadLabel = pad.id?.trim() ? pad.id.trim().slice(0, 48) : 'Controller'
+      ui.notice(`${gamepadLabel} ready. Left stick runs · A acts · Start opens settings.`)
+    }
+    const intents = decodeGamepad(pad, priorGamepadButtons)
+    priorGamepadButtons = pad.buttons.map(button => button.pressed)
+    if (ui.isPanelOpen()) {
+      if (intents.up) { if (!stepPanelValue(-1)) movePanelFocus(-1) }
+      if (intents.down) { if (!stepPanelValue(1)) movePanelFocus(1) }
+      if (intents.left) { if (!stepPanelValue(-1)) movePanelFocus(-1) }
+      if (intents.right) { if (!stepPanelValue(1)) movePanelFocus(1) }
+      if (intents.interact) activatePanelControl()
+      if (intents.cancel || intents.menu) ui.closePanel()
+      return
+    }
+    if (intents.move) { game.moveInput(intents.move.x, intents.move.z); gamepadWasMoving = true }
+    else if (gamepadWasMoving) { gamepadWasMoving = false; if (keys.size === 0) game.moveInput(0, 0) }
+    if (intents.zoomAxis !== 0) applyZoom(zoom + intents.zoomAxis * dt * 14)
+    if (intents.up) applyZoom(zoom - .8)
+    if (intents.down) applyZoom(zoom + .8)
+    if (intents.left || intents.right || intents.interact) {
+      const candidates = gamepadCandidates(snapshot)
+      if (intents.left || intents.right) {
+        const id = cycleTarget(snapshot.position, candidates, snapshot.targetId, intents.left ? -1 : 1)
+        if (id) game.interact(id)
+      } else if (intents.interact) {
+        if (snapshot.targetId && candidates.some(candidate => candidate.id === snapshot.targetId)) game.interact(snapshot.targetId)
+        else {
+          const id = nearestTarget(snapshot.position, candidates, 12)
+          if (id) game.interact(id)
+        }
+      }
+    }
+    if (intents.offence) game.technique('offence')
+    if (intents.guard) game.technique('guard')
+    if (intents.dash) {
+      if (intents.move) game.technique('dash', { x: snapshot.position.x + intents.move.x * 3.2, z: snapshot.position.z + intents.move.z * 3.2 })
+      else game.technique('dash')
+    }
+    if (intents.cancel) { game.cancel(); keys.clear() }
+    else if (intents.menu) ui.openPanel('settings')
+  }
   function resize() {
     engine.resize(); const aspect = engine.getRenderWidth() / engine.getRenderHeight()
     camera.orthoLeft = -zoom; camera.orthoRight = zoom; camera.orthoTop = zoom / aspect; camera.orthoBottom = -zoom / aspect
@@ -104,7 +214,7 @@ async function boot() {
   setQuality(quality)
   const map = document.querySelector<HTMLCanvasElement>('#minimap')!, mapContext = map.getContext('2d')!
   function drawMap(snapshot: GameSnapshot) {
-    const ctx = mapContext, radius = 32
+    const ctx = mapContext, radius = 48
     const sx = (x: number) => (x - snapshot.position.x + radius) / (radius * 2) * map.width
     const sz = (z: number) => (z - snapshot.position.z + radius) / (radius * 2) * map.height
     ctx.fillStyle = '#a5a77b'; ctx.fillRect(0, 0, map.width, map.height)
@@ -133,7 +243,7 @@ async function boot() {
     const hit = scene.pick(x, y, mesh => Boolean(mesh.metadata?.walkSurface))
     if (hit?.pickedPoint) game.moveTo({ x: hit.pickedPoint.x, z: hit.pickedPoint.z })
   })
-  canvas.addEventListener('wheel', event => { event.preventDefault(); zoom = Math.max(10, Math.min(24, zoom + Math.sign(event.deltaY) * .8)); ui.setZoom(zoom); resize() }, { passive: false })
+  canvas.addEventListener('wheel', event => { event.preventDefault(); zoom = Math.max(cameraZoom.min, Math.min(cameraZoom.max, zoom + Math.sign(event.deltaY) * .8)); ui.setZoom(zoom); resize() }, { passive: false })
   window.addEventListener('keydown', event => {
     const key = event.key.toLowerCase()
     if (key === 'escape') { if (ui.isPanelOpen()) ui.closePanel(); else game.cancel(); keys.clear(); return }
@@ -154,6 +264,7 @@ async function boot() {
     game.advance(dt)
     const snapshot = game.snapshot(), events = game.drainEvents()
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
+    pollGamepad(snapshot, dt)
     world.events(events, snapshot)
     environment.update(snapshot.position)
     environment.waterMat.setFloat('time', snapshot.time)
@@ -179,7 +290,7 @@ async function boot() {
     if (meterTime > .5) { meterTime = 0; ui.setPerformance(`${Math.round(engine.getFps())} FPS · ${engine.getRenderWidth()} × ${engine.getRenderHeight()}`) }
     scene.render()
   })
-  Object.defineProperty(window, '__aenonGame', { configurable: true, value: () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, shadowCasters: shadows?.getShadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked }) })
+  Object.defineProperty(window, '__aenonGame', { configurable: true, value: () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, controller: { connected: priorGamepadButtons !== null, name: gamepadLabel }, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, shadowCasters: shadows?.getShadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked }) })
   loading.hidden = true; canvas.focus(); ui.render(game.snapshot()); drawMap(game.snapshot()); save()
   if (savingBlocked || temporaryStorage) ui.openPanel('settings')
   else ui.notice(loaded.legacy ? 'Your progress is preserved. Welcome back to the Season.' : loaded.saved ? 'Welcome back. Open the journal to continue your work, or the map to explore.' : 'Welcome to Aenon. Speak to the potter to begin, or explore the riverbank.')

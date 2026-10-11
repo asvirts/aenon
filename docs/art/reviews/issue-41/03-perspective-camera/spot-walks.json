@@ -1,0 +1,322 @@
+[
+  {
+    "fixture": {
+      "corner": "top-left",
+      "placeId": "jordan",
+      "position": {
+        "x": -4.849897230798177,
+        "z": 150.99345037846092
+      },
+      "radius": 22,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 80,
+      "y": 180
+    },
+    "click": {
+      "x": 80,
+      "y": 165
+    },
+    "selected": {
+      "position": {
+        "x": -5.033255598348028,
+        "z": 151.04931567556213
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -16.429024062262283,
+        "z": 154.5213578814356
+      },
+      "targetId": "ore-vein"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "bottom-right",
+      "placeId": "jordan",
+      "position": {
+        "x": -27.39585978119477,
+        "z": 157.82387045274075
+      },
+      "radius": 22,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 1200,
+      "y": 620
+    },
+    "click": {
+      "x": 1200,
+      "y": 620
+    },
+    "selected": {
+      "position": {
+        "x": -27.203710315426363,
+        "z": 157.7661210597603
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -19.61549193768817,
+        "z": 155.48552661020008
+      },
+      "targetId": "ore-vein"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "top-right",
+      "placeId": "jordan",
+      "position": {
+        "x": -17.393366483582298,
+        "z": 169.1220763923483
+      },
+      "radius": 22,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 1040,
+      "y": 80
+    },
+    "click": {
+      "x": 1040,
+      "y": 80
+    },
+    "selected": {
+      "position": {
+        "x": -17.4021558480775,
+        "z": 168.91746508505625
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -17.928995849279158,
+        "z": 156.6529354437501
+      },
+      "targetId": "ore-vein"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "bottom-left",
+      "placeId": "jordan",
+      "position": {
+        "x": -15.527254272747072,
+        "z": 145.55362918269103
+      },
+      "radius": 22,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 80,
+      "y": 620
+    },
+    "click": {
+      "x": 80,
+      "y": 620
+    },
+    "selected": {
+      "position": {
+        "x": -15.586652943201695,
+        "z": 145.78054368545833
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -17.570066118952106,
+        "z": 153.3575687453254
+      },
+      "targetId": "ore-vein"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "top-left",
+      "placeId": "jordan",
+      "position": {
+        "x": -168.6238185084821,
+        "z": 172.3162270434472
+      },
+      "radius": 44,
+      "spot": {
+        "id": "salim-mining",
+        "name": "Salim stone outcrop",
+        "x": -196,
+        "z": 180
+      },
+      "x": 80,
+      "y": 180
+    },
+    "click": {
+      "x": 70,
+      "y": 180
+    },
+    "selected": {
+      "position": {
+        "x": -168.78371957318984,
+        "z": 172.3611070599355
+      },
+      "targetId": "salim-mining"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -194.42981694022336,
+        "z": 179.55929097944917
+      },
+      "targetId": "salim-mining"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "bottom-right",
+      "placeId": "jordan",
+      "position": {
+        "x": -36.91133533855641,
+        "z": 159.8254845620734
+      },
+      "radius": 44,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 1200,
+      "y": 620
+    },
+    "click": {
+      "x": 1200,
+      "y": 620
+    },
+    "selected": {
+      "position": {
+        "x": -36.702351377655994,
+        "z": 159.77215946054076
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -19.645043275140477,
+        "z": 155.419755177835
+      },
+      "targetId": "ore-vein"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "top-right",
+      "placeId": "jordan",
+      "position": {
+        "x": 0.15168704402251265,
+        "z": 241.11407269284567
+      },
+      "radius": 44,
+      "spot": {
+        "id": "herb-patch",
+        "name": "Wild herbs",
+        "x": -1,
+        "z": 213
+      },
+      "x": 1040,
+      "y": 80
+    },
+    "click": {
+      "x": 1050,
+      "y": 80
+    },
+    "selected": {
+      "position": {
+        "x": 0.14440469658575472,
+        "z": 240.93630179034727
+      },
+      "targetId": "herb-patch"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -0.9313656716840336,
+        "z": 214.67544690679185
+      },
+      "targetId": "herb-patch"
+    }
+  },
+  {
+    "fixture": {
+      "corner": "bottom-left",
+      "placeId": "jordan",
+      "position": {
+        "x": -13.758563969983229,
+        "z": 136.00504451459568
+      },
+      "radius": 44,
+      "spot": {
+        "id": "ore-vein",
+        "name": "Copper outcrop",
+        "x": -18,
+        "z": 155
+      },
+      "x": 80,
+      "y": 620
+    },
+    "click": {
+      "x": 80,
+      "y": 620
+    },
+    "selected": {
+      "position": {
+        "x": -13.807170181663636,
+        "z": 136.22272381487264
+      },
+      "targetId": "ore-vein"
+    },
+    "arrival": {
+      "activity": "gather",
+      "moving": false,
+      "paused": false,
+      "position": {
+        "x": -17.630742607342604,
+        "z": 153.3463082582066
+      },
+      "targetId": "ore-vein"
+    }
+  }
+]

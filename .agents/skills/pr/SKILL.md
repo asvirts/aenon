@@ -163,6 +163,8 @@ Screenshots are S-tier - when the environment is set up for it and the change is
 
 For a graphics slice, identify the base and implementation commits beside the before/after shots. Record the browser, hardware, viewport, preset and zoom with measurements, and distinguish development-render timing from an uncached production download measurement. Keep measured evidence separate from the reporter's visual verdict; if the issue requires that verdict, leave acceptance pending until the reporter gives it.
 
+After a rendering or interaction fix, refresh the affected evidence on the final implementation commit before publishing the PR. Test occlusion in the actual compound model: a passing ray test against one primitive does not prove that its roof, walls and attached details fade together.
+
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
 ### Merge Danger

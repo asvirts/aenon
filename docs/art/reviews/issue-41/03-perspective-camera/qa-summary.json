@@ -1,0 +1,39 @@
+{
+  "implementationCommit": "8be0484c9f05e5e77f30444d33fc8ecffc09aee6",
+  "baseCommit": "751971842c24c3a68a2fe79c5ae96604b0b7c70c",
+  "automated": {
+    "tests": 581,
+    "typecheck": "pass",
+    "productionBuild": "pass"
+  },
+  "browser": "Codex in-app Chromium 155",
+  "checks": {
+    "canonicalBeforeShots": 32,
+    "canonicalAfterShots": 32,
+    "repeatedShotStateMatches": 32,
+    "groundCornerWalksPassed": 8,
+    "authoredSpotCornerWalksPassed": 8,
+    "houseMeshesFadedAndRestored": 25,
+    "visibleNameplateAnchorsChecked": 164,
+    "movingCoveragePresetsChecked": 4,
+    "minimapNativeClick": "opened region map",
+    "keyboardMovement": "pass",
+    "mouseWheelZoom": "pass",
+    "simulatedGamepadMovementAndZoom": "pass",
+    "productionReady": true,
+    "productionReviewHooks": "absent",
+    "productionConsoleErrors": 0
+  },
+  "independentReview": "No concrete source or raw-evidence findings on implementation commit; raw performance arithmetic, production transfer sum and sample counts independently checked.",
+  "unchangedInvariants": [
+    "src/season",
+    "save format"
+  ],
+  "limitations": [
+    "Single 10-second performance sample per view on Apple M5 Pro; ordinary-laptop acceptance remains outstanding.",
+    "Physical gamepad not tested; simulated gamepad axes exercised the existing polling path.",
+    "Moving coverage checked the recorded Aenon outskirts route and canonical views, not every world position.",
+    "Transfer includes encoded body bytes plus a 300-byte header allowance per response, not packet capture."
+  ],
+  "reporterVisualApproval": "pending"
+}

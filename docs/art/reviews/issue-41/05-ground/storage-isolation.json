@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "97182d1",
+  "entryCount": 0,
+  "after32ShotsEqual": true,
+  "afterReloadEqual": true,
+  "method": "Exact key/value comparison in memory from script-free same-origin page. No saved contents retained. This origin began with no entries."
+}

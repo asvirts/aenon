@@ -1,0 +1,96 @@
+{
+  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+  "sourceCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+  "reporterVisualApproval": "pending",
+  "canonicalCaptures": {
+    "before": 32,
+    "after": 32,
+    "width": 1280,
+    "height": 720,
+    "devicePixelRatio": 1,
+    "shots": [
+      "aenon-square",
+      "aenon-near",
+      "aenon-far",
+      "aenon-riverbank",
+      "jordan-bridge",
+      "scythopolis-market",
+      "sea-shore",
+      "fight"
+    ],
+    "qualities": [
+      "low",
+      "medium",
+      "high",
+      "ultra"
+    ]
+  },
+  "repeat": {
+    "matchingStates": true,
+    "pairs": 32,
+    "thresholdExclusive": 8,
+    "maximumPixelsOverThreshold": {
+      "file": "fight-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 4868,
+      "pixelsOver8": 718,
+      "percentPixelsOver8": 0.077908,
+      "meanAbsoluteRgbDifference": 0.024039,
+      "maxChannelDifference": 113,
+      "over8BoundingBox": [
+        609,
+        321,
+        736,
+        461
+      ],
+      "evidenceSha256": "9ecd21a6c2f4a223b9f367a783e3222b5de412c8c1e698f8b40cc63b3b0365cb",
+      "repeatSha256": "c5e94be9c8a59087f5c5f374f4d6ba5e85759b8acbf9e62d335c9cf55fd83c75"
+    },
+    "evidence": "repeat-image-differences-after.json"
+  },
+  "verification": {
+    "reportedBy": "implementation agent / root coordinator",
+    "testsPassed": 591,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "independentSourceReview": "No actionable finding in ground material, terrain paint attributes, texture lifecycle and provenance after the final dirt-hue correction."
+  },
+  "visualReview": {
+    "scope": "All 32 final after PNGs inspected on two contact sheets; final fight-low PNG inspected at native 1280x720. Earlier near/square and comparison captures inspected during implementation. This is implementation QA, not reporter acceptance.",
+    "observations": [
+      "Grass, settlement stones, dirt roads and wet bank surfaces remain distinguishable across the captured presets.",
+      "Final brown/ochre road retains a discernible orange warning disc and selected-target ring in the captured fight.",
+      "No additional ground clipping or obvious repeated tile grid identified in these captures."
+    ],
+    "retainedBaseLimitations": [
+      "Jordan bridge deck striping/seams remain from the base; architecture slice #58 owns bridge geometry.",
+      "Some Aenon label/HUD overlaps remain from the base."
+    ],
+    "limits": "These frames do not establish every location, gameplay state, GPU or material transition."
+  },
+  "normalRoute": {
+    "evidence": "interaction/bridge-route-qa.json",
+    "samples": 89,
+    "nominalDurationSeconds": 22,
+    "distanceTravelled": 70.20511999988517,
+    "movingSamples": 88,
+    "maxDistanceFromExistingRoadCenter": 1.4635283153585007e-13
+  },
+  "storageIsolation": {
+    "evidence": "storage-isolation.json",
+    "initialEntryCount": 0,
+    "after32ShotsEqual": true,
+    "afterReloadEqual": true,
+    "limitation": "The origin began empty. This demonstrates no writes in this review run, not preservation of a populated save."
+  },
+  "productionGuard": {
+    "evidence": "production-guard-after.json",
+    "ready": true,
+    "quality": "medium",
+    "reviewShot": "undefined",
+    "measure": "undefined"
+  },
+  "performanceLimits": "Eight single ten-second samples per side on one M5 Pro; not a sustained benchmark or ordinary-laptop acceptance."
+}

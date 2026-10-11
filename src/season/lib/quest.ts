@@ -14,6 +14,7 @@ import {
   readAdventurerLevel,
 } from "./experience.ts"
 import { packAfterGoods } from "./pack.ts"
+import { presentCompany } from "./scene.ts"
 import type { PlayingScene } from "./begin.ts"
 import type { ExperienceCurve, LevelBand, PackEntry, Person, QuestDefinition, SeasonDefinition } from "./types.ts"
 
@@ -158,6 +159,7 @@ export type SpeakResult =
       scene?: PlayingScene
     }
   | { ok: true; kind: "short-word" }
+  | { ok: true; kind: "silence" }
   | {
       ok: false
       reason: "not-present" | "not-offered" | "step-not-ready" | "pack-full" | "second-jesus-scene" | "scene-playing"
@@ -178,7 +180,18 @@ export function lookAtPerson(
   personId: string,
 ): LookResult {
   const person = personHere(state, definition, personId)
-  if (!person) return { ok: false, reason: "not-present" }
+  if (!person) {
+    const company = presentCompany(state, definition, personId)
+    if (company) {
+      return {
+        ok: true,
+        presence: { personId: company.personId, placeId: company.placeId },
+        offeredQuests: [],
+        currentLine: null,
+      }
+    }
+    return { ok: false, reason: "not-present" }
+  }
 
   const underway = inProgressForGiver(state, definition, person.id)
   const offeredQuests = offeredFor(state, definition, curve, person.id).map((quest) => ({
@@ -395,7 +408,10 @@ export function speakToPerson(
   personId: string,
 ): SpeakResult {
   const person = personHere(state, definition, personId)
-  if (!person) return { ok: false, reason: "not-present" }
+  if (!person) {
+    if (presentCompany(state, definition, personId)) return { ok: true, kind: "silence" }
+    return { ok: false, reason: "not-present" }
+  }
   if (person.kind === "biblical-figure" && person.figure === "john") {
     return { ok: true, kind: "short-word" }
   }

@@ -3,6 +3,7 @@ import { experienceInsideBand, readAdventurerLevel } from "./experience.ts"
 import { wornGear } from "./gear.ts"
 import { clearCarcasses, leaveCarcass, receiveDrop, type Drop } from "./hunt.ts"
 import { completeCurrentDefeat } from "./quest.ts"
+import type { Acquaintance } from "./scene.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
 
 export type Blow = {
@@ -12,7 +13,7 @@ export type Blow = {
 }
 
 export type EnterResult =
-  | { ok: true; scene?: { kind: "set-scene"; sceneId: string } }
+  | { ok: true; scene?: { kind: "set-scene"; sceneId: string }; acquaintance?: Acquaintance }
   | { ok: false; reason: "not-present" | "fight-underway" | "scene-playing" }
 
 export type FaceResult =
@@ -20,7 +21,7 @@ export type FaceResult =
   | { ok: false; reason: "not-present" | "peaceful-place" | "no-hitpoints" | "fight-underway" | "scene-playing" }
 
 export type SwingResult =
-  | { ok: true; damage: number; hostileFell: boolean }
+  | { ok: true; damage: number; hostileFell: boolean; acquaintance?: Acquaintance }
   | { ok: false; reason: "not-facing" | "scene-playing" }
 
 export type StepBackResult = { ok: true } | { ok: false; reason: "not-facing" | "fight-underway" | "scene-playing" }
@@ -41,6 +42,7 @@ export function enterPlace(
     if (arrived) state.mealBuff = null
     state.lastSettlementId = place.id
     state.outing = "closed"
+    state.hadAcquaintance = false
   } else if (state.outing === "closed") {
     state.outing = "open"
   }
@@ -167,6 +169,7 @@ function wakeInLastSettlement(state: SeasonState, defeatLoss: number): void {
   state.mealBuff = null
   state.coin = Math.max(0, state.coin - defeatLoss)
   state.outing = "closed"
+  state.hadAcquaintance = false
   state.fight = null
   clearCarcasses(state)
 }

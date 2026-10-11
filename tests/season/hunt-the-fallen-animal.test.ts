@@ -39,7 +39,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     const swung = season.swing(() => 2)
     assert.deepEqual(swung, { ok: true, damage: 2, hostileFell: true })
@@ -73,7 +76,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("bandit"), { ok: true })
     const swung = season.swing(() => 2)
     assert.deepEqual(swung, { ok: true, damage: 2, hostileFell: true })
@@ -91,7 +97,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     const beforeHunt = season.adventurer()
@@ -128,7 +137,10 @@ describe("hunt the fallen animal", () => {
   it("sees the level after the defeat grant before paying the smaller grant", () => {
     const season = loadAt(jordan, 18)
     assert.equal(season.adventurer().adventurerLevel, 19)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     assert.equal(season.adventurer().adventurerExperience, 19)
@@ -151,7 +163,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     const before = season.adventurer()
@@ -193,7 +208,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: true })
     assert.deepEqual(season.hunt(), { ok: true })
@@ -220,7 +238,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     assert.deepEqual(season.adventurer().carcasses, [{ placeId: "jordan", hostileId: "wolf" }])
@@ -231,7 +252,10 @@ describe("hunt the fallen animal", () => {
     assert.deepEqual(season.adventurer().fallenHostiles, ["wolf"])
     assert.equal(season.adventurer().adventurerExperience, 4)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const back = season.adventurer()
     assert.deepEqual(season.hunt(), { ok: false, reason: "no-carcass" })
     assert.deepEqual(season.adventurer(), back)
@@ -243,7 +267,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const before = season.adventurer()
     assert.deepEqual(season.hunt(), { ok: false, reason: "no-carcass" })
     assert.deepEqual(season.adventurer(), before)
@@ -269,7 +296,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     assert.deepEqual(season.face("bandit"), { ok: true })
@@ -288,7 +318,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -334,7 +367,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -367,7 +403,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -386,7 +425,10 @@ describe("hunt the fallen animal", () => {
     assert.deepEqual(season.pickUp("blade"), { ok: false, reason: "not-present" })
     assert.deepEqual(season.adventurer(), inTown)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.pickUp("blade"), { ok: true })
     assert.deepEqual(season.adventurer().pack, [{ kind: "gear", id: "blade" }])
     assert.deepEqual(season.adventurer().pickups, [])
@@ -428,7 +470,10 @@ describe("hunt the fallen animal", () => {
     const season = loaded.season
 
     assert.deepEqual(season.enter("salim"), { ok: true })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -464,7 +509,10 @@ describe("hunt the fallen animal", () => {
     assert.equal(woken.adventurerExperience, 4)
     assert.deepEqual(woken.fallenHostiles, ["wolf"])
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.pickUp("blade"), { ok: true })
     assert.deepEqual(season.adventurer().pack, [{ kind: "gear", id: "blade" }])
     assert.deepEqual(season.adventurer().pickups, [])
@@ -489,7 +537,10 @@ describe("hunt the fallen animal", () => {
     assert.equal(season.adventurer().trainedSkills.Hunting.experience, 96)
     assert.equal(season.adventurer().trainedSkills.Hunting.level, 97)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: true })
     assert.deepEqual(season.hunt(), { ok: true })
@@ -543,7 +594,10 @@ describe("hunt the fallen animal", () => {
     }
     const middle = loadAt(hills, 20)
     assert.equal(middle.adventurer().adventurerLevel, 21)
-    assert.deepEqual(middle.enter("hills"), { ok: true })
+    assert.deepEqual(middle.enter("hills"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(middle.face("wolf"), { ok: true })
     assert.deepEqual(middle.swing(() => 1), { ok: true, damage: 1, hostileFell: true })
     assert.equal(middle.adventurer().adventurerExperience, 23)
@@ -579,7 +633,10 @@ describe("hunt the fallen animal", () => {
     }
     const early = loadAt(lake, 0)
     assert.equal(early.adventurer().adventurerLevel, 1)
-    assert.deepEqual(early.enter("lake"), { ok: true })
+    assert.deepEqual(early.enter("lake"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(early.face("wolf"), { ok: true })
     assert.deepEqual(early.swing(() => 1), { ok: true, damage: 1, hostileFell: true })
     assert.equal(early.adventurer().adventurerExperience, 0)
@@ -614,7 +671,10 @@ describe("hunt the fallen animal", () => {
     }
     const season = loadAt(definition, 10)
     assert.equal(season.adventurer().adventurerLevel, 11)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: true })
     assert.equal(season.adventurer().adventurerExperience, 16)
@@ -638,7 +698,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("bandit"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -666,7 +729,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(
@@ -694,7 +760,10 @@ describe("hunt the fallen animal", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(
       season.swing(

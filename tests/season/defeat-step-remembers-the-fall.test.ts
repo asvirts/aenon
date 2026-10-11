@@ -19,7 +19,10 @@ describe("a defeat step remembers the fall", () => {
       questId: "wolf-on-the-jordan",
       line: "The wolf on the Jordan falls.",
     })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     const swung = season.swing(() => 4)
@@ -49,7 +52,10 @@ describe("a defeat step remembers the fall", () => {
 
   it("completes a defeat step when that hostile has already fallen, including before the step became current", () => {
     const season = load(wolfQuest())
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 4), { ok: true, damage: 4, hostileFell: true })
     assert.deepEqual(season.enter("aenon"), { ok: true })
@@ -83,7 +89,10 @@ describe("a defeat step remembers the fall", () => {
       questId: "clear-the-jordan",
       line: "The bandit on the Jordan falls.",
     })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 4), { ok: true, damage: 4, hostileFell: true })
 
@@ -117,7 +126,10 @@ describe("a defeat step remembers the fall", () => {
   it("keeps a fallen hostile fallen for the Season", () => {
     const season = load(wolfQuest())
     assert.equal(season.speak("tanner").ok, true)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 4), { ok: true, damage: 4, hostileFell: true })
     const fallen = season.adventurer()
@@ -130,7 +142,10 @@ describe("a defeat step remembers the fall", () => {
     assert.equal(fallen.questJournal[0]?.line, "Tell the tanner the wolf has fallen.")
 
     assert.deepEqual(season.enter("aenon"), { ok: true })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const returned = season.adventurer()
     assert.deepEqual(returned.fallenHostiles, ["wolf"])
     assert.deepEqual(season.face("wolf"), { ok: false, reason: "not-present" })
@@ -231,7 +246,10 @@ describe("a defeat step remembers the fall", () => {
     assert.deepEqual(season.adventurer(), beforeReport)
     assert.deepEqual(season.exportState(), savedReport)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: false })
     assert.equal(season.adventurer().questJournal[0]?.line, "The wolf on the Jordan falls.")
@@ -280,7 +298,10 @@ describe("a defeat step remembers the fall", () => {
       questId: "flax-then-wolf",
       line: "Carry two measures of flax.",
     })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 4), { ok: true, damage: 4, hostileFell: true })
     assert.equal(season.adventurer().questJournal[0]?.line, "Carry two measures of flax.")
@@ -326,7 +347,10 @@ describe("a defeat step remembers the fall", () => {
       questId: "ford-then-wolf",
       line: "Cross at the ford.",
     })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 4), { ok: true, damage: 4, hostileFell: true })
     assert.equal(season.adventurer().questJournal[0]?.line, "Cross at the ford.")

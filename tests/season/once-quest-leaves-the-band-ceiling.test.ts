@@ -389,7 +389,10 @@ describe("a once quest leaves the band ceiling", () => {
     const at1 = load(definition)
     assert.equal(at1.adventurer().adventurerLevel, 1)
     assert.deepEqual(offeredIds(at1, "cana", "miller"), [])
-    assert.deepEqual(at1.enter("hills"), { ok: true })
+    assert.deepEqual(at1.enter("hills"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(at1.face("wolf"), { ok: true })
     assert.deepEqual(at1.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     assert.equal(at1.adventurer().adventurerExperience, 0)
@@ -403,7 +406,10 @@ describe("a once quest leaves the band ceiling", () => {
     const beforeSpeak = at20.adventurer()
     assert.deepEqual(at20.speak("fisher"), { ok: false, reason: "not-offered" })
     assert.deepEqual(at20.adventurer(), beforeSpeak)
-    assert.deepEqual(at20.enter("lake"), { ok: true })
+    assert.deepEqual(at20.enter("lake"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(at20.face("bandit"), { ok: true })
     assert.deepEqual(at20.swing(() => 2), { ok: true, damage: 2, hostileFell: true })
     assert.equal(at20.adventurer().adventurerExperience, 19)

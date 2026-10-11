@@ -48,7 +48,7 @@ import {
   type SpeakResult,
 } from "./lib/quest.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
-import { presentHere, travelingCompany } from "./lib/scene.ts"
+import { presentHere, resolveAcquaintance, travelingCompany, type Acquaintance } from "./lib/scene.ts"
 import {
   buyFromVendor,
   openCache,
@@ -108,6 +108,7 @@ export type {
   VendorStockLine,
 } from "./lib/types.ts"
 export type { GearSlot }
+export type { Acquaintance }
 export type { Adventurer, Carcass, Fight, Pace, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState, StoredBurn }
 export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
@@ -215,7 +216,9 @@ export function loadSeason(
         const entered = enterPlace(seasonState, definition, placeId)
         if (!entered.ok) return entered
         const scene = resolveAttendance(seasonState, definition)
-        return scene ? { ok: true, scene } : entered
+        if (scene) return { ok: true, scene }
+        const acquaintance = resolveAcquaintance(seasonState, definition)
+        return acquaintance ? { ok: true, acquaintance } : entered
       },
       face: (hostileId) => blockedByScene() ?? faceHostile(seasonState, definition, hostileId),
       stepBack: () => blockedByScene() ?? stepBack(seasonState),
@@ -223,7 +226,12 @@ export function loadSeason(
         const blocked = blockedByScene()
         if (blocked) return blocked
         const swung = swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop)
-        if (swung.ok) resolveAttendance(seasonState, definition)
+        if (!swung.ok) return swung
+        const scene = resolveAttendance(seasonState, definition)
+        if (scene === null && swung.hostileFell) {
+          const acquaintance = resolveAcquaintance(seasonState, definition)
+          if (acquaintance) return { ...swung, acquaintance }
+        }
         return swung
       },
       read: (scriptureObjectId) =>

@@ -496,7 +496,10 @@ describe("a set scene plays for its attend step", () => {
       questId: "attend-john",
       line: "Walk to the Jordan.",
     })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.report("jordan"), {
       ok: true,
       questId: "attend-john",

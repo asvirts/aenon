@@ -94,6 +94,7 @@ export type SeasonState = {
   worn: Record<GearSlot, string | null>
   lastSettlementId: string
   outing: Outing
+  hadAcquaintance: boolean
   fight: Fight | null
   fallenHostiles: readonly string[]
   carcasses: readonly Carcass[]
@@ -165,6 +166,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     worn: emptyWorn(),
     lastSettlementId: placeId,
     outing: "closed",
+    hadAcquaintance: false,
     fight: null,
     fallenHostiles: [],
     carcasses: [],

@@ -77,7 +77,7 @@ An animal or bandit encountered as an opponent in the wilderness. An ordinary ho
 _Avoid_: biblical figure
 
 **Camp**:
-A few ordinary hostiles gathered at one wilderness landmark.
+A few ordinary hostiles gathered at one wilderness landmark, close enough that stepping among them is one fight.
 _Avoid_: pack, patrol, spawn
 
 **Cache**:

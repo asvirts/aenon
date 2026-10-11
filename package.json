@@ -2,6 +2,7 @@
   "name": "aenon",
   "private": true,
   "type": "module",
+  "engines": { "node": "24.x" },
   "scripts": {
     "dev": "vite",
     "server": "node --env-file=.env src/server/passageServer.ts",

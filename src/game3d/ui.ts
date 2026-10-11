@@ -91,6 +91,29 @@ export function requireNivVersion(version: unknown): { bibleId: typeof nivBibleI
   return { bibleId: nivBibleId, copyright: version.copyright }
 }
 
+/** A missing deployed API often returns HTML or plain text rather than JSON. */
+export async function readPassageResponse(response: Response): Promise<{ html: string; reference?: unknown; version?: unknown }> {
+  const unavailable = `The passage service is unavailable (HTTP ${response.status}).`
+  const mediaType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? ''
+  if (mediaType !== 'application/json' && !/^application\/[a-z0-9!#$&^_.+-]+\+json$/.test(mediaType)) {
+    throw new Error(response.status === 404
+      ? `${unavailable} The deployed passage API could not be found.`
+      : `${unavailable} The server did not return a JSON passage response.`)
+  }
+  let data: unknown
+  try {
+    data = await response.json()
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) throw error
+    throw new Error(`${unavailable} The server returned an invalid passage response.`)
+  }
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error(`${unavailable} The server returned an invalid passage response.`)
+  if (!response.ok || !('html' in data) || typeof data.html !== 'string' || !data.html.trim()) {
+    throw new Error('error' in data && typeof data.error === 'string' && data.error.trim() ? data.error : unavailable)
+  }
+  return { html: data.html, reference: 'reference' in data ? data.reference : undefined, version: 'version' in data ? data.version : undefined }
+}
+
 export function createUI(options: UIOptions) {
   const { game, definition, layout } = options
   let snapshot = game.snapshot()
@@ -493,8 +516,7 @@ export function createUI(options: UIOptions) {
     try {
       if (!usfm) throw new Error('This passage reference is not yet mapped for live reading.')
       const response = await fetch(`/api/passage?usfm=${encodeURIComponent(usfm)}`, { signal: request.signal })
-      const data = await response.json() as { html?: unknown; reference?: unknown; version?: unknown; error?: unknown }
-      if (!response.ok || typeof data.html !== 'string' || !data.html.trim()) throw new Error(typeof data.error === 'string' ? data.error : 'The live passage service is unavailable.')
+      const data = await readPassageResponse(response)
       if (request.signal.aborted || currentPanel !== 'scripture') return
       const passage = node('div', 'scripture-passage')
       passage.append(safePassage(data.html))

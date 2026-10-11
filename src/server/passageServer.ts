@@ -1,32 +1,15 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
-import { fetchPassage, fetchVersion } from "./youversion.ts"
+import { handleScriptureRequest } from "./scriptureApi.ts"
 
 /**
- * The only caller of the YouVersion Platform. The App Key lives in the
+ * Local HTTP adapter. The App Key lives in the
  * process environment (local `.env`, never git, never the client bundle).
  *
  * Passage wording is fetched live and never written to disk: the Developer
  * Terms grant no stored copy of the text.
  */
-
-const USFM_PATTERN = /^[A-Z0-9]{3}\.[0-9]+(\.[0-9]+(-[0-9]+)?)?$/
-
-function platformKey(): string {
-  const key = process.env["YVP_APP_KEY"]
-  if (!key) throw new Error("Missing YVP_APP_KEY in the environment (see .env.example).")
-  return key
-}
-
-function bibleId(): number {
-  const id = process.env["YVP_BIBLE_ID"] ?? "111"
-  const numericId = Number(id)
-  if (!/^\d+$/.test(id) || !Number.isSafeInteger(numericId) || numericId < 1) {
-    throw new Error("YVP_BIBLE_ID must be a positive Bible ID (111 for NIV).")
-  }
-  return numericId
-}
 
 function sendJson(response: ServerResponse, status: number, value: unknown): void {
   response.writeHead(status, { "Content-Type": "application/json" })
@@ -61,34 +44,13 @@ async function serveDist(request: IncomingMessage, response: ServerResponse): Pr
   }
 }
 
-const key = platformKey()
-const versionId = bibleId()
-const version = await fetchVersion(key, versionId)
-console.log(`Serving ${version.title} (${version.abbreviation || versionId}).`)
-
 const server = createServer((request, response) => {
   void (async () => {
     const url = new URL(request.url ?? "/", "http://localhost")
-    if (url.pathname === "/api/passage") {
-      const usfm = url.searchParams.get("usfm") ?? ""
-      if (!USFM_PATTERN.test(usfm)) {
-        sendJson(response, 400, { error: "Expected usfm like JHN.1.29." })
-        return
-      }
-      try {
-        const passage = await fetchPassage(key, versionId, usfm)
-        sendJson(response, 200, {
-          reference: passage.reference,
-          html: passage.html,
-          version,
-        })
-      } catch (error) {
-        sendJson(response, 502, { error: error instanceof Error ? error.message : "Passage lookup failed." })
-      }
-      return
-    }
-    if (url.pathname === "/api/version") {
-      sendJson(response, 200, { version })
+    if (url.pathname.startsWith('/api/')) {
+      const result = await handleScriptureRequest(new Request(url, { method: request.method }))
+      response.writeHead(result.status, Object.fromEntries(result.headers))
+      response.end(await result.text())
       return
     }
     if (await serveDist(request, response)) return

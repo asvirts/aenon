@@ -9,3 +9,6 @@ node_modules/
 dist/
 # Local secrets: the YouVersion App Key lives here, never in git.
 .env
+.env.*
+!.env.example
+.vercel/

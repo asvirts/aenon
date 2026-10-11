@@ -38,6 +38,16 @@ If Scripture says unavailable, check `http://localhost:5174/api/version`: its `v
 
 An upstream 401 means authentication was rejected. A 403 means the requested Bible is not accessible to that key; inspect the owning app and its publisher agreements in the [YouVersion Platform portal](https://platform.youversion.com/platform/licenses). A Bible appearing in the full catalog does not establish access. After resolving access, verify a real NIV passage in the game before treating Scripture as working. Do not use another translation under an NIV label.
 
+### Vercel
+
+Deploy the repository with its Vite frontend and the root `api/passage.ts` and `api/version.ts` Node Functions. `vercel.json` selects `npm ci`, the current npm lockfile, the Vite build and `dist` output. Node 24 is selected by `package.json`. The standalone `npm run server` process and Vite's development proxy do not run in a static Vercel deployment.
+
+Set `YVP_APP_KEY` to this game's licensed YouVersion Platform App Key and `YVP_BIBLE_ID` to `111` in the Vercel project's Production environment; also set Preview if previews need live Scripture. Keep both server-side, without a `VITE_` prefix. `PORT` is only for local use. Deploy the code containing the API Functions after setting the variables; redeploying an older frontend-only commit will still return 404.
+
+Verify `/api/version` returns JSON with `version.bibleId: 111`, then `/api/passage?usfm=JHN.3.22-30` returns nonempty `html` and version attribution. Finally open that passage in the game. The API returns `Cache-Control: no-store` and JSON diagnostics for missing configuration or provider failures. A plain-text/HTML 404 means the Functions were not deployed; it does not establish a licensing problem.
+
+References: [Vercel Node Functions](https://vercel.com/docs/functions/runtimes/node-js), [YouVersion API usage](https://developers.youversion.com/api-usage).
+
 Click the ground to run, or click a person, Spot, hostile, station, cache, carcass or dropped Gear to approach and act. Spots repeat timed harvests until depleted; selecting a hostile begins automatic basic attacks. Move out of the red attack warning to evade a hostile's independent strike.
 
 | Control | Action |

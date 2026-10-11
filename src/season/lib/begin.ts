@@ -85,6 +85,7 @@ export type SeasonState = {
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
   questProgress: readonly QuestProgress[]
+  openedCaches: readonly string[]
 }
 
 export type Adventurer = {
@@ -138,6 +139,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     referenceJournal: [],
     playedSetScenes: [],
     questProgress: [],
+    openedCaches: [],
   }
 }
 

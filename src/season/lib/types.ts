@@ -69,6 +69,27 @@ export type Person = {
   vendor?: boolean
 }
 
+export type VendorStockLine =
+  | { kind: "everyday"; id: string; price: number; rarity?: string }
+  | { kind: "gear"; id: string; price: number }
+  | { kind: "special-find"; band: LevelBand; price: number }
+
+export type VendorPrice =
+  | { kind: "everyday" | "material" | "fish" | "food"; id: string; price: number }
+  | { kind: "gear"; id: string; price: number }
+  | { kind: "special-find"; band: LevelBand; price: number }
+
+export type Vendor = {
+  personId: string
+  stock: readonly VendorStockLine[]
+  prices: readonly VendorPrice[]
+}
+
+export type Cache = {
+  id: string
+  placeId: string
+}
+
 export type QuestStep =
   | { kind: "hold"; goodId: string; count: number; line: string }
   | { kind: "return"; goodId: string; count: number; line: string }
@@ -129,6 +150,11 @@ export type Gear =
       defence: number
     }
 
+export type CatalogGood =
+  | { kind: "everyday" | "material"; id: string; rarity?: string }
+  | { kind: "fish" | "food"; id: string; rarity?: string }
+  | { kind: "special-find"; band: LevelBand; rarity?: string }
+
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
@@ -140,6 +166,9 @@ export type SeasonDefinition = {
   people?: readonly Person[]
   quests?: readonly QuestDefinition[]
   gear?: readonly Gear[]
+  goods?: readonly CatalogGood[]
+  vendors?: readonly Vendor[]
+  caches?: readonly Cache[]
 }
 
 export type ExperienceCurve = (experience: number) => number

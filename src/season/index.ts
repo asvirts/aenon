@@ -40,6 +40,19 @@ import {
 } from "./lib/quest.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
 import {
+  buyFromVendor,
+  openCache,
+  requireCaches,
+  requireGoods,
+  requireVendors,
+  sellToVendor,
+  type BuyGood,
+  type BuyResult,
+  type OpenCacheResult,
+  type SellGood,
+  type SellResult,
+} from "./lib/trade.ts"
+import {
   requireDefeatGrants,
   requireHostilesInWilderness,
   requireLowBandAenon,
@@ -60,10 +73,16 @@ export type {
   Person,
   Place,
   QuestDefinition,
+  Rarity,
   ScriptureObject,
   SeasonDefinition,
   Spot,
   SpotSkill,
+  Cache,
+  CatalogGood,
+  Vendor,
+  VendorPrice,
+  VendorStockLine,
 } from "./lib/types.ts"
 export type { GearSlot }
 export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
@@ -73,6 +92,7 @@ export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
 export type { TakeOffResult, WearResult }
 export type { LookResult, QuestLoadFailure, SpeakResult }
+export type { BuyGood, BuyResult, OpenCacheResult, SellGood, SellResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -93,6 +113,9 @@ export type Season = {
   pickUp: (gearId: string) => PickUpResult
   wear: (pieceId: string) => WearResult
   takeOff: (slot: GearSlot) => TakeOffResult
+  buy: (personId: string, good: BuyGood) => BuyResult
+  sell: (personId: string, good: SellGood) => SellResult
+  openCache: (cacheId: string, rollDrop: () => Drop) => OpenCacheResult
 }
 
 export type SeasonLoad =
@@ -120,6 +143,12 @@ export function loadSeason(
   if (!quests.ok) return quests
   const catalog = requireGearCatalog(definition)
   if (!catalog.ok) return catalog
+  const vendors = requireVendors(definition)
+  if (!vendors.ok) return vendors
+  const goods = requireGoods(definition)
+  if (!goods.ok) return goods
+  const caches = requireCaches(definition)
+  if (!caches.ok) return caches
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -146,6 +175,9 @@ export function loadSeason(
       pickUp: (gearId) => pickUp(seasonState, definition, gearId),
       wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
       takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
+      buy: (personId, good) => buyFromVendor(seasonState, definition, personId, good),
+      sell: (personId, good) => sellToVendor(seasonState, definition, personId, good),
+      openCache: (cacheId, rollDrop) => openCache(seasonState, definition, cacheId, rollDrop),
     },
   }
 }

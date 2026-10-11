@@ -15,15 +15,18 @@ function definition(smallerGrant: number, hostiles: readonly Hostile[] = []): Se
     places: [{ id: "aenon", kind: "settlement", band: "low" }],
     smallerGrant,
     defeatLoss: 0,
+    packSize: 28,
     hostiles,
   }
 }
 
 const wolf = (defeatGrant: number): Hostile => ({
   id: "wolf",
+  kind: "animal",
   placeId: "jordan",
   hitpoints: 2,
   defeatGrant,
+  huntingExperience: 1,
 })
 
 describe("a defeat pays inside its level band", () => {
@@ -56,7 +59,17 @@ describe("a defeat pays inside its level band", () => {
         ],
         smallerGrant: 1,
         defeatLoss: 0,
-        hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+        packSize: 28,
+        hostiles: [
+          {
+            id: "wolf",
+            kind: "animal",
+            placeId: "jordan",
+            hitpoints: 5,
+            defeatGrant: 4,
+            huntingExperience: 1,
+          },
+        ],
       },
       onePointPerLevel,
     )
@@ -95,7 +108,17 @@ describe("a defeat pays inside its level band", () => {
         ],
         smallerGrant: 1,
         defeatLoss: 0,
-        hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+        packSize: 28,
+        hostiles: [
+          {
+            id: "wolf",
+            kind: "animal",
+            placeId: "jordan",
+            hitpoints: 5,
+            defeatGrant: 4,
+            huntingExperience: 1,
+          },
+        ],
       },
       onePointPerLevel,
     )
@@ -372,12 +395,15 @@ function wildDefinition(options: WildOptions): SeasonDefinition {
     ],
     smallerGrant: options.smallerGrant ?? 1,
     defeatLoss: 0,
+    packSize: 28,
     hostiles: [
       {
         id: "wolf",
+        kind: "animal",
         placeId: options.placeId,
         hitpoints: options.hitpoints,
         defeatGrant: options.defeatGrant,
+        huntingExperience: 1,
       },
     ],
   }

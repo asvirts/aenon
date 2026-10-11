@@ -1,6 +1,7 @@
 import type { ExperienceCurve, LevelBand } from "./types.ts"
 
 export const adventurerLevelCap = 60
+const trainedLevelCap = 99
 
 const defeatSpans = {
   low: { minLevel: 1, maxLevel: 19, ceiling: 20 },
@@ -26,13 +27,29 @@ export function experienceForLevel(curve: ExperienceCurve, level: number): numbe
 }
 
 export function holdAdventurerExperience(experience: number, curve: ExperienceCurve): number {
-  const cap = experienceForLevel(curve, adventurerLevelCap)
+  return holdExperience(experience, curve, adventurerLevelCap)
+}
+
+export function holdTrainedExperience(experience: number, curve: ExperienceCurve): number {
+  return holdExperience(experience, curve, trainedLevelCap)
+}
+
+function holdExperience(experience: number, curve: ExperienceCurve, capLevel: number): number {
+  const cap = experienceForLevel(curve, capLevel)
   return experience > cap ? cap : experience
 }
 
 export function readAdventurerLevel(curve: ExperienceCurve, experience: number): number {
+  return readLevel(curve, experience, adventurerLevelCap)
+}
+
+export function readTrainedLevel(curve: ExperienceCurve, experience: number): number {
+  return readLevel(curve, experience, trainedLevelCap)
+}
+
+function readLevel(curve: ExperienceCurve, experience: number, capLevel: number): number {
   const level = curve(experience)
-  return level > adventurerLevelCap ? adventurerLevelCap : level
+  return level > capLevel ? capLevel : level
 }
 
 export function experienceAfterDefeat(

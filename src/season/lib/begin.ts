@@ -1,4 +1,4 @@
-import { readAdventurerLevel } from "./experience.ts"
+import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
 import type { ExperienceCurve } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
@@ -36,6 +36,22 @@ export type Fight = {
   phase: "facing" | "underway"
 }
 
+export type HuntMaterial = "meat" | "hide" | "bone"
+
+export type PackEntry =
+  | { kind: "material"; id: HuntMaterial; count: number }
+  | { kind: "gear"; id: string }
+
+export type Carcass = {
+  placeId: string
+  hostileId: string
+}
+
+export type Pickup = {
+  placeId: string
+  gearId: string
+}
+
 export type Outing = "open" | "closed"
 
 export type SeasonState = {
@@ -44,12 +60,14 @@ export type SeasonState = {
   trainedExperience: Record<TrainedSkill, number>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
+  carcasses: readonly Carcass[]
+  pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly []
   playedSetScenes: readonly []
@@ -64,12 +82,14 @@ export type Adventurer = {
   trainedSkills: Record<TrainedSkill, TrainedSkillState>
   currentHitpoints: number
   coin: number
-  pack: readonly []
+  pack: readonly PackEntry[]
   worn: Record<GearSlot, null>
   lastSettlementId: string
   outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
+  carcasses: readonly Carcass[]
+  pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly []
   playedSetScenes: readonly []
@@ -99,6 +119,8 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     outing: "closed",
     fight: null,
     fallenHostiles: [],
+    carcasses: [],
+    pickups: [],
     mealBuff: null,
     referenceJournal: [],
     playedSetScenes: [],
@@ -113,7 +135,7 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
   const trained = {} as Record<TrainedSkill, TrainedSkillState>
   for (const skill of trainedSkills) {
     const experience = state.trainedExperience[skill]
-    trained[skill] = { experience, level: curve(experience) }
+    trained[skill] = { experience, level: readTrainedLevel(curve, experience) }
   }
 
   return {
@@ -124,12 +146,14 @@ export function presentAdventurer(state: SeasonState, curve: ExperienceCurve): A
     trainedSkills: trained,
     currentHitpoints: state.currentHitpoints,
     coin: state.coin,
-    pack: [...state.pack],
+    pack: state.pack.map((entry) => ({ ...entry })),
     worn: { ...state.worn },
     lastSettlementId: state.lastSettlementId,
     outing: state.outing,
     fight: state.fight === null ? null : { ...state.fight },
     fallenHostiles: [...state.fallenHostiles],
+    carcasses: state.carcasses.map((carcass) => ({ ...carcass })),
+    pickups: state.pickups.map((pickup) => ({ ...pickup })),
     mealBuff: state.mealBuff,
     referenceJournal: [...state.referenceJournal],
     playedSetScenes: [...state.playedSetScenes],

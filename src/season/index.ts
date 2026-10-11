@@ -1,5 +1,16 @@
-import { copyState, initialState, presentAdventurer, type Adventurer, type Fight, type SeasonState } from "./lib/begin.ts"
-import { holdAdventurerExperience } from "./lib/experience.ts"
+import {
+  copyState,
+  initialState,
+  presentAdventurer,
+  trainedSkills,
+  type Adventurer,
+  type Carcass,
+  type Fight,
+  type PackEntry,
+  type Pickup,
+  type SeasonState,
+} from "./lib/begin.ts"
+import { holdAdventurerExperience, holdTrainedExperience } from "./lib/experience.ts"
 import {
   enterPlace,
   faceHostile,
@@ -10,6 +21,7 @@ import {
   type StepBackResult,
   type SwingResult,
 } from "./lib/fight.ts"
+import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import {
   requireDefeatGrants,
   requireHostilesInWilderness,
@@ -21,8 +33,9 @@ import {
 import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
 
 export type { ExperienceCurve, Hostile, LevelBand, Place, SeasonDefinition } from "./lib/types.ts"
-export type { Adventurer, Fight, SeasonState }
+export type { Adventurer, Carcass, Fight, PackEntry, Pickup, SeasonState }
 export type { EnterResult, FaceResult, StepBackResult, SwingResult }
+export type { Drop, HuntResult, PickUpResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -30,7 +43,13 @@ export type Season = {
   enter: (placeId: string) => EnterResult
   face: (hostileId: string) => FaceResult
   stepBack: () => StepBackResult
-  swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
+  swing: (
+    rollDamage: () => number,
+    rollHostileDamage?: () => number,
+    rollDrop?: () => Drop,
+  ) => SwingResult
+  hunt: () => HuntResult
+  pickUp: (gearId: string) => PickUpResult
 }
 
 export type SeasonLoad =
@@ -55,6 +74,9 @@ export function loadSeason(
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
+  for (const skill of trainedSkills) {
+    seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curve)
+  }
 
   return {
     ok: true,
@@ -64,8 +86,10 @@ export function loadSeason(
       enter: (placeId) => enterPlace(seasonState, definition, placeId),
       face: (hostileId) => faceHostile(seasonState, definition, hostileId),
       stepBack: () => stepBack(seasonState),
-      swing: (rollDamage, rollHostileDamage) =>
-        swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
+      swing: (rollDamage, rollHostileDamage, rollDrop) =>
+        swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop),
+      hunt: () => hunt(seasonState, definition, curve),
+      pickUp: (gearId) => pickUp(seasonState, definition, gearId),
     },
   }
 }

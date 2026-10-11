@@ -14,6 +14,7 @@ const aenonOnly: SeasonDefinition = {
   places: [{ id: "aenon", kind: "settlement", band: "low" }],
   smallerGrant: 1,
   defeatLoss: 0,
+  packSize: 28,
   hostiles: [],
 }
 
@@ -125,11 +126,11 @@ describe("begin in Aenon", () => {
   })
 
   it("fails to load a definition with no Aenon", () => {
-    const empty = loadSeason({ places: [], smallerGrant: 1, defeatLoss: 0, hostiles: [] }, onePointPerLevel)
+    const empty = loadSeason({ places: [], smallerGrant: 1, defeatLoss: 0, packSize: 28, hostiles: [] }, onePointPerLevel)
     assert.deepEqual(empty, { ok: false, reason: "missing-aenon" })
 
     const otherSettlement = loadSeason(
-      { places: [{ id: "salim", kind: "settlement", band: "low" }], smallerGrant: 1, defeatLoss: 0, hostiles: [] },
+      { places: [{ id: "salim", kind: "settlement", band: "low" }], smallerGrant: 1, defeatLoss: 0, packSize: 28, hostiles: [] },
       onePointPerLevel,
     )
     assert.deepEqual(otherSettlement, { ok: false, reason: "missing-aenon" })
@@ -144,14 +145,14 @@ describe("begin in Aenon", () => {
   it("fails to load when Aenon is not a low-band settlement", () => {
     for (const band of ["middle", "high"] as const) {
       const loaded = loadSeason(
-        { places: [{ id: "aenon", kind: "settlement", band }], smallerGrant: 1, defeatLoss: 0, hostiles: [] },
+        { places: [{ id: "aenon", kind: "settlement", band }], smallerGrant: 1, defeatLoss: 0, packSize: 28, hostiles: [] },
         onePointPerLevel,
       )
       assert.deepEqual(loaded, { ok: false, reason: "aenon-not-low-band-settlement" })
     }
 
     const wilderness = loadSeason(
-      { places: [{ id: "aenon", kind: "wilderness", band: "low" }], smallerGrant: 1, defeatLoss: 0, hostiles: [] },
+      { places: [{ id: "aenon", kind: "wilderness", band: "low" }], smallerGrant: 1, defeatLoss: 0, packSize: 28, hostiles: [] },
       onePointPerLevel,
     )
     assert.deepEqual(wilderness, { ok: false, reason: "aenon-not-low-band-settlement" })

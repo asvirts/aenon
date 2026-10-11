@@ -167,6 +167,22 @@
       "licenseUrl": "https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md",
       "retrieved": "2026-10-11",
       "changes": "Original Blender house and 11 painted colour textures preserved. Added a subtle original procedural limestone normal map, then pruned, deduplicated, resampled and compressed geometry with meshopt; colour textures use ETC1S KTX2 and the normal map uses UASTC KTX2. Raw input retained in art/source/house-painted.glb."
+    },
+    {
+      "files": [
+        "public/game-assets/environment/qwantani-puresky.env"
+      ],
+      "category": "Environment lighting",
+      "title": "Qwantani (Pure Sky)",
+      "author": "Greg Zaal (original photography); Jarod Guest (sky edits)",
+      "authorUrl": "https://polyhaven.com/a/qwantani_puresky",
+      "source": "https://polyhaven.com/a/qwantani_puresky",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "retrieved": "2026-10-11",
+      "changes": "Official 1K HDR converted with Babylon.js 9.30.0 into a 256px prefiltered cubemap: nine specular mip levels encoded as PNG RGBD, plus diffuse spherical polynomial data. No exposure, tint or rotation baked in. Raw HDR and conversion record retained under art/vendor/polyhaven/qwantani-puresky/.",
+      "vendorLicenseFile": "art/vendor/polyhaven/qwantani-puresky/License.txt",
+      "notes": "The official asset and Poly Haven licence pages declare CC0. The direct HDR download supplied no separate licence file; License.txt retains that source declaration and the complete CC0 legal text."
     }
   ],
   "software": [

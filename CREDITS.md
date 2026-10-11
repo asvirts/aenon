@@ -50,6 +50,20 @@ Vendor licence: [public/decoders/babylon-9.30.0/WASM-LICENSE.md](<public/decoder
 
 Notes: The Zstandard licence and copyright are in the final section of the retained vendor notice.
 
+## Environment lighting
+
+### [Qwantani (Pure Sky)](<https://polyhaven.com/a/qwantani_puresky>)
+
+By [Greg Zaal (original photography); Jarod Guest (sky edits)](<https://polyhaven.com/a/qwantani_puresky>) · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Official 1K HDR converted with Babylon.js 9.30.0 into a 256px prefiltered cubemap: nine specular mip levels encoded as PNG RGBD, plus diffuse spherical polynomial data. No exposure, tint or rotation baked in. Raw HDR and conversion record retained under art/vendor/polyhaven/qwantani-puresky/.
+
+Files: [public/game-assets/environment/qwantani-puresky.env](<public/game-assets/environment/qwantani-puresky.env>)
+
+Vendor licence: [art/vendor/polyhaven/qwantani-puresky/License.txt](<art/vendor/polyhaven/qwantani-puresky/License.txt>)
+
+Notes: The official asset and Poly Haven licence pages declare CC0. The direct HDR download supplied no separate licence file; License.txt retains that source declaration and the complete CC0 legal text.
+
 ## Original models
 
 ### [Adventurer](<https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py>)

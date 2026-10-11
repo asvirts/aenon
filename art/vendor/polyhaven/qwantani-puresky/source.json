@@ -1,0 +1,50 @@
+{
+  "asset": "Qwantani (Pure Sky)",
+  "assetPage": "https://polyhaven.com/a/qwantani_puresky",
+  "authors": {
+    "Greg Zaal": "Original photography",
+    "Jarod Guest": "Sky edits"
+  },
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://polyhaven.com/license",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-10-11",
+  "downloadUrl": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/qwantani_puresky_1k.hdr",
+  "filesApi": "https://api.polyhaven.com/files/qwantani_puresky",
+  "metadataApi": "https://api.polyhaven.com/info/qwantani_puresky",
+  "sourceBytes": 1142401,
+  "upstreamMd5": "086b9fb2feb8f641b0d485c73dfb7cdc",
+  "sha256": "53279fa5e01a5f23f499718b579b66a2da0718a900ac5d13f09eddf575b9af8e",
+  "sourceDimensions": [
+    1024,
+    512
+  ],
+  "conversion": {
+    "script": "scripts/art/prefilter-environment.ts",
+    "babylonVersion": "9.30.0",
+    "cubeFaceSize": 256,
+    "noMipmap": false,
+    "generateHarmonics": true,
+    "gammaSpace": false,
+    "prefilterOnLoad": false,
+    "outputImageType": "image/png",
+    "bakedExposureOrTint": false,
+    "output": "public/game-assets/environment/qwantani-puresky.env",
+    "prefilter": "HDRFiltering.prefilter",
+    "prefilterSamples": 4096,
+    "hdrScale": 1
+  },
+  "output": {
+    "path": "public/game-assets/environment/qwantani-puresky.env",
+    "bytes": 567390,
+    "sha256": "0006e4b7c6ee68a6c2b6ed062e06bbe35292d8e90cc747aefbbbe8aa27296218",
+    "version": 2,
+    "cubeFaceSize": 256,
+    "imageType": "image/png",
+    "mipLevels": 9,
+    "mipImages": 54,
+    "sphericalPolynomialComponents": 27,
+    "lodGenerationScale": 0.8,
+    "validated": "All 54 PNGs have expected mip dimensions, 8-bit RGBA, bounded payloads and valid decompressed image lengths; all 27 diffuse polynomial components are finite."
+  }
+}

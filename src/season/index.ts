@@ -12,18 +12,21 @@ import {
   type ReferenceFiling,
   type SeasonState,
 } from "./lib/begin.ts"
+import { requireGearCatalog } from "./lib/catalog.ts"
 import { holdAdventurerExperience, holdTrainedExperience } from "./lib/experience.ts"
 import {
   enterPlace,
   faceHostile,
   stepBack,
   swingAtHostile,
+  type Blow,
   type EnterResult,
   type FaceResult,
   type StepBackResult,
   type SwingResult,
 } from "./lib/fight.ts"
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
+import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import {
   lookAtPerson,
@@ -44,11 +47,12 @@ import {
   requirePositiveSmallerGrant,
   type DefinitionFailure,
 } from "./lib/definition.ts"
-import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
+import type { ExperienceCurve, GearSlot, SeasonDefinition } from "./lib/types.ts"
 
 export type {
   ExperienceCurve,
   GatheringSkill,
+  Gear,
   Good,
   Hostile,
   LevelBand,
@@ -61,11 +65,13 @@ export type {
   Spot,
   SpotSkill,
 } from "./lib/types.ts"
+export type { GearSlot }
 export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
-export type { EnterResult, FaceResult, StepBackResult, SwingResult }
+export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
+export type { TakeOffResult, WearResult }
 export type { LookResult, QuestLoadFailure, SpeakResult }
 
 export type Season = {
@@ -75,8 +81,8 @@ export type Season = {
   face: (hostileId: string) => FaceResult
   stepBack: () => StepBackResult
   swing: (
-    rollDamage: () => number,
-    rollHostileDamage?: () => number,
+    rollDamage: (blow: Blow) => number,
+    rollHostileDamage?: (blow: Blow) => number,
     rollDrop?: () => Drop,
   ) => SwingResult
   read: (scriptureObjectId: string) => ReadResult
@@ -85,6 +91,8 @@ export type Season = {
   speak: (personId: string) => SpeakResult
   hunt: () => HuntResult
   pickUp: (gearId: string) => PickUpResult
+  wear: (pieceId: string) => WearResult
+  takeOff: (slot: GearSlot) => TakeOffResult
 }
 
 export type SeasonLoad =
@@ -110,6 +118,8 @@ export function loadSeason(
   if (!gatheringSpots.ok) return gatheringSpots
   const quests = requireQuests(definition)
   if (!quests.ok) return quests
+  const catalog = requireGearCatalog(definition)
+  if (!catalog.ok) return catalog
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -134,6 +144,8 @@ export function loadSeason(
       speak: (personId) => speakToPerson(seasonState, definition, curve, personId),
       hunt: () => hunt(seasonState, definition, curve),
       pickUp: (gearId) => pickUp(seasonState, definition, gearId),
+      wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
+      takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
     },
   }
 }

@@ -11,6 +11,9 @@ export type Animal = {
   hitpoints: number
   defeatGrant: number
   huntingExperience: number
+  accuracy?: number
+  strength?: number
+  defence?: number
 }
 
 export type Bandit = {
@@ -19,6 +22,9 @@ export type Bandit = {
   placeId: string
   hitpoints: number
   defeatGrant: number
+  accuracy?: number
+  strength?: number
+  defence?: number
 }
 
 export type Hostile = Animal | Bandit
@@ -82,6 +88,47 @@ export type QuestDefinition = {
   }
 }
 
+export const gearSlots = ["weapon", "shield", "head", "body", "legs", "feet"] as const
+
+export type GearSlot = (typeof gearSlots)[number]
+
+export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary"
+
+export type WeaponHold = "one-handed" | "two-handed"
+
+export type WeaponKind = "sword" | "mace"
+
+export type ArmorWeight = "heavy" | "medium" | "cloth"
+
+export type Gear =
+  | {
+      id: string
+      slot: "weapon"
+      hold: WeaponHold
+      kind: WeaponKind
+      band: LevelBand
+      rarity: Rarity
+      accuracyModifier: number
+      strengthModifier: number
+    }
+  | {
+      id: string
+      slot: "shield"
+      band: LevelBand
+      rarity: Rarity
+      accuracyModifier: number
+      defence: number
+    }
+  | {
+      id: string
+      slot: "head" | "body" | "legs" | "feet"
+      armorWeight: ArmorWeight
+      band: LevelBand
+      rarity: Rarity
+      accuracyModifier: number
+      defence: number
+    }
+
 export type SeasonDefinition = {
   places: readonly Place[]
   smallerGrant: number
@@ -92,6 +139,7 @@ export type SeasonDefinition = {
   spots: readonly Spot[]
   people?: readonly Person[]
   quests?: readonly QuestDefinition[]
+  gear?: readonly Gear[]
 }
 
 export type ExperienceCurve = (experience: number) => number

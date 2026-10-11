@@ -10,6 +10,10 @@ export type DefinitionFailure =
   | "higher-band-spot-level-not-greater"
   | "hunting-has-no-spot"
   | "spot-place-missing"
+  | "gear-accuracy"
+  | "sword-mace-gap"
+  | "weapon-strength"
+  | "armor-defence"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

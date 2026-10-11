@@ -17,3 +17,7 @@ Five default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for
 ### Domain docs
 
 Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+## Asking the user
+
+Always ask the user questions one at a time with the AskUserQuestion tool. Send one question per tool call, never several in one call or in plain text, and wait for the answer before asking the next. Each answer can change the questions that follow.

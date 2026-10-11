@@ -34,8 +34,12 @@ _Avoid_: hero, disciple, chosen one
 A person in a settlement who buys goods and sells supplies and gear.
 _Avoid_: merchant, shopkeeper
 
+**Townsperson**:
+A person in a settlement with no office in the Gospel, who gives quests or speaks with the Adventurer. A vendor is one kind of townsperson.
+_Avoid_: NPC, quest giver, ordinary person
+
 **Biblical figure**:
-John, Jesus, someone in the traveling company, or another person the Gospels place in an episode. An ordinary person is not a biblical figure.
+John, Jesus, someone in the traveling company, or another person the Gospels place in an episode. A townsperson is not a biblical figure.
 _Avoid_: NPC, quest giver
 
 **Traveling company**:
@@ -52,8 +56,12 @@ _Avoid_: cutscene, quest giver
 A wilderness meeting with Jesus and the traveling company, marked by one encouraging line from him.
 _Avoid_: set scene, quest
 
+**Conversation window**:
+The panel where the Adventurer speaks with a townsperson or a biblical figure. The world pauses while it is open.
+_Avoid_: pop-up, dialog, modal
+
 **Quest**:
-Work given by one ordinary person in a settlement, made of ordered steps in that settlement's level band. It is once or repeatable.
+Work given by one townsperson in a settlement, made of ordered steps in that settlement's level band. It is once or repeatable.
 _Avoid_: mission, campaign, side quest
 
 **Quest journal**:
@@ -101,6 +109,10 @@ The filed NIV passages the Adventurer has read.
 _Avoid_: Quest journal, Bible
 
 ## Goods
+
+**Inventory**:
+The goods the Adventurer carries, held in a limited number of spaces. Each space holds one piece of gear or one stack of a single good.
+_Avoid_: pack, backpack, bag
 
 **Gear**:
 A piece worn in a gear slot, with a rarity and a level band.

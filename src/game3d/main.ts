@@ -13,6 +13,8 @@ import { lake } from './terrain.ts'
 import { cameraZoom } from './view.ts'
 import type { GameSnapshot, Panel } from './types.ts'
 import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
+import { openStorage } from './storage.ts'
+import type { ReviewHarness } from './review.ts'
 import './style.css'
 import './world.css'
 
@@ -23,11 +25,9 @@ const loadingDetail = document.querySelector<HTMLElement>('#loading-detail')!
 const qualities: Quality[] = ['low', 'medium', 'high', 'ultra']
 async function boot() {
   configureAssetDecoders()
-  let storage: Storage, temporaryStorage = false
-  try { storage = window.localStorage } catch {
-    temporaryStorage = true; const entries = new Map<string, string>()
-    storage = { get length() { return entries.size }, clear: () => entries.clear(), getItem: key => entries.get(key) ?? null, key: n => [...entries.keys()][n] ?? null, removeItem: key => { entries.delete(key) }, setItem: (key, value) => { entries.set(key, value) } }
-  }
+  const review = import.meta.env.DEV && new URLSearchParams(location.search).has('review') ? await import('./review.ts') : undefined
+  const { storage, temporaryStorage } = openStorage(Boolean(review), () => window.localStorage)
+  let reviewHarness: ReviewHarness | undefined
   const loaded = loadGameSave(storage, definition, layout)
   let savingBlocked = Boolean(loaded.blocked)
   const options = { definition, curves, layout, pathfind: (start: { x: number; z: number }, goal: { x: number; z: number }) => findPath(start, goal, navigation), canTraverse: (start: { x: number; z: number }, goal: { x: number; z: number }) => canTraverse(start, goal, navigation) }
@@ -211,7 +211,8 @@ async function boot() {
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
     onRestart: () => { const fresh = createGame(options).exportSave(); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
   })
-  if (temporaryStorage) ui.setSaveStatus('Browser storage is unavailable. Export your progress before leaving.', true)
+  if (review) ui.setSaveStatus('Review session. Progress and graphics preferences stay in memory.')
+  else if (temporaryStorage) ui.setSaveStatus('Browser storage is unavailable. Export your progress before leaving.', true)
   else if (loaded.warning) ui.setSaveStatus(loaded.warning, savingBlocked)
   setQuality(quality)
   const map = document.querySelector<HTMLCanvasElement>('#minimap')!, mapContext = map.getContext('2d')!
@@ -263,17 +264,17 @@ async function boot() {
   const fpsSamples: number[] = []
   engine.runRenderLoop(() => {
     const dt = Math.min(engine.getDeltaTime() / 1000, .05)
-    game.advance(dt)
+    if (!reviewHarness) game.advance(dt)
     const snapshot = game.snapshot(), events = game.drainEvents()
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
-    pollGamepad(snapshot, dt)
+    if (!reviewHarness) pollGamepad(snapshot, dt)
     world.events(events, snapshot)
     environment.update(snapshot.position)
     environment.waterMat.setFloat('time', snapshot.time)
     lockCameraToPlayer(camera, new Vector3(snapshot.position.x, heightAt(snapshot.position.x, snapshot.position.z), snapshot.position.z))
     world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight)
     sun.position.set(snapshot.position.x - 22, heightAt(snapshot.position.x, snapshot.position.z) + 40, snapshot.position.z + 16)
-    scene.animationTimeScale = snapshot.paused ? 0 : 1
+    scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt
     if (fadeTime > .1) {
       fadeTime = 0
@@ -291,10 +292,30 @@ async function boot() {
     if (!document.hidden && Number.isFinite(engine.getFps()) && engine.getFps() > 0) { fpsSamples.push(engine.getFps()); if (fpsSamples.length > 120) fpsSamples.shift() }
     if (meterTime > .5) { meterTime = 0; ui.setPerformance(`${Math.round(engine.getFps())} FPS · ${engine.getRenderWidth()} × ${engine.getRenderHeight()}`) }
     scene.render()
+    reviewHarness?.afterFrame()
   })
-  Object.defineProperty(window, '__aenonGame', { configurable: true, value: () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, controller: { connected: priorGamepadButtons !== null, name: gamepadLabel }, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, shadowCasters: shadows?.getShadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked }) })
+  const debug = () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, controller: { connected: priorGamepadButtons !== null, name: gamepadLabel }, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, shadowCasters: shadows?.getShadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked })
+  if (import.meta.env.DEV && review) {
+    reviewHarness = review.installReviewHarness({
+      game, options, scene, engine, applyQuality: setQuality, applyZoom, closePanel: ui.closePanel,
+      resetView: events => {
+        ui.notice(''); keys.clear()
+        review.resetReviewActors(world.actors.values())
+        // An attack drives its authored clip; omit floating damage and notices.
+        world.events(events.filter(event => event.kind === 'attack'), game.snapshot())
+        fadeTime = 1; uiTime = 1
+      },
+    })
+    Object.assign(debug, { reviewShot: reviewHarness.reviewShot, measure: reviewHarness.measure, reviewState: reviewHarness.reviewState })
+  }
+  Object.defineProperty(window, '__aenonGame', { configurable: true, value: debug })
   loading.hidden = true; canvas.focus(); ui.render(game.snapshot()); drawMap(game.snapshot()); save()
-  if (savingBlocked || temporaryStorage) ui.openPanel('settings')
+  if (import.meta.env.DEV && review && reviewHarness) {
+    const params = new URLSearchParams(location.search), shot = params.get('shot') ?? 'aenon-square', preset = params.get('preset') ?? 'high'
+    if (!review.isReviewShot(shot) || !review.isReviewPreset(preset)) throw new Error('Unknown review shot or preset in URL.')
+    await reviewHarness.reviewShot(shot, preset)
+  }
+  else if (savingBlocked || temporaryStorage) ui.openPanel('settings')
   else ui.notice(loaded.legacy ? 'Your progress is preserved. Welcome back to the Season.' : loaded.saved ? 'Welcome back. Open the journal to continue your work, or the map to explore.' : 'Welcome to Aenon. Speak to the potter to begin, or explore the riverbank.')
 }
 boot().catch(error => {

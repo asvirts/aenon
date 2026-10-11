@@ -161,6 +161,8 @@ Concrete evidence that the change works. Show a before and after.
 
 Screenshots are S-tier - when the environment is set up for it and the change is visual.
 
+For a graphics slice, identify the base and implementation commits beside the before/after shots. Record the browser, hardware, viewport, preset and zoom with measurements, and distinguish development-render timing from an uncached production download measurement. Keep measured evidence separate from the reporter's visual verdict; if the issue requires that verdict, leave acceptance pending until the reporter gives it.
+
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
 ### Merge Danger

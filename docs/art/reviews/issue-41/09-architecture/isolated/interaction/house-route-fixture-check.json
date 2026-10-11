@@ -1,0 +1,47 @@
+{
+  "kind": "CLI fixture preparation and navigation prediction; browser interaction not yet verified",
+  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "fixture": "house-route-import.json",
+  "derivation": "Fresh createGame export with only runtime.position changed to (-12,195); no experience, coin, gear or progress edits.",
+  "start": {
+    "x": -12,
+    "z": 195
+  },
+  "house": {
+    "x": -6,
+    "z": 201,
+    "rotation": 0,
+    "scale": 1
+  },
+  "walkable": true,
+  "merchant": {
+    "id": "merchant",
+    "name": "Merchant",
+    "x": -6.5,
+    "z": 206.2
+  },
+  "directPathClear": false,
+  "expectedRoute": [
+    {
+      "x": -9.78,
+      "z": 204.87
+    },
+    {
+      "x": -7.700131517836563,
+      "z": 205.39519608605863
+    }
+  ],
+  "allRouteSegmentsClear": true,
+  "simulatedFinalPosition": {
+    "x": -7.93377075078527,
+    "z": 205.33243156420207
+  },
+  "simulatedEvents": [
+    {
+      "kind": "panel",
+      "panel": "trade",
+      "id": "merchant"
+    }
+  ],
+  "validation": "validateGameSave passed against current definition/layout; createGame retained exact requested position."
+}

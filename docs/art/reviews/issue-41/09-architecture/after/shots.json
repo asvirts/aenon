@@ -1,0 +1,514 @@
+[
+  {
+    "name": "aenon-square",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-near",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 12
+    }
+  },
+  {
+    "name": "aenon-far",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "aenon-riverbank",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "jordan-bridge",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "scythopolis-market",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "sea-shore",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "fight",
+    "preset": "low",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "low",
+      "simulationTime": 0.4,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-square",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-near",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 12
+    }
+  },
+  {
+    "name": "aenon-far",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "aenon-riverbank",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "jordan-bridge",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "scythopolis-market",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "sea-shore",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "fight",
+    "preset": "medium",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "medium",
+      "simulationTime": 0.4,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-square",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-near",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 12
+    }
+  },
+  {
+    "name": "aenon-far",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "aenon-riverbank",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "jordan-bridge",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "scythopolis-market",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "sea-shore",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "fight",
+    "preset": "high",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "high",
+      "simulationTime": 0.4,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-square",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "aenon-near",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 12
+    }
+  },
+  {
+    "name": "aenon-far",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "aenon-riverbank",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "jordan-bridge",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "scythopolis-market",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "sea-shore",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  {
+    "name": "fight",
+    "preset": "ultra",
+    "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "state": {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "ultra",
+      "simulationTime": 0.4,
+      "zoom": 22
+    }
+  }
+]

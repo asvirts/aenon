@@ -18,13 +18,20 @@ export const reviewShots = {
   'fight': { position: { x: -118.2, z: 188 }, zoom: 'default' },
 } as const
 export type ReviewShot = keyof typeof reviewShots
+/** Supplemental architecture coverage; never changes the canonical eight shots. */
+export const architectureShots = {
+  salim: { position: { x: -206, z: 164 }, zoom: 'max' },
+  pella: { position: { x: 210, z: -73 }, zoom: 'max' },
+} as const
+export type ArchitectureShot = keyof typeof architectureShots
+const allShots = { ...reviewShots, ...architectureShots }
 
 export function isReviewShot(name: string): name is ReviewShot { return Object.hasOwn(reviewShots, name) }
 export function isReviewPreset(name: string): name is ReviewPreset { return reviewPresets.some(preset => preset === name) }
 
 /** Real simulation and authored hostiles; no rules or save schema changes. */
-export function createShotGame(options: GameOptions, name: ReviewShot): Game {
-  const position = reviewShots[name].position
+export function createShotGame(options: GameOptions, name: ReviewShot | ArchitectureShot): Game {
+  const position = allShots[name].position
   if (!options.canTraverse(position, position)) throw new Error(`Review shot ${name} is no longer on walkable ground.`)
   const fresh = { ...options, saved: undefined, legacy: undefined, random: () => .5 }
   const saved = createGame(fresh).exportSave()
@@ -101,7 +108,7 @@ export function frameSampler(seconds: number) {
   }
 }
 
-export type ReviewShotResult = { name: ReviewShot; quality: ReviewPreset; zoom: number; position: Point; simulationTime: number; inCombat: boolean }
+export type ReviewShotResult = { name: ReviewShot | ArchitectureShot; quality: ReviewPreset; zoom: number; position: Point; simulationTime: number; inCombat: boolean }
 export type ReviewMeasurement = FrameMeasurement & {
   shot: ReviewShotResult
   renderSize: { width: number; height: number }
@@ -127,8 +134,7 @@ export function installReviewHarness(context: {
   style.textContent = '#game-notice { display: none !important; }'
   document.head.append(style)
 
-  async function reviewShot(name: ReviewShot, quality: ReviewPreset = 'high'): Promise<ReviewShotResult> {
-    if (!isReviewShot(name)) throw new Error(`Unknown review shot: ${name}`)
+  async function applyShot(name: ReviewShot | ArchitectureShot, quality: ReviewPreset): Promise<ReviewShotResult> {
     if (!isReviewPreset(quality)) throw new Error(`Unknown review preset: ${quality}`)
     if (busy) throw new Error(`A review ${busy} is already running.`)
     busy = 'shot'; settled = false
@@ -139,7 +145,7 @@ export function installReviewHarness(context: {
       // UI/world retain this object's identity, but now use the fresh methods.
       Object.assign(game, holdReviewGame(fixture))
       context.resetView(game.drainEvents())
-      const zoom = cameraZoom[reviewShots[name].zoom]
+      const zoom = cameraZoom[allShots[name].zoom]
       context.applyQuality(quality); context.applyZoom(zoom)
       const snapshot = game.snapshot()
       selected = { name, quality, zoom, position: { ...snapshot.position }, simulationTime: snapshot.time, inCombat: snapshot.inCombat }
@@ -159,6 +165,15 @@ export function installReviewHarness(context: {
     } finally { busy = undefined }
   }
 
+  function reviewShot(name: ReviewShot, quality: ReviewPreset = 'high') {
+    if (!isReviewShot(name)) throw new Error(`Unknown review shot: ${name}`)
+    return applyShot(name, quality)
+  }
+  function architectureShot(name: ArchitectureShot, quality: ReviewPreset = 'high') {
+    if (!Object.hasOwn(architectureShots, name)) throw new Error(`Unknown architecture shot: ${name}`)
+    return applyShot(name, quality)
+  }
+
   async function measure(seconds = 10): Promise<ReviewMeasurement> {
     if (busy) throw new Error(`A review ${busy} is already running.`)
     if (!selected || !settled) throw new Error('Load and await a reviewShot before measuring.')
@@ -169,7 +184,7 @@ export function installReviewHarness(context: {
   }
 
   return {
-    reviewShot, measure,
+    reviewShot, architectureShot, measure,
     reviewState: () => ({ shot: selected, settled, busy: busy ?? null }),
     /** Called after scene.render(), so counters belong to the completed frame. */
     afterFrame() {

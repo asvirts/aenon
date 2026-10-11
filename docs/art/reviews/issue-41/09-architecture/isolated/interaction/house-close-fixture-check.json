@@ -1,0 +1,74 @@
+{
+  "kind": "CLI fixture preparation and actual imported-source-geometry ray prediction; browser interaction not yet verified",
+  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "fixture": "house-close-import.json",
+  "derivation": "Fresh createGame export with only runtime.position changed to (-6,197.5); no experience, coin, gear or progress edits.",
+  "start": {
+    "x": -6,
+    "z": 197.5
+  },
+  "walkable": true,
+  "merchant": {
+    "id": "merchant",
+    "x": -6.5,
+    "z": 206.2
+  },
+  "directPathClear": false,
+  "expectedRoute": [
+    {
+      "x": -9.772619516686095,
+      "z": 197.47
+    },
+    {
+      "x": -9.772619516686095,
+      "z": 205.12
+    },
+    {
+      "x": -8.422619516686094,
+      "z": 205.57
+    },
+    {
+      "x": -7.942619516686095,
+      "z": 206.11709083237434
+    }
+  ],
+  "allRouteSegmentsClear": true,
+  "simulatedFinalPosition": {
+    "x": -8.141227656149448,
+    "z": 205.89072272334244
+  },
+  "simulatedEvents": [
+    {
+      "kind": "panel",
+      "panel": "trade",
+      "id": "merchant"
+    }
+  ],
+  "rayPrediction": {
+    "geometry": "art/source/architecture/house-limestone.glb",
+    "rightHandedScene": true,
+    "housePosition": {
+      "x": -6,
+      "y": 0.3600314197549279,
+      "z": 201
+    },
+    "cameraRadius": 22,
+    "x": -6,
+    "z": 197.5,
+    "walkable": true,
+    "hits": 3,
+    "groupMeshes": 7,
+    "allFaded": true,
+    "camera": [
+      5.479519367218018,
+      16.07697868347168,
+      208.97952270507812
+    ],
+    "merchantPixel": [
+      150.57962327262064,
+      569.3731595162487,
+      0.9946709246833194
+    ]
+  },
+  "validation": "validateGameSave passed against current definition/layout; imported source GLB in NullEngine with actual createFollowCamera/playerOcclusionRays/updateOcclusionGroups."
+}

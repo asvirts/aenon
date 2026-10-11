@@ -1,0 +1,23 @@
+diff --git a/src/game3d/review.ts b/src/game3d/review.ts
+index f3f49d0..bf253e7 100644
+--- a/src/game3d/review.ts
++++ b/src/game3d/review.ts
+@@ -8,13 +8,13 @@ import type { Game, GameEvent, GameOptions, Point } from './types.ts'
+ export const reviewPresets = ['low', 'medium', 'high', 'ultra'] as const
+ export type ReviewPreset = typeof reviewPresets[number]
+ export const reviewShots = {
+-  'aenon-square': { position: { x: -.8, z: 209 }, zoom: 'default' },
++  'aenon-square': { position: { x: -206, z: 164 }, zoom: 'max' },
+   'aenon-near': { position: { x: -.8, z: 209 }, zoom: 'min' },
+   'aenon-far': { position: { x: -.8, z: 209 }, zoom: 'max' },
+-  'aenon-riverbank': { position: { x: 4.7, z: 201 }, zoom: 'default' },
+-  'jordan-bridge': { position: { x: 24, z: -77.98 }, zoom: 'default' },
+-  'scythopolis-market': { position: { x: -20, z: -65 }, zoom: 'default' },
+-  'sea-shore': { position: { x: 31, z: -374 }, zoom: 'default' },
++  'aenon-riverbank': { position: { x: 210, z: -73 }, zoom: 'max' },
++  'jordan-bridge': { position: { x: -218.75, z: -144 }, zoom: 'default' },
++  'scythopolis-market': { position: { x: -248, z: -187.5 }, zoom: 'default' },
++  'sea-shore': { position: { x: -189.5, z: -99.5 }, zoom: 'default' },
+   'fight': { position: { x: -118.2, z: 188 }, zoom: 'default' },
+ } as const
+ export type ReviewShot = keyof typeof reviewShots

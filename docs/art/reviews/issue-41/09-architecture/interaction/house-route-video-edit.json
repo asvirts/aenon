@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "rawArchive": "/tmp/aenon-58-integrated-house-route-4cee146-full.webm",
+  "rawBytes": 25253278,
+  "rawSha256": "64c05d8368e88073d334c95ad29ac6170a8b6ebc21d3ec00718d3ceadd45eabc",
+  "rawDurationSeconds": 188.550406,
+  "retainedFile": "house-route.webm",
+  "retainedBytes": 1023965,
+  "retainedSha256": "5ca7848ddb1c01676de5c5d09160feeaa42b7cb83a837e7aa1fc8f56fdd37d63",
+  "requestedEndSeconds": 6.5,
+  "retainedDurationSeconds": 6.496,
+  "method": "ffmpeg stream copy from time 0 through 6.5 seconds; no re-encoding, frame-rate conversion, or changes within retained frames. Long idle after arrival removed.",
+  "cutoffBasis": "First paused arrival is sample 43 at 100 ms nominal cadence, 4.2483 simulation seconds after first sample. The 6.5-second cutoff retains approximately 2 seconds after arrival, allowing for initial sample offset and scheduling jitter. Raw samples do not contain wall-clock timestamps, so exact arrival media time is not claimed.",
+  "codec": "vp9",
+  "dimensions": [
+    1280,
+    720
+  ],
+  "retainedEndFrameReview": "Decoded frame approximately 0.2 seconds before retained end independently inspected: Adventurer has reached the Merchant beside the restored opaque house. Canvas-only capture omits trade panel; merchant-reached.png retains it."
+}

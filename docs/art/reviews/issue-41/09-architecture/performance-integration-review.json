@@ -1,0 +1,91 @@
+{
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "method": "Read-only source comparison against approved ground, recorded workload comparison and fresh same-session approved-ground timings. No source changes or speculative optimizations.",
+  "findings": [],
+  "verified": [
+    "src/game3d/terrain.ts and groundMaterial.ts are unchanged against approved-ground base.",
+    "createGroundMaterial is instantiated once and assigned only to terrain chunk meshes.",
+    "main.ts diff adds only DEV architectureShot; quality/update paths are unchanged.",
+    "The architecture/ground merge conflict resolution changes credits and skill guidance, not runtime source.",
+    "Every measured integrated row has fewer draw calls, active meshes and rendered triangles than its matching baseline row."
+  ],
+  "result": "No concrete source integration bug identified. Fresh approved-ground timings are close to integrated architecture in seven of eight rows (within 3.7% average FPS); Medium near is 10.39% lower with architecture. These single short samples do not establish repeatability or causation. The much faster historical baseline is not used as the primary comparator.",
+  "limitation": "Both versions miss 60 FPS on High and Ultra, and both are below 30 FPS at Ultra far. Workload counters do not diagnose pixel/material cost, CPU cost or session effects. The cause of the earlier-versus-current timing gap, sustained behavior and ordinary-laptop performance are unmeasured.",
+  "rows": [
+    {
+      "quality": "low",
+      "shot": "aenon-near",
+      "baselineAverageFps": 78.44900814470594,
+      "integratedAverageFps": 76.3663987847168,
+      "averageFpsChangePercent": -2.6547300077364833,
+      "baselineP95FrameMs": 16.80000001192093,
+      "integratedP95FrameMs": 17.200000047683716
+    },
+    {
+      "quality": "low",
+      "shot": "aenon-far",
+      "baselineAverageFps": 74.07555506718106,
+      "integratedAverageFps": 71.93094629138876,
+      "averageFpsChangePercent": -2.895163963128311,
+      "baselineP95FrameMs": 17.599999964237213,
+      "integratedP95FrameMs": 18.100000023841854
+    },
+    {
+      "quality": "medium",
+      "shot": "aenon-near",
+      "baselineAverageFps": 70.47885634309706,
+      "integratedAverageFps": 63.15642206892302,
+      "averageFpsChangePercent": -10.38954752405148,
+      "baselineP95FrameMs": 27.80000001192093,
+      "integratedP95FrameMs": 29.799999952316284
+    },
+    {
+      "quality": "medium",
+      "shot": "aenon-far",
+      "baselineAverageFps": 61.5969201539923,
+      "integratedAverageFps": 62.09689515524224,
+      "averageFpsChangePercent": 0.8116883116883189,
+      "baselineP95FrameMs": 29.100000023841854,
+      "integratedP95FrameMs": 28.100000023841854
+    },
+    {
+      "quality": "high",
+      "shot": "aenon-near",
+      "baselineAverageFps": 44.30783969338494,
+      "integratedAverageFps": 42.67567486537761,
+      "averageFpsChangePercent": -3.683693087503459,
+      "baselineP95FrameMs": 35.40000003576279,
+      "integratedP95FrameMs": 34.59999996423721
+    },
+    {
+      "quality": "high",
+      "shot": "aenon-far",
+      "baselineAverageFps": 34.36735101653429,
+      "integratedAverageFps": 34.837640623159956,
+      "averageFpsChangePercent": 1.3684197143952304,
+      "baselineP95FrameMs": 44.19999998807907,
+      "integratedP95FrameMs": 40
+    },
+    {
+      "quality": "ultra",
+      "shot": "aenon-near",
+      "baselineAverageFps": 42.74998252050197,
+      "integratedAverageFps": 42.91288683966432,
+      "averageFpsChangePercent": 0.38106289069057553,
+      "baselineP95FrameMs": 31.399999976158146,
+      "integratedP95FrameMs": 30.5
+    },
+    {
+      "quality": "ultra",
+      "shot": "aenon-far",
+      "baselineAverageFps": 26.421528061531266,
+      "integratedAverageFps": 26.88763168951898,
+      "averageFpsChangePercent": 1.7641054934530498,
+      "baselineP95FrameMs": 42.09999996423721,
+      "integratedP95FrameMs": 42.30000001192093
+    }
+  ],
+  "baselineRefreshRecord": "performance-baseline-refresh.json",
+  "historicalBaseline": "performance-before-approved-earlier.json"
+}

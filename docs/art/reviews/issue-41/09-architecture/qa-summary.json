@@ -1,0 +1,142 @@
+{
+  "status": "Integrated source, visual, interaction, storage and production checks complete, with measured performance limits; reporter visual approval pending",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "checks": {
+    "tests": {
+      "passed": 600,
+      "failed": 0,
+      "suites": 49
+    },
+    "typecheck": "pass",
+    "productionBuild": "pass",
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "logs": [
+      "checks/npm-test.log",
+      "checks/typecheck.log",
+      "checks/build.log"
+    ],
+    "buildWarning": "Existing Vite large-chunk advisory",
+    "logNormalization": "Trailing whitespace only"
+  },
+  "assets": {
+    "models": 11,
+    "uniqueTextures": 22,
+    "modelBytes": 947668,
+    "textureBytes": 3165861,
+    "totalBytes": 4113529,
+    "largestModelBytes": 193340,
+    "allModelsUnderOneMillionBytes": true
+  },
+  "canonicalEvidence": {
+    "beforeFrames": 32,
+    "afterFrames": 32,
+    "timingRowsBefore": 8,
+    "timingRowsAfter": 8
+  },
+  "supplementalEvidence": {
+    "towns": [
+      "salim",
+      "pella"
+    ],
+    "presets": [
+      "low",
+      "medium",
+      "high",
+      "ultra"
+    ],
+    "before": "8 approved-ground frames captured",
+    "after": "8 integrated frames captured and inspected"
+  },
+  "pending": [],
+  "isolatedEvidence": "Historical isolated records are labeled under isolated/ and fully archived at /tmp/aenon-58-isolated-db6f9dc; original complete package remains in Git at 8504b8c.",
+  "reporterVisualApproval": "pending",
+  "independentVisualReview": {
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "canonicalFrames": 32,
+    "townFrames": 8,
+    "result": "No actionable finding in all 40 integrated frames. Olive meshes remain visible across all 4 presets; bridge masonry, dry moored boat floor, civic and domestic variants remain coherent with approved ground.",
+    "method": "Local contact sheets; separate from live browser interactions and reporter visual verdict."
+  },
+  "beforeAfterStateComparison": {
+    "record": "state-comparison.json",
+    "all40Equal": true
+  },
+  "repeatability": {
+    "record": "repeatability.json",
+    "all32RepeatStatesEqual": true,
+    "pixelDifferencePercentRange": [
+      0.0006510416666666667,
+      0.20160590277777776
+    ],
+    "byteIdenticalPngCount": 0
+  },
+  "performance": {
+    "record": "performance-after.json",
+    "integrationSourceReview": "performance-integration-review.json",
+    "lowAtLeast30FpsOnMeasuredHardware": true,
+    "lowAverageFps": [
+      76.3663987847168,
+      71.93094629138876
+    ],
+    "highAndUltraBelow60Fps": true,
+    "ultraFarBelow30Fps": true,
+    "causeEstablished": false,
+    "ordinaryLaptopMeasured": false,
+    "sustainedPerformanceMeasured": false,
+    "baselineRecord": "performance-before.json",
+    "baselineRefreshRecord": "performance-baseline-refresh.json",
+    "historicalBaselineRecord": "performance-before-approved-earlier.json",
+    "comparison": "Fresh approved ground and integrated architecture are within 3.7% average FPS in seven of eight rows; Medium near is 10.39% lower in the integrated sample. Single short samples do not establish repeatability or causation.",
+    "averageFpsChangePercentRange": [
+      -10.38954752405148,
+      1.7641054934530498
+    ],
+    "baselineAlsoBelow60FpsOnHighAndUltra": true,
+    "baselineAlsoBelow30FpsOnUltraFar": true
+  },
+  "productionTransfer": {
+    "record": "production-transfer-after.json",
+    "requests": "production-network-after.jsonl",
+    "estimatedTransferredMB": 13.718658,
+    "encodedBytes": 13623558,
+    "responses": 317,
+    "rawArithmeticVerified": true,
+    "every304UrlHasFull200BodyInSameRun": true,
+    "under40MB": true,
+    "onlyFailedRequest": "/favicon.ico 404"
+  },
+  "productionGuard": {
+    "record": "production-guard-after.json",
+    "ready": true,
+    "quality": "medium",
+    "reviewShot": "undefined",
+    "measure": "undefined",
+    "architectureShot": "undefined"
+  },
+  "interaction": {
+    "record": "interaction/house-route-qa.json",
+    "normalProductionSettingsImport": true,
+    "merchantLabelClickOpenedTrade": true,
+    "sampleCount": 1879,
+    "movingSamples": 42,
+    "all1879PointsAnd1878ConsecutiveSegmentsClear": true,
+    "allQueuedRoutesClear": true,
+    "compoundFadeAndClear": "pass; integrated full-size images independently inspected",
+    "video": "interaction/house-route.webm",
+    "videoDurationSeconds": 6.496,
+    "rawVideoRetained": "/tmp/aenon-58-integrated-house-route-4cee146-full.webm",
+    "videoTrimRecord": "interaction/house-route-video-edit.json"
+  },
+  "storageIsolation": {
+    "record": "storage-isolation.json",
+    "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "beforeEntryCount": 0,
+    "afterEntryCount": 0,
+    "byteIdentical": true,
+    "allFourPresetsSettled": true,
+    "reloadSettled": true,
+    "temporaryProbeRemoved": true,
+    "limitation": "Empty-origin no-write evidence; this run does not itself exercise an existing populated save."
+  }
+}

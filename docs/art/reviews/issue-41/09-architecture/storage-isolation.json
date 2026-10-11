@@ -1,0 +1,71 @@
+{
+  "source": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "origin": "http://127.0.0.1:5203",
+  "baselineMethod": "Script-free page before entering review mode",
+  "beforeEntryCount": 0,
+  "afterEntryCount": 0,
+  "byteIdentical": true,
+  "alsoMatchesEarlierEmptyBaseline": true,
+  "settledPresetChecks": [
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  ],
+  "reloadState": {
+    "busy": null,
+    "settled": true,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    }
+  },
+  "afterMethod": "Waited for reloaded review scene settled=true, then navigated back to script-free page and read native localStorage."
+}

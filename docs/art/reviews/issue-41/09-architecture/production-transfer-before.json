@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "97182d1",
+  "method": "Fresh localhost origin logging proxy; encoded response body bytes plus an estimated 300 header bytes per response; includes decoder workers. Frozen before subsequent QA navigation.",
+  "encodedBytes": 9792246,
+  "responses": 246,
+  "headerAllowanceBytes": 73800,
+  "estimatedTransferredBytes": 9866046,
+  "estimatedTransferredMB": 9.866046,
+  "statuses": [
+    200,
+    304,
+    404
+  ],
+  "notes": "Repeated worker requests revalidate already fetched decoders with304 within this load. The only404 is favicon.ico; all runtime assets return200."
+}

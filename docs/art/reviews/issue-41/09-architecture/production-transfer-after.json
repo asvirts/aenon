@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "method": "Fresh origin logging proxy; encoded bodies plus estimated300 header bytes per response, decoder traffic included; frozen before further QA.",
+  "encodedBytes": 13623558,
+  "responses": 317,
+  "headerAllowanceBytes": 95100,
+  "estimatedTransferredBytes": 13718658,
+  "estimatedTransferredMB": 13.718658,
+  "statuses": [
+    200,
+    304,
+    404
+  ],
+  "non200": [
+    {
+      "path": "/favicon.ico",
+      "status": 404
+    }
+  ]
+}

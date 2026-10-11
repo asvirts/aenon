@@ -1,0 +1,696 @@
+{
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "comparedFields": [
+    "name",
+    "position",
+    "quality",
+    "simulationTime",
+    "zoom",
+    "inCombat"
+  ],
+  "supplementalNormalization": "Use outer salim/pella name to normalize explicit baseline hook aliases; all other state fields compared unchanged.",
+  "all40StatesEqual": true,
+  "rows": [
+    {
+      "supplemental": false,
+      "name": "aenon-square",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-near",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-far",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-riverbank",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "jordan-bridge",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "scythopolis-market",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "sea-shore",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "fight",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "low",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-square",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-near",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-far",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-riverbank",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "jordan-bridge",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "scythopolis-market",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "sea-shore",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "fight",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "medium",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-square",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-near",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-far",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-riverbank",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "jordan-bridge",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "scythopolis-market",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "sea-shore",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "fight",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "high",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-square",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-near",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-far",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "aenon-riverbank",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "jordan-bridge",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "scythopolis-market",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "sea-shore",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": false,
+      "name": "fight",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "ultra",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "salim",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "salim",
+        "position": {
+          "x": -206,
+          "z": 164
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "pella",
+      "preset": "low",
+      "equal": true,
+      "state": {
+        "name": "pella",
+        "position": {
+          "x": 210,
+          "z": -73
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "salim",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "salim",
+        "position": {
+          "x": -206,
+          "z": 164
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "pella",
+      "preset": "medium",
+      "equal": true,
+      "state": {
+        "name": "pella",
+        "position": {
+          "x": 210,
+          "z": -73
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "salim",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "salim",
+        "position": {
+          "x": -206,
+          "z": 164
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "pella",
+      "preset": "high",
+      "equal": true,
+      "state": {
+        "name": "pella",
+        "position": {
+          "x": 210,
+          "z": -73
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "salim",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "salim",
+        "position": {
+          "x": -206,
+          "z": 164
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    },
+    {
+      "supplemental": true,
+      "name": "pella",
+      "preset": "ultra",
+      "equal": true,
+      "state": {
+        "name": "pella",
+        "position": {
+          "x": 210,
+          "z": -73
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      }
+    }
+  ]
+}

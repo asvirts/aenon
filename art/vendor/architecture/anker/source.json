@@ -1,0 +1,41 @@
+{
+  "source": "https://ankersassets.itch.io/low-poly-desert-buildings",
+  "retrieved": "2026-10-11",
+  "archiveSha256": "38b3e244e882c2218fc6c378825a2d71272b83ac390fa85e6081dc897555ba16",
+  "archiveBytes": 1984075,
+  "license": "CC0-1.0",
+  "files": [
+    {
+      "name": "Awning A.fbx",
+      "sha256": "9c24162d59787fb9c8a31b28c976f36ddb72fd1dceca020112f570fde9bb1de3"
+    },
+    {
+      "name": "Awning B.fbx",
+      "sha256": "591f19c2e5708211e84892a140df9a74942a8a6fc69c14e29bafa7080a72e67c"
+    },
+    {
+      "name": "LICENSE-SOURCE.md",
+      "sha256": "4a3f49e8ae20489c072473d8930782fc36cc04f94c977eede6404fe50cdb716d"
+    },
+    {
+      "name": "Ladder B.fbx",
+      "sha256": "4eed93d3cd4db7f3079572e947ac98eaa6072a56f8a32926c334c94e6de88eca"
+    },
+    {
+      "name": "Large Building D.fbx",
+      "sha256": "d0130cbe469585ae4cd4314bb680939c83df0a21de69e6156a974b0dcf0cf247"
+    },
+    {
+      "name": "Medium Building A.fbx",
+      "sha256": "d5c28d9c36d6d1be940031a5ad5fcc2b5fa3c0c03e9fc16e1d2823ba57656f04"
+    },
+    {
+      "name": "Medium Building B.fbx",
+      "sha256": "344a5befa23e2b67741c859990e6febe38f321ab7d18da5a6ac8dd9c3d1d4a68"
+    },
+    {
+      "name": "Small Building A.fbx",
+      "sha256": "eecb8303e76d284594f361808c1dc4e05d47635ade2b6ba9f3645530917f7906"
+    }
+  ]
+}

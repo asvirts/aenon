@@ -1,0 +1,88 @@
+{
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "implementationCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "canonicalBefore": {
+    "source": "../05-ground/after",
+    "measuredCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentToBase": true,
+    "frames": 32,
+    "metadata": "before/shots.json"
+  },
+  "performanceBefore": {
+    "record": "performance-before.json",
+    "measuredCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentToBase": true,
+    "rows": 8,
+    "method": "Fresh same-session approved-ground run at http://127.0.0.1:5240/?review=1 after integrated architecture sampling; other game tabs closed and heavy jobs stopped. Five-second warmup plus ten-second sample per row.",
+    "refreshRecord": "performance-baseline-refresh.json"
+  },
+  "productionBefore": {
+    "source": "../05-ground/production-*-after.*",
+    "measuredCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "runtimeEquivalentToBase": true,
+    "verification": "git diff --name-only 97182d1 2dac97a -- src public package.json package-lock.json returned no paths; copied JSON preserves original measured source."
+  },
+  "supplementalBefore": {
+    "status": "8 frames captured at approved-ground source 97182d1; runtime-equivalent to 2dac97a",
+    "metadata": "supplemental/before/shots.json",
+    "fixtureOnlyPatch": "supplemental/baseline-fixture-only.patch",
+    "note": "Temporary DEV hook aliases map aenon-square to Salim and aenon-riverbank to Pella at radius 44. Runtime source restored after capture."
+  },
+  "canonicalAfter": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "frames": 32,
+    "status": "captured and contact-sheet inspected",
+    "metadata": "after/shots.json"
+  },
+  "supplementalAfter": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "frames": 8,
+    "status": "captured and contact-sheet inspected",
+    "metadata": "supplemental/after/shots.json"
+  },
+  "isolatedEvidence": {
+    "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "evidenceCommit": "8504b8c61a4266a891529ae8e1effeec6a8295e7",
+    "localArchive": "/tmp/aenon-58-isolated-db6f9dc",
+    "interactionRecords": "isolated/interaction",
+    "status": "Historical isolated validation only; not integrated acceptance."
+  },
+  "performanceAfter": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "rows": 8,
+    "record": "performance-after.json"
+  },
+  "repeatability": {
+    "source": "/tmp/aenon-58-repeat-4cee146",
+    "frames": 32,
+    "metadata": "repeat-shots.json",
+    "analysis": "repeatability.json"
+  },
+  "productionAfter": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "origin": "http://127.0.0.1:5253",
+    "record": "production-transfer-after.json",
+    "requests": "production-network-after.jsonl",
+    "method": "Fresh origin logging proxy, frozen at first playable before subsequent QA. Includes decoder-worker payloads and estimated 300 bytes of headers per response."
+  },
+  "interaction": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "origin": "http://127.0.0.1:5253",
+    "record": "interaction/house-route-qa.json",
+    "videoEditRecord": "interaction/house-route-video-edit.json",
+    "method": "Normal Settings import, actual Merchant label click, read-only status samples and canvas capture. Integrated screenshots independently inspected."
+  },
+  "historicalPerformanceBefore": {
+    "record": "performance-before-approved-earlier.json",
+    "source": "../05-ground/performance-after.json",
+    "measuredCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+    "rows": 8,
+    "role": "Historical approved-ground measurement retained unchanged; not the current timing comparator."
+  },
+  "storageIsolation": {
+    "commit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+    "origin": "http://127.0.0.1:5203",
+    "record": "storage-isolation.json",
+    "method": "Script-free empty baseline, four settled review presets, settled reload, then script-free native localStorage readback. Temporary public probe removed."
+  }
+}

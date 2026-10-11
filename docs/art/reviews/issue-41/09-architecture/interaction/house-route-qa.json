@@ -1,0 +1,68 @@
+{
+  "sourceCommit": "4cee146bc21124cbed17baf8a90a20115bd9a3db",
+  "baseCommit": "2dac97aa9acd73e2d1097eb5661e491a20c53326",
+  "method": "Normal integrated production game, fresh fixture imported through Settings, then actual Merchant label click. Independent analysis checks all sampled positions, consecutive segments and queued routes against unchanged production navigation. Identical checks are memoized; all raw samples remain retained.",
+  "fixture": "house-close-import.json",
+  "samples": "house-route-samples.json",
+  "sampleCount": 1879,
+  "movingSampleCount": 42,
+  "merchantTargetSampleCount": 42,
+  "start": {
+    "x": -6,
+    "z": 197.5
+  },
+  "final": {
+    "x": -8.162142120133671,
+    "z": 205.87360587576657
+  },
+  "totalSampledDistanceMetres": 13.087240664341905,
+  "firstObservedQueuedRoute": [
+    {
+      "x": -9.772619516686095,
+      "z": 197.47
+    },
+    {
+      "x": -9.772619516686095,
+      "z": 205.12
+    },
+    {
+      "x": -8.422619516686094,
+      "z": 205.57
+    },
+    {
+      "x": -7.942619516686095,
+      "z": 206.11709083237432
+    }
+  ],
+  "firstPausedArrivalSampleIndex": 43,
+  "directStartToMerchantTraversable": false,
+  "allSampledPositionsWalkable": true,
+  "allConsecutiveSampleSegmentsTraversable": true,
+  "consecutiveSegmentCount": 1878,
+  "allQueuedRouteSegmentsTraversable": true,
+  "invalidPositionIndices": [],
+  "invalidConsecutiveSegmentIndices": [],
+  "invalidQueuedRouteSampleIndices": [],
+  "merchantTradeOpened": {
+    "operatorObserved": true,
+    "image": "merchant-reached.png",
+    "finalPaused": true,
+    "finalRouteEmpty": true,
+    "finalTargetCleared": true
+  },
+  "occlusion": {
+    "fadedImage": "whole-house-faded.png",
+    "clearImage": "whole-house-clear.png",
+    "independentImageReview": "Whole house roof, walls, ladder, courtyard and awning visibly translucent while Adventurer remains visible at close start. The same assembly is opaque after detour and closing trade. Both integrated images independently inspected at full size.",
+    "result": "pass"
+  },
+  "video": {
+    "file": "house-route.webm",
+    "editRecord": "house-route-video-edit.json",
+    "durationSeconds": 6.496,
+    "canvasOnly": true,
+    "trimmedLongIdle": true
+  },
+  "limitations": "Sampling supplements actual browser movement. The video omits DOM panels; separate PNG retains Merchant dialog. Full 188.55-second video is preserved locally; the first 6.5 seconds are retained by stream copying without re-encoding. Timing cutoff is approximately arrival plus 2 seconds, because samples have no wall-clock timestamps.",
+  "result": "pass"
+}

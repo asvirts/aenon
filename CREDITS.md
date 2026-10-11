@@ -4,6 +4,80 @@ Generated from `art/credits.json` by `npm run credits`. Edit the manifest, then 
 
 Original art is identified as original work; this record does not grant a new licence. Software decoders retain their own code licences, separately from the art licence policy.
 
+## Architecture and settlement art
+
+### [Low Poly Desert Buildings — retained CC0 sources](<https://ankersassets.itch.io/low-poly-desert-buildings>)
+
+By Anker's Assets · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Original FBX files retained unchanged. Four buildings, ladders and awnings are retextured, normalized to the established footprint and assembled into the shipped variants.
+
+Files: [art/vendor/architecture/anker/Awning A.fbx](<art/vendor/architecture/anker/Awning A.fbx>), [art/vendor/architecture/anker/Awning B.fbx](<art/vendor/architecture/anker/Awning B.fbx>), [art/vendor/architecture/anker/Ladder B.fbx](<art/vendor/architecture/anker/Ladder B.fbx>), [art/vendor/architecture/anker/Large Building D.fbx](<art/vendor/architecture/anker/Large Building D.fbx>), [art/vendor/architecture/anker/Medium Building A.fbx](<art/vendor/architecture/anker/Medium Building A.fbx>), [art/vendor/architecture/anker/Medium Building B.fbx](<art/vendor/architecture/anker/Medium Building B.fbx>), [art/vendor/architecture/anker/Small Building A.fbx](<art/vendor/architecture/anker/Small Building A.fbx>)
+
+Vendor licence: [art/vendor/architecture/anker/LICENSE-SOURCE.md](<art/vendor/architecture/anker/LICENSE-SOURCE.md>)
+
+### [Medieval Village MegaKit Standard — retained CC0 parts](<https://quaternius.com/packs/medievalvillagemegakit.html>)
+
+By Quaternius · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Original door and crate source meshes retained unchanged; used as retextured, resized parts in period-appropriate flat-roof houses and market porticoes.
+
+Files: [art/vendor/architecture/quaternius/Door\_1\_Flat.fbx](<art/vendor/architecture/quaternius/Door_1_Flat.fbx>), [art/vendor/architecture/quaternius/Prop\_Crate.fbx](<art/vendor/architecture/quaternius/Prop_Crate.fbx>)
+
+Vendor licence: [art/vendor/architecture/quaternius/License\_Standard.txt](<art/vendor/architecture/quaternius/License_Standard.txt>)
+
+Notes: The downloaded Standard archive explicitly declares CC0. Its unmodified License\_Standard.txt controls this intake; the newer general QAL website notice is not used to license other archives. Source archive SHA-256 is recorded alongside the files.
+
+### [Plaster 002](<https://3dtextures.me/2018/03/13/plaster-002/>)
+
+By Katsukagi / 3dtextures.me · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Original maps retained unchanged. Embedded derivative textures are resized, warm-tinted and tiled in the architecture GLBs; colour uses ETC1S and normal/roughness use UASTC KTX2.
+
+Files: [art/vendor/3dtextures/architecture/plaster/Plaster\_002\_COLOR.jpg](<art/vendor/3dtextures/architecture/plaster/Plaster_002_COLOR.jpg>)
+
+Notes: CC0 and redistribution declaration: https://3dtextures.me/about/ . Per-file download identifiers and hashes retained in source.json.
+
+### [Settlement architecture, stone bridge, timber dock and fishing boat](<https://github.com/asvirts/aenon/blob/main/scripts/art/build_architecture.py>)
+
+By The Season contributors (assembly and original geometry); Anker's Assets and Quaternius (CC0 model parts); Katsukagi (CC0 surfaces) · [original](<https://github.com/asvirts/aenon/blob/main/docs/adr/0023-licensed-third-party-and-ai-art-with-credits.md>) · Retrieved 2026-10-11
+
+Changes: Six flat-roof variants assembled from the separately credited CC0 sources, including civic assembly halls and colonnades; original detailed portico, courtyard furnishings, bridge arches, timber docks and open fishing-boat hull. Geometry uses meshopt; all textures use shared KTX2 files with complete mip chains.
+
+Files: [public/game-assets/architecture/fishing-boat.glb](<public/game-assets/architecture/fishing-boat.glb>), [public/game-assets/architecture/house-assembly.glb](<public/game-assets/architecture/house-assembly.glb>), [public/game-assets/architecture/house-colonnade.glb](<public/game-assets/architecture/house-colonnade.glb>), [public/game-assets/architecture/house-courtyard.glb](<public/game-assets/architecture/house-courtyard.glb>), [public/game-assets/architecture/house-limestone.glb](<public/game-assets/architecture/house-limestone.glb>), [public/game-assets/architecture/house-mudbrick.glb](<public/game-assets/architecture/house-mudbrick.glb>), [public/game-assets/architecture/house-workshop.glb](<public/game-assets/architecture/house-workshop.glb>), [public/game-assets/architecture/market-portico.glb](<public/game-assets/architecture/market-portico.glb>), [public/game-assets/architecture/stone-bridge-arcade.glb](<public/game-assets/architecture/stone-bridge-arcade.glb>), [public/game-assets/architecture/stone-bridge-span.glb](<public/game-assets/architecture/stone-bridge-span.glb>), [public/game-assets/architecture/timber-dock.glb](<public/game-assets/architecture/timber-dock.glb>)
+
+Notes: This entry identifies original assembly work, not a new licence grant. Embedded Anker, Quaternius and 3dtextures.me components remain CC0 under their individual source entries and retained declarations. Reproduction instructions and archive provenance: art/vendor/architecture/README.md.
+
+### [Shared architecture PBR surface maps](<https://3dtextures.me/about/>)
+
+By Katsukagi / 3dtextures.me; The Season contributors (processing) · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Plaster 002, Stylized Wood Planks 002 and Stylized Stone Wall 002 maps resized, tinted and encoded as ETC1S colour or UASTC data maps. Identical KTX2 payloads are shared by SHA-256 across all architecture models, preserving complete mip chains.
+
+Files: [public/game-assets/architecture/textures/sha256-095c0331693a53b82459d12cac20003ab911e8e9ea5cc106aa2640144e34831c.ktx2](<public/game-assets/architecture/textures/sha256-095c0331693a53b82459d12cac20003ab911e8e9ea5cc106aa2640144e34831c.ktx2>), [public/game-assets/architecture/textures/sha256-20dc7c679b61484f3a4ee229017cd0218ca5a4b4bd0be1356ffb611302be4e51.ktx2](<public/game-assets/architecture/textures/sha256-20dc7c679b61484f3a4ee229017cd0218ca5a4b4bd0be1356ffb611302be4e51.ktx2>), [public/game-assets/architecture/textures/sha256-26de886a920d20468d0f5e2476bdee3b36955772028361006cfaa485e6566f51.ktx2](<public/game-assets/architecture/textures/sha256-26de886a920d20468d0f5e2476bdee3b36955772028361006cfaa485e6566f51.ktx2>), [public/game-assets/architecture/textures/sha256-282ae3c54f9b3890703343787feb77ef4e7c299cc6b4747203a27733f5a5af08.ktx2](<public/game-assets/architecture/textures/sha256-282ae3c54f9b3890703343787feb77ef4e7c299cc6b4747203a27733f5a5af08.ktx2>), [public/game-assets/architecture/textures/sha256-32056398567c7a6a510eecedd3c8f7ec6677c950fdf8ae3ba979af72b68ea234.ktx2](<public/game-assets/architecture/textures/sha256-32056398567c7a6a510eecedd3c8f7ec6677c950fdf8ae3ba979af72b68ea234.ktx2>), [public/game-assets/architecture/textures/sha256-34c8e77af2a7cb4d02f931e50cb4221b6bb44ccc8a3452ed1b32ed80b67ba2eb.ktx2](<public/game-assets/architecture/textures/sha256-34c8e77af2a7cb4d02f931e50cb4221b6bb44ccc8a3452ed1b32ed80b67ba2eb.ktx2>), [public/game-assets/architecture/textures/sha256-3a1bcff7cba210069dba7ef85b20582376b126d833b25f0a37941ea2684ac86f.ktx2](<public/game-assets/architecture/textures/sha256-3a1bcff7cba210069dba7ef85b20582376b126d833b25f0a37941ea2684ac86f.ktx2>), [public/game-assets/architecture/textures/sha256-3f6bb4f31923d75241d2f16d589446fcbc0379ca2362d98aa2a98f897c5ec6f9.ktx2](<public/game-assets/architecture/textures/sha256-3f6bb4f31923d75241d2f16d589446fcbc0379ca2362d98aa2a98f897c5ec6f9.ktx2>), [public/game-assets/architecture/textures/sha256-41d9c2de912d0d0ef6d03abafac08dab7e7ab6e3180bc37ade851d7e32cbe415.ktx2](<public/game-assets/architecture/textures/sha256-41d9c2de912d0d0ef6d03abafac08dab7e7ab6e3180bc37ade851d7e32cbe415.ktx2>), [public/game-assets/architecture/textures/sha256-519cea77956fa212d0350273dc33d1b6451bdf8b0a47d73a1150abb488fba190.ktx2](<public/game-assets/architecture/textures/sha256-519cea77956fa212d0350273dc33d1b6451bdf8b0a47d73a1150abb488fba190.ktx2>), [public/game-assets/architecture/textures/sha256-587b0911d80656a68f8bb9f855cdff6fff5a76f409d69d81f492b5888b1870b6.ktx2](<public/game-assets/architecture/textures/sha256-587b0911d80656a68f8bb9f855cdff6fff5a76f409d69d81f492b5888b1870b6.ktx2>), [public/game-assets/architecture/textures/sha256-5aeffba8a5000b91271e0de94bd7a6e25261eae40ac01d70b549010a06121236.ktx2](<public/game-assets/architecture/textures/sha256-5aeffba8a5000b91271e0de94bd7a6e25261eae40ac01d70b549010a06121236.ktx2>), [public/game-assets/architecture/textures/sha256-5ee10a305a58e316b6901196b0094cf08c6a31de055723d62ce36756ec4f2cf2.ktx2](<public/game-assets/architecture/textures/sha256-5ee10a305a58e316b6901196b0094cf08c6a31de055723d62ce36756ec4f2cf2.ktx2>), [public/game-assets/architecture/textures/sha256-680fa61227af3e1ba80f30c0386990698594d5b610a2e454e86226057f45ee28.ktx2](<public/game-assets/architecture/textures/sha256-680fa61227af3e1ba80f30c0386990698594d5b610a2e454e86226057f45ee28.ktx2>), [public/game-assets/architecture/textures/sha256-7bc81a37e4b0849dc9de42536bb9f008aef0fac8d2aee9c28576d06803464243.ktx2](<public/game-assets/architecture/textures/sha256-7bc81a37e4b0849dc9de42536bb9f008aef0fac8d2aee9c28576d06803464243.ktx2>), [public/game-assets/architecture/textures/sha256-83a0bcec842668271f35ddfa39fd72cc2d281700866233be40b05d3cd30e8fb3.ktx2](<public/game-assets/architecture/textures/sha256-83a0bcec842668271f35ddfa39fd72cc2d281700866233be40b05d3cd30e8fb3.ktx2>), [public/game-assets/architecture/textures/sha256-a60538a39c3c63e69685318bae0632e193b7d3861505dd6f79f34cb0bf1484ec.ktx2](<public/game-assets/architecture/textures/sha256-a60538a39c3c63e69685318bae0632e193b7d3861505dd6f79f34cb0bf1484ec.ktx2>), [public/game-assets/architecture/textures/sha256-a83f4b2ef30a9821096e7d6c6f3fb3fcf60f581cc29512845bbcdcbe58f27046.ktx2](<public/game-assets/architecture/textures/sha256-a83f4b2ef30a9821096e7d6c6f3fb3fcf60f581cc29512845bbcdcbe58f27046.ktx2>), [public/game-assets/architecture/textures/sha256-b56e0638e9cde756c1a41799233ddf245330dc70cdaecbcb8232dcba717f5d12.ktx2](<public/game-assets/architecture/textures/sha256-b56e0638e9cde756c1a41799233ddf245330dc70cdaecbcb8232dcba717f5d12.ktx2>), [public/game-assets/architecture/textures/sha256-c7db66fd90a041e43bfdde4cf3e5a8d8a59ca4b59f488aab9c433ba7224e1e96.ktx2](<public/game-assets/architecture/textures/sha256-c7db66fd90a041e43bfdde4cf3e5a8d8a59ca4b59f488aab9c433ba7224e1e96.ktx2>), [public/game-assets/architecture/textures/sha256-cf304f68a207ed394870a4418aedc91ac4f216ff97e8aaff537101a6b5a29997.ktx2](<public/game-assets/architecture/textures/sha256-cf304f68a207ed394870a4418aedc91ac4f216ff97e8aaff537101a6b5a29997.ktx2>), [public/game-assets/architecture/textures/sha256-d618fc2d573a4aee36a41528659b90447cbdc929f6565808a1e894c837d89aa5.ktx2](<public/game-assets/architecture/textures/sha256-d618fc2d573a4aee36a41528659b90447cbdc929f6565808a1e894c837d89aa5.ktx2>)
+
+Notes: Original source maps and their exact download/source URLs are separately registered above. These files are required same-origin GLB dependencies; their content hashes and model references are recorded in art/source/architecture/runtime-manifest.json.
+
+### [Stylized Stone Wall 002](<https://3dtextures.me/2024/06/18/stylized-stone-wall-002/>)
+
+By Katsukagi / 3dtextures.me · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Original maps retained unchanged. Embedded derivative textures are resized, warm-tinted and tiled in the architecture GLBs; colour uses ETC1S and normal/roughness use UASTC KTX2.
+
+Files: [art/vendor/3dtextures/architecture/stone-wall/Stylized\_Stone\_Wall\_002\_basecolor.png](<art/vendor/3dtextures/architecture/stone-wall/Stylized_Stone_Wall_002_basecolor.png>), [art/vendor/3dtextures/architecture/stone-wall/Stylized\_Stone\_Wall\_002\_normal.png](<art/vendor/3dtextures/architecture/stone-wall/Stylized_Stone_Wall_002_normal.png>), [art/vendor/3dtextures/architecture/stone-wall/Stylized\_Stone\_Wall\_002\_roughness.png](<art/vendor/3dtextures/architecture/stone-wall/Stylized_Stone_Wall_002_roughness.png>)
+
+Notes: CC0 and redistribution declaration: https://3dtextures.me/about/ . Per-file download identifiers and hashes retained in source.json.
+
+### [Stylized Wood Planks 002](<https://3dtextures.me/2024/07/19/stylized-wood-planks-002/>)
+
+By Katsukagi / 3dtextures.me · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-11
+
+Changes: Original maps retained unchanged. Embedded derivative textures are resized, warm-tinted and tiled in the architecture GLBs; colour uses ETC1S and normal/roughness use UASTC KTX2.
+
+Files: [art/vendor/3dtextures/architecture/wood/Stylized\_Wood\_Planks\_002\_basecolor.png](<art/vendor/3dtextures/architecture/wood/Stylized_Wood_Planks_002_basecolor.png>), [art/vendor/3dtextures/architecture/wood/Stylized\_Wood\_Planks\_002\_normal.png](<art/vendor/3dtextures/architecture/wood/Stylized_Wood_Planks_002_normal.png>), [art/vendor/3dtextures/architecture/wood/Stylized\_Wood\_Planks\_002\_roughness.png](<art/vendor/3dtextures/architecture/wood/Stylized_Wood_Planks_002_roughness.png>)
+
+Notes: CC0 and redistribution declaration: https://3dtextures.me/about/ . Per-file download identifiers and hashes retained in source.json.
+
 ## Decoder software
 
 ### [Babylon.js KTX2 decoder 9.30.0](<https://registry.npmjs.org/babylonjs-ktx2decoder/-/babylonjs-ktx2decoder-9.30.0.tgz>)

@@ -28,6 +28,7 @@ import {
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
 import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
+import { makePiece, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import {
   lookAtPerson,
   presentQuestJournal,
@@ -50,20 +51,28 @@ import {
 import type { ExperienceCurve, GearSlot, SeasonDefinition } from "./lib/types.ts"
 
 export type {
+  ArmorSlot,
+  ArmorWeight,
   ExperienceCurve,
   GatheringSkill,
   Gear,
+  GearPiece,
+  GearRecipe,
   Good,
   Hostile,
   LevelBand,
+  MaterialCost,
   PackEntry,
   Person,
   Place,
   QuestDefinition,
+  Rarity,
   ScriptureObject,
   SeasonDefinition,
   Spot,
   SpotSkill,
+  Station,
+  StationKind,
 } from "./lib/types.ts"
 export type { GearSlot }
 export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
@@ -73,6 +82,7 @@ export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
 export type { TakeOffResult, WearResult }
 export type { LookResult, QuestLoadFailure, SpeakResult }
+export type { MakeResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -93,6 +103,7 @@ export type Season = {
   pickUp: (gearId: string) => PickUpResult
   wear: (pieceId: string) => WearResult
   takeOff: (slot: GearSlot) => TakeOffResult
+  make: (stationId: string, recipeId: string) => MakeResult
 }
 
 export type SeasonLoad =
@@ -120,6 +131,8 @@ export function loadSeason(
   if (!quests.ok) return quests
   const catalog = requireGearCatalog(definition)
   if (!catalog.ok) return catalog
+  const gearMaking = requireGearMaking(definition)
+  if (!gearMaking.ok) return gearMaking
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -146,6 +159,7 @@ export function loadSeason(
       pickUp: (gearId) => pickUp(seasonState, definition, gearId),
       wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
       takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
+      make: (stationId, recipeId) => makePiece(seasonState, definition, curve, stationId, recipeId),
     },
   }
 }

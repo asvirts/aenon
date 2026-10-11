@@ -14,6 +14,13 @@ export type DefinitionFailure =
   | "sword-mace-gap"
   | "weapon-strength"
   | "armor-defence"
+  | "weapon-on-wrong-skill"
+  | "recipe-tied-to-station"
+  | "higher-band-recipe-level-not-greater"
+  | "piece-band-not-recipe-band"
+  | "recipe-piece-wrong"
+  | "station-not-in-settlement"
+  | "recipe-piece-missing"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

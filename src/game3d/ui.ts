@@ -7,10 +7,10 @@ import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
+import { qualities, qualityDescriptions, type Quality } from './quality.ts'
 import type { Gear, MaterialCost, SeasonDefinition, SellGood } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
-type Quality = 'low' | 'medium' | 'high' | 'ultra'
 export type UIOptions = {
   game: Game; definition: SeasonDefinition; layout: WorldLayout
   onQuality: (quality: Quality) => void; onZoom: (distance: number) => void
@@ -574,10 +574,12 @@ export function createUI(options: UIOptions) {
     const label = node('label', 'setting-label', 'Visual quality')
     label.htmlFor = 'game-quality'
     const select = node('select'); select.id = 'game-quality'
-    for (const quality of ['low', 'medium', 'high', 'ultra'] as const) { const item = node('option', '', pretty(quality)); item.value = quality; select.append(item) }
+    for (const quality of qualities) { const item = node('option', '', `${pretty(quality)} — ${qualityDescriptions[quality]}`); item.value = quality; select.append(item) }
     select.value = currentQuality
-    select.addEventListener('change', () => { currentQuality = select.value as Quality; options.onQuality(currentQuality) })
-    body.append(label, select, description('Choose a level of detail that runs smoothly on your device.'))
+    const qualityDetail = description(qualityDescriptions[currentQuality]); qualityDetail.id = 'game-quality-detail'; qualityDetail.setAttribute('aria-live', 'polite')
+    select.setAttribute('aria-describedby', qualityDetail.id)
+    select.addEventListener('change', () => { currentQuality = select.value as Quality; qualityDetail.textContent = qualityDescriptions[currentQuality]; options.onQuality(currentQuality) })
+    body.append(label, select, qualityDetail)
     const zoomLabel = node('label', 'setting-label', 'Camera distance'); zoomLabel.htmlFor = 'game-zoom'
     const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = String(cameraZoom.min); zoom.max = String(cameraZoom.max); zoom.step = '1'; zoom.value = String(zoomDistance)
     zoom.addEventListener('input', () => { zoomDistance = Number(zoom.value); options.onZoom(zoomDistance) })

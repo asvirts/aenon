@@ -22,6 +22,15 @@ export type DefinitionFailure =
   | "station-not-in-settlement"
   | "recipe-piece-missing"
   | "special-effect"
+  | "stock-above-rare"
+  | "special-find-on-stock"
+  | "stock-outside-band"
+  | "stock-gear-missing"
+  | "vendor-not-in-settlement"
+  | "everyday-has-rarity"
+  | "rarity-not-graded"
+  | "special-find-not-legendary"
+  | "cache-not-in-wilderness"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

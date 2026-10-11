@@ -6,3 +6,6 @@
 .DS_Store
 # Node
 node_modules/
+dist/
+# Local secrets: the YouVersion App Key lives here, never in git.
+.env

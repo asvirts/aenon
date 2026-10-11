@@ -24,3 +24,21 @@ The Season's rules are specified in [Season rules on the logic surface](https://
 npm test          # behavior tests
 npm run typecheck # tsc --noEmit
 ```
+
+## Run the game (browser MVP)
+
+Vite + Phaser canvas wired to the rules module, with a demo Aenon + Jordan
+definition in `src/host/demoDefinition.ts`. The save is the exported Season
+state in `localStorage`. The passage panel loads live text + copyright from
+`src/server/passageServer.ts`, the only YouVersion caller; the App Key lives
+in local `.env` (see `.env.example`), never in git or the client bundle.
+
+```sh
+npm run server  # passage API on http://localhost:5174 (needs YVP_APP_KEY)
+npm run dev     # play at http://localhost:5173
+npm run build   # production bundle in dist/
+```
+
+Walk with click-to-move or WASD across the midpoint to travel between Aenon
+and the Jordan. Keys: `G` gather · `F` face wolf · `SPACE` swing · `H` hunt ·
+`R` read · `J`/`T` look at / speak to John · `B` buy rope.

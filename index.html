@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aenon — Season MVP</title>
+    <style>
+      body { margin: 0; background: #0b1116; color: #f2ede0; font: 15px/1.5 system-ui, sans-serif; }
+      main { max-width: 1000px; margin: 0 auto; padding: 20px; }
+      h1 { font-size: 20px; margin: 0 0 12px; }
+      #game canvas { display: block; margin: 0 auto; }
+      #passage { margin-top: 16px; border: 1px solid #3a4a58; border-radius: 8px; padding: 12px 16px; }
+      #passage h2 { font-size: 16px; margin: 0 0 6px; }
+      #passage p { margin: 0; color: #c9d4de; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Aenon — Season MVP</h1>
+      <div id="game"></div>
+      <section id="passage" aria-live="polite"></section>
+    </main>
+    <script type="module" src="/src/host/main.ts"></script>
+  </body>
+</html>

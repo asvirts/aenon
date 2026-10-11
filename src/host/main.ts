@@ -396,59 +396,89 @@ const TREE_PALETTE: Record<string, number> = {
   R: 0x5d3f2a,
 }
 
+const PINE_A = [
+  ".........OO.........",
+  "........OGGO........",
+  "........OGGO........",
+  ".......OGGLGO.......",
+  "......OGGLLGGO......",
+  "......OGGGGGGO......",
+  ".....OGGGGGGGGO.....",
+  "....OGGLLGGGGGGO....",
+  "...OGGLLLGGGGGGO....",
+  "...OGGGGGGDDDDDGO...",
+  "..OGGGGGGGDDDDDDGO..",
+  "..OGGGGGGGDDDDDDGO..",
+  ".OGGLLGGGGGDDDDDDGO.",
+  ".OGGLLLGGGGGDDDDDDGO",
+  ".OGGGGGGGDDDDDDDDGO.",
+  ".OGGGGGGGDDDDDDDDGO.",
+  "..OGGGGGDDDDDDDDGO..",
+  "...ODDDDDDDDDDDDO...",
+  ".......OTTTTO.......",
+  ".......OTTTTO.......",
+  ".......OTTTTO.......",
+  ".......OTTTTO.......",
+  "......OOTTTTTOO.....",
+  "......ORTTTTRO......",
+  "....................",
+]
+
 const TREE_A = [
   "........................",
-  "..........OOOO..........",
-  "........OOGGGGOO........",
-  "......OOGGLLGGGGOO......",
-  ".....OGGLLGGGGGGGGO.....",
-  "....OGGLGGGGGGDDDDGO....",
-  "....OGGGGGGGGGDDDDGO....",
-  "...OGGGGGGLLGGDDDDDGO...",
-  "...OGGLLGGGLLGGDDDDGO...",
-  "..OGGGLLGGGGGGGGDDDDGO..",
-  "..OGGGGGGGGLLGGDDDDDGO..",
-  "..OGGDDGGGGGGGGDDDDGO...",
-  "..OGDDDDGGGLLGGGDDDGO...",
-  "...ODDDDDGGGLLGGGDDGO...",
-  "...OODDDDGGGGGGGGDGO....",
-  ".....OODDGGGGGGGGO......",
+  "........OOOOOO..........",
+  "......OOGGGGGGGGOO......",
+  "....OGGLLGGGGGGGGGGO....",
+  "...OGGLLGGGGGGDDDDDGO...",
+  "..OGGGGLLGGGGGGDDDDDGO..",
+  "..OGGLGGGGGGGGDDDDDDGO..",
+  ".OGGGLLGGGGGGGDDDDDDDGO.",
+  ".OGGLLLGGGLLGGDDDDDDDGO.",
+  ".OGGGGGGGGGGGDDDDDDDDGO.",
+  "..OGDDGGGGGGGDDDDDDDGO..",
+  "..OGDDDGGGLLLGGDDDDDGO..",
+  "...ODDDDDGGLLGGGGDDGO...",
+  "...OODDDDDGGGGGGGGDGO...",
+  ".....OODDGGGGGGGDGO.....",
   ".......OOGGGGGGOO.......",
-  ".........OOTTTTOO.......",
-  "..........OTTTTO........",
-  "..........OTTTTO........",
-  ".........OOTTTTOO.......",
-  ".........ORTTTTRO.......",
-  "........OORTTTTRRO......",
-  "........OOOTTTTOOO......",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  ".........TTTTTT.........",
+  "........OOTTTTOO........",
+  "........ORTTTTRO........",
+  ".......OORTTTTRRO.......",
   "........................",
 ]
 
 const TREE_B = [
   "........................",
-  "..........OOOO..........",
-  "........OOGGGGOO........",
-  "......OOGGGGLLGGOO......",
-  ".....OGGGGGGLLGGGGO.....",
-  "....OGGDDGGGGGGGLLGO....",
-  "....OGDDDGGGGGGLLGGO....",
-  "....OGDDDGGGLLGGGGGO....",
-  "...OGDDDGGGLLLGGGGGGO...",
-  "...OGDDGGGGGGGGGLLGGO...",
-  "..OGGDDGGGLLGGGGGGLLGO..",
-  "..OGGGGGGLLLGGGGGGGGGO..",
-  "..OGGLLGGGDDDGGGGGGGO...",
-  "..OGGLLGGDDDDDGGGLLGO...",
-  "...OGGGGGDDDDDGGLLGO....",
-  "...OOGGGDDDDDGGGGGO.....",
-  ".....OOGGDDDDGGGO.......",
-  ".......OOTTTTTOO........",
-  "........OOTTTTOO........",
+  "..........OOOOOO........",
+  "......OOGGGGGGGGOO......",
+  "....OGGGGGGGGGGLLGGO....",
+  "...OGDDDDDGGGGGGLLGGO...",
+  "..OGDDDDDGGGGGGLLGGGGO..",
+  "..OGDDDDDDGGGGGGGGLGGO..",
+  ".OGDDDDDDDGGGGGGGLLGGGO.",
+  ".OGDDDDDDDGGLLGGGLLLGGO.",
+  ".OGDDDDDDDDGGGGGGGGGGGO.",
+  "..OGDDDDDDDGGGGGGGDDGO..",
+  "..OGDDDDDGGLLLGGGDDDGO..",
+  "...OGDDGGGGLLGGDDDDDO...",
+  "...OGDGGGGGGGGDDDDDOO...",
+  ".....OGDGGGGGGGDDOO.....",
+  ".......OOGGGGGGOO.......",
   "..........TTTT..........",
-  ".........OTTTTO.........",
-  ".........ORTTRO.........",
-  "........OORTTRRO........",
-  "........OOOTTTTTOO......",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  "..........TTTT..........",
+  ".........TTTTTT.........",
+  "........OOTTTTOO........",
+  "........ORTTTTRO........",
+  ".......OORTTTTRRO.......",
   "........................",
 ]
 
@@ -2553,12 +2583,18 @@ class AenonScene extends Phaser.Scene {
       this.keys["DOWN"]?.isDown
     ) {
       this.target = null
-      let dx = 0
-      let dy = 0
-      if (this.keys["A"]?.isDown || this.keys["LEFT"]?.isDown) dx -= 1
-      if (this.keys["D"]?.isDown || this.keys["RIGHT"]?.isDown) dx += 1
-      if (this.keys["W"]?.isDown || this.keys["UP"]?.isDown) dy -= 1
-      if (this.keys["S"]?.isDown || this.keys["DOWN"]?.isDown) dy += 1
+      // Keyboard is screen-relative: W/Up = screen-up, S/Down = screen-down,
+      // A/Left = screen-left, D/Right = screen-right. Convert that screen
+      // intent through the inverse iso projection into logical movement, so
+      // a single key moves straight on screen and diagonals need two keys.
+      let sdx = 0
+      let sdy = 0
+      if (this.keys["A"]?.isDown || this.keys["LEFT"]?.isDown) sdx -= 1
+      if (this.keys["D"]?.isDown || this.keys["RIGHT"]?.isDown) sdx += 1
+      if (this.keys["W"]?.isDown || this.keys["UP"]?.isDown) sdy -= 1
+      if (this.keys["S"]?.isDown || this.keys["DOWN"]?.isDown) sdy += 1
+      const dx = sdx + 2 * sdy
+      const dy = 2 * sdy - sdx
       const length = Math.hypot(dx, dy) || 1
       wantX = (dx / length) * SPEED
       wantY = (dy / length) * SPEED
@@ -2591,7 +2627,10 @@ class AenonScene extends Phaser.Scene {
         Phaser.Math.Clamp(this.player.x + movedX, 24, WORLD_W - 24),
         Phaser.Math.Clamp(this.player.y + movedY, 240, WORLD_H - 24),
       )
-      if (Math.abs(this.velX) > 30) this.player.setFacing(this.velX < 0)
+      // Facing follows screen-horizontal motion (isoX grows with x - y),
+      // so straight screen-up/down holds its facing instead of flipping.
+      const screenVX = this.velX - this.velY
+      if (Math.abs(screenVX) > 30) this.player.setFacing(screenVX < 0)
       this.player.step(moved, delta)
       this.syncPlace()
     } else {

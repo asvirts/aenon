@@ -6,7 +6,7 @@ A single-player game set in the Galilee and Jordan during one season of Jesus' m
 
 TypeScript in the browser.
 
-- Phaser draws the top-down pixel world. Movement is click-to-walk or WASD.
+- Phaser draws the isometric pixel world. Movement is click-to-walk or WASD.
 - A React page around that canvas uses the YouVersion React SDK to show an NIV passage and that version's copyright beside it.
 - A small Node server holds the YouVersion App Key and is the only caller of the Platform.
 - The save is the rules module's exported state in that browser.

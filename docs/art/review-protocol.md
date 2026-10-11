@@ -67,3 +67,5 @@ Each evidence directory's `README.md` records date, base/head SHA, hardware (CPU
 Run `npm test`, `npm run typecheck`, and `npm run build`. Tests cover all eight deterministic fixtures, real fight engagement, storage isolation, warmup/hidden-tab accounting, and the actual production bundle's exclusion of review entry points. Also inspect a production preview with `?review`: `typeof __aenonGame.reviewShot` and `typeof __aenonGame.measure` must both be `"undefined"`.
 
 For browser save isolation, record all localStorage keys and exact values before entering review mode and compare after capturing and reloading the review URL, including after changing preset. Leave any pre-existing player save in place. Store only the equality verdict in evidence, not the player's saved contents. This verifies browser integration in addition to the unit-level storage boundary.
+
+Take the pre-review baseline on a script-free page at the same origin after leaving normal gameplay. Normal gameplay saves on pagehide, so reading the baseline while that game is still running can include a final legitimate gameplay save in the comparison. Keep existing storage entries untouched.

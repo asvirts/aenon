@@ -1,0 +1,52 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "build": "production",
+  "browser": "Codex in-app Chromium 155",
+  "house": {
+    "method": "Import the owned position fixture through normal Settings UI, then move with native keyboard input.",
+    "quality": "high",
+    "cameraRadius": 22,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "nativeDevicePixelRatio": 2,
+    "effectiveRenderPixelRatio": 1.5,
+    "renderSize": {
+      "width": 1920,
+      "height": 1080
+    },
+    "before": {
+      "position": {
+        "x": -33.03,
+        "z": 198.98
+      },
+      "observation": "House fades; the Adventurer remains discernible behind it.",
+      "screenshot": "interaction/house-faded-high.png"
+    },
+    "input": {
+      "kind": "native keyboard",
+      "key": "A",
+      "durationSeconds": 1.8
+    },
+    "after": {
+      "position": {
+        "x": -37.0981833,
+        "z": 203.0481833
+      },
+      "observation": "House appearance fully restores after the Adventurer clears it; no obvious AO halo in the inspected image.",
+      "screenshot": "interaction/house-cleared-high.png"
+    },
+    "limitation": "Qualitative smoke check of one house on High. Render size is 1920x1080 at a 1280x720 CSS viewport because native DPR 2 is capped to 1.5 on High. This check is separate from the canonical screenshots, repeatability comparison and performance samples, all captured at DPR 1. No numeric per-mesh visibility or AO-halo measurement was taken."
+  },
+  "credits": {
+    "method": "Visible text readback in the production Settings Credits UI.",
+    "asset": "Qwantani (Pure Sky)",
+    "authors": [
+      "Greg Zaal",
+      "Jarod Guest"
+    ],
+    "license": "CC0-1.0",
+    "observedBy": "Root agent using Codex in-app browser"
+  }
+}

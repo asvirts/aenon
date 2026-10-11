@@ -1,0 +1,358 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "stateMatches": true,
+  "shots": [
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "low",
+      "simulationTime": 0.4,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "medium",
+      "simulationTime": 0.4,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "high",
+      "simulationTime": 0.4,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 4.7,
+        "z": 201
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "jordan-bridge",
+      "position": {
+        "x": 24,
+        "z": -77.98
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "scythopolis-market",
+      "position": {
+        "x": -20,
+        "z": -65
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": false,
+      "name": "sea-shore",
+      "position": {
+        "x": 31,
+        "z": -374
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 22
+    },
+    {
+      "inCombat": true,
+      "name": "fight",
+      "position": {
+        "x": -118.2,
+        "z": 188
+      },
+      "quality": "ultra",
+      "simulationTime": 0.4,
+      "zoom": 22
+    }
+  ]
+}

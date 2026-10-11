@@ -1,0 +1,25 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "origin": "http://127.0.0.1:5230",
+  "baseline": "Script-free temporary same-origin HTML page before entering review, retaining existing localStorage.",
+  "keyCount": 2,
+  "compared": "All localStorage keys and exact values, sorted by key; contents not retained.",
+  "operations": [
+    {
+      "shot": "aenon-square",
+      "quality": "low"
+    },
+    {
+      "shot": "fight",
+      "quality": "ultra"
+    },
+    {
+      "shot": "sea-shore",
+      "quality": "high"
+    }
+  ],
+  "capturedFrames": 3,
+  "exactlyEqualAfterCapturesAndPresetChanges": true,
+  "exactlyEqualAfterReviewReload": true,
+  "excludedSetupAttempt": "Initial baseline was read in a running normal game. Normal pagehide autosave changed its save key on navigation; that invalid setup was excluded. A script-free same-origin baseline then proved equality across entering review, captures, preset changes and reload."
+}

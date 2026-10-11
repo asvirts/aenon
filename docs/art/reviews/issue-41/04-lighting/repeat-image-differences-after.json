@@ -1,0 +1,626 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "method": "Decode both PNGs as RGB with Pillow. At each pixel take the maximum absolute difference across R/G/B; count pixels whose maximum exceeds 8 on the 0-255 scale. No image alignment, crop, blur or exclusion mask.",
+  "thresholdExclusive": 8,
+  "referenceDirectory": "after/",
+  "repeatCaptureDirectory": "/tmp/aenon-53-repeat-after",
+  "pairCount": 32,
+  "stateMatches": true,
+  "stateEvidence": "repeatability-after.json",
+  "interpretation": "Pixel differences do not establish a cause or a visual verdict. The review harness continues skeletal animation while holding simulation state, so different animation phases can produce differences.",
+  "maximumPixelsOver8": {
+    "file": "fight-high.png",
+    "pixelsOver8": 1025,
+    "percentPixelsOver8": 0.11122
+  },
+  "comparisons": [
+    {
+      "file": "aenon-far-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 95945,
+      "pixelsOver8": 75,
+      "percentPixelsOver8": 0.008138,
+      "meanAbsoluteRgbDifference": 0.08403,
+      "maxChannelDifference": 31,
+      "over8BoundingBox": [
+        106,
+        39,
+        880,
+        432
+      ],
+      "evidenceSha256": "fc5644b638da13318083654d871a1468a21e759224460876e952bb363450761e",
+      "repeatSha256": "801cb344cc7ef44c6c2fcc064228f362a62e2cbcf7337afb9565d75728111786"
+    },
+    {
+      "file": "aenon-far-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 347,
+      "pixelsOver8": 17,
+      "percentPixelsOver8": 0.001845,
+      "meanAbsoluteRgbDifference": 0.000652,
+      "maxChannelDifference": 23,
+      "over8BoundingBox": [
+        356,
+        257,
+        648,
+        380
+      ],
+      "evidenceSha256": "9157996242dc0420f1c4f2bec15e502e33f267970cb9a15ff0d177bc1d71663f",
+      "repeatSha256": "3c0accb56a6238db3eb2b1226a40c4e2076c2e1e726b5270a02668ff96645517"
+    },
+    {
+      "file": "aenon-far-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 495,
+      "pixelsOver8": 54,
+      "percentPixelsOver8": 0.005859,
+      "meanAbsoluteRgbDifference": 0.001546,
+      "maxChannelDifference": 65,
+      "over8BoundingBox": [
+        354,
+        246,
+        877,
+        367
+      ],
+      "evidenceSha256": "fd4dbea028dfc71c62f6b449d8411262b3564fddcb285676d7027c5ef5a3e9eb",
+      "repeatSha256": "8f918753a4f6a82caba1c30fac09d3926fb886cb33b29eb56902c9d4f6c77e13"
+    },
+    {
+      "file": "aenon-far-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 56541,
+      "pixelsOver8": 31,
+      "percentPixelsOver8": 0.003364,
+      "meanAbsoluteRgbDifference": 0.038758,
+      "maxChannelDifference": 34,
+      "over8BoundingBox": [
+        353,
+        156,
+        873,
+        378
+      ],
+      "evidenceSha256": "bb12656a947f896034eb03ac8f2f39522d6769b56398f0c063bc1f0c2e14b26d",
+      "repeatSha256": "b3708a80eaa2c9befefeb3ed341760b091f545d3355fa86ef97864b567b09bfa"
+    },
+    {
+      "file": "aenon-near-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 66395,
+      "pixelsOver8": 272,
+      "percentPixelsOver8": 0.029514,
+      "meanAbsoluteRgbDifference": 0.062823,
+      "maxChannelDifference": 73,
+      "over8BoundingBox": [
+        212,
+        0,
+        727,
+        454
+      ],
+      "evidenceSha256": "4988ac3a94bf270e434711f2783a1348d7f0a671633a52bc9ed5a30b89a0938b",
+      "repeatSha256": "56f6db78b085e5f34d74ba76b6af1cfd621fd9599af2d4435bcae6baa48977a2"
+    },
+    {
+      "file": "aenon-near-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 994,
+      "pixelsOver8": 66,
+      "percentPixelsOver8": 0.007161,
+      "meanAbsoluteRgbDifference": 0.002166,
+      "maxChannelDifference": 24,
+      "over8BoundingBox": [
+        459,
+        14,
+        669,
+        436
+      ],
+      "evidenceSha256": "09cd79bf3ded9024b5577f66384268d896e60400d1f9f7f15ccfb90fd0304f98",
+      "repeatSha256": "ee7cc92c586dd0e940fa879ac94e013acb923ee110f714afed5aba1616234704"
+    },
+    {
+      "file": "aenon-near-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 195,
+      "pixelsOver8": 32,
+      "percentPixelsOver8": 0.003472,
+      "meanAbsoluteRgbDifference": 0.000734,
+      "maxChannelDifference": 64,
+      "over8BoundingBox": [
+        468,
+        2,
+        673,
+        378
+      ],
+      "evidenceSha256": "dbf56b6e28f7753224c68cd3354f7bf96c2344ca4b8e29cb5157c491dba44775",
+      "repeatSha256": "45257829cd14a75f2a55e31f4ebacc37ef06213db52aa4e6364af1404e62113c"
+    },
+    {
+      "file": "aenon-near-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 36929,
+      "pixelsOver8": 45,
+      "percentPixelsOver8": 0.004883,
+      "meanAbsoluteRgbDifference": 0.024671,
+      "maxChannelDifference": 55,
+      "over8BoundingBox": [
+        461,
+        0,
+        671,
+        428
+      ],
+      "evidenceSha256": "424967fd23134411b1df121d372381bcdc6aa53f521f308337bc5e390a16babc",
+      "repeatSha256": "27bddc7dbd02837ca28c42d982f33c2e2853759a45d9a9be19598576e301ca18"
+    },
+    {
+      "file": "aenon-riverbank-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 88618,
+      "pixelsOver8": 156,
+      "percentPixelsOver8": 0.016927,
+      "meanAbsoluteRgbDifference": 0.079746,
+      "maxChannelDifference": 64,
+      "over8BoundingBox": [
+        42,
+        61,
+        707,
+        431
+      ],
+      "evidenceSha256": "9553e82d0edf0f1276c3811ef7a6b04ec2ff994003350b0b6240a2063c9d54fb",
+      "repeatSha256": "f445a89229fa4164d68aa1aafc9401dcacbb5d8ee3c20db55b500c528e7e6636"
+    },
+    {
+      "file": "aenon-riverbank-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 495,
+      "pixelsOver8": 47,
+      "percentPixelsOver8": 0.0051,
+      "meanAbsoluteRgbDifference": 0.001253,
+      "maxChannelDifference": 36,
+      "over8BoundingBox": [
+        54,
+        188,
+        646,
+        396
+      ],
+      "evidenceSha256": "8cd4de32168420587727d6560e4c04e6d0865b903b74f5b68a54e1d1a264e969",
+      "repeatSha256": "1590051b2c659f00e6d2c4e8e6faf5d811a6298badef8c03e5d4d919160b585e"
+    },
+    {
+      "file": "aenon-riverbank-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 856,
+      "pixelsOver8": 125,
+      "percentPixelsOver8": 0.013563,
+      "meanAbsoluteRgbDifference": 0.002986,
+      "maxChannelDifference": 68,
+      "over8BoundingBox": [
+        46,
+        192,
+        658,
+        394
+      ],
+      "evidenceSha256": "da2350baa36b1837d82c66bd57d379a0431864c34ae079fb62f645bf513df4fa",
+      "repeatSha256": "4ebb994876cdb3c0c031790134c4cab468dfa8cd0961ce387704b2bc97999d4c"
+    },
+    {
+      "file": "aenon-riverbank-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 50081,
+      "pixelsOver8": 37,
+      "percentPixelsOver8": 0.004015,
+      "meanAbsoluteRgbDifference": 0.034373,
+      "maxChannelDifference": 65,
+      "over8BoundingBox": [
+        50,
+        35,
+        655,
+        398
+      ],
+      "evidenceSha256": "b0058477290cd1be51ddba3e34756709510f5f603249d609bac5f6c0f3563cab",
+      "repeatSha256": "dc7c21366547c3bed3bd5d82c7da4b6e41355aceddcb6e061cebd2c9b9d14787"
+    },
+    {
+      "file": "aenon-square-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 88488,
+      "pixelsOver8": 621,
+      "percentPixelsOver8": 0.067383,
+      "meanAbsoluteRgbDifference": 0.09003,
+      "maxChannelDifference": 95,
+      "over8BoundingBox": [
+        97,
+        102,
+        1131,
+        410
+      ],
+      "evidenceSha256": "d8bfaeb8a40d76f8a6195bedcf36f456d0f006fc6080a04de4bfde27ad41b568",
+      "repeatSha256": "6249e5c65a6d0408012eb80b1abab9b06ff048da0db60e653ba747c71db02fb4"
+    },
+    {
+      "file": "aenon-square-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 1202,
+      "pixelsOver8": 85,
+      "percentPixelsOver8": 0.009223,
+      "meanAbsoluteRgbDifference": 0.002751,
+      "maxChannelDifference": 29,
+      "over8BoundingBox": [
+        101,
+        134,
+        1081,
+        394
+      ],
+      "evidenceSha256": "ad94dba436b2a8d5be5e020127ac35399774d353e4945fed508368af157712d5",
+      "repeatSha256": "2f4b6ecaa7654f9931bd5867412ee75c29df0ee2677f177f3b5ad7ea28ac09fa"
+    },
+    {
+      "file": "aenon-square-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 982,
+      "pixelsOver8": 156,
+      "percentPixelsOver8": 0.016927,
+      "meanAbsoluteRgbDifference": 0.00388,
+      "maxChannelDifference": 71,
+      "over8BoundingBox": [
+        100,
+        129,
+        1069,
+        400
+      ],
+      "evidenceSha256": "f20bc58b93fe62e9948ee27e6af9b6fda1c080613e70fbc203e35c523fdd9221",
+      "repeatSha256": "c1538c68a58794b36b5e01d7e649c9dc67d6d0b223788a96fc84b0140e114023"
+    },
+    {
+      "file": "aenon-square-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 53859,
+      "pixelsOver8": 868,
+      "percentPixelsOver8": 0.094184,
+      "meanAbsoluteRgbDifference": 0.056006,
+      "maxChannelDifference": 107,
+      "over8BoundingBox": [
+        97,
+        128,
+        1119,
+        412
+      ],
+      "evidenceSha256": "63b4a32438f9ed98b7111570b4465b1494f7c0c81d2db9ca58495d08c1ee3440",
+      "repeatSha256": "3ef10fcb736cc39c513302876ffd891c6e5ade650d0acaf7e8ded1666ceea51f"
+    },
+    {
+      "file": "fight-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 30656,
+      "pixelsOver8": 1025,
+      "percentPixelsOver8": 0.11122,
+      "meanAbsoluteRgbDifference": 0.044736,
+      "maxChannelDifference": 154,
+      "over8BoundingBox": [
+        609,
+        321,
+        744,
+        465
+      ],
+      "evidenceSha256": "bd42662b97fec9342c05c5c0f0e1126785f243d6557e5134abec967a16229c8d",
+      "repeatSha256": "fecf12af2e4c3578cee31c5ca873566e4c5e93996cd871da667f78ebd6fa2ce0"
+    },
+    {
+      "file": "fight-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 1933,
+      "pixelsOver8": 626,
+      "percentPixelsOver8": 0.067925,
+      "meanAbsoluteRgbDifference": 0.020209,
+      "maxChannelDifference": 142,
+      "over8BoundingBox": [
+        597,
+        322,
+        730,
+        445
+      ],
+      "evidenceSha256": "0df8fefc23eba423be6bb61af4c25b843809c1321de194c06aae055319336c26",
+      "repeatSha256": "358eae098f94add6386d8fd41735f5422cca3f2460dea222cd350b1a18e2740f"
+    },
+    {
+      "file": "fight-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 5331,
+      "pixelsOver8": 905,
+      "percentPixelsOver8": 0.098199,
+      "meanAbsoluteRgbDifference": 0.026349,
+      "maxChannelDifference": 107,
+      "over8BoundingBox": [
+        609,
+        321,
+        746,
+        464
+      ],
+      "evidenceSha256": "c95e7051178a7063cd90bd11c40f792b59c9268746c3a6237c2f414c7107e9d4",
+      "repeatSha256": "5568bbddf5979ffab825f54b4ded91a3546361b7528758950f95f3da5a66ea99"
+    },
+    {
+      "file": "fight-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 17235,
+      "pixelsOver8": 818,
+      "percentPixelsOver8": 0.088759,
+      "meanAbsoluteRgbDifference": 0.030308,
+      "maxChannelDifference": 132,
+      "over8BoundingBox": [
+        609,
+        321,
+        740,
+        462
+      ],
+      "evidenceSha256": "51411104bf67c4e55a2bf487c95bbbc49aa831bf29e04f1a4684a5791c4d5a17",
+      "repeatSha256": "e15838f4a178342186440abaacee67dfe2b6cab3d90c38b67789d6e434584ad0"
+    },
+    {
+      "file": "jordan-bridge-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 57674,
+      "pixelsOver8": 22,
+      "percentPixelsOver8": 0.002387,
+      "meanAbsoluteRgbDifference": 0.046674,
+      "maxChannelDifference": 43,
+      "over8BoundingBox": [
+        621,
+        327,
+        710,
+        407
+      ],
+      "evidenceSha256": "4b23d6893f9da7ef622542adc7d86a9ddcf3759ca08d7f532e28934a78909675",
+      "repeatSha256": "8e7c54282d82a257e98b167f7a93ea3939098503631484ce3c704fe46aebafae"
+    },
+    {
+      "file": "jordan-bridge-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 718,
+      "pixelsOver8": 76,
+      "percentPixelsOver8": 0.008247,
+      "meanAbsoluteRgbDifference": 0.002155,
+      "maxChannelDifference": 36,
+      "over8BoundingBox": [
+        620,
+        320,
+        658,
+        405
+      ],
+      "evidenceSha256": "066d1252c2d6982a968ba513c214566f122f7897f9aa09163adcea05115e2d2c",
+      "repeatSha256": "5180c3933915b4e845bfca4abb7956b7d4cebc9b396f80e7d9a63236d5116e8e"
+    },
+    {
+      "file": "jordan-bridge-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 69,
+      "pixelsOver8": 13,
+      "percentPixelsOver8": 0.001411,
+      "meanAbsoluteRgbDifference": 0.000307,
+      "maxChannelDifference": 30,
+      "over8BoundingBox": [
+        637,
+        322,
+        649,
+        395
+      ],
+      "evidenceSha256": "7322811ab3dc801b2c45019fa17f9b66dea2f98e6b52c6a29169d2d62ff5470f",
+      "repeatSha256": "ee7d53fadb2013fe8d45e08906d97e9703a937ea767e43997939c3eca88582dd"
+    },
+    {
+      "file": "jordan-bridge-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 29130,
+      "pixelsOver8": 9,
+      "percentPixelsOver8": 0.000977,
+      "meanAbsoluteRgbDifference": 0.018664,
+      "maxChannelDifference": 36,
+      "over8BoundingBox": [
+        633,
+        329,
+        658,
+        399
+      ],
+      "evidenceSha256": "d52260f03f96ab9175d23a5ee3cb1d25fe2f9953b8673a031f2d6fb5bca2b28b",
+      "repeatSha256": "b24887abe61fce90ef79863ee4b866aea119cf81edefb134b0df3fa5d601125b"
+    },
+    {
+      "file": "scythopolis-market-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 103782,
+      "pixelsOver8": 60,
+      "percentPixelsOver8": 0.00651,
+      "meanAbsoluteRgbDifference": 0.098313,
+      "maxChannelDifference": 57,
+      "over8BoundingBox": [
+        104,
+        206,
+        1261,
+        661
+      ],
+      "evidenceSha256": "4c5ce3cea46e037d60da2716917a21bfb9d25ea76ca44354af8afd396c3aaab3",
+      "repeatSha256": "d5f0022ac4c3107df5b0aa8efe8d2cda224bb706d134b17319b18b5f1f5cd943"
+    },
+    {
+      "file": "scythopolis-market-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 210,
+      "pixelsOver8": 12,
+      "percentPixelsOver8": 0.001302,
+      "meanAbsoluteRgbDifference": 0.000429,
+      "maxChannelDifference": 32,
+      "over8BoundingBox": [
+        629,
+        319,
+        646,
+        396
+      ],
+      "evidenceSha256": "9cf11672588fe07eb7064d6a24e3735f427690c4041fda9a3cc390005277bc91",
+      "repeatSha256": "4ac923f2fd96637f82a425e242b511d4eed3431fa423bfccc9af21513fd86162"
+    },
+    {
+      "file": "scythopolis-market-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 76,
+      "pixelsOver8": 16,
+      "percentPixelsOver8": 0.001736,
+      "meanAbsoluteRgbDifference": 0.000391,
+      "maxChannelDifference": 60,
+      "over8BoundingBox": [
+        631,
+        329,
+        657,
+        374
+      ],
+      "evidenceSha256": "7e587b2c40efe7377896f5fb3f9bab23b2a16987bb55c135a08bea6e0fa3f727",
+      "repeatSha256": "4715878d0baf465d121ff936b8ac35df1a9b194cbad6c529a5f39a203789031e"
+    },
+    {
+      "file": "scythopolis-market-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 58768,
+      "pixelsOver8": 14,
+      "percentPixelsOver8": 0.001519,
+      "meanAbsoluteRgbDifference": 0.039055,
+      "maxChannelDifference": 45,
+      "over8BoundingBox": [
+        621,
+        329,
+        658,
+        392
+      ],
+      "evidenceSha256": "f07da62f2c83783d6c0adec5333f1ff2b1e872af808b948855a7f2da0bbc57b9",
+      "repeatSha256": "e79ef65f88ce9a1f89744b4bc81140c0af86219208ef3e964780d56f34cfed71"
+    },
+    {
+      "file": "sea-shore-high.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 78402,
+      "pixelsOver8": 100,
+      "percentPixelsOver8": 0.010851,
+      "meanAbsoluteRgbDifference": 0.074851,
+      "maxChannelDifference": 53,
+      "over8BoundingBox": [
+        0,
+        0,
+        917,
+        441
+      ],
+      "evidenceSha256": "1c4e8d65cf03d98a50c8298d74c21ce4451e3ec955c10abb4cd6dfe5dadb0a2a",
+      "repeatSha256": "f15013b082ec4d7c2a128ae3564c3a7079f45bf9440e6c191e60f312d5c06e19"
+    },
+    {
+      "file": "sea-shore-low.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 323,
+      "pixelsOver8": 25,
+      "percentPixelsOver8": 0.002713,
+      "meanAbsoluteRgbDifference": 0.000814,
+      "maxChannelDifference": 30,
+      "over8BoundingBox": [
+        168,
+        28,
+        651,
+        364
+      ],
+      "evidenceSha256": "464982ee375acc935e3a07a8c89accce41a057590a05f09821dcf465eafaf9d6",
+      "repeatSha256": "ce8de9d8ab473d6f6f1f3ee55b9d0c9d800059d1bd568f832d53b9b8321bb616"
+    },
+    {
+      "file": "sea-shore-medium.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 3910,
+      "pixelsOver8": 722,
+      "percentPixelsOver8": 0.078342,
+      "meanAbsoluteRgbDifference": 0.021627,
+      "maxChannelDifference": 109,
+      "over8BoundingBox": [
+        152,
+        0,
+        699,
+        392
+      ],
+      "evidenceSha256": "e6b9e8ca633f84ea71fea3d95bb57feeea5868ca11312317ca9650aa270297e2",
+      "repeatSha256": "c4bc7969f1cf905e80c2f24fb9e1053cfe17ce2e62ee2fd26fed312d5dda794b"
+    },
+    {
+      "file": "sea-shore-ultra.png",
+      "width": 1280,
+      "height": 720,
+      "totalPixels": 921600,
+      "pixelsAnyDifference": 45502,
+      "pixelsOver8": 50,
+      "percentPixelsOver8": 0.005425,
+      "meanAbsoluteRgbDifference": 0.033105,
+      "maxChannelDifference": 62,
+      "over8BoundingBox": [
+        154,
+        0,
+        658,
+        371
+      ],
+      "evidenceSha256": "260deee86a6cceb39c8c35e27bc1e983cd9331d306196b926323b16fcef8350d",
+      "repeatSha256": "b02e95dbb5853ec9ed1c9f90d3c365c2433843b9c8e4e45afd8174fdc7a9ed5c"
+    }
+  ]
+}

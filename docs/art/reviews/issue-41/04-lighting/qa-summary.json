@@ -1,0 +1,63 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "baseCommit": "9887b9425a10a68aee5f8f2529e18b2313484f6c",
+  "checks": {
+    "tests": {
+      "passed": 590,
+      "failed": 0,
+      "suites": 49
+    },
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "buildWarning": "Existing large JavaScript chunks exceed the 500 kB advisory threshold."
+  },
+  "browser": "Codex in-app Chromium 155",
+  "canonicalEvidence": {
+    "beforeFrames": 32,
+    "afterFrames": 32,
+    "repeatedStatesMatched": 32,
+    "timingRowsPerVersion": 8,
+    "cssViewport": [
+      1280,
+      720
+    ],
+    "devicePixelRatio": 1
+  },
+  "readability": {
+    "environmentReadyFrames": 32,
+    "labelAnchorsInsideViewport": 164,
+    "fightPresetsWithSelectedRingAndWarningDisc": 4,
+    "warningSampleAlpha": 0.219,
+    "scope": "Recorded review states and warning phase; bounds do not guarantee unobstructed labels."
+  },
+  "production": {
+    "estimatedTransferredBytes": 7623960,
+    "encodedBytes": 7554960,
+    "responseCount": 230,
+    "headerAllowancePerResponse": 300,
+    "environmentReady": true,
+    "reviewHooksExposed": false,
+    "consoleWarningsAndErrors": 0,
+    "resourceOrigins": "game origin only in recorded main-page and decoder requests"
+  },
+  "independentCodeReview": "No concrete findings on final implementation.",
+  "unchangedContracts": [
+    "src/season/",
+    "save format",
+    "navigation and collision rules"
+  ],
+  "limitations": [
+    "Ordinary-laptop and other GPU checks remain unverified.",
+    "Timing rows are one 10-second sample each after 5 seconds warmup.",
+    "Baseline John/minimap and Potter/HUD overlaps remain.",
+    "Baseline Jordan bridge geometry striping remains; owned by issue 58.",
+    "Reporter must judge visual acceptance, including High/Ultra distinctness."
+  ],
+  "reporterVisualApproval": "pending",
+  "reviewSaveIsolation": {
+    "existingEntries": 2,
+    "exactlyEqualAfterCapturesAndPresetChanges": true,
+    "exactlyEqualAfterReviewReload": true,
+    "record": "storage-isolation.json"
+  }
+}

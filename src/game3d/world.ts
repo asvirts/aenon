@@ -11,6 +11,7 @@ import { anchorHeight, plateKind, subtitleFor } from './nameplates.ts'
 import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 import type { ViewCoverage } from './view.ts'
 import { occlusionGroup, type OcclusionGroup } from './occlusion.ts'
+import { surfaceMaterial, cueMaterial } from './materials.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
 export async function createWorld(scene: Scene, interact: (id: string) => void) {
@@ -21,10 +22,9 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   const labels = new Map<string, HTMLButtonElement>(), telegraphs = new Map<string, AbstractMesh>()
   const labelLayer = document.createElement('div'); labelLayer.className = 'world-labels'; document.body.append(labelLayer)
   const floating: { element: HTMLElement; point: Point; until: number }[] = []
-  const material = (name: string, hex: string, glow = 0) => {
-    const mat = new StandardMaterial(name, scene); mat.diffuseColor = Color3.FromHexString(hex); mat.specularColor = Color3.Black(); mat.emissiveColor = mat.diffuseColor.scale(glow); return mat
-  }
+  const material = (name: string, hex: string, glow = 0) => surfaceMaterial(scene, name, hex, glow)
   const wood = material('olive-wood', '#795331'), stone = material('worked-limestone', '#b9ad8f'), iron = material('hammered-bronze', '#846840'), leaf = material('herb-green', '#56704c'), linen = material('woven-linen', '#c7bda0'), copper = material('exposed-copper', '#a36d44'), flower = material('flax-blossom', '#809caf'), ember = material('hearth-coals', '#df8744', .7)
+  iron.metallic = .55; iron.roughness = .5; copper.metallic = .7; copper.roughness = .4
   const tile = material('regional-terracotta', '#9f6547'), basalt = material('Galilee-basalt', '#5d6258'), indigo = material('regional-indigo-cloth', '#556571'), garden = material('garden-vine', '#59764b')
   const hullMat = material('original-hull-pigments', '#ddcbaa'); hullMat.backFaceCulling = false
   const register = (meshes: AbstractMesh[], id?: string) => {
@@ -133,7 +133,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     const result = await actor(`company-${name}`, `/game-assets/${i === 0 ? 'john' : i % 3 === 0 || i > 12 ? 'merchant' : 'adventurer'}.glb`, { x: 0, z: 0 }, true)
     for (const mat of attireMaterials(result.model.root)) {
       if (/linen|robe|camel hair|shawl|sash|edging|head wrap/i.test(mat.name)) {
-        mat.albedoTexture = null; mat.albedoColor = Color3.FromHexString(companyColors[i]!); mat.roughness = .94
+        mat.albedoTexture = null; mat.albedoColor = Color3.FromHexString(companyColors[i]!).toLinearSpace(); mat.roughness = .94
         if (/fold|edging/i.test(mat.name)) mat.albedoColor.scaleInPlace(.83)
       }
     }
@@ -172,7 +172,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   const episodeCapacity = Math.max(0, ...(gearDefinition.setScenes ?? []).map(item => episodeStanding(item.id).length))
   const episodePeople = await Promise.all(Array.from({ length: episodeCapacity }, async (_, i) => {
     const result = await actor(`episode-extra-${i}`, `/game-assets/${i % 3 === 1 ? 'adventurer' : 'merchant'}.glb`, { x: 0, z: 0 }, true)
-    const color = Color3.FromHexString(['#8d8eae', '#ad9173', '#9b735d', '#7f9381'][i % 4]!)
+    const color = Color3.FromHexString(['#8d8eae', '#ad9173', '#9b735d', '#7f9381'][i % 4]!).toLinearSpace()
     for (const mat of attireMaterials(result.model.root)) if (/linen|robe|shawl|sash|edging|head wrap/i.test(mat.name)) {
       mat.albedoTexture = null; mat.albedoColor = /fold|edging/i.test(mat.name) ? color.scale(.8) : color.clone(); mat.roughness = .94
     }
@@ -212,13 +212,13 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     for (const [i, person] of episodePeople.entries()) showActor(person, Boolean(names[i]))
   }
 
-  function box(parent: TransformNode, name: string, size: [number, number, number], position: [number, number, number], mat: StandardMaterial) {
+  function box(parent: TransformNode, name: string, size: [number, number, number], position: [number, number, number], mat: PBRMaterial) {
     const mesh = MeshBuilder.CreateBox(name, { width: size[0], height: size[1], depth: size[2] }, scene); mesh.parent = parent; mesh.position.set(...position); mesh.material = mat; return mesh
   }
-  function sphere(parent: TransformNode, name: string, diameter: number, position: [number, number, number], mat: StandardMaterial) {
+  function sphere(parent: TransformNode, name: string, diameter: number, position: [number, number, number], mat: PBRMaterial) {
     const mesh = MeshBuilder.CreateIcoSphere(name, { radius: diameter / 2, subdivisions: 1, flat: true }, scene); mesh.parent = parent; mesh.position.set(...position); mesh.material = mat; return mesh
   }
-  function cylinder(parent: TransformNode, name: string, height: number, diameter: number, position: [number, number, number], mat: StandardMaterial) {
+  function cylinder(parent: TransformNode, name: string, height: number, diameter: number, position: [number, number, number], mat: PBRMaterial) {
     const mesh = MeshBuilder.CreateCylinder(name, { height, diameter, tessellation: 8 }, scene); mesh.parent = parent; mesh.position.set(...position); mesh.material = mat; return mesh
   }
   function decorateHouse(root: TransformNode, placeId: string, index: number) {
@@ -268,7 +268,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     const sections = [{ z: -2.05, w: .04, y: .46 }, { z: -1.5, w: .59, y: .31 }, { z: -.65, w: .83, y: .26 }, { z: .65, w: .83, y: .26 }, { z: 1.5, w: .59, y: .31 }, { z: 2.05, w: .04, y: .46 }]
     for (const [j, section] of sections.entries()) for (const [k, factor] of [-1, -.7, .7, 1].entries()) {
       positions.push(section.w * factor, Math.abs(factor) === 1 ? section.y + .22 : -.12, section.z)
-      const c = (j + k) % 2 ? [.42, .29, .17] : [.53, .38, .23]; colors.push(...c, 1)
+      const c = ((j + k) % 2 ? new Color3(.42, .29, .17) : new Color3(.53, .38, .23)).toLinearSpace(); colors.push(c.r, c.g, c.b, 1)
       if (j && k) { const i = j * 4 + k; indices.push(i - 5, i - 4, i, i - 5, i, i - 1) }
     }
     const hull = new Mesh(name, scene), data = new VertexData(), normals: number[] = []; VertexData.ComputeNormals(positions, indices, normals)
@@ -346,7 +346,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     register(root.getChildMeshes(), object.id)
   }
   for (const object of objects) if (!['hostile', 'person'].includes(object.kind) && object.model !== 'tree') makeProp(object)
-  const poolWater = material('original-irrigated-pool-water', '#294e51'); poolWater.specularColor = new Color3(.1, .15, .14); poolWater.specularPower = 38
+  const poolWater = material('original-irrigated-pool-water', '#294e51'); poolWater.roughness = .28
   const poolRipple = material('original-pool-ripple', '#53736e')
   for (const detail of landscapeDetails) {
     const root = new TransformNode(detail.id, scene); setPosition(root, detail); root.rotation.y = detail.rotation ?? 0; root.scaling.setAll(detail.scale ?? 1); scenery.push(root)
@@ -436,6 +436,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   }
   // Every held object is modeled here for this game; no external prop pack is used.
   const polishedBronze = material('weapon-bronze-edge', '#ba9a61'), gripLeather = material('weapon-grip-leather', '#4e3425')
+  polishedBronze.metallic = .7; polishedBronze.roughness = .35
   const emberBronze = material('legendary-ember-bronze', '#d68a40', .22), shieldPaint = material('shield-painted-linen', '#3b625c')
   function palmSocket(name: string, side: 'L' | 'R') {
     const hand = player.asset.transformNodes.find(node => node.name === `Hand.${side}` || node.name.endsWith(`|Hand.${side}`))
@@ -553,15 +554,15 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       const piece = /olive wool trousers/i.test(mat.name) ? legs : /linen/i.test(mat.name) ? body : undefined
       if (!piece || !('armorWeight' in piece)) continue
       const clothColor = piece.band === 'high' ? '#9bb8bc' : piece.band === 'middle' ? '#b6bba1' : '#eee0c2'
-      mat.albedoColor = Color3.FromHexString(piece.armorWeight === 'heavy' ? '#aaa890' : piece.armorWeight === 'medium' ? '#baa58b' : clothColor)
+      mat.albedoColor = Color3.FromHexString(piece.armorWeight === 'heavy' ? '#aaa890' : piece.armorWeight === 'medium' ? '#baa58b' : clothColor).toLinearSpace()
       mat.albedoTexture = piece.armorWeight === 'heavy' ? null : piece.armorWeight === 'medium' ? originalLeather : original.texture
       mat.metallic = piece.armorWeight === 'heavy' ? .6 : 0; mat.roughness = piece.armorWeight === 'heavy' ? .43 : .86
     }
-    function finish(mat: StandardMaterial, piece: typeof body) {
+    function finish(mat: PBRMaterial, piece: typeof body) {
       const weight = piece && 'armorWeight' in piece ? piece.armorWeight : 'cloth'
-      mat.diffuseColor = Color3.FromHexString(weight === 'heavy' ? '#969783' : weight === 'medium' ? '#70513a' : '#b7ad91')
-      mat.specularColor = weight === 'heavy' ? new Color3(.55, .53, .4) : Color3.Black(); mat.specularPower = weight === 'heavy' ? 28 : 8
-      if (piece?.rarity === 'legendary') mat.diffuseColor = Color3.Lerp(mat.diffuseColor, Color3.FromHexString('#b89a59'), .32)
+      mat.albedoColor = Color3.FromHexString(weight === 'heavy' ? '#969783' : weight === 'medium' ? '#70513a' : '#b7ad91').toLinearSpace()
+      mat.metallic = weight === 'heavy' ? .6 : 0; mat.roughness = weight === 'heavy' ? .43 : .86
+      if (piece?.rarity === 'legendary') mat.albedoColor = Color3.Lerp(mat.albedoColor, Color3.FromHexString('#b89a59').toLinearSpace(), .32)
     }
     finish(headMat, head); finish(bodyMat, body); finish(legMat, legs); finish(bootMat, feet)
     headArmor.setEnabled(Boolean(head)); bodyArmor.setEnabled(Boolean(body && 'armorWeight' in body && body.armorWeight !== 'cloth'))
@@ -569,12 +570,12 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     for (const root of footArmor) root.setEnabled(Boolean(feet && feet.id !== 'leather-sandals'))
   }
   const target = MeshBuilder.CreateTorus('selected-target', { diameter: 1.3, thickness: .045, tessellation: 40 }, scene)
-  target.material = material('selection-gold', '#efd18c', .4); target.isPickable = false; target.setEnabled(false)
+  target.material = cueMaterial(scene, 'selection-gold', '#efd18c', 1.2); target.isPickable = false; target.setEnabled(false)
   const destination = MeshBuilder.CreateTorus('destination', { diameter: .48, thickness: .025, tessellation: 32 }, scene)
   destination.material = target.material; destination.isPickable = false; destination.setEnabled(false)
   for (const object of objects.filter(o => o.kind === 'hostile')) {
     const disc = MeshBuilder.CreateCylinder(`danger-${object.id}`, { height: .018, diameter: 2.3, tessellation: 48 }, scene)
-    const mat = material(`danger-red-${object.id}`, '#c54a2e', .65); mat.alpha = .3; disc.material = mat; disc.isPickable = false; disc.setEnabled(false); telegraphs.set(object.id, disc)
+    const mat = cueMaterial(scene, `danger-red-${object.id}`, '#c54a2e', 1.25); mat.alpha = .3; disc.material = mat; disc.isPickable = false; disc.setEnabled(false); telegraphs.set(object.id, disc)
   }
   function float(point: Point, text: string, isPlayer: boolean, time: number) {
     const element = document.createElement('span'); element.className = `world-float${isPlayer ? ' hurt' : ''}`; element.textContent = text; labelLayer.append(element); floating.push({ element, point: { ...point }, until: time + 1.05 })

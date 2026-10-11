@@ -10,8 +10,24 @@ const WORLD_H = 2000
 const RIVER_WEST = 1600
 const RIVER_EAST = 1680
 const MID_X = 1640
-const HUD_TOP = 142
+const HUD_TOP = 116
 const ZOOM = 1.2
+
+/**
+ * Isometric projection (2:1 dimetric). Game logic thinks in logical
+ * top-down coordinates; only rendering converts. Depth sorts by x + y.
+ */
+const ISO_OX = 1600
+const ISO_OY = 0
+const isoX = (x: number, y: number): number => ISO_OX + (x - y) * 0.5
+const isoY = (x: number, y: number): number => ISO_OY + (x + y) * 0.25
+const isoDepth = (x: number, y: number): number => x + y
+const v2 = (x: number, y: number): Phaser.Math.Vector2 => new Phaser.Math.Vector2(x, y)
+function isoInverse(sx: number, sy: number): { x: number; y: number } {
+  const a = (sx - ISO_OX) / 0.5
+  const b = (sy - ISO_OY) / 0.25
+  return { x: (a + b) / 2, y: (b - a) / 2 }
+}
 const SPEED = 240
 const ART_SCALE = 2.5
 
@@ -261,37 +277,6 @@ const ADV_TORSO = [
   ".....OBBBGGGGBBBBBO.....",
 ]
 
-const ADV_STAND = [
-  ...ADV_TORSO,
-  ".....OPPPPPPPPPPPPO.....",
-  ".....OPPQPPPPPPQPPO.....",
-  ".....OPPP......PPPO.....",
-  ".....OFFF......FFFO.....",
-  ".....OFFF......FFFO.....",
-  ".....OOOO......OOOO.....",
-  "........................",
-]
-const ADV_WALK_A = [
-  ...ADV_TORSO,
-  ".....OPPPPPPPPPPPPO.....",
-  ".....OPPQPPPPPPQPPO.....",
-  "....OPPPP......PPPO.....",
-  "....OFFFF......FFFO.....",
-  "....OFFFF......FFFO.....",
-  "....OOOOO......OOOO.....",
-  "........................",
-]
-const ADV_WALK_B = [
-  ...ADV_TORSO,
-  ".....OPPPPPPPPPPPPO.....",
-  ".....OPPQPPPPPPQPPO.....",
-  "......OPPP......PPPPO...",
-  "......OFFF......FFFFO...",
-  "......OFFF......FFFFO...",
-  "......OOOO......OOOOO...",
-  "........................",
-]
-
 const JOHN_PALETTE: Record<string, number> = {
   O: 0x241a10,
   H: 0x3a2a18,
@@ -303,6 +288,7 @@ const JOHN_PALETTE: Record<string, number> = {
   K: 0xa67c4a,
   P: 0xd9c9a8,
   F: 0x6b4a2f,
+  Q: 0xc4b394,
   "|": 0x7a5230,
   "*": 0xf2c14e,
 }
@@ -346,6 +332,7 @@ const MERCHANT_PALETTE: Record<string, number> = {
   L: 0x9a7fd0,
   K: 0x5a3a8a,
   F: 0x5d3f2a,
+  Q: 0xc4b394,
 }
 
 const MERCHANT_ROWS = [
@@ -397,20 +384,6 @@ const WOLF_STAND = [
   "....FF...FF...FF...FF...",
   "....FF...FF...FF...FF...",
   "....DD...DD...DD...DD...",
-  "........................",
-]
-
-const WOLF_TROT = [
-  "........................",
-  "..OOO................TTT",
-  ".OOFFFOO.....KKKKKTTTTTT",
-  ".OFFFFFFOOOKKKKKKKKFTTTT",
-  ".NFAFFFFFOOKKKKKKKKFFTTT",
-  "..OFFFFFFFFFFFFFFFFFFT..",
-  "..ODDFFFFFFFFFFFFFDDDT..",
-  "..FF....FF....FF....FF..",
-  "..FF....FF....FF....FF..",
-  "..DD....DD....DD....DD..",
   "........................",
 ]
 
@@ -642,16 +615,18 @@ const WAVE_ROWS = [
 
 /** A decorative walker: villagers, sheep. Pure ambience, no Season rules. */
 type Wanderer = {
-  sprite: Phaser.GameObjects.Sprite
+  visual: WalkerVisual
   minX: number
   maxX: number
   minY: number
   maxY: number
   target: { x: number; y: number }
   speed: number
-  phase: number
-  frames: [string, string, string, string]
+  cadence: number
   label: Phaser.GameObjects.Text | null
+  graze: boolean
+  grazeUntil: number
+  nextGraze: number
 }
 
 type Butterfly = {
@@ -670,6 +645,7 @@ const SHEEP_PALETTE: Record<string, number> = {
   K: 0xd9cdb2,
   H: 0x4a3a30,
   W: 0xffffff,
+  D: 0xcfc4ae,
 }
 
 const SHEEP_STAND = [
@@ -683,20 +659,6 @@ const SHEEP_STAND = [
   "....OKKKFFFFKKOO....",
   "....OFF..FF..FFO....",
   "....ODD..DD..DDO....",
-  "....................",
-]
-
-const SHEEP_STEP = [
-  "....................",
-  "......OOOOOOOO......",
-  "....OOFFFFFFFFOO....",
-  "...OFFFFFKFFFFFFO...",
-  "..OFFFFKFFFFFHHHHO..",
-  "..OFWFFKFFFFFHHHHO..",
-  "...OFFFFFKFFFFFFO...",
-  "....OKKKFFFFKKOO....",
-  ".....OFF..FF..FFO...",
-  ".....ODD..DD..DDO...",
   "....................",
 ]
 
@@ -869,28 +831,6 @@ const DEAD_ROWS = [
   "......................",
 ]
 
-const CROP_PALETTE: Record<string, number> = {
-  S: 0x6b5335,
-  G: 0x46b464,
-}
-
-const CROP_ROWS = [
-  "................................",
-  ".GG........................GG...",
-  ".GGGG..................GGGGG....",
-  "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-  "...GG..........GG..........GG...",
-  "...GGGG........GGGG........GGGG.",
-  "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-  "......GG..........GG............",
-  "......GGGG........GGGG....GG....",
-  "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-  ".GG........................GG...",
-  ".GGGG..................GGGGG....",
-  "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-  "................................",
-]
-
 const STONE_PALETTE: Record<string, number> = {
   O: 0x2b2d33,
   R: 0x8a8f98,
@@ -914,6 +854,85 @@ const STONE_ROWS = [
   "...OODDDDDO...",
   "....OOOOOO....",
   "..............",
+]
+
+/** Small shared limb maps for the paper-doll rigs. */
+const BIPED_ARM = [
+  "..OO..",
+  ".OTTO.",
+  ".OTTO.",
+  ".OTTO.",
+  ".OKKO.",
+  ".OSSO.",
+  "..OO..",
+]
+
+const BIPED_LEG = [
+  "..OOOO..",
+  "..OPPO..",
+  "..OPPO..",
+  "..OPPO..",
+  "..OFFO..",
+  "..OFFO..",
+  "..OOOO..",
+]
+
+const JOHN_ARM = [
+  "..OO..",
+  ".OCCO.",
+  ".OCCO.",
+  ".OCCO.",
+  ".OKKO.",
+  ".OSSO.",
+  "..OO..",
+]
+
+const MERCHANT_ARM = [
+  "..OO..",
+  ".OPPO.",
+  ".OPPO.",
+  ".OPPO.",
+  ".OKKO.",
+  ".OSSO.",
+  "..OO..",
+]
+
+const STAFF_ROWS = [
+  "OOOO",
+  "O**O",
+  "O**O",
+  "OOOO",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+  ".||.",
+]
+
+const WOLF_LEG = [
+  ".OOOO.",
+  ".OFFO.",
+  ".OFFO.",
+  ".OFFO.",
+  ".ODDO.",
+]
+
+const SHEEP_LEG = [
+  ".OO.",
+  ".OFO.",
+  ".OFO.",
+  ".ODO.",
 ]
 
 const PROPS_PALETTE: Record<string, number> = {
@@ -996,6 +1015,265 @@ const VILLAGER_B_PALETTE: Record<string, number> = {
   K: 0x7a3a24,
 }
 
+/** Paper-doll rigs: separate limbs on sine phases read as real locomotion.
+ *  The root holds logic position/flip/depth; the bob holds visual-only
+ *  offsets (bounce, squash, lunge) so game logic never wobbles. */
+class BipedRig {
+  readonly root: Phaser.GameObjects.Container
+  readonly bob: Phaser.GameObjects.Container
+  private jumper: Phaser.GameObjects.Container
+  private scene: Phaser.Scene
+  private torso: Phaser.GameObjects.Sprite
+  private armL: Phaser.GameObjects.Sprite
+  private armR: Phaser.GameObjects.Sprite
+  private legL: Phaser.GameObjects.Sprite
+  private legR: Phaser.GameObjects.Sprite
+  private phase = 0
+  private blend = 0
+  private scale: number
+  private lx = 0
+  private ly = 0
+  facingLeft = false
+
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    textures: { torso: string; arm: string; leg: string },
+    scale: number,
+  ) {
+    this.scene = scene
+    this.scale = scale
+    this.lx = x
+    this.ly = y
+    this.root = scene.add.container(isoX(x, y), isoY(x, y))
+    this.jumper = scene.add.container(0, 0)
+    this.bob = scene.add.container(0, 0)
+    this.root.add(this.jumper)
+    this.jumper.add(this.bob)
+    this.torso = scene.add.sprite(0, 0, textures.torso)
+    this.armL = scene.add.sprite(-9, 3, textures.arm).setOrigin(0.5, 0.12)
+    this.armR = scene.add.sprite(9, 3, textures.arm).setOrigin(0.5, 0.12)
+    this.legL = scene.add.sprite(-4.5, 9, textures.leg).setOrigin(0.5, 0)
+    this.legR = scene.add.sprite(4.5, 9, textures.leg).setOrigin(0.5, 0)
+    this.bob.add([this.legL, this.legR, this.torso, this.armL, this.armR])
+    this.root.setScale(scale)
+    this.root.setDepth(isoDepth(x, y))
+  }
+
+  get x(): number {
+    return this.lx
+  }
+
+  get y(): number {
+    return this.ly
+  }
+
+  setPosition(x: number, y: number): void {
+    this.lx = x
+    this.ly = y
+    this.root.setPosition(isoX(x, y), isoY(x, y))
+  }
+
+  setDepth(): void {
+    this.root.setDepth(isoDepth(this.lx, this.ly))
+  }
+
+  setFacing(left: boolean): void {
+    this.facingLeft = left
+    this.root.scaleX = left ? -this.scale : this.scale
+  }
+
+  setTint(color: number): void {
+    for (const part of [this.torso, this.armL, this.armR, this.legL, this.legR]) part.setTint(color)
+  }
+
+  clearTint(): void {
+    for (const part of [this.torso, this.armL, this.armR, this.legL, this.legR]) part.clearTint()
+  }
+
+  setAlpha(alpha: number): void {
+    this.root.setAlpha(alpha)
+  }
+
+  setAngle(angle: number): void {
+    this.root.setAngle(angle)
+  }
+
+  /** Advance the gait by the distance just traveled. */
+  step(distance: number, delta: number, cadence = 1): void {
+    this.phase += distance * 0.11 * cadence
+    this.blend += (1 - this.blend) * Math.min(1, delta * 0.008)
+    this.pose()
+  }
+
+  /** Ease back to neutral and breathe. */
+  rest(time: number, delta: number): void {
+    this.blend += (0 - this.blend) * Math.min(1, delta * 0.008)
+    this.pose()
+    this.bob.scaleY = 1 + Math.sin(time * 0.0022) * 0.01
+  }
+
+  private pose(): void {
+    const swing = Math.sin(this.phase) * this.blend
+    this.legL.y = 9 + swing * 2.2
+    this.legR.y = 9 - swing * 2.2
+    this.armL.y = 3 - swing * 2.2
+    this.armR.y = 3 + swing * 2.2
+    this.bob.y = -Math.abs(Math.cos(this.phase)) * 1.6 * this.blend
+    this.bob.scaleY = 1 - 0.03 * Math.abs(swing)
+  }
+
+  /** Quick visual jab that never touches logic position. */
+  lunge(direction: 1 | -1): void {
+    this.scene.tweens.killTweensOf(this.jumper)
+    this.jumper.setPosition(0, 0)
+    this.scene.tweens.add({ targets: this.jumper, x: direction * 13, duration: 85, yoyo: true, ease: "quad.out" })
+  }
+
+  hop(height = 7): void {
+    this.scene.tweens.killTweensOf(this.jumper)
+    this.jumper.setPosition(0, 0)
+    this.scene.tweens.add({ targets: this.jumper, y: -height, duration: 130, yoyo: true, ease: "quad.out" })
+  }
+}
+
+class QuadRig {
+  readonly root: Phaser.GameObjects.Container
+  readonly bob: Phaser.GameObjects.Container
+  private jumper: Phaser.GameObjects.Container
+  private scene: Phaser.Scene
+  private body: Phaser.GameObjects.Sprite
+  private legs: Phaser.GameObjects.Sprite[] = []
+  private phase = Math.random() * 6
+  private blend = 0
+  private pitch = 0
+  private pitchTarget = 0
+  private stride: number
+  private lx = 0
+  private ly = 0
+  facingLeft = true
+
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    textures: { body: string; leg: string },
+    scale: number,
+    legXs: [number, number, number, number],
+    legY: number,
+    stride: number,
+  ) {
+    this.scene = scene
+    this.stride = stride
+    this.lx = x
+    this.ly = y
+    this.root = scene.add.container(isoX(x, y), isoY(x, y))
+    this.jumper = scene.add.container(0, 0)
+    this.bob = scene.add.container(0, 0)
+    this.root.add(this.jumper)
+    this.jumper.add(this.bob)
+    this.body = scene.add.sprite(0, 0, textures.body)
+    this.bob.add(this.body)
+    for (const lx of legXs) {
+      const leg = scene.add.sprite(lx, legY, textures.leg).setOrigin(0.5, 0.1)
+      this.legs.push(leg)
+      this.bob.add(leg)
+    }
+    this.root.setScale(scale)
+    this.root.setDepth(isoDepth(x, y))
+    this.setFacing(true)
+  }
+
+  get x(): number {
+    return this.lx
+  }
+
+  get y(): number {
+    return this.ly
+  }
+
+  setPosition(x: number, y: number): void {
+    this.lx = x
+    this.ly = y
+    this.root.setPosition(isoX(x, y), isoY(x, y))
+  }
+
+  setDepth(): void {
+    this.root.setDepth(isoDepth(this.lx, this.ly))
+  }
+
+  setFacing(left: boolean): void {
+    this.facingLeft = left
+    const s = Math.abs(this.root.scaleX) || 1
+    this.root.scaleX = left ? s : -s
+  }
+
+  setBodyTexture(key: string): void {
+    this.body.setTexture(key)
+  }
+
+  setTint(color: number): void {
+    this.body.setTint(color)
+    for (const leg of this.legs) leg.setTint(color)
+  }
+
+  clearTint(): void {
+    this.body.clearTint()
+    for (const leg of this.legs) leg.clearTint()
+  }
+
+  setAlpha(alpha: number): void {
+    this.root.setAlpha(alpha)
+  }
+
+  setAngle(angle: number): void {
+    this.root.setAngle(angle)
+  }
+
+  setPitch(pitch: number): void {
+    this.pitchTarget = pitch
+  }
+
+  step(distance: number, delta: number, cadence = 1): void {
+    this.phase += distance * 0.09 * cadence
+    this.blend += (1 - this.blend) * Math.min(1, delta * 0.008)
+    this.pose(delta)
+  }
+
+  rest(time: number, delta: number): void {
+    this.blend += (0 - this.blend) * Math.min(1, delta * 0.008)
+    this.pose(delta)
+    this.body.rotation = this.pitch + Math.sin(time * 0.0018) * 0.02
+  }
+
+  private pose(delta: number): void {
+    const swing = Math.sin(this.phase) * this.blend
+    this.legs[0].rotation = swing * this.stride
+    this.legs[3].rotation = swing * this.stride
+    this.legs[1].rotation = -swing * this.stride
+    this.legs[2].rotation = -swing * this.stride
+    this.pitch += (this.pitchTarget - this.pitch) * Math.min(1, delta * 0.006)
+    this.body.rotation = 0.05 * swing + this.pitch
+    this.bob.y = -Math.abs(Math.cos(this.phase)) * 1.1 * this.blend
+  }
+
+  hop(height = 8): void {
+    this.scene.tweens.killTweensOf(this.jumper)
+    this.jumper.setPosition(0, 0)
+    this.scene.tweens.add({ targets: this.jumper, y: -height, duration: 140, yoyo: true, ease: "quad.out" })
+  }
+}
+
+/** Minimal walker surface so bipeds and quads share wander logic. */
+type WalkerVisual = {
+  readonly root: Phaser.GameObjects.Container
+  setFacing(left: boolean): void
+  step(distance: number, delta: number, cadence?: number): void
+  rest(time: number, delta: number): void
+  setDepth(): void
+}
+
 /** Screen-fixed interface: HUD, banners, minimap, vignette.
  *  Lives in its own scene so camera zoom and scroll never touch it. */
 class UIScene extends Phaser.Scene {
@@ -1027,23 +1305,15 @@ class UIScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.add.rectangle(8, 8, 776, 134, 0x000000).setOrigin(0, 0).setFillStyle(0x101820, 1).setDepth(19)
+    this.add.rectangle(8, 8, 776, 100, 0x000000).setOrigin(0, 0).setFillStyle(0x101820, 1).setDepth(19)
     this.hud = this.add
       .text(16, 12, "", { color: "#ffffff", fontSize: "14px", lineSpacing: 4 })
       .setDepth(20)
-    this.add
-      .text(
-        16,
-        120,
-        "G gather · F face wolf · SPACE swing · H hunt · R read reeds · J look John · T speak John · B buy rope",
-        { color: "#9fb4c7", fontSize: "13px" },
-      )
-      .setDepth(20)
     this.message = this.add
-      .text(16, 560, "", { color: "#ffe9a8", fontSize: "14px" })
+      .text(16, 500, "", { color: "#ffe9a8", fontSize: "14px" })
       .setDepth(20)
     this.add
-      .rectangle(8, 552, 660, 34, 0x000000)
+      .rectangle(8, 492, 660, 34, 0x000000)
       .setOrigin(0, 0)
       .setFillStyle(0x101820, 1)
       .setDepth(19)
@@ -1159,14 +1429,14 @@ class UIScene extends Phaser.Scene {
 
 class AenonScene extends Phaser.Scene {
   private season!: Season
-  player!: Phaser.GameObjects.Sprite
+  player!: BipedRig
   private playerShadow!: Phaser.GameObjects.Image
-  wolf!: Phaser.GameObjects.Sprite
+  wolf!: QuadRig
   private wolfShadow!: Phaser.GameObjects.Image
   private wolfCry!: Phaser.GameObjects.Text
   private wolfTag!: Phaser.GameObjects.Text
-  private john!: Phaser.GameObjects.Sprite
-  private merchant!: Phaser.GameObjects.Sprite
+  private john!: BipedRig
+  private merchant!: BipedRig
   private reeds!: Phaser.GameObjects.Sprite
   private fire!: Phaser.GameObjects.Sprite
   private fireGlow!: Phaser.GameObjects.Image
@@ -1178,13 +1448,16 @@ class AenonScene extends Phaser.Scene {
   private butterflies: Butterfly[] = []
   private fishes: Phaser.GameObjects.Sprite[] = []
   private birds: Array<{ sprite: Phaser.GameObjects.Sprite; phase: number }> = []
+  private leafBurst!: Phaser.GameObjects.Particles.ParticleEmitter
+  private emberBurst!: Phaser.GameObjects.Particles.ParticleEmitter
+  private glintBurst!: Phaser.GameObjects.Particles.ParticleEmitter
   private ui!: UIScene
   private target: { x: number; y: number } | null = null
   private keys!: Record<string, Phaser.Input.Keyboard.Key>
   messageLine = ""
   private hereId = "aenon"
-  private walkPhase = 0
-  private wolfPhase = 0
+  private velX = 0
+  private velY = 0
   private wolfTarget: { x: number; y: number } | null = null
   private wolfHoldUntil = 0
   private wolfFallen = false
@@ -1211,18 +1484,11 @@ class AenonScene extends Phaser.Scene {
     this.createArt()
 
     // World: Aenon settlement (west of the river) and the Jordan
-    // wilderness (east). Tiled textures cover each region; the camera
-    // follows the Adventurer and the HUD stays fixed to the viewport.
-    this.add.rectangle(WORLD_W / 2, WORLD_H / 2, WORLD_W + 120, WORLD_H + 120, 0x1d3a24).setOrigin(0.5)
-    this.add.tileSprite(RIVER_WEST / 2, WORLD_H / 2, RIVER_WEST, WORLD_H, "tile-a").setDepth(0)
-    this.add.tileSprite((RIVER_WEST + WORLD_W) / 2, WORLD_H / 2, WORLD_W - RIVER_WEST, WORLD_H, "tile-b").setDepth(0)
-    this.add.rectangle(RIVER_WEST / 2, WORLD_H / 2, RIVER_WEST, WORLD_H).setStrokeStyle(3, 0x5d4c33).setFillStyle(0x000000, 0)
-    this.add
-      .rectangle((RIVER_WEST + WORLD_W) / 2, WORLD_H / 2, WORLD_W - RIVER_WEST, WORLD_H)
-      .setStrokeStyle(3, 0x18293a)
-      .setFillStyle(0x000000, 0)
-    this.add.text(80, 250, "Aenon — settlement", { color: "#f5eeda" }).setDepth(20)
-    this.add.text(1760, 250, "The Jordan — wilderness", { color: "#dceef5" }).setDepth(20)
+    // wilderness (east). One baked diamond floor; the camera follows the
+    // Adventurer and the HUD lives in the overlay scene.
+    this.add.rectangle(1600, 650, 3440, 1540, 0x1d3a24).setOrigin(0.5).setDepth(-200)
+    this.add.text(isoX(80, 250), isoY(80, 250), "Aenon — settlement", { color: "#f5eeda" }).setDepth(6000)
+    this.add.text(isoX(1760, 250), isoY(1760, 250), "The Jordan — wilderness", { color: "#dceef5" }).setDepth(6000)
 
     this.buildAenonDressing()
     this.buildJordanDressing()
@@ -1255,10 +1521,25 @@ class AenonScene extends Phaser.Scene {
     this.reeds.setDepth(this.reeds.y)
 
     // John + staff east of the plaza, on the trail to the river.
-    this.john = this.add.sprite(1050, 700, "john").setScale(ART_SCALE)
-    this.john.setDepth(this.john.y)
-    this.merchant = this.add.sprite(420, 1270, "merchant").setScale(ART_SCALE)
-    this.merchant.setDepth(this.merchant.y)
+    this.john = new BipedRig(
+      this,
+      1050,
+      700,
+      { torso: "rig-john-t", arm: "rig-john-arm", leg: "rig-john-leg" },
+      ART_SCALE,
+    )
+    this.john.setDepth()
+    const staff = this.add.sprite(15, 8, "john-staff").setOrigin(0.5, 0.9)
+    this.john.bob.add(staff)
+    this.tweens.add({ targets: staff, rotation: 0.05, duration: 1600, yoyo: true, repeat: -1, ease: "sine.inout" })
+    this.merchant = new BipedRig(
+      this,
+      420,
+      1270,
+      { torso: "rig-mer-t", arm: "rig-mer-arm", leg: "rig-mer-leg" },
+      ART_SCALE,
+    )
+    this.merchant.setDepth()
     this.add.image(1050, 730, "shadow").setDepth(2).setAlpha(0.6)
     this.add.image(420, 1300, "shadow").setDepth(2).setAlpha(0.6)
 
@@ -1287,8 +1568,17 @@ class AenonScene extends Phaser.Scene {
     })
 
     // Wolf roams the deep wilderness, far east of the river.
-    this.wolf = this.add.sprite(2300, 1050, "wolf-0").setScale(ART_SCALE)
-    this.wolf.setDepth(this.wolf.y)
+    this.wolf = new QuadRig(
+      this,
+      2300,
+      1050,
+      { body: "rig-wolf-b", leg: "rig-wolf-leg" },
+      ART_SCALE,
+      [-6, -4, 5, 7],
+      2.5,
+      0.5,
+    )
+    this.wolf.setDepth()
     this.wolfCry = this.add
       .text(0, 0, "!", { color: "#ffd94e", fontSize: "24px", fontStyle: "bold" })
       .setVisible(false)
@@ -1301,19 +1591,19 @@ class AenonScene extends Phaser.Scene {
         padding: { x: 4, y: 2 },
       })
       .setOrigin(0.5)
-      .setDepth(20)
+      .setDepth(6000)
 
     // Soft shadows follow the walkers.
-    this.playerShadow = this.add.image(0, 0, "shadow").setDepth(2).setAlpha(0.8)
-    this.wolfShadow = this.add.image(this.wolf.x, this.wolf.y + 20, "shadow").setDepth(2).setAlpha(0.8)
-    this.wolfTag.setPosition(this.wolf.x, this.wolf.y - 42)
+    this.playerShadow = this.add.image(0, 0, "shadow").setDepth(-10).setAlpha(0.8)
+    this.wolfShadow = this.add.image(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 20, "shadow").setDepth(-10).setAlpha(0.8)
+    this.wolfTag.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) - 42)
 
     // Floating name tags keep the scene readable.
     const tag = (x: number, y: number, label: string): void => {
       this.add
-        .text(x, y, label, { color: "#fff8e6", fontSize: "11px", backgroundColor: "#00000066", padding: { x: 4, y: 2 } })
+        .text(isoX(x, y), isoY(x, y), label, { color: "#fff8e6", fontSize: "11px", backgroundColor: "#00000066", padding: { x: 4, y: 2 } })
         .setOrigin(0.5)
-        .setDepth(20)
+        .setDepth(6000)
     }
     tag(330, 448, "timber-stand")
     tag(1470, 912, "reeds · read")
@@ -1325,24 +1615,75 @@ class AenonScene extends Phaser.Scene {
     tag(1150, 1298, "sheep pen")
 
     const start = this.hereId === "jordan" ? { x: 2200, y: 1050 } : { x: 650, y: 1050 }
-    this.player = this.add.sprite(start.x, start.y, "adventurer-0").setScale(ART_SCALE)
-    this.player.setDepth(start.y)
-    this.playerShadow.setPosition(start.x, start.y + 32)
+    this.player = new BipedRig(
+      this,
+      start.x,
+      start.y,
+      { torso: "rig-adv-t", arm: "rig-adv-arm", leg: "rig-adv-leg" },
+      ART_SCALE,
+    )
+    this.player.setDepth()
+    this.playerShadow.setPosition(isoX(start.x, start.y), isoY(start.x, start.y) + 32)
 
-    // The camera follows the Adventurer; the viewport sees one portion.
+    // The camera follows the Adventurer through projected space.
     const camera = this.cameras.main
-    camera.setBounds(0, 0, WORLD_W, WORLD_H)
+    camera.setBounds(0, 0, WORLD_W, 1340)
     camera.setZoom(ZOOM)
-    camera.centerOn(start.x, start.y)
-    camera.startFollow(this.player, false, 0.12, 0.12)
+    camera.centerOn(isoX(start.x, start.y), isoY(start.x, start.y))
+    camera.startFollow(this.player.root, false, 0.12, 0.12)
 
     // Slash + sparkle effects, hidden until an action fires them.
-    this.slash = this.add.image(start.x, start.y, "slash").setVisible(false).setDepth(40).setScale(1.6)
-    this.sparkle = this.add.image(1470, 934, "sparkle").setVisible(false).setDepth(40).setScale(2)
+    this.slash = this.add.image(isoX(start.x, start.y), isoY(start.x, start.y), "slash").setVisible(false).setDepth(7000).setScale(1.6)
+    this.sparkle = this.add.image(isoX(1470, 934), isoY(1470, 934), "sparkle").setVisible(false).setDepth(7000).setScale(2)
+
+    // Particle bursts: leaves, embers, glints. Plus ambient fire embers.
+    this.leafBurst = this.add.particles(0, 0, "tuft", {
+      speed: { min: 40, max: 130 },
+      lifespan: { min: 350, max: 700 },
+      scale: { min: 0.7, max: 1.3 },
+      alpha: { start: 1, end: 0 },
+      gravityY: 170,
+      frequency: -1,
+    })
+    this.leafBurst.setDepth(7000)
+    this.emberBurst = this.add.particles(0, 0, "mote", {
+      speed: { min: 30, max: 110 },
+      lifespan: { min: 400, max: 900 },
+      scale: { min: 0.8, max: 1.6 },
+      alpha: { start: 1, end: 0 },
+      gravityY: -60,
+      frequency: -1,
+      tint: 0xe08a3c,
+    })
+    this.emberBurst.setDepth(7000)
+    this.glintBurst = this.add.particles(0, 0, "sparkle", {
+      speed: { min: 30, max: 100 },
+      lifespan: { min: 400, max: 800 },
+      scale: { min: 0.5, max: 1 },
+      alpha: { start: 1, end: 0 },
+      gravityY: 40,
+      frequency: -1,
+    })
+    this.glintBurst.setDepth(7000)
+    const embers = this.add.particles(isoX(852, 1462), isoY(852, 1462), "mote", {
+      speedX: { min: -10, max: 10 },
+      speedY: { min: -46, max: -14 },
+      lifespan: 1500,
+      frequency: 280,
+      scale: { min: 0.5, max: 1 },
+      alpha: { start: 0.9, end: 0 },
+      tint: 0xe08a3c,
+    })
+    embers.setDepth(7000)
 
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       // Screen-space gate keeps HUD clicks from moving the Adventurer.
-      if (pointer.y > HUD_TOP) this.target = { x: pointer.worldX, y: pointer.worldY }
+      // Unproject through the camera into logical world coordinates.
+      if (pointer.y > HUD_TOP) {
+        const camera = this.cameras.main
+        const goal = isoInverse(camera.scrollX + pointer.x / camera.zoom, camera.scrollY + pointer.y / camera.zoom)
+        this.target = { x: goal.x, y: goal.y }
+      }
     })
 
     const keyboard = this.input.keyboard
@@ -1360,17 +1701,7 @@ class AenonScene extends Phaser.Scene {
       keyboard.on("keydown-B", () => this.doBuyRope())
     }
 
-    // Gentle idle bob for the settlement figures.
-    this.tweens.add({ targets: this.john, y: this.john.y - 2, duration: 1200, yoyo: true, repeat: -1, ease: "sine.inout" })
-    this.tweens.add({
-      targets: this.merchant,
-      y: this.merchant.y - 2,
-      duration: 1500,
-      yoyo: true,
-      repeat: -1,
-      ease: "sine.inout",
-      delay: 400,
-    })
+    // The rigs breathe on their own; no positioned tweens needed here.
 
     this.time.addEvent({
       delay: 5000,
@@ -1393,13 +1724,6 @@ class AenonScene extends Phaser.Scene {
   }
 
   private createArt(): void {
-    pixelTexture(this, "adventurer-0", ADV_STAND, ADV_PALETTE)
-    pixelTexture(this, "adventurer-1", ADV_WALK_A, ADV_PALETTE)
-    pixelTexture(this, "adventurer-2", ADV_WALK_B, ADV_PALETTE)
-    pixelTexture(this, "john", JOHN_ROWS, JOHN_PALETTE)
-    pixelTexture(this, "merchant", MERCHANT_ROWS, MERCHANT_PALETTE)
-    pixelTexture(this, "wolf-0", WOLF_STAND, WOLF_PALETTE)
-    pixelTexture(this, "wolf-1", WOLF_TROT, WOLF_PALETTE)
     pixelTexture(this, "tree-a", TREE_A, TREE_PALETTE)
     pixelTexture(this, "tree-b", TREE_B, TREE_PALETTE)
     pixelTexture(this, "reeds", REEDS_ROWS, { C: 0xe8d9a0, G: 0x3fae5f, D: 0x257a48 })
@@ -1414,9 +1738,6 @@ class AenonScene extends Phaser.Scene {
     pixelTexture(this, "flower-r", FLOWER_R, PROP_PALETTE)
     pixelTexture(this, "flower-y", FLOWER_Y, PROP_PALETTE)
     pixelTexture(this, "wave", WAVE_ROWS, { L: 0x7fb8d4 })
-    pixelTexture(this, "sheep-0", SHEEP_STAND, SHEEP_PALETTE)
-    pixelTexture(this, "sheep-1", SHEEP_STEP, SHEEP_PALETTE)
-    pixelTexture(this, "sheep-2", SHEEP_STAND, SHEEP_PALETTE)
     pixelTexture(this, "bird-0", BIRD_ROWS_A, { W: 0x3a3d45 })
     pixelTexture(this, "bird-1", BIRD_ROWS_B, { W: 0x3a3d45 })
     pixelTexture(this, "bfly-0", BUTTERFLY_A, { O: 0xe08a3c, B: 0x2b2018 })
@@ -1426,22 +1747,32 @@ class AenonScene extends Phaser.Scene {
     pixelTexture(this, "stall", STALL_ROWS, STALL_PALETTE)
     pixelTexture(this, "palm", PALM_ROWS, PALM_PALETTE)
     pixelTexture(this, "deadtree", DEAD_ROWS, DEAD_PALETTE)
-    pixelTexture(this, "crop", CROP_ROWS, CROP_PALETTE)
     pixelTexture(this, "stone", STONE_ROWS, STONE_PALETTE)
     pixelTexture(this, "barrel", BARREL_ROWS, PROPS_PALETTE)
     pixelTexture(this, "crate", CRATE_ROWS, PROPS_PALETTE)
     pixelTexture(this, "lamp", LAMP_ROWS, PROPS_PALETTE)
     pixelTexture(this, "sign", SIGN_ROWS, PROPS_PALETTE)
-    for (const [key, rows, palette] of [
-      ["vil-a-0", ADV_STAND, VILLAGER_A_PALETTE],
-      ["vil-a-1", ADV_WALK_A, VILLAGER_A_PALETTE],
-      ["vil-a-2", ADV_WALK_B, VILLAGER_A_PALETTE],
-      ["vil-b-0", ADV_STAND, VILLAGER_B_PALETTE],
-      ["vil-b-1", ADV_WALK_A, VILLAGER_B_PALETTE],
-      ["vil-b-2", ADV_WALK_B, VILLAGER_B_PALETTE],
-    ] as Array<[string, string[], Record<string, number>]>) {
-      pixelTexture(this, key, rows, palette)
-    }
+    // Paper-doll rig parts. Torsos reuse the head/torso rows of each cast map.
+    pixelTexture(this, "rig-adv-t", ADV_TORSO, ADV_PALETTE)
+    pixelTexture(this, "rig-adv-arm", BIPED_ARM, ADV_PALETTE)
+    pixelTexture(this, "rig-adv-leg", BIPED_LEG, ADV_PALETTE)
+    pixelTexture(this, "rig-vila-t", ADV_TORSO, VILLAGER_A_PALETTE)
+    pixelTexture(this, "rig-vila-arm", BIPED_ARM, VILLAGER_A_PALETTE)
+    pixelTexture(this, "rig-vila-leg", BIPED_LEG, VILLAGER_A_PALETTE)
+    pixelTexture(this, "rig-vilb-t", ADV_TORSO, VILLAGER_B_PALETTE)
+    pixelTexture(this, "rig-vilb-arm", BIPED_ARM, VILLAGER_B_PALETTE)
+    pixelTexture(this, "rig-vilb-leg", BIPED_LEG, VILLAGER_B_PALETTE)
+    pixelTexture(this, "rig-john-t", JOHN_ROWS.slice(0, 20), JOHN_PALETTE)
+    pixelTexture(this, "rig-john-arm", JOHN_ARM, JOHN_PALETTE)
+    pixelTexture(this, "rig-john-leg", BIPED_LEG, JOHN_PALETTE)
+    pixelTexture(this, "john-staff", STAFF_ROWS, JOHN_PALETTE)
+    pixelTexture(this, "rig-mer-t", MERCHANT_ROWS.slice(0, 19), MERCHANT_PALETTE)
+    pixelTexture(this, "rig-mer-arm", MERCHANT_ARM, MERCHANT_PALETTE)
+    pixelTexture(this, "rig-mer-leg", BIPED_LEG, MERCHANT_PALETTE)
+    pixelTexture(this, "rig-wolf-b", WOLF_STAND.slice(0, 7), WOLF_PALETTE)
+    pixelTexture(this, "rig-wolf-leg", WOLF_LEG, WOLF_PALETTE)
+    pixelTexture(this, "rig-sheep-b", SHEEP_STAND.slice(0, 8), SHEEP_PALETTE)
+    pixelTexture(this, "rig-sheep-leg", SHEEP_LEG, SHEEP_PALETTE)
 
     // Soft drifting cloud-shade blob.
     if (!this.textures.exists("shadeblob")) {
@@ -1522,18 +1853,45 @@ class AenonScene extends Phaser.Scene {
       mote.destroy()
     }
 
-    this.makeTile("tile-a", 0x8a734f, 0x6f5a3c, 0xa89064, 7)
-    this.makeTile("tile-b", 0x274156, 0x1b2f42, 0x33566e, 13)
+    this.bakeGround()
   }
 
   /** Villagers, sheep, fish, butterflies, clouds, and birds. */
   private buildAmbience(): void {
-    // Villagers stroll the plaza and the market. Sheep pace the pen.
-    this.addWanderer(800, 950, 650, 950, 850, 1100, "vil-a", 34, "villager")
-    this.addWanderer(420, 1300, 280, 560, 1220, 1400, "vil-b", 34, "villager")
-    this.addWanderer(1130, 1340, 1090, 1210, 1310, 1390, "sheep", 20, null)
-    this.addWanderer(1170, 1360, 1090, 1210, 1310, 1390, "sheep", 20, null)
-    this.addWanderer(1150, 1320, 1090, 1210, 1310, 1390, "sheep", 20, null)
+    // Villagers stroll the plaza and the market. Sheep pace the pen and graze.
+    const vilA = new BipedRig(
+      this,
+      800,
+      950,
+      { torso: "rig-vila-t", arm: "rig-vila-arm", leg: "rig-vila-leg" },
+      ART_SCALE,
+    )
+    this.addWanderer(vilA, 650, 950, 850, 1100, 34, 2.5, "villager", false)
+    const vilB = new BipedRig(
+      this,
+      420,
+      1300,
+      { torso: "rig-vilb-t", arm: "rig-vilb-arm", leg: "rig-vilb-leg" },
+      ART_SCALE,
+    )
+    this.addWanderer(vilB, 280, 560, 1220, 1400, 34, 2.5, "villager", false)
+    for (const [x, y] of [
+      [1130, 1340],
+      [1170, 1360],
+      [1150, 1320],
+    ] as Array<[number, number]>) {
+      const sheep = new QuadRig(
+        this,
+        x,
+        y,
+        { body: "rig-sheep-b", leg: "rig-sheep-leg" },
+        ART_SCALE,
+        [-3.5, -1.5, 1.5, 3.5],
+        3,
+        0.3,
+      )
+      this.addWanderer(sheep, 1090, 1210, 1310, 1390, 20, 3, null, true)
+    }
 
     // Fish work the river channel.
     for (const [x, y] of [
@@ -1542,11 +1900,11 @@ class AenonScene extends Phaser.Scene {
       [1660, 1400],
       [1630, 1700],
     ] as Array<[number, number]>) {
-      const fish = this.add.sprite(x, y, "fish").setScale(2).setDepth(3).setAlpha(0.85)
+      const fish = this.add.sprite(isoX(x, y), isoY(x, y), "fish").setScale(2).setDepth(3).setAlpha(0.85)
       this.fishes.push(fish)
       this.tweens.add({
         targets: fish,
-        y: y + 90,
+        y: fish.y + 90,
         duration: 4200,
         yoyo: true,
         repeat: -1,
@@ -1564,7 +1922,7 @@ class AenonScene extends Phaser.Scene {
       [1300, 1500],
     ]
     for (const [index, [cx, cy]] of butterflySpots.entries()) {
-      const sprite = this.add.sprite(cx, cy, "bfly-0").setScale(2).setDepth(12)
+      const sprite = this.add.sprite(isoX(cx, cy), isoY(cx, cy), "bfly-0").setScale(2).setDepth(isoDepth(cx, cy))
       this.butterflies.push({ sprite, cx, cy, rx: 70, ry: 45, speed: 0.0011 + index * 0.0002, phase: index * 1.7 })
     }
 
@@ -1593,24 +1951,19 @@ class AenonScene extends Phaser.Scene {
   }
 
   private addWanderer(
-    x: number,
-    y: number,
+    visual: WalkerVisual,
     minX: number,
     maxX: number,
     minY: number,
     maxY: number,
-    prefix: string,
     speed: number,
+    cadence: number,
     label: string | null,
+    graze: boolean,
   ): void {
-    const sprite = this.add.sprite(x, y, `${prefix}-0`).setScale(ART_SCALE).setDepth(y)
-    const frames: [string, string, string, string] = [`${prefix}-0`, `${prefix}-1`, `${prefix}-0`, `${prefix}-2`]
-    for (const frame of frames) {
-      if (!this.textures.exists(frame)) console.warn(`[aenon] missing wander frame: ${frame}`)
-    }
     const tag = label
       ? this.add
-          .text(x, y - 42, label, {
+          .text(visual.root.x, visual.root.y - 42, label, {
             color: "#fff8e6",
             fontSize: "11px",
             backgroundColor: "#00000066",
@@ -1620,16 +1973,18 @@ class AenonScene extends Phaser.Scene {
           .setDepth(20)
       : null
     this.wanderers.push({
-      sprite,
+      visual,
       minX,
       maxX,
       minY,
       maxY,
-      target: { x, y },
+      target: { x: visual.root.x, y: visual.root.y },
       speed,
-      phase: Math.random() * 10,
-      frames: [`${prefix}-0`, `${prefix}-1`, `${prefix}-0`, `${prefix}-2`],
+      cadence,
       label: tag,
+      graze,
+      grazeUntil: 0,
+      nextGraze: this.time.now + 2000 + Math.random() * 4000,
     })
   }
 
@@ -1668,37 +2023,46 @@ class AenonScene extends Phaser.Scene {
     return "Train skills, work the land, and return to John"
   }
 
-  private updateWanderers(delta: number): void {
+  private updateWanderers(time: number, delta: number): void {
     for (const walker of this.wanderers) {
-      const dx = walker.target.x - walker.sprite.x
-      const dy = walker.target.y - walker.sprite.y
+      const pos = walker.visual.root
+      const dx = walker.target.x - pos.x
+      const dy = walker.target.y - pos.y
       const distance = Math.hypot(dx, dy)
-      if (distance < 6) {
+      if (distance < 8) {
         walker.target = {
           x: Phaser.Math.Between(walker.minX, walker.maxX),
           y: Phaser.Math.Between(walker.minY, walker.maxY),
         }
-        walker.sprite.setTexture(walker.frames[0])
-        continue
+        walker.visual.rest(time, delta)
+      } else {
+        const step = (walker.speed * delta) / 1000
+        const moveX = (dx / distance) * Math.min(step, distance)
+        const moveY = (dy / distance) * Math.min(step, distance)
+        pos.x += moveX
+        pos.y += moveY
+        if (Math.abs(dx) > 4) walker.visual.setFacing(dx < 0)
+        walker.visual.step(Math.hypot(moveX, moveY), delta, walker.cadence)
       }
-      const step = (walker.speed * delta) / 1000
-      walker.sprite.x += (dx / distance) * step
-      walker.sprite.y += (dy / distance) * step
-      walker.sprite.setFlipX(dx < 0)
-      walker.phase += delta * 0.011
-      const frames = walker.frames
-      walker.sprite.setTexture(frames[Math.floor(walker.phase) % frames.length])
-      walker.sprite.setDepth(walker.sprite.y)
-      if (walker.label) walker.label.setPosition(walker.sprite.x, walker.sprite.y - 42)
+      walker.visual.setDepth()
+      if (walker.label) walker.label.setPosition(isoX(pos.x, pos.y), isoY(pos.x, pos.y) - 42)
+      if (walker.graze && walker.visual instanceof QuadRig) {
+        if (time > walker.nextGraze) {
+          walker.grazeUntil = time + 2600
+          walker.nextGraze = time + 5200 + Math.random() * 3000
+        }
+        walker.visual.setPitch(time < walker.grazeUntil ? 0.3 : 0)
+      }
     }
   }
 
   private updateButterflies(time: number): void {
     for (const fly of this.butterflies) {
       const t = time * fly.speed + fly.phase
-      fly.sprite.setPosition(fly.cx + Math.cos(t) * fly.rx, fly.cy + Math.sin(t * 1.4) * fly.ry)
+      const x = fly.cx + Math.cos(t) * fly.rx
+      const y = fly.cy + Math.sin(t * 1.4) * fly.ry
+      fly.sprite.setPosition(isoX(x, y), isoY(x, y))
       fly.sprite.setTexture(Math.floor(time / 260 + fly.phase) % 2 === 0 ? "bfly-0" : "bfly-1")
-      fly.sprite.setDepth(fly.sprite.y)
     }
   }
 
@@ -1711,87 +2075,140 @@ class AenonScene extends Phaser.Scene {
     }
   }
 
-  /** Small speckled tile with soft tonal patches, repeated by TileSprites. */
-  private makeTile(key: string, base: number, dark: number, light: number, seed: number): void {
-    if (this.textures.exists(key)) return
+  /** Bakes the whole world floor once: diamond tiles, river, trails, plaza,
+   *  pools. One static quad instead of thousands of objects. */
+  private bakeGround(): void {
     const graphics = this.make.graphics({ x: 0, y: 0 })
-    graphics.fillStyle(base, 1)
-    graphics.fillRect(0, 0, 256, 256)
-    const random = mulberry32(seed)
-    // Broad tonal patches first (kept off the edges so tiling stays seamless).
-    for (let i = 0; i < 12; i += 1) {
-      const color = random() < 0.5 ? dark : light
-      graphics.fillStyle(color, 0.22)
-      graphics.fillEllipse(40 + random() * 176, 40 + random() * 176, 24 + random() * 44, 18 + random() * 32)
+    const random = mulberry32(7)
+    const shadesA = [0x8a734f, 0x877350, 0x8d7752, 0x847052]
+    const shadesB = [0x274156, 0x294659, 0x253e50, 0x2b4a60]
+    // Diamond field, one diamond per 48px logical cell.
+    for (let gx = 0; gx < 67; gx += 1) {
+      for (let gy = 0; gy < 42; gy += 1) {
+        const cx = isoX(gx * 48 + 24, gy * 48 + 24)
+        const cy = isoY(gx * 48 + 24, gy * 48 + 24)
+        const west = gx * 48 + 24 < RIVER_WEST
+        const shades = west ? shadesA : shadesB
+        graphics.fillStyle(shades[Math.floor(random() * shades.length)], 1)
+        graphics.fillPoints([v2(cx, cy - 12), v2(cx + 24, cy), v2(cx, cy + 12), v2(cx - 24, cy)], true)
+      }
     }
-    for (let i = 0; i < 320; i += 1) {
-      const color = random() < 0.5 ? dark : light
-      graphics.fillStyle(color, 0.35 + random() * 0.4)
-      const size = 1 + Math.floor(random() * 3)
-      graphics.fillRect(Math.floor(random() * 256), Math.floor(random() * 256), size, size === 3 ? 2 : size)
+    // Speckle.
+    for (let i = 0; i < 1600; i += 1) {
+      const x = random() * WORLD_W
+      const y = random() * WORLD_H
+      const west = x < RIVER_WEST
+      graphics.fillStyle(west ? (random() < 0.5 ? 0x6f5a3c : 0xa89064) : 0x1b2f42, 0.5)
+      graphics.fillRect(isoX(x, y), isoY(x, y), 2, 2)
     }
-    graphics.generateTexture(key, 256, 256)
+    // River: water band between sandy banks, full height.
+    const riverPoly = (x0: number, x1: number, color: number): void => {
+      graphics.fillStyle(color, 1)
+      graphics.fillPoints(
+        [v2(isoX(x0, 0), isoY(x0, 0)), v2(isoX(x1, 0), isoY(x1, 0)), v2(isoX(x1, WORLD_H), isoY(x1, WORLD_H)), v2(isoX(x0, WORLD_H), isoY(x0, WORLD_H))],
+        true,
+      )
+    }
+    riverPoly(RIVER_WEST - 30, RIVER_WEST, 0x9a8258)
+    riverPoly(RIVER_EAST, RIVER_EAST + 32, 0x9a8258)
+    riverPoly(RIVER_WEST, RIVER_EAST, 0x3a6280)
+    graphics.lineStyle(3, 0x9fc6d8, 0.8)
+    graphics.lineBetween(isoX(RIVER_WEST, 0), isoY(RIVER_WEST, 0), isoX(RIVER_WEST, WORLD_H), isoY(RIVER_WEST, WORLD_H))
+    graphics.lineBetween(isoX(RIVER_EAST, 0), isoY(RIVER_EAST, 0), isoX(RIVER_EAST, WORLD_H), isoY(RIVER_EAST, WORLD_H))
+    // Dirt trails from the plaza: grove, farms, John, market, camp, pen, reeds.
+    graphics.fillStyle(0x9a8258, 0.85)
+    const dots: Array<[number, number, number, number]> = [
+      [650, 850, 60, 15],
+      [520, 750, 60, 15],
+      [420, 660, 60, 15],
+      [780, 800, 56, 15],
+      [760, 650, 56, 15],
+      [750, 520, 56, 15],
+      [920, 860, 64, 15],
+      [990, 780, 60, 15],
+      [1030, 730, 54, 14],
+      [650, 1050, 64, 15],
+      [540, 1150, 64, 15],
+      [460, 1220, 60, 15],
+      [800, 1100, 60, 15],
+      [810, 1220, 60, 15],
+      [825, 1330, 60, 15],
+      [950, 1050, 64, 15],
+      [1050, 1180, 64, 15],
+      [1120, 1280, 60, 15],
+      [1200, 760, 64, 15],
+      [1320, 830, 64, 15],
+      [1420, 900, 64, 15],
+      [550, 1350, 60, 14],
+      [650, 1400, 60, 14],
+      [750, 1420, 60, 14],
+    ]
+    for (const [x, y, w, h] of dots) graphics.fillEllipse(isoX(x, y), isoY(x, y), w, h)
+    graphics.fillStyle(0xa89064, 0.7)
+    for (const [x, y, w, h] of dots) graphics.fillEllipse(isoX(x, y), isoY(x, y), w * 0.6, h * 0.55)
+    // Plaza + cache pools, squashed to lie on the ground plane.
+    graphics.fillStyle(0x9a8258, 0.8)
+    graphics.fillEllipse(isoX(800, 950), isoY(800, 950), 230, 82)
+    graphics.fillStyle(0xa89064, 0.7)
+    graphics.fillEllipse(isoX(800, 950), isoY(800, 950), 150, 52)
+    graphics.fillStyle(0x3f6f8f, 1)
+    graphics.fillEllipse(isoX(2500, 700), isoY(2500, 700), 56, 22)
+    graphics.fillStyle(0x5a93b5, 1)
+    graphics.fillEllipse(isoX(2500, 700), isoY(2500, 700), 38, 14)
+    for (const [px, py] of [
+      [2100, 1300],
+      [2700, 1400],
+    ] as Array<[number, number]>) {
+      graphics.fillStyle(0x3f6f8f, 1)
+      graphics.fillEllipse(isoX(px, py), isoY(px, py), 44, 17)
+      graphics.fillStyle(0x5a93b5, 1)
+      graphics.fillEllipse(isoX(px, py), isoY(px, py), 30, 11)
+    }
+    const groundKey = "ground-baked"
+    if (!this.textures.exists(groundKey)) {
+      graphics.generateTexture(groundKey, WORLD_W, 1340)
+    }
     graphics.destroy()
+    this.add.image(0, 0, groundKey).setOrigin(0, 0).setDepth(-100)
   }
 
-  /** Dirt trail, fences, rug, jars, scatter, and border woods for Aenon. */
+    /** Settlement dressing on the diamond: well plaza, mudbrick house, crop
+   *  fields, market, sheep pen, groves, and verge scatter. */
   private buildAenonDressing(): void {
-    // Dirt trail: merchant camp -> John -> river reeds.
-    const path = this.add.graphics().setDepth(1)
-    path.fillStyle(0x9a8258, 0.85)
-    const dots: Array<[number, number, number, number]> = [
-      [650, 850, 60, 26],
-      [520, 750, 60, 26],
-      [420, 660, 60, 26],
-      [780, 800, 56, 26],
-      [760, 650, 56, 26],
-      [750, 520, 56, 26],
-      [920, 860, 64, 26],
-      [990, 780, 60, 26],
-      [1030, 730, 54, 24],
-      [650, 1050, 64, 26],
-      [540, 1150, 64, 26],
-      [460, 1220, 60, 26],
-      [800, 1100, 60, 26],
-      [810, 1220, 60, 26],
-      [825, 1330, 60, 26],
-      [950, 1050, 64, 26],
-      [1050, 1180, 64, 26],
-      [1120, 1280, 60, 26],
-      [1200, 760, 64, 26],
-      [1320, 830, 64, 26],
-      [1420, 900, 64, 26],
-      [550, 1350, 60, 24],
-      [650, 1400, 60, 24],
-      [750, 1420, 60, 24],
-    ]
-    for (const [x, y, w, h] of dots) path.fillEllipse(x, y, w, h)
-    path.fillStyle(0xa89064, 0.7)
-    for (const [x, y, w, h] of dots) path.fillEllipse(x, y, w * 0.6, h * 0.55)
-
-    // Fence run along the north edge of the settlement, one graphics object.
-    const fence = this.add.graphics().setDepth(2)
-    for (let x = 80; x <= 1520; x += 24) {
-      fence.fillStyle(0x5d3f2a, 1)
-      fence.fillRect(x, 300, 4, 14)
-      fence.fillStyle(0x7a5230, 1)
-      fence.fillRect(x + 4, 302, 20, 3)
-      fence.fillRect(x + 4, 308, 20, 3)
+    const put = (x: number, y: number, tex: string, scale: number): Phaser.GameObjects.Sprite => {
+      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale)
+      sprite.setDepth(isoDepth(x, y))
+      return sprite
     }
 
-    // Plaza: packed-earth hub with the well at its heart.
-    const plaza = this.add.graphics().setDepth(1)
-    plaza.fillStyle(0x9a8258, 0.8)
-    plaza.fillEllipse(800, 950, 230, 150)
-    plaza.fillStyle(0xa89064, 0.7)
-    plaza.fillEllipse(800, 950, 150, 95)
-    const well = this.add.sprite(800, 950, "well").setScale(2.5)
-    well.setDepth(950)
+    // North fence run in chunks so each length sorts against walkers.
+    for (let run = 0; run < 6; run += 1) {
+      const x0 = 80 + run * 240
+      const fence = this.add.graphics()
+      fence.setDepth(isoDepth(x0 + 240, 300))
+      const ax = isoX(x0, 300)
+      const ay = isoY(x0, 300)
+      const bx = isoX(x0 + 240, 300)
+      const by = isoY(x0 + 240, 300)
+      fence.lineStyle(3, 0x7a5230, 1)
+      fence.lineBetween(ax, ay - 5, bx, by - 5)
+      fence.lineBetween(ax, ay - 9, bx, by - 9)
+      fence.fillStyle(0x5d3f2a, 1)
+      for (let x = x0; x <= x0 + 240; x += 24) {
+        fence.fillRect(isoX(x, 300) - 2, isoY(x, 300) - 12, 4, 12)
+      }
+    }
 
-    // Mudbrick house with a thatch roof, north of the plaza.
-    const house = this.add.graphics().setDepth(630)
+    // Well plaza: the well itself; the packed earth is baked into the floor.
+    put(800, 950, "well", 2.5)
+
+    // Mudbrick house with a thatch roof, north of the plaza. The drawing
+    // stays in its own local frame; only the frame origin is projected.
+    const house = this.add.graphics()
+    house.setPosition(isoX(830, 600) - 830, isoY(830, 600) - 600)
+    house.setDepth(isoDepth(830, 620))
     house.fillStyle(0x000000, 0.25)
-    house.fillEllipse(830, 668, 150, 22)
+    house.fillEllipse(830, 668, 150, 12)
     house.fillStyle(0xbb9663, 1)
     house.fillRect(775, 585, 110, 70)
     house.fillStyle(0x8a6a3f, 0.35)
@@ -1811,29 +2228,78 @@ class AenonScene extends Phaser.Scene {
     house.fillRect(795, 610, 2, 14)
     house.fillRect(863, 610, 2, 14)
 
-    // Crop fields north of the plaza, railed in.
-    for (const [cx, cy, w, h] of [
-      [700, 430, 320, 130],
-      [1060, 430, 280, 130],
+    // Crop fields: soil parallelograms with sprout grids, railed in.
+    for (const [fx0, fy0, fx1, fy1] of [
+      [540, 365, 860, 495],
+      [920, 365, 1200, 495],
     ] as Array<[number, number, number, number]>) {
-      this.add.tileSprite(cx, cy, w, h, "crop").setDepth(1)
-      const rails = this.add.graphics().setDepth(2)
-      rails.lineStyle(3, 0x5d3f2a, 1)
-      rails.strokeRect(cx - w / 2, cy - h / 2, w, h)
+      const field = this.add.graphics().setDepth(-50)
+      field.fillStyle(0x6b5335, 1)
+      field.fillPoints(
+        [v2(isoX(fx0, fy0), isoY(fx0, fy0)), v2(isoX(fx1, fy0), isoY(fx1, fy0)), v2(isoX(fx1, fy1), isoY(fx1, fy1)), v2(isoX(fx0, fy1), isoY(fx0, fy1))],
+        true,
+      )
+      field.fillStyle(0x46b464, 1)
+      for (let lx = fx0 + 12; lx < fx1; lx += 16) {
+        for (let ly = fy0 + 12; ly < fy1; ly += 16) {
+          field.fillRect(isoX(lx, ly), isoY(lx, ly), 3, 3)
+        }
+      }
+      this.railsRect(fx0, fy0, fx1, fy1)
     }
 
     // Market stalls southwest, jars by the merchant rug.
-    const stallA = this.add.sprite(300, 1350, "stall").setScale(2)
-    stallA.setDepth(1350)
-    const stallB = this.add.sprite(560, 1360, "stall").setScale(2).setFlipX(true)
-    stallB.setDepth(1360)
-    // Stall keepers mind the counters; barrels and crates pile nearby.
-    const keeperA = this.add.sprite(300, 1336, "vil-a-0").setScale(2)
-    keeperA.setDepth(1336)
-    const keeperB = this.add.sprite(560, 1346, "vil-b-0").setScale(2)
-    keeperB.setDepth(1346)
-    this.add.image(300, 1362, "shadow").setDepth(2).setAlpha(0.6)
-    this.add.image(560, 1372, "shadow").setDepth(2).setAlpha(0.6)
+    put(300, 1350, "stall", 2)
+    put(560, 1360, "stall", 2).setFlipX(true)
+    // Stall keepers mind the counters (breathing rigs rooted in place).
+    const keeperA = new BipedRig(
+      this,
+      300,
+      1336,
+      { torso: "rig-vila-t", arm: "rig-vila-arm", leg: "rig-vila-leg" },
+      2,
+    )
+    keeperA.setDepth()
+    const keeperB = new BipedRig(
+      this,
+      560,
+      1346,
+      { torso: "rig-vilb-t", arm: "rig-vilb-arm", leg: "rig-vilb-leg" },
+      2,
+    )
+    keeperB.setDepth()
+    this.wanderers.push(
+      {
+        visual: keeperA,
+        minX: 300,
+        maxX: 300,
+        minY: 1336,
+        maxY: 1336,
+        target: { x: 300, y: 1336 },
+        speed: 0,
+        cadence: 1,
+        label: null,
+        graze: false,
+        grazeUntil: 0,
+        nextGraze: Number.POSITIVE_INFINITY,
+      },
+      {
+        visual: keeperB,
+        minX: 560,
+        maxX: 560,
+        minY: 1346,
+        maxY: 1346,
+        target: { x: 560, y: 1346 },
+        speed: 0,
+        cadence: 1,
+        label: null,
+        graze: false,
+        grazeUntil: 0,
+        nextGraze: Number.POSITIVE_INFINITY,
+      },
+    )
+    this.add.image(isoX(300, 1362), isoY(300, 1362), "shadow").setDepth(-10).setAlpha(0.6)
+    this.add.image(isoX(560, 1372), isoY(560, 1372), "shadow").setDepth(-10).setAlpha(0.6)
     for (const [x, y, tex] of [
       [250, 1382, "barrel"],
       [276, 1376, "barrel"],
@@ -1842,8 +2308,7 @@ class AenonScene extends Phaser.Scene {
       [880, 1396, "crate"],
       [770, 920, "barrel"],
     ] as Array<[number, number, string]>) {
-      const prop = this.add.sprite(x, y, tex).setScale(2)
-      prop.setDepth(y)
+      put(x, y, tex, 2)
     }
     // Lamps along the plaza walks; signposts where trails meet.
     for (const [x, y] of [
@@ -1852,29 +2317,20 @@ class AenonScene extends Phaser.Scene {
       [700, 1040],
       [900, 1040],
     ] as Array<[number, number]>) {
-      const lamp = this.add.sprite(x, y, "lamp").setScale(2)
-      lamp.setDepth(y)
+      put(x, y, "lamp", 2)
     }
     for (const [x, y] of [
       [830, 1000],
       [1540, 950],
     ] as Array<[number, number]>) {
-      const sign = this.add.sprite(x, y, "sign").setScale(2)
-      sign.setDepth(y)
+      put(x, y, "sign", 2)
     }
-    this.add.image(420, 1302, "rug").setDepth(1)
-    const jars = this.add.sprite(470, 1315, "jars").setScale(2)
-    jars.setDepth(1315)
+    const rug = this.add.image(isoX(420, 1302), isoY(420, 1302), "rug").setDepth(-40)
+    rug.setRotation(Math.PI / 4)
+    put(470, 1315, "jars", 2)
 
-    // Sheep pen southeast: railed square.
-    const pen = this.add.graphics().setDepth(2)
-    pen.lineStyle(3, 0x5d3f2a, 1)
-    pen.strokeRect(1070, 1290, 160, 130)
-    for (let x = 1070; x <= 1230; x += 32) {
-      pen.fillStyle(0x5d3f2a, 1)
-      pen.fillRect(x, 1286, 5, 16)
-      pen.fillRect(x, 1408, 5, 16)
-    }
+    // Sheep pen southeast: railed parallelogram.
+    this.railsRect(1070, 1290, 1230, 1420)
 
     // Palms lean near the west bank.
     for (const [x, y] of [
@@ -1882,8 +2338,7 @@ class AenonScene extends Phaser.Scene {
       [1530, 1100],
       [1480, 1300],
     ] as Array<[number, number]>) {
-      const palm = this.add.sprite(x, y, "palm").setScale(2.5)
-      palm.setDepth(y)
+      put(x, y, "palm", ART_SCALE)
     }
 
     // Border woods: west edge + south edge read as the end of the land.
@@ -1891,34 +2346,37 @@ class AenonScene extends Phaser.Scene {
     for (let y = 380; y <= 1900; y += 120) borderTrees.push([52, y, y % 240 === 0 ? "tree-b" : "tree-a"])
     for (let x = 140; x <= 1520; x += 130) borderTrees.push([x, 1950, x % 260 === 0 ? "tree-b" : "tree-a"])
     for (const [x, y, tex] of borderTrees) {
-      const tree = this.add.sprite(x, y, tex).setScale(ART_SCALE)
-      tree.setDepth(y)
+      put(x, y, tex, ART_SCALE)
     }
 
     // Growth in drifts and clumps, the way real verges grow.
     const random = mulberry32(42)
-    const scatter = (tex: string, cx: number, cy: number, spread: number, count: number, depth: number): void => {
+    const scatter = (tex: string, cx: number, cy: number, spread: number, count: number): void => {
       for (let i = 0; i < count; i += 1) {
         const x = cx + (random() + random() - 1) * spread
         const y = cy + (random() + random() - 1) * spread * 0.7
-        const sprite = this.add.image(x, y, tex).setScale(2)
-        sprite.setDepth(depth).setAlpha(0.9)
+        const sprite = this.add.image(isoX(x, y), isoY(x, y), tex).setScale(2)
+        sprite.setDepth(1).setAlpha(0.9)
       }
     }
     // Undergrowth rings the grove; flower drifts mark the butterfly grounds.
-    scatter("tuft", 330, 560, 140, 30, 1)
-    scatter("tuft", 900, 1500, 170, 22, 1)
-    scatter("pebble", 1300, 800, 120, 12, 1)
-    scatter("flower-r", 600, 1200, 90, 8, 2)
-    scatter("flower-y", 950, 1100, 90, 8, 2)
-    scatter("flower-r", 350, 900, 90, 8, 2)
-    scatter("flower-y", 1200, 600, 90, 8, 2)
+    scatter("tuft", 330, 560, 140, 30)
+    scatter("tuft", 900, 1500, 170, 22)
+    scatter("pebble", 1300, 800, 120, 12)
+    scatter("flower-r", 600, 1200, 90, 8)
+    scatter("flower-y", 950, 1100, 90, 8)
+    scatter("flower-r", 350, 900, 90, 8)
+    scatter("flower-y", 1200, 600, 90, 8)
     for (let i = 0; i < 40; i += 1) {
-      const tuft = this.add.image(60 + random() * 1440, 340 + random() * 1580, "tuft").setScale(2)
+      const x = 60 + random() * 1440
+      const y = 340 + random() * 1580
+      const tuft = this.add.image(isoX(x, y), isoY(x, y), "tuft").setScale(2)
       tuft.setDepth(1).setAlpha(0.9)
     }
     for (let i = 0; i < 16; i += 1) {
-      const pebble = this.add.image(60 + random() * 1440, 340 + random() * 1580, "pebble").setScale(2)
+      const x = 60 + random() * 1440
+      const y = 340 + random() * 1580
+      const pebble = this.add.image(isoX(x, y), isoY(x, y), "pebble").setScale(2)
       pebble.setDepth(1).setAlpha(0.9)
     }
     const bushes: Array<[number, number]> = [
@@ -1929,13 +2387,14 @@ class AenonScene extends Phaser.Scene {
       [950, 1100],
     ]
     for (const [x, y] of bushes) {
-      const bush = this.add.sprite(x, y, "bush").setScale(2.5)
-      bush.setDepth(y)
+      put(x, y, "bush", 2.5)
     }
 
     // Ambient dust motes drifting over the settlement.
     for (let i = 0; i < 10; i += 1) {
-      const mote = this.add.image(80 + random() * 1400, 360 + random() * 1500, "mote").setAlpha(0.25).setDepth(15)
+      const mx = 80 + random() * 1400
+      const my = 360 + random() * 1500
+      const mote = this.add.image(isoX(mx, my), isoY(mx, my), "mote").setAlpha(0.25).setDepth(15)
       this.tweens.add({
         targets: mote,
         y: mote.y - 24 - random() * 20,
@@ -1949,54 +2408,47 @@ class AenonScene extends Phaser.Scene {
     }
   }
 
-  /** River channel, banks, waves, rocks, and the cache ring for the Jordan. */
-  private buildJordanDressing(): void {
-    // The river itself: light water between sandy banks, full height.
-    const river = this.add.graphics().setDepth(1)
-    river.fillStyle(0x9a8258, 1)
-    river.fillRect(RIVER_WEST - 30, 0, 30, WORLD_H)
-    river.fillRect(RIVER_EAST, 0, 32, WORLD_H)
-    river.fillStyle(0x7a6540, 1)
-    river.fillRect(RIVER_WEST - 34, 0, 4, WORLD_H)
-    river.fillRect(RIVER_EAST + 32, 0, 4, WORLD_H)
-    river.fillStyle(0x3a6280, 1)
-    river.fillRect(RIVER_WEST, 0, RIVER_EAST - RIVER_WEST, WORLD_H)
-    river.fillStyle(0x9fc6d8, 0.8)
-    river.fillRect(RIVER_WEST + 2, 0, 3, WORLD_H)
-    river.fillRect(RIVER_EAST - 5, 0, 3, WORLD_H)
-    const sandRandom = mulberry32(99)
-    for (let i = 0; i < 220; i += 1) {
-      river.fillStyle(sandRandom() < 0.5 ? 0x7a6540 : 0xb5986a, 0.8)
-      const west = sandRandom() < 0.5
-      river.fillRect(
-        west ? RIVER_WEST - 30 + Math.floor(sandRandom() * 30) : RIVER_EAST + Math.floor(sandRandom() * 32),
-        Math.floor(sandRandom() * WORLD_H),
-        2,
-        2,
-      )
+  /** Railed parallelogram for fields and pens, sorted as one piece. */
+  private railsRect(x0: number, y0: number, x1: number, y1: number): void {
+    const rails = this.add.graphics()
+    rails.setDepth(isoDepth(x1, y1))
+    const corners: Array<[number, number]> = [
+      [isoX(x0, y0), isoY(x0, y0)],
+      [isoX(x1, y0), isoY(x1, y0)],
+      [isoX(x1, y1), isoY(x1, y1)],
+      [isoX(x0, y1), isoY(x0, y1)],
+    ]
+    rails.lineStyle(3, 0x5d3f2a, 1)
+    for (let i = 0; i < 4; i += 1) {
+      const [ax, ay] = corners[i]
+      const [bx, by] = corners[(i + 1) % 4]
+      rails.lineBetween(ax, ay, bx, by)
     }
-    // Lily pads ride the channel.
-    const padRandom = mulberry32(7)
-    const pads = this.add.graphics().setDepth(2)
-    pads.fillStyle(0x2f9e5f, 1)
-    for (let i = 0; i < 12; i += 1) {
-      pads.fillEllipse(RIVER_WEST + 12 + padRandom() * 56, 100 + padRandom() * 1800, 10, 5)
+    rails.fillStyle(0x5d3f2a, 1)
+    for (const [px, py] of corners) rails.fillRect(px - 2, py - 12, 4, 12)
+  }
+
+    /** River life on the diamond: cache ring, rocks, ruins, reeds, waves. */
+  private buildJordanDressing(): void {
+    const put = (x: number, y: number, tex: string, scale: number): Phaser.GameObjects.Sprite => {
+      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale)
+      sprite.setDepth(isoDepth(x, y))
+      return sprite
     }
 
-    // Cache pool: ring of stones with a still blue heart.
+    // Cache pool water is baked into the floor; the stone ring + glint sit on top.
     const ringX = 2500
     const ringY = 700
-    const pool = this.add.graphics().setDepth(1)
-    pool.fillStyle(0x3f6f8f, 1)
-    pool.fillEllipse(ringX, ringY, 56, 40)
-    pool.fillStyle(0x5a93b5, 1)
-    pool.fillEllipse(ringX, ringY, 38, 26)
     for (let i = 0; i < 9; i += 1) {
       const angle = (i / 9) * Math.PI * 2
-      const stone = this.add.image(ringX + Math.cos(angle) * 32, ringY + Math.sin(angle) * 23, "pebble").setScale(3)
+      const stone = this.add.image(
+        isoX(ringX + Math.cos(angle) * 30, ringY + Math.sin(angle) * 30),
+        isoY(ringX + Math.cos(angle) * 30, ringY + Math.sin(angle) * 30),
+        "pebble",
+      ).setScale(3)
       stone.setDepth(2)
     }
-    const glint = this.add.image(ringX, ringY, "sparkle").setScale(1.5).setAlpha(0.7).setDepth(3)
+    const glint = this.add.image(isoX(ringX, ringY), isoY(ringX, ringY), "sparkle").setScale(1.5).setAlpha(0.7).setDepth(3)
     this.tweens.add({ targets: glint, alpha: 0.2, scale: 2.2, duration: 1400, yoyo: true, repeat: -1 })
 
     // Rocks, a reed bed near the east bank, and brush.
@@ -2007,8 +2459,7 @@ class AenonScene extends Phaser.Scene {
       [2950, 900, 3],
     ]
     for (const [x, y, scale] of rocks) {
-      const rock = this.add.sprite(x, y, "rock").setScale(scale)
-      rock.setDepth(y)
+      put(x, y, "rock", scale)
     }
     // Rock borders: east, south, and north read as the end of the land.
     const borderRocks: Array<[number, number]> = []
@@ -2016,58 +2467,45 @@ class AenonScene extends Phaser.Scene {
     for (let x = 1750; x <= 3150; x += 140) borderRocks.push([x, 1950])
     for (let x = 1750; x <= 3150; x += 160) borderRocks.push([x, 260])
     for (const [x, y] of borderRocks) {
-      const rock = this.add.sprite(x, y, "rock").setScale(3)
-      rock.setDepth(y)
+      put(x, y, "rock", 3)
     }
     // Old stones: a ring of standing stones in the northeast.
     for (let i = 0; i < 5; i += 1) {
       const angle = (i / 5) * Math.PI * 2
-      const stone = this.add.sprite(2600 + Math.cos(angle) * 55, 450 + Math.sin(angle) * 40, "stone").setScale(2.5)
-      stone.setDepth(450 + Math.sin(angle) * 40)
+      put(2600 + Math.cos(angle) * 55, 450 + Math.sin(angle) * 40, "stone", 2.5)
     }
-    const fallen = this.add.sprite(2600, 510, "stone").setScale(2.5).setAngle(90)
-    fallen.setDepth(510)
+    const fallen = put(2600, 510, "stone", 2.5)
+    fallen.setAngle(90)
     this.add
-      .text(2600, 372, "old stones", {
+      .text(isoX(2600, 372), isoY(2600, 372), "old stones", {
         color: "#fff8e6",
         fontSize: "11px",
         backgroundColor: "#00000066",
         padding: { x: 4, y: 2 },
       })
       .setOrigin(0.5)
-      .setDepth(20)
-    // Dead trees and quiet still pools dot the deep wilderness.
+      .setDepth(6000)
+    // Dead trees dot the deep wilderness.
     for (const [x, y] of [
       [2000, 900],
       [2400, 1500],
       [2900, 800],
     ] as Array<[number, number]>) {
-      const dead = this.add.sprite(x, y, "deadtree").setScale(2.5)
-      dead.setDepth(y)
+      put(x, y, "deadtree", 2.5)
     }
-    for (const [px, py] of [
-      [2100, 1300],
-      [2700, 1400],
-    ] as Array<[number, number]>) {
-      const still = this.add.graphics().setDepth(1)
-      still.fillStyle(0x3f6f8f, 1)
-      still.fillEllipse(px, py, 44, 30)
-      still.fillStyle(0x5a93b5, 1)
-      still.fillEllipse(px, py, 30, 20)
-    }
-    const reeds2 = this.add.sprite(1760, 1200, "reeds").setScale(2)
-    reeds2.setDepth(1200)
+    put(1760, 1200, "reeds", 2)
     for (const [x, y] of [
       [2400, 900],
       [2000, 1500],
     ] as Array<[number, number]>) {
-      const bush = this.add.sprite(x, y, "bush").setScale(2.5)
-      bush.setDepth(y)
+      put(x, y, "bush", 2.5)
     }
     // Dry tufts across the wilderness.
     const dryRandom = mulberry32(77)
     for (let i = 0; i < 40; i += 1) {
-      const tuft = this.add.image(1720 + dryRandom() * 1430, 320 + dryRandom() * 1610, "tuft").setScale(2)
+      const x = 1720 + dryRandom() * 1430
+      const y = 320 + dryRandom() * 1610
+      const tuft = this.add.image(isoX(x, y), isoY(x, y), "tuft").setScale(2)
       tuft.setDepth(1).setAlpha(0.7).setTint(0xc4b394)
     }
 
@@ -2085,7 +2523,7 @@ class AenonScene extends Phaser.Scene {
       [1900, 1400],
     ]
     for (const [index, [x, y]] of waveSpots.entries()) {
-      const wave = this.add.image(x, y, "wave").setAlpha(0.5).setDepth(1)
+      const wave = this.add.image(isoX(x, y), isoY(x, y), "wave").setAlpha(0.5).setDepth(1)
       this.waves.push(wave)
       this.tweens.add({
         targets: wave,
@@ -2102,52 +2540,72 @@ class AenonScene extends Phaser.Scene {
 
   override update(time: number, delta: number): void {
     if (!this.player || !this.keys) return
-    const step = (SPEED * delta) / 1000
-    let dx = 0
-    let dy = 0
-    if (this.keys["A"]?.isDown || this.keys["LEFT"]?.isDown) dx -= 1
-    if (this.keys["D"]?.isDown || this.keys["RIGHT"]?.isDown) dx += 1
-    if (this.keys["W"]?.isDown || this.keys["UP"]?.isDown) dy -= 1
-    if (this.keys["S"]?.isDown || this.keys["DOWN"]?.isDown) dy += 1
-    if (dx !== 0 || dy !== 0) {
+    let wantX = 0
+    let wantY = 0
+    if (
+      this.keys["A"]?.isDown ||
+      this.keys["D"]?.isDown ||
+      this.keys["W"]?.isDown ||
+      this.keys["S"]?.isDown ||
+      this.keys["LEFT"]?.isDown ||
+      this.keys["RIGHT"]?.isDown ||
+      this.keys["UP"]?.isDown ||
+      this.keys["DOWN"]?.isDown
+    ) {
       this.target = null
-      const length = Math.hypot(dx, dy)
-      this.player.x = Phaser.Math.Clamp(this.player.x + (dx / length) * step, 24, WORLD_W - 24)
-      this.player.y = Phaser.Math.Clamp(this.player.y + (dy / length) * step, 220, WORLD_H - 24)
-      if (dx !== 0) this.player.setFlipX(dx < 0)
-      this.animateWalk(delta)
-      this.syncPlace()
+      let dx = 0
+      let dy = 0
+      if (this.keys["A"]?.isDown || this.keys["LEFT"]?.isDown) dx -= 1
+      if (this.keys["D"]?.isDown || this.keys["RIGHT"]?.isDown) dx += 1
+      if (this.keys["W"]?.isDown || this.keys["UP"]?.isDown) dy -= 1
+      if (this.keys["S"]?.isDown || this.keys["DOWN"]?.isDown) dy += 1
+      const length = Math.hypot(dx, dy) || 1
+      wantX = (dx / length) * SPEED
+      wantY = (dy / length) * SPEED
     } else if (this.target) {
       const dxT = this.target.x - this.player.x
       const dyT = this.target.y - this.player.y
       const distance = Math.hypot(dxT, dyT)
-      if (distance <= step) {
-        this.player.x = Phaser.Math.Clamp(this.target.x, 24, WORLD_W - 24)
-        this.player.y = Phaser.Math.Clamp(this.target.y, 220, WORLD_H - 24)
+      if (distance < 6) {
+        this.player.setPosition(
+          Phaser.Math.Clamp(this.target.x, 24, WORLD_W - 24),
+          Phaser.Math.Clamp(this.target.y, 240, WORLD_H - 24),
+        )
         this.target = null
-        this.player.setTexture("adventurer-0")
       } else {
-        this.player.x += (dxT / distance) * step
-        this.player.y += (dyT / distance) * step
-        this.player.setFlipX(dxT < 0)
-        this.animateWalk(delta)
+        // Ease out as the target approaches so arrivals settle softly.
+        const ease = Math.min(1, distance / 70)
+        wantX = (dxT / distance) * SPEED * ease
+        wantY = (dyT / distance) * SPEED * ease
       }
-      this.syncPlace()
     }
-    this.player.setDepth(this.player.y)
-    this.playerShadow.setPosition(this.player.x, this.player.y + 32)
+    // Eased velocity: no more ice-skating starts and stops.
+    const blend = Math.min(1, (delta * 10) / 1000)
+    this.velX += (wantX - this.velX) * blend
+    this.velY += (wantY - this.velY) * blend
+    const movedX = (this.velX * delta) / 1000
+    const movedY = (this.velY * delta) / 1000
+    const moved = Math.hypot(movedX, movedY)
+    if (moved > 0.01) {
+      this.player.setPosition(
+        Phaser.Math.Clamp(this.player.x + movedX, 24, WORLD_W - 24),
+        Phaser.Math.Clamp(this.player.y + movedY, 240, WORLD_H - 24),
+      )
+      if (Math.abs(this.velX) > 30) this.player.setFacing(this.velX < 0)
+      this.player.step(moved, delta)
+      this.syncPlace()
+    } else {
+      this.velX = 0
+      this.velY = 0
+      this.player.rest(time, delta)
+    }
+    this.player.setDepth()
+    this.playerShadow.setPosition(isoX(this.player.x, this.player.y), isoY(this.player.x, this.player.y) + 32)
 
     this.updateWolf(time, delta)
-    this.updateWanderers(delta)
+    this.updateWanderers(time, delta)
     this.updateButterflies(time)
     this.updateFishAndBirds(time)
-  }
-
-  private animateWalk(delta: number): void {
-    this.walkPhase += delta * 0.012
-    const frames = ["adventurer-0", "adventurer-1", "adventurer-0", "adventurer-2"]
-    const frame = frames[Math.floor(this.walkPhase) % frames.length]
-    this.player.setTexture(frame)
   }
 
   private randomJordanSpot(): { x: number; y: number } {
@@ -2156,10 +2614,14 @@ class AenonScene extends Phaser.Scene {
 
   private updateWolf(time: number, delta: number): void {
     if (!this.wolf || this.wolfFallen) return
-    this.wolfTag.setPosition(this.wolf.x, this.wolf.y - 42)
-    if (time < this.wolfHoldUntil) return
+    this.wolfTag.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) - 42)
+    if (time < this.wolfHoldUntil) {
+      this.wolf.rest(time, delta)
+      return
+    }
     if (!this.wolfTarget) {
       this.wolfTarget = this.randomJordanSpot()
+      this.wolf.rest(time, delta)
       return
     }
     const step = (46 * delta) / 1000
@@ -2168,18 +2630,18 @@ class AenonScene extends Phaser.Scene {
     const distance = Math.hypot(dx, dy)
     if (distance <= step) {
       this.wolfTarget = null
-      this.wolf.setTexture("wolf-0")
+      this.wolf.rest(time, delta)
       return
     }
-    this.wolf.x += (dx / distance) * step
-    this.wolf.y += (dy / distance) * step
-    this.wolf.setFlipX(dx > 0)
-    this.wolfPhase += delta * 0.014
-    this.wolf.setTexture(Math.floor(this.wolfPhase) % 2 === 0 ? "wolf-0" : "wolf-1")
-    this.wolf.setDepth(this.wolf.y)
-    this.wolfShadow.setPosition(this.wolf.x, this.wolf.y + 18)
-    this.wolfTag.setPosition(this.wolf.x, this.wolf.y - 42)
-    if (!this.wolfCry.visible) this.wolfCry.setPosition(this.wolf.x - 4, this.wolf.y - 52)
+    const moveX = (dx / distance) * step
+    const moveY = (dy / distance) * step
+    this.wolf.setPosition(this.wolf.x + moveX, this.wolf.y + moveY)
+    this.wolf.setFacing(dx < 0)
+    this.wolf.step(Math.hypot(moveX, moveY), delta, 2.7)
+    this.wolf.setDepth()
+    this.wolfShadow.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 18)
+    this.wolfTag.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) - 42)
+    if (!this.wolfCry.visible) this.wolfCry.setPosition(isoX(this.wolf.x, this.wolf.y) - 4, isoY(this.wolf.x, this.wolf.y) - 52)
   }
 
   private placeAt(x: number): string {
@@ -2260,7 +2722,7 @@ class AenonScene extends Phaser.Scene {
   }
 
   private flashSparkle(x: number, y: number): void {
-    this.sparkle.setPosition(x, y).setVisible(true).setAlpha(1).setScale(1)
+    this.sparkle.setPosition(isoX(x, y), isoY(x, y)).setVisible(true).setAlpha(1).setScale(1)
     this.tweens.killTweensOf(this.sparkle)
     this.tweens.add({
       targets: this.sparkle,
@@ -2273,7 +2735,7 @@ class AenonScene extends Phaser.Scene {
   }
 
   private showSlash(x: number, y: number, flip: boolean): void {
-    this.slash.setPosition(x, y).setVisible(true).setAlpha(1).setScale(1.6).setFlipX(flip)
+    this.slash.setPosition(isoX(x, y), isoY(x, y)).setVisible(true).setAlpha(1).setScale(1.6).setFlipX(flip)
     this.tweens.killTweensOf(this.slash)
     this.tweens.add({
       targets: this.slash,
@@ -2290,6 +2752,7 @@ class AenonScene extends Phaser.Scene {
     if (result.ok) {
       playSfx("gather")
       const tree = this.nearestTree()
+      this.player.hop(4)
       this.tweens.killTweensOf(tree)
       tree.setAngle(0)
       this.tweens.add({
@@ -2312,6 +2775,7 @@ class AenonScene extends Phaser.Scene {
         },
       })
       this.flashSparkle(tree.x, tree.y - 44)
+      this.leafBurst.explode(8, isoX(tree.x, tree.y - 30), isoY(tree.x, tree.y - 30))
     }
     this.afterAction(result.ok, result.ok ? "" : result.reason, "You cut wood at the timber-stand.")
   }
@@ -2321,8 +2785,9 @@ class AenonScene extends Phaser.Scene {
     if (result.ok) {
       playSfx("face")
       this.wolfHoldUntil = this.time.now + 3000
-      this.wolf.setFlipX(this.wolf.x < this.player.x ? false : true)
-      this.wolfCry.setPosition(this.wolf.x - 4, this.wolf.y - 52).setVisible(true)
+      this.wolf.setFacing(this.wolf.x >= this.player.x)
+      this.wolf.hop()
+      this.wolfCry.setPosition(isoX(this.wolf.x, this.wolf.y) - 4, isoY(this.wolf.x, this.wolf.y) - 52).setVisible(true)
       this.time.delayedCall(900, () => this.wolfCry.setVisible(false))
     }
     this.afterAction(result.ok, result.ok ? "" : result.reason, "A wolf of the Jordan faces you.")
@@ -2334,7 +2799,8 @@ class AenonScene extends Phaser.Scene {
       this.say(`Nothing happens (${result.reason}).`)
       return
     }
-    const facingLeft = this.player.flipX
+    const facingLeft = this.player.facingLeft
+    this.player.lunge(facingLeft ? -1 : 1)
     const slashX = this.player.x + (facingLeft ? -30 : 30)
     this.showSlash(slashX, this.player.y - 6, facingLeft)
     playSfx("swing")
@@ -2342,10 +2808,17 @@ class AenonScene extends Phaser.Scene {
       this.wolf.setTint(0xff8888)
       this.time.delayedCall(120, () => this.wolf.clearTint())
       const push = this.wolf.x < this.player.x ? -10 : 10
-      this.tweens.add({ targets: this.wolf, x: Phaser.Math.Clamp(this.wolf.x + push, 1850, 3050), duration: 120 })
+      this.tweens.add({
+        targets: this.wolf.root,
+        x: Phaser.Math.Clamp(this.wolf.x + push, 1850, 3050),
+        duration: 120,
+      })
+      this.wolf.hop(5)
     } else {
       this.wolfFallen = true
-      this.wolf.setTexture("wolf-0").setTint(0x8a8f98).setAngle(90).setDepth(this.wolf.y)
+      this.wolf.setTint(0x8a8f98)
+      this.wolf.setAngle(90)
+      this.wolf.setDepth()
       this.wolfCry.setVisible(false)
       this.wolfTag.setVisible(false)
     }
@@ -2359,13 +2832,15 @@ class AenonScene extends Phaser.Scene {
     if (result.ok) playSfx("hunt")
     if (result.ok && this.wolfFallen) {
       this.tweens.add({
-        targets: this.wolf,
+        targets: this.wolf.root,
         alpha: 0,
         duration: 500,
         onComplete: () => {
           const spot = this.randomJordanSpot()
-          this.wolf.setPosition(spot.x, spot.y).setAngle(0).clearTint().setAlpha(1)
-          this.wolf.setTexture("wolf-0")
+          this.wolf.setPosition(spot.x, spot.y)
+          this.wolf.setAngle(0)
+          this.wolf.clearTint()
+          this.wolf.setAlpha(1)
           this.wolfFallen = false
           this.wolfTarget = null
           this.wolfTag.setVisible(true)
@@ -2385,6 +2860,7 @@ class AenonScene extends Phaser.Scene {
     this.refreshHud()
     playSfx("read")
     this.flashSparkle(this.reeds.x, this.reeds.y - 34)
+    this.glintBurst.explode(10, isoX(this.reeds.x, this.reeds.y - 24), isoY(this.reeds.x, this.reeds.y - 24))
     this.tweens.add({ targets: this.reeds, y: this.reeds.y - 4, duration: 140, yoyo: true, repeat: 1 })
     const usfm = SCRIPTURE_USFM["reeds"] ?? "JHN.1.29"
     void loadLivePassage(usfm)
@@ -2397,7 +2873,7 @@ class AenonScene extends Phaser.Scene {
       this.say(`Nothing happens (${result.reason}).`)
       return
     }
-    this.tweens.add({ targets: this.john, y: this.john.y - 5, duration: 130, yoyo: true, repeat: 1 })
+    this.john.hop(5)
     this.say("John stands at Aenon, baptizing. (Look: presence confirmed.)")
   }
 
@@ -2407,7 +2883,7 @@ class AenonScene extends Phaser.Scene {
       this.say(`Nothing happens (${result.reason}).`)
       return
     }
-    this.tweens.add({ targets: this.john, y: this.john.y - 5, duration: 130, yoyo: true, repeat: 1 })
+    this.john.hop(5)
     this.say("John answers with a short word and stays at Aenon.")
   }
 
@@ -2416,7 +2892,8 @@ class AenonScene extends Phaser.Scene {
     if (result.ok) {
       playSfx("buy")
       this.flashSparkle(this.merchant.x, this.merchant.y - 38)
-      this.tweens.add({ targets: this.merchant, y: this.merchant.y - 5, duration: 130, yoyo: true, repeat: 1 })
+      this.glintBurst.explode(8, isoX(this.merchant.x, this.merchant.y - 30), isoY(this.merchant.x, this.merchant.y - 30))
+      this.merchant.hop(5)
     }
     this.afterAction(result.ok, result.ok ? "" : result.reason, "You buy rope from the merchant.")
   }
@@ -2429,5 +2906,11 @@ new Phaser.Game({
   height: 600,
   backgroundColor: "#101820",
   pixelArt: true,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 960,
+    height: 600,
+  },
   scene: [AenonScene],
 })

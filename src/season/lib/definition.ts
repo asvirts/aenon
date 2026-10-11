@@ -14,6 +14,7 @@ export type DefinitionFailure =
   | "sword-mace-gap"
   | "weapon-strength"
   | "armor-defence"
+  | "special-effect"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

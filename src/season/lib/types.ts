@@ -100,7 +100,13 @@ export type WeaponKind = "sword" | "mace"
 
 export type ArmorWeight = "heavy" | "medium" | "cloth"
 
-export type Gear =
+export type SpecialEffect =
+  | { kind: "second-hit" }
+  | { kind: "stun" }
+  | { kind: "burn"; damage: number; exchanges: number }
+  | { kind: "heal"; amount: number }
+
+type GearPiece =
   | {
       id: string
       slot: "weapon"
@@ -128,6 +134,10 @@ export type Gear =
       accuracyModifier: number
       defence: number
     }
+
+export type Gear = GearPiece & {
+  effects?: readonly SpecialEffect[]
+}
 
 export type SeasonDefinition = {
   places: readonly Place[]

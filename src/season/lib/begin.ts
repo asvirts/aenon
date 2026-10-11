@@ -26,10 +26,17 @@ export type TrainedSkillState = {
   experience: number
 }
 
+export type StoredBurn = {
+  damage: number
+  remainingExchanges: number
+}
+
 export type Fight = {
   hostileId: string
   hostileHitpoints: number
   phase: "facing" | "underway"
+  queuedStuns?: number
+  burns?: readonly StoredBurn[]
 }
 
 export type HuntMaterial = "meat" | "hide" | "bone"
@@ -109,6 +116,11 @@ export type Adventurer = {
   questJournal: readonly QuestJournalEntry[]
 }
 
+function presentFight(fight: Fight): Fight {
+  if (!fight.burns) return { ...fight }
+  return { ...fight, burns: fight.burns.map((burn) => ({ ...burn })) }
+}
+
 function emptyWorn(): Record<GearSlot, string | null> {
   const worn = {} as Record<GearSlot, string | null>
   for (const slot of gearSlots) worn[slot] = null
@@ -167,7 +179,7 @@ export function presentAdventurer(
     worn: { ...state.worn },
     lastSettlementId: state.lastSettlementId,
     outing: state.outing,
-    fight: state.fight === null ? null : { ...state.fight },
+    fight: state.fight === null ? null : presentFight(state.fight),
     fallenHostiles: [...state.fallenHostiles],
     carcasses: state.carcasses.map((carcass) => ({ ...carcass })),
     pickups: state.pickups.map((pickup) => ({ ...pickup })),

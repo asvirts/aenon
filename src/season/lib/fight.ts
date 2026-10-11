@@ -1,4 +1,4 @@
-import type { SeasonState } from "./begin.ts"
+import type { SeasonState, StoredBurn } from "./begin.ts"
 import { experienceInsideBand, readAdventurerLevel } from "./experience.ts"
 import { wornGear } from "./gear.ts"
 import { clearCarcasses, leaveCarcass, receiveDrop, type Drop } from "./hunt.ts"
@@ -79,23 +79,54 @@ export function swingAtHostile(
   const hostile = definition.hostiles.find((candidate) => candidate.id === fight.hostileId)
   const level = readAdventurerLevel(curve, state.adventurerExperience)
   const gear = wornGear(state, definition)
-  const damage = rollDamage({
+  const adventurerBlow: Blow = {
     accuracy: level + gear.accuracyModifier,
     strength: level + gear.strengthModifier,
     defence: hostile?.defence ?? 0,
-  })
-  const remaining = fight.hostileHitpoints - damage
+  }
+  const damage = rollDamage(adventurerBlow)
+  let remaining = fight.hostileHitpoints - damage
+  let queuedStuns = fight.queuedStuns ?? 0
+  const burns: StoredBurn[] = []
+  for (const burn of fight.burns ?? []) {
+    remaining -= burn.damage
+    if (burn.remainingExchanges > 1) {
+      burns.push({ damage: burn.damage, remainingExchanges: burn.remainingExchanges - 1 })
+    }
+  }
+  if (damage > 0) {
+    for (const effect of gear.effects) {
+      if (effect.kind === "second-hit") remaining -= rollDamage(adventurerBlow)
+      if (effect.kind === "stun") queuedStuns += 1
+      if (effect.kind === "burn") {
+        remaining -= effect.damage
+        if (effect.exchanges > 1) {
+          burns.push({ damage: effect.damage, remainingExchanges: effect.exchanges - 1 })
+        }
+      }
+      if (effect.kind === "heal") {
+        const healed = state.currentHitpoints + effect.amount
+        state.currentHitpoints = healed > level ? level : healed
+      }
+    }
+  }
   if (remaining > 0) {
+    let hostileDamage = 0
+    if (queuedStuns > 0) queuedStuns -= 1
+    else {
+      hostileDamage = rollHostileDamage({
+        accuracy: hostile?.accuracy ?? 0,
+        strength: hostile?.strength ?? 0,
+        defence: level + gear.defence,
+      })
+    }
     state.fight = {
       hostileId: fight.hostileId,
       hostileHitpoints: remaining,
       phase: "underway",
+      ...(queuedStuns > 0 ? { queuedStuns } : {}),
+      ...(burns.length > 0 ? { burns } : {}),
     }
-    const hostileDamage = rollHostileDamage({
-      accuracy: hostile?.accuracy ?? 0,
-      strength: hostile?.strength ?? 0,
-      defence: level + gear.defence,
-    })
     const nextHitpoints = state.currentHitpoints - hostileDamage
     state.currentHitpoints = nextHitpoints > 0 ? nextHitpoints : 0
     if (state.currentHitpoints === 0) wakeInLastSettlement(state, definition.defeatLoss)

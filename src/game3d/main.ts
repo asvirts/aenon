@@ -1,4 +1,4 @@
-import { Color3, Color4, DirectionalLight, Engine, HemisphericLight, Scene, ShadowGenerator, Vector3 } from '@babylonjs/core'
+import { Engine, Scene, Vector3 } from '@babylonjs/core'
 import { createEnvironment, heightAt, riverCenter, riverHalfWidth } from './terrain.ts'
 import { lockCameraToPlayer } from '../art-sample/camera.ts'
 import { canTraverseRegion as canTraverse, findRegionPath as findPath } from './regionNavigation.ts'
@@ -17,14 +17,14 @@ import type { GameSnapshot, Panel } from './types.ts'
 import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
 import { openStorage } from './storage.ts'
 import type { ReviewHarness } from './review.ts'
+import { createLighting, lightingPresets } from './lighting.ts'
+import { selectGraphicsQuality, type Quality } from './quality.ts'
 import './style.css'
 import './world.css'
 
-type Quality = 'low' | 'medium' | 'high' | 'ultra'
 const canvas = document.querySelector<HTMLCanvasElement>('#world')!
 const loading = document.querySelector<HTMLElement>('#loading')!
 const loadingDetail = document.querySelector<HTMLElement>('#loading-detail')!
-const qualities: Quality[] = ['low', 'medium', 'high', 'ultra']
 async function boot() {
   configureAssetDecoders()
   const review = import.meta.env.DEV && new URLSearchParams(location.search).has('review') ? await import('./review.ts') : undefined
@@ -36,22 +36,15 @@ async function boot() {
   const game = createGame({ ...options, saved: loaded.saved, legacy: loaded.legacy })
   const engine = new Engine(canvas, true, { stencil: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' })
   const scene = new Scene(engine); scene.useRightHandedSystem = true
-  scene.clearColor = Color4.FromHexString('#b7b69aff'); scene.ambientColor = new Color3(.34, .35, .29)
-  scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0035; scene.fogColor = Color3.FromHexString('#b7b69a')
-  scene.imageProcessingConfiguration.exposure = 1; scene.imageProcessingConfiguration.contrast = 1.12
   const camera = createFollowCamera(scene)
-  const sky = new HemisphericLight('valley-sky', new Vector3(0, 1, 0), scene)
-  sky.intensity = .72; sky.diffuse = new Color3(.92, .96, 1); sky.groundColor = new Color3(.33, .29, .21)
-  const sun = new DirectionalLight('afternoon-sun', new Vector3(.55, -1, -.4), scene)
-  sun.position.set(-18, 32, 20); sun.intensity = 1.35; sun.diffuse = new Color3(1, .92, .78); sun.shadowMinZ = 1; sun.shadowMaxZ = 110
-  sun.shadowFrustumSize = 64; sun.autoUpdateExtends = false
+  const lighting = createLighting(scene, engine, camera)
   const environment = createEnvironment(scene, 110)
   loadingDetail.textContent = 'Preparing the village, riverbank, and their inhabitants…'
   const world = await createWorld(scene, id => { if (!game.snapshot().paused) { keys.clear(); game.interact(id) } })
-  let shadows: ShadowGenerator | null = null, zoom = cameraZoom.default
+  let zoom = cameraZoom.default
   let coverage = viewCoverage(zoom, engine.getRenderWidth() / engine.getRenderHeight(), heightAt(game.snapshot().position.x, game.snapshot().position.z))
   const savedQuality = (() => { try { return storage.getItem('aenon-graphics-quality') } catch { return null } })()
-  let quality: Quality = qualities.includes(savedQuality as Quality) ? savedQuality as Quality : navigator.hardwareConcurrency <= 4 ? 'low' : 'high'
+  let quality: Quality = selectGraphicsQuality(savedQuality, navigator.hardwareConcurrency, engine.getGlInfo().renderer)
   const keys = new Set<string>()
   let priorGamepadButtons: readonly boolean[] | null = null
   let gamepadWasMoving = false
@@ -165,20 +158,17 @@ async function boot() {
     engine.resize(); camera.radius = zoom
   }
   function setQuality(value: Quality) {
-    quality = value; const dpr = Math.min(window.devicePixelRatio || 1, value === 'ultra' ? 2 : value === 'high' ? 1.5 : 1)
-    engine.setHardwareScalingLevel((value === 'low' ? 1.4 : 1) / dpr)
+    quality = value
+    const preset = lightingPresets[value], dpr = Math.min(window.devicePixelRatio || 1, preset.pixelRatio)
+    engine.setHardwareScalingLevel(preset.resolutionScale / dpr)
     environment.meadow.setEnabled(value !== 'low'); environment.rockMesh?.setEnabled(value !== 'low')
-    shadows?.dispose(); shadows = null
-    if (value !== 'low') {
-      shadows = new ShadowGenerator(value === 'ultra' ? 4096 : value === 'high' ? 2048 : 1024, sun)
-      shadows.usePoissonSampling = true; shadows.bias = .0006; shadows.normalBias = .035
-      updateShadowCasters(game.snapshot().position)
-    }
+    lighting.setQuality(value)
+    updateShadowCasters(game.snapshot().position)
     try { storage.setItem('aenon-graphics-quality', value) } catch { /* Preferences must not prevent playing. */ }
     resize()
   }
   function updateShadowCasters(position: { x: number; z: number }) {
-    const shadowMap = shadows?.getShadowMap()
+    const shadowMap = lighting.shadowMap()
     if (!shadowMap) return
     const nearby = world.shadowCasters.filter(mesh => {
       mesh.computeWorldMatrix(true)
@@ -277,8 +267,7 @@ async function boot() {
     lockCameraToPlayer(camera, new Vector3(snapshot.position.x, playerHeight, snapshot.position.z))
     scene.updateTransformMatrix()
     world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight, coverage)
-    sun.position.set(snapshot.position.x - 22, playerHeight + 40, snapshot.position.z + 16)
-    sun.shadowFrustumSize = coverage.shadowFrustum
+    lighting.update(snapshot.position, playerHeight, zoom, engine.getRenderWidth() / engine.getRenderHeight())
     scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt
     if (fadeTime > .1) {
@@ -297,7 +286,7 @@ async function boot() {
     scene.render()
     reviewHarness?.afterFrame()
   })
-  const debug = () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, controller: { connected: priorGamepadButtons !== null, name: gamepadLabel }, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, shadowCasters: shadows?.getShadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked })
+  const debug = () => ({ ready: true, snapshot: game.snapshot(), quality, zoom, controller: { connected: priorGamepadButtons !== null, name: gamepadLabel }, camera: { target: camera.target.asArray(), position: camera.position.asArray(), alpha: camera.alpha, beta: camera.beta, radius: camera.radius }, animations: Object.fromEntries([...world.actors].map(([id, actor]) => [id, actor.active?.name])), fps: engine.getFps(), averageFps: fpsSamples.reduce((a, b) => a + b, 0) / Math.max(1, fpsSamples.length), renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(), meshes: scene.meshes.length, lighting: lighting.info(), shadowCasters: lighting.shadowMap()?.renderList?.length ?? 0, triangles: scene.meshes.reduce((sum, mesh) => sum + mesh.getTotalIndices(), 0) / 3, savingBlocked })
   if (import.meta.env.DEV && review) {
     reviewHarness = review.installReviewHarness({
       game, options, scene, engine, applyQuality: setQuality, applyZoom, closePanel: ui.closePanel,

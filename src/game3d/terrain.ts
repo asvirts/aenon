@@ -1,7 +1,9 @@
-import { Color3, DynamicTexture, Mesh, MeshBuilder, ShaderMaterial, StandardMaterial, TransformNode, VertexData } from '@babylonjs/core'
+import { Color3, DynamicTexture, Mesh, MeshBuilder, TransformNode, VertexData } from '@babylonjs/core'
 import type { Scene } from '@babylonjs/core'
 import { regionBounds, regionPlaces, regionRoads } from './region.ts'
 import { AENON_OFFSET, LOW_BAND_STREETS } from './lowBand.ts'
+import { surfaceMaterial } from './materials.ts'
+import { createWaterMaterial } from './waterMaterial.ts'
 
 type Point = { x: number; z: number }
 const clamp = (value: number) => Math.max(0, Math.min(1, value))
@@ -88,14 +90,14 @@ function vertexMesh(name: string, positions: number[], indices: number[], colors
 /** One continuous region, split into independently culled terrain and decoration meshes. */
 export function createEnvironment(scene: Scene, _legacySize = 110) {
   const ground = new TransformNode('region-earth', scene), meadow = new TransformNode('regional-meadow', scene), rockMesh = new TransformNode('regional-stones', scene)
-  const groundMat = new StandardMaterial('original-regional-earth', scene); groundMat.specularColor = Color3.Black(); groundMat.diffuseColor = new Color3(.72, .72, .72)
+  const groundMat = surfaceMaterial(scene, 'original-regional-earth', '#ffffff'); groundMat.roughness = 1
   const texture = new DynamicTexture('original-regional-brushwork', { width: 512, height: 512 }, scene, true), ctx = texture.getContext(), paint = random(72028)
   ctx.fillStyle = '#efebd9'; ctx.fillRect(0, 0, 512, 512)
   for (let i = 0; i < 18000; i++) { const v = Math.floor(185 + paint() * 65); ctx.fillStyle = `rgba(${v},${v - 2},${v - 10},.13)`; ctx.fillRect(paint() * 512, paint() * 512, 1 + paint() * 8, .5 + paint() * 2) }
   for (let i = 0; i < 950; i++) { ctx.fillStyle = paint() > .42 ? 'rgba(92,78,52,.18)' : 'rgba(255,246,216,.30)'; ctx.fillRect(paint() * 512, paint() * 512, 1 + paint() * 3, 1 + paint() * 2) }
-  texture.update(); groundMat.diffuseTexture = texture
-  const grassMat = new StandardMaterial('regional-grass-pigments', scene); grassMat.specularColor = Color3.Black(); grassMat.backFaceCulling = false
-  const stoneMat = new StandardMaterial('regional-limestone', scene); stoneMat.diffuseColor = Color3.FromHexString('#9c947b'); stoneMat.specularColor = Color3.Black()
+  texture.update(); groundMat.albedoTexture = texture
+  const grassMat = surfaceMaterial(scene, 'regional-grass-pigments', '#ffffff'); grassMat.roughness = 1; grassMat.backFaceCulling = false
+  const stoneMat = surfaceMaterial(scene, 'regional-limestone', '#9c947b')
   const sand = Color3.FromHexString('#c8b586'), sage = Color3.FromHexString('#929669'), dark = Color3.FromHexString('#737f52'), pathColor = Color3.FromHexString('#94784e'), courtyard = Color3.FromHexString('#baa780')
   const settlements = regionPlaces.filter(place => place.kind === 'settlement')
   const chunks: { x: number; z: number; ground: Mesh; grass?: Mesh; stones?: Mesh; decorated: boolean }[] = []
@@ -113,6 +115,7 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
       color = Color3.Lerp(color, pathColor.scale(.96 + noise(px, pz) * .075), clamp((2.25 - roadDistance(px, pz) + noise(px, pz) * .2) / 1.05))
       if (waterDistance(px, pz) < 2) color = Color3.Lerp(color, sand, .55)
       if (y > 9) color = Color3.Lerp(color, Color3.FromHexString('#a29c7e'), .35)
+      color.toLinearSpaceToRef(color)
       colors.push(color.r, color.g, color.b, 1)
       if (col < cells && row < cells) { const i = row * (cells + 1) + col; indices.push(i, i + 1, i + cells + 1, i + 1, i + cells + 2, i + cells + 1) }
     }
@@ -120,11 +123,7 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
     mesh.parent = ground; mesh.material = groundMat; mesh.receiveShadows = true; mesh.metadata = { walkSurface: true }
     chunks.push({ x: x + chunkSize / 2, z: z + chunkSize / 2, ground: mesh, decorated: false })
   }
-  const waterMat = new ShaderMaterial('original-regional-water', scene, {
-    vertexSource: 'precision highp float;attribute vec3 position;attribute vec2 uv;uniform mat4 worldViewProjection;varying vec2 vUV;varying vec3 p;void main(){vUV=uv;p=position;gl_Position=worldViewProjection*vec4(position,1.);}',
-    fragmentSource: `precision highp float;varying vec2 vUV;varying vec3 p;uniform float time;void main(){float edge=min(vUV.x,1.-vUV.x);float flow=sin(p.z*2.6+p.x*1.8+time*.48)+sin(p.z*7.4-p.x*3.6-time*.65)*.28;vec3 col=mix(vec3(.34,.57,.51),vec3(.13,.36,.38),smoothstep(0.,.28,edge));col+=vec3(.033,.05,.045)*flow;float ripple=pow(max(0.,sin(p.z*8.+p.x*2.+sin(p.x*2.5+time*.22)*1.5+time*.8)),34.);col+=vec3(.23,.26,.20)*ripple*smoothstep(.15,.7,sin(p.x*4.3-p.z*.85))*.45;float foam=(1.-smoothstep(.008,.035,edge))*(.55+.3*sin(p.z*5.+time*.5));gl_FragColor=vec4(mix(col,vec3(.72,.76,.58),foam*.8),1.);}`,
-  }, { attributes: ['position', 'uv'], uniforms: ['worldViewProjection', 'time'] })
-  waterMat.backFaceCulling = false; waterMat.setFloat('time', 0)
+  const waterMat = createWaterMaterial(scene)
   const water = new TransformNode('regional-water', scene)
   const riverPositions: number[] = [], riverIndices: number[] = [], riverUV: number[] = []
   const riverRows = Math.ceil((regionBounds.maxZ - regionBounds.minZ + 10) / 1.5)
@@ -150,7 +149,7 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
     for (let i = 0; i < 330; i++) {
       const x = chunk.x + (rand() - .5) * chunkSize, z = chunk.z + (rand() - .5) * chunkSize
       if (!dryLand(x, z) || roadDistance(x, z) < 2 || regionPlaces.some(place => place.kind === 'settlement' && Math.hypot(x - place.x, z - place.z) < place.radius * .7)) continue
-      const y = heightAt(x, z), reed = waterDistance(x, z) < 2, color = Color3.FromHexString(reed ? '#777e49' : '#8c925b')
+      const y = heightAt(x, z), reed = waterDistance(x, z) < 2, color = Color3.FromHexString(reed ? '#777e49' : '#8c925b').toLinearSpace()
       for (let b = 0; b < 3; b++) {
         const angle = rand() * Math.PI * 2, w = .035, h = reed ? .5 + rand() * .7 : .17 + rand() * .3, dx = Math.cos(angle) * w, dz = Math.sin(angle) * w, n = positions.length / 3
         positions.push(x - dx, y, z - dz, x + dx, y, z + dz, x + Math.sin(angle) * .1, y + h, z + Math.cos(angle) * .1); indices.push(n, n + 1, n + 2)

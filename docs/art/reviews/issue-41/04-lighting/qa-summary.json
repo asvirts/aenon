@@ -53,5 +53,11 @@
     "Baseline Jordan bridge geometry striping remains; owned by issue 58.",
     "Reporter must judge visual acceptance, including High/Ultra distinctness."
   ],
-  "reporterVisualApproval": "pending"
+  "reporterVisualApproval": "pending",
+  "reviewSaveIsolation": {
+    "existingEntries": 2,
+    "exactlyEqualAfterCapturesAndPresetChanges": true,
+    "exactlyEqualAfterReviewReload": true,
+    "record": "storage-isolation.json"
+  }
 }

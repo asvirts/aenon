@@ -29,7 +29,7 @@ import {
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
 import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
-import { makePiece, requireGearMaking, type MakeResult } from "./lib/make.ts"
+import { makePiece, requireCooking, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import {
   lookAtPerson,
   presentQuestJournal,
@@ -71,6 +71,9 @@ export type {
   ArmorWeight,
   ExperienceCurve,
   GatheringSkill,
+  CookingRecipe,
+  Fish,
+  Food,
   Gear,
   GearPiece,
   GearRecipe,
@@ -166,6 +169,8 @@ export function loadSeason(
   if (!goods.ok) return goods
   const caches = requireCaches(definition)
   if (!caches.ok) return caches
+  const cooking = requireCooking(definition)
+  if (!cooking.ok) return cooking
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)

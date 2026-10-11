@@ -68,7 +68,7 @@ export type GearPiece =
   | { id: string; slot: "shield"; band: LevelBand; rarity: Rarity }
   | { id: string; slot: ArmorSlot; weight: ArmorWeight; band: LevelBand; rarity: Rarity }
 
-export type StationKind = "forge" | "loom" | "tanning-rack"
+export type StationKind = "forge" | "loom" | "tanning-rack" | "hearth"
 
 export type Station = {
   id: string
@@ -101,6 +101,28 @@ export type GearRecipe =
       hide: MaterialCost
       bone: MaterialCost
     })
+
+export type Fish = {
+  id: string
+  rarity: Rarity
+}
+
+export type Food = {
+  id: string
+  rarity: Rarity
+}
+
+export type CookingRecipe = {
+  id: string
+  requiredLevel: number
+  fish: MaterialCost
+  meat: MaterialCost
+  herbs: MaterialCost
+  foodId: string
+  skillExperience: number
+  band?: LevelBand
+  stationId?: string
+}
 
 export type Spot = {
   id: string
@@ -235,6 +257,9 @@ export type SeasonDefinition = {
   goods?: readonly CatalogGood[]
   vendors?: readonly Vendor[]
   caches?: readonly Cache[]
+  fish?: readonly Fish[]
+  foods?: readonly Food[]
+  cookingRecipes?: readonly CookingRecipe[]
 }
 
 export type ExperienceCurve = (experience: number) => number

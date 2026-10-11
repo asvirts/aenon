@@ -31,6 +31,11 @@ export type DefinitionFailure =
   | "rarity-not-graded"
   | "special-find-not-legendary"
   | "cache-not-in-wilderness"
+  | "meal-rarity-not-fish-rarity"
+  | "cooking-recipe-has-band"
+  | "cooking-count-not-positive"
+  | "cooking-fish-missing"
+  | "cooking-food-missing"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

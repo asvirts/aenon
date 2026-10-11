@@ -3,6 +3,7 @@ import type { DefinitionFailure } from "./definition.ts"
 import { experienceInsideBand, holdSkillExperience, readSkillLevel } from "./experience.ts"
 import { packAfterGoods, packWithoutGoods } from "./pack.ts"
 import type {
+  CookingRecipe,
   ExperienceCurve,
   GearPiece,
   GearRecipe,
@@ -54,6 +55,24 @@ export function requireGearMaking(
   return { ok: true }
 }
 
+export function requireCooking(
+  definition: SeasonDefinition,
+): { ok: true } | { ok: false; reason: DefinitionFailure } {
+  for (const recipe of definition.cookingRecipes ?? []) {
+    if (recipe.band !== undefined) return { ok: false, reason: "cooking-recipe-has-band" }
+    if (recipe.stationId !== undefined) return { ok: false, reason: "recipe-tied-to-station" }
+    if (!positiveCount(recipe.fish.count) || !positiveCount(recipe.meat.count) || !positiveCount(recipe.herbs.count)) {
+      return { ok: false, reason: "cooking-count-not-positive" }
+    }
+    const fish = (definition.fish ?? []).find((candidate) => candidate.id === recipe.fish.id)
+    if (!fish) return { ok: false, reason: "cooking-fish-missing" }
+    const food = (definition.foods ?? []).find((candidate) => candidate.id === recipe.foodId)
+    if (!food) return { ok: false, reason: "cooking-food-missing" }
+    if (fish.rarity !== food.rarity) return { ok: false, reason: "meal-rarity-not-fish-rarity" }
+  }
+  return { ok: true }
+}
+
 export type MakeResult =
   | { ok: true }
   | {
@@ -76,6 +95,9 @@ export function makePiece(
   recipeId: string,
 ): MakeResult {
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
+
+  const cooking = (definition.cookingRecipes ?? []).find((candidate) => candidate.id === recipeId)
+  if (cooking) return cookMeal(state, definition, curve, stationId, cooking)
 
   const station = (definition.stations ?? []).find((candidate) => candidate.id === stationId)
   const recipe = (definition.gearRecipes ?? []).find((candidate) => candidate.id === recipeId)
@@ -123,6 +145,55 @@ export function makePiece(
     definition.smallerGrant,
   )
   return { ok: true }
+}
+
+function cookMeal(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  curve: ExperienceCurve,
+  stationId: string,
+  recipe: CookingRecipe,
+): MakeResult {
+  const station = (definition.stations ?? []).find((candidate) => candidate.id === stationId)
+  if (!station || station.placeId !== state.placeId || station.kind !== "hearth") {
+    return { ok: false, reason: "wrong-station" }
+  }
+  const place = definition.places.find((candidate) => candidate.id === station.placeId)
+  if (!place || place.kind !== "settlement") return { ok: false, reason: "wrong-station" }
+  if (readSkillLevel(curve, state.trainedExperience.Cooking) < recipe.requiredLevel) {
+    return { ok: false, reason: "skill-too-low" }
+  }
+
+  let pack: readonly PackEntry[] = state.pack
+  const withoutFish = packWithoutGoods(pack, { kind: "fish", id: recipe.fish.id }, recipe.fish.count)
+  if (!withoutFish) return { ok: false, reason: "missing-materials" }
+  pack = withoutFish
+  const withoutMeat = packWithoutGoods(pack, { kind: "material", id: recipe.meat.id }, recipe.meat.count)
+  if (!withoutMeat) return { ok: false, reason: "missing-materials" }
+  pack = withoutMeat
+  const withoutHerbs = packWithoutGoods(pack, { kind: "material", id: recipe.herbs.id }, recipe.herbs.count)
+  if (!withoutHerbs) return { ok: false, reason: "missing-materials" }
+  pack = withoutHerbs
+
+  const withFood = packAfterGoods(pack, definition.packSize, { kind: "food", id: recipe.foodId }, 1)
+  if (!withFood) return { ok: false, reason: "pack-full" }
+
+  state.pack = withFood
+  state.trainedExperience.Cooking = holdSkillExperience(
+    state.trainedExperience.Cooking + recipe.skillExperience,
+    curve,
+  )
+  state.adventurerExperience = experienceInsideBand(
+    state.adventurerExperience,
+    curve,
+    place.band,
+    definition.smallerGrant,
+  )
+  return { ok: true }
+}
+
+function positiveCount(count: number): boolean {
+  return Number.isInteger(count) && count > 0
 }
 
 function pieceFitsSkill(piece: GearPiece, skill: GearRecipe["skill"]): boolean {

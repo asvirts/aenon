@@ -2,6 +2,7 @@ import type { SeasonState } from "./begin.ts"
 import { experienceInsideBand, readAdventurerLevel } from "./experience.ts"
 import { wornGear } from "./gear.ts"
 import { clearCarcasses, leaveCarcass, receiveDrop, type Drop } from "./hunt.ts"
+import { completeCurrentDefeat } from "./quest.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
 
 export type Blow = {
@@ -115,6 +116,7 @@ export function swingAtHostile(
     state.fallenHostiles = [...state.fallenHostiles, hostile.id]
     leaveCarcass(state, hostile)
     receiveDrop(state, rollDrop())
+    completeCurrentDefeat(state, definition, hostile.id)
   }
   state.fight = null
   return { ok: true, damage, hostileFell: true }

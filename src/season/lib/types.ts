@@ -71,6 +71,8 @@ export type Person = {
 
 export type QuestStep =
   | { kind: "hold"; goodId: string; count: number; line: string }
+  | { kind: "defeat"; hostileId: string; line: string }
+  | { kind: "mark"; mark: string; line: string }
   | { kind: "return"; goodId: string; count: number; line: string }
 
 export type QuestDefinition = {

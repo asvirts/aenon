@@ -20,6 +20,7 @@ import {
   type SwingResult,
 } from "./lib/fight.ts"
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
+import { makePiece, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
 import {
   requireDefeatGrants,
@@ -32,22 +33,31 @@ import {
 import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
 
 export type {
+  ArmorSlot,
+  ArmorWeight,
   ExperienceCurve,
   GatheringSkill,
+  GearPiece,
+  GearRecipe,
   Good,
   Hostile,
   LevelBand,
+  MaterialCost,
   PackEntry,
   Place,
+  Rarity,
   ScriptureObject,
   SeasonDefinition,
   Spot,
   SpotSkill,
+  Station,
+  StationKind,
 } from "./lib/types.ts"
 export type { Adventurer, Fight, ReferenceFiling, SeasonState }
 export type { EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }
+export type { MakeResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -58,6 +68,7 @@ export type Season = {
   swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
   read: (scriptureObjectId: string) => ReadResult
   gather: (spotId: string) => GatherResult
+  make: (stationId: string, recipeId: string) => MakeResult
 }
 
 export type SeasonLoad =
@@ -81,6 +92,8 @@ export function loadSeason(
   if (!wildernessHostiles.ok) return wildernessHostiles
   const gatheringSpots = requireGatheringSpots(definition)
   if (!gatheringSpots.ok) return gatheringSpots
+  const gearMaking = requireGearMaking(definition)
+  if (!gearMaking.ok) return gearMaking
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -100,6 +113,7 @@ export function loadSeason(
         swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
       read: (scriptureObjectId) => readScripture(seasonState, definition, curve, scriptureObjectId),
       gather: (spotId) => gatherAtSpot(seasonState, definition, curve, spotId),
+      make: (stationId, recipeId) => makePiece(seasonState, definition, curve, stationId, recipeId),
     },
   }
 }

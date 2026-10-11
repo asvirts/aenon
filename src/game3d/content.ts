@@ -117,8 +117,8 @@ for (const [index, place] of regionPlaces.entries()) {
     } else for (const [h, offset] of [[-8, -8], [8, -9], [-10, -1]].entries()) houses.push({ x: place.x + offset[0]!, z: place.z + offset[1]!, rotation: 0, scale: h === 0 ? 1 : .78 })
     const vendorId = `${place.id}-vendor`, giverId = `${place.id}-neighbor`
     people.push({ id: vendorId, placeId: place.id, kind: 'ordinary', vendor: true }, { id: giverId, placeId: place.id, kind: 'ordinary' })
-    objects.push({ id: vendorId, kind: 'person', model: 'merchant', name: `${place.name} Vendor`, placeId: place.id, ...land({ x: place.x + 5, z: place.z + 4 }) },
-      { id: giverId, kind: 'person', model: 'villager', name: `${place.giver!.name} · ${place.giver!.trade}`, placeId: place.id, ...land({ x: place.x - 4, z: place.z + 3 }) })
+    objects.push({ id: vendorId, kind: 'person', model: 'merchant', name: `${place.name} Vendor`, subtitle: 'Vendor', placeId: place.id, ...land({ x: place.x + 5, z: place.z + 4 }) },
+      { id: giverId, kind: 'person', model: 'villager', name: `${place.giver!.name} · ${place.giver!.trade}`, subtitle: 'Work giver', placeId: place.id, ...land({ x: place.x - 4, z: place.z + 3 }) })
     personStories[giverId] = place.character
     vendors.push(regionalVendor(vendorId, place.band, economy))
     for (const [n, [kind, model]] of ([['forge', 'forge'], ['loom', 'loom'], ['tanning-rack', 'rack'], ['hearth', 'hearth']] as const).entries()) {
@@ -145,7 +145,7 @@ for (const [index, place] of regionPlaces.entries()) {
     const id = `${place.id}-threat-${n}`, animal = (index + n) % 3 !== 0
     const lowThreat = place.id === 'pella' ? { hitpoints: 80, strength: 14 } : place.id === 'scythopolis' ? { hitpoints: 45, strength: 8 } : { hitpoints: 20, strength: 4 }
     hostiles.push({ id, ...(animal ? { kind: 'animal' as const, huntingExperience: [40, 250, 1200][rank]! } : { kind: 'bandit' as const }), placeId: home, hitpoints: rank === 0 ? lowThreat.hitpoints : [12, 90, 200][rank]!, accuracy: [2, 21, 43][rank]!, strength: rank === 0 ? lowThreat.strength : [2, 18, 38][rank]!, defence: [1, 15, 35][rank]!, defeatGrant: [120, 800, 1800][rank]! })
-    objects.push({ ...at, id, kind: 'hostile', model: animal ? 'wolf' : 'bandit', name: animal ? `${place.name} wild wolf` : `${place.name} road bandit`, placeId: home,
+    objects.push({ ...at, id, kind: 'hostile', model: animal ? 'wolf' : 'bandit', name: animal ? `${place.name} wild wolf` : `${place.name} road bandit`, subtitle: 'Hostile', placeId: home,
       respawnSeconds: 45 + b * 15, aggroRadius: 4.2, leashRadius: 9,
       loot: { coin: [3, 12, 26][rank]!, goods: [{ kind: 'special-find', id: `${ownBand}-find`, band: ownBand }], goodsChance: .08,
         gear: [{ id: `${['jordan', 'hill-country', 'galilee'][rank]}-uncommon-shield`, chance: .12 }, { id: `${['jordan', 'hill-country', 'galilee'][rank]}-rare-sword`, chance: .025 }, { id: `${['jordan', 'hill-country', 'galilee'][rank]}-legendary-mace`, chance: .005 }] } })

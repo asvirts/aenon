@@ -7,6 +7,7 @@ import { regionPlaces, regionRoads, ports } from './region.ts'
 import { specialFindNames } from './economy.ts'
 import { canTraverseRegion } from './regionNavigation.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
+import { anchorHeight, plateKind, subtitleFor } from './nameplates.ts'
 import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
@@ -34,14 +35,30 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       if (fade) { occluders.push(mesh); if (mesh.material) mesh.material.transparencyMode = null }
     }
   }
-  function label(id: string, name: string, kind: string) {
-    const button = document.createElement('button'); button.className = `world-label ${kind}`; button.type = 'button'; button.dataset.objectId = id; button.hidden = true
-    const title = document.createElement('span'); title.textContent = name; button.append(title)
+  const nameplateContext = {
+    vendorIds: (gearDefinition.vendors ?? []).map(vendor => vendor.personId),
+    questGiverIds: (gearDefinition.quests ?? []).map(quest => quest.giverId),
+    biblicalFigureIds: (gearDefinition.people ?? []).filter(person => person.kind === 'biblical-figure').map(person => person.id),
+  }
+  function label(id: string, name: string, kind: string, object?: WorldObject) {
+    const button = document.createElement('button'); button.type = 'button'; button.dataset.objectId = id; button.hidden = true
+    const full = object ? plateKind(object) === 'full' : kind === 'hostile' || kind === 'person'
+    button.className = `world-label ${kind} ${full ? 'full' : 'hint'}`
+    const title = document.createElement('span'); title.className = 'plate-name'; title.textContent = name; button.append(title)
+    if (full) {
+      const subtitle = document.createElement('span'); subtitle.className = 'plate-subtitle'
+      subtitle.textContent = subtitleFor({ id, kind: (object?.kind ?? kind) as WorldObject['kind'], name, subtitle: object?.subtitle }, nameplateContext)
+      button.append(subtitle)
+      if ((object?.kind ?? kind) === 'hostile') {
+        const track = document.createElement('span'); track.className = 'plate-health-track'
+        const fill = document.createElement('span'); fill.className = 'plate-health-fill'; track.append(fill); button.append(track)
+      }
+    }
     const detail = document.createElement('small'); button.append(detail)
     button.addEventListener('click', () => { interact(id); (document.querySelector('#world') as HTMLCanvasElement)?.focus() })
     labelLayer.append(button); labels.set(id, button); return button
   }
-  for (const object of objects) label(object.id, object.name, object.kind)
+  for (const object of objects) label(object.id, object.name, object.kind, object)
   const setPosition = (root: TransformNode, p: Point, y = 0) => root.position.set(p.x, heightAt(p.x, p.z) + y, p.z)
   function container(filename: string) {
     let cached = containers.get(filename)
@@ -616,7 +633,10 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       model.prior = { x: enemy.x, z: enemy.z }
       const danger = telegraphs.get(enemy.id)!; danger.setEnabled(enemy.status === 'windup' && Boolean(enemy.attackPoint))
       if (enemy.attackPoint) { setPosition(danger, enemy.attackPoint, .05); (danger.material as StandardMaterial).alpha = .2 + .4 * (1 - enemy.windup / .7) }
-      const button = labels.get(enemy.id)!; button.querySelector('small')!.textContent = `${Math.ceil(enemy.hitpoints)} / ${enemy.maxHitpoints}${enemy.stunned > 0 ? ' · stunned' : enemy.burning ? ' · burning' : ''}`
+      const button = labels.get(enemy.id)!
+      button.querySelector('small')!.textContent = `${Math.ceil(enemy.hitpoints)} / ${enemy.maxHitpoints}${enemy.stunned > 0 ? ' · stunned' : enemy.burning ? ' · burning' : ''}`
+      const fill = button.querySelector('.plate-health-fill') as HTMLElement | null
+      if (fill) fill.style.width = `${Math.max(0, Math.min(1, enemy.hitpoints / enemy.maxHitpoints)) * 100}%`
     }
     for (const spot of snapshot.spots) {
       labels.get(spot.id)!.querySelector('small')!.textContent = spot.stock ? `${spot.stock} / ${spot.capacity}` : `Regrowing · ${Math.ceil(spot.replenishIn)}s`
@@ -651,7 +671,8 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       const visible = present && point && !snapshot.paused && Math.hypot(point.x - p.x, point.z - p.z) < 20 && enemy?.status !== 'dead'
       element.hidden = !visible
       if (point && visible) {
-        const pos = Vector3.Project(new Vector3(point.x, heightAt(point.x, point.z) + (enemy ? 1.65 : .92), point.z), Matrix.Identity(), scene.getTransformMatrix(), camera.viewport.toGlobal(width, height))
+        const anchor = anchorHeight(object?.model ?? (enemy ? objectById.get(enemy.id)?.model : undefined))
+        const pos = Vector3.Project(new Vector3(point.x, heightAt(point.x, point.z) + anchor, point.z), Matrix.Identity(), scene.getTransformMatrix(), camera.viewport.toGlobal(width, height))
         element.style.transform = `translate(${pos.x}px,${pos.y}px) translate(-50%,-100%)`; element.hidden = pos.x < 15 || pos.x > width - 15 || pos.y < 55 || pos.y > height - 95
         element.classList.toggle('selected', snapshot.targetId === id)
       }

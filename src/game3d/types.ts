@@ -2,7 +2,7 @@ import type { Adventurer, BuyGood, SellGood, GearSlot, SeasonState, SeasonDefini
 export type Point = { x: number; z: number }
 export type ObjectKind = 'hostile' | 'spot' | 'person' | 'scripture' | 'station' | 'cache' | 'travel'
 export type WorldLoot = { coin: number; gear?: readonly { id: string; chance: number }[]; goods?: readonly Good[]; goodsChance?: number }
-export type WorldObject = Point & { id: string; kind: ObjectKind; name: string; placeId: string; model?: 'wolf' | 'bandit' | 'tree' | 'ore' | 'herbs' | 'flax' | 'fish' | 'john' | 'merchant' | 'villager' | 'forge' | 'loom' | 'rack' | 'hearth' | 'scroll' | 'chest' | 'boat' | 'signpost'; capacity?: number; cycleSeconds?: number; replenishSeconds?: number; respawnSeconds?: number; aggroRadius?: number; leashRadius?: number; story?: boolean; sceneId?: string; loot?: WorldLoot; journeyId?: string }
+export type WorldObject = Point & { id: string; kind: ObjectKind; name: string; subtitle?: string; placeId: string; model?: 'wolf' | 'bandit' | 'tree' | 'ore' | 'herbs' | 'flax' | 'fish' | 'john' | 'merchant' | 'villager' | 'forge' | 'loom' | 'rack' | 'hearth' | 'scroll' | 'chest' | 'boat' | 'signpost'; capacity?: number; cycleSeconds?: number; replenishSeconds?: number; respawnSeconds?: number; aggroRadius?: number; leashRadius?: number; story?: boolean; sceneId?: string; loot?: WorldLoot; journeyId?: string }
 export type WorldJourney = { id: string; from: Point; to: Point; fromPlaceId: string; toPlaceId: string; kind: 'road' | 'boat'; durationSeconds?: number }
 export type JourneyView = Pick<WorldJourney, 'id' | 'from' | 'to' | 'kind'> & { progress: number }
 export type CompanyView = { kind: 'scene' | 'acquaintance'; anchor: Point; sceneId?: string }

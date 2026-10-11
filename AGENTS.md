@@ -2,7 +2,7 @@
 
 The Season is a TypeScript browser game. Babylon.js draws the original 3D world at the root route through `src/game3d/main.ts`. The camera follows the Adventurer at a constant isometric-style angle. `src/season/realtime.ts` owns the browser-independent simulation; DOM panels provide Gear, journals, trade, crafting, settings, and live NIV passages. A small Node server holds the YouVersion App Key. Versioned saves live in the browser, with earlier saves retained for recovery. The previous Phaser host remains in `src/host/` as source, and `/art-sample.html` retains the separate art study.
 
-The rules module is specified in [Season rules on the logic surface](https://github.com/asvirts/aenon/issues/15). The decision map is [Aenon region spec](https://github.com/asvirts/aenon/issues/1). The rules module lives in `src/season/`. Accepted 3D and real-time changes are recorded in `docs/design/3d-redesign.md` and ADRs 0015–0022. Verify with `npm test`, `npm run typecheck`, and `npm run build`, then check the actual game in the Codex in-app browser.
+The rules module is specified in [Season rules on the logic surface](https://github.com/asvirts/aenon/issues/15). The decision map is [Aenon region spec](https://github.com/asvirts/aenon/issues/1). The rules module lives in `src/season/`. Accepted 3D and real-time changes are recorded in `docs/design/3d-redesign.md` and ADRs 0015–0023. Verify with `npm test`, `npm run typecheck`, and `npm run build`, then check the actual game in the Codex in-app browser.
 
 ## Agent skills
 

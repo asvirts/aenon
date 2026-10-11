@@ -15,7 +15,7 @@ The root route now uses the Babylon 3D host. Authoritative real-time gameplay, o
 - Graphics: Low/Medium/High/Ultra presets, with a playable Low preset on ordinary laptops and greater visual richness on stronger hardware. Target at least 30 FPS at Low and 60 FPS where hardware permits; recommend a starting preset and allow manual changes. These are validation targets, not measured performance or guarantees.
 - Controls: click-to-act is primary, with WASD retained. The Adventurer uses a running or jogging gait by default when moving, following the user's playable-sample feedback. Clicking an interaction moves into range; routes go around obstacles rather than through them. Movement speed and gait timing are tuned together through playable review.
 - World authoring: primarily directed through Codex; a visual scene editor is optional.
-- Art production: all art is made specifically for The Season through Codex-driven Blender modeling, original rigs and animations, and AI-assisted original concept/texture work. The initial playable sample established the pipeline and received running-gait and player-follow-camera corrections; the user then authorized first-area production. Reusable third-party art packs are rejected. See [ADR 0017](../adr/0017-original-art-through-blender.md).
+- Art production: all art is made specifically for The Season through Codex-driven Blender modeling, original rigs and animations, and AI-assisted original concept/texture work. The initial playable sample established the pipeline and received running-gait and player-follow-camera corrections; the user then authorized first-area production. Issue #41 later reopened provenance: free third-party and AI-generated art is allowed when its licence permits public redistribution and modification, and every asset is credited in the repository and in the game. See [ADR 0023](../adr/0023-licensed-third-party-and-ai-art-with-credits.md), which supersedes [ADR 0017](../adr/0017-original-art-through-blender.md).
 - Interface: most screen space belongs to the world, with a compact action bar and panels opened as needed for Gear, journals, trading, and Scripture. Use readable text and restrained parchment/stone styling.
 - Occlusion: fade roofs, walls, and tree canopies that obscure the Adventurer or current interaction target, preserving their physical obstacles and routes around them.
 - Panels: opening Scripture, journals, Gear, or trading stops movement and pauses gameplay until the panel closes. Existing action restrictions still apply, including not reading Scripture during a fight.
@@ -64,7 +64,7 @@ These defaults were explicitly presented and accepted in Q27:
 
 - Real 3D presentation: settled.
   - Art direction: stylized Galilee/Jordan, settled.
-    - Art provenance: all art specific to this game, settled.
+    - Art provenance: original, free third-party, or AI-generated art, legally licensed and credited (ADR 0023, superseding the original-only rule), settled.
     - Production method and review: Codex-driven Blender, original rigs/animations, AI-assisted concept/texture work, and a playable art sample, settled.
     - Blender setup and original sample production were authorized by Q27. The subsequent instruction authorizes original assets for the complete first area; no asset purchases or commissions are part of this plan.
   - Camera: player-centered tracking with constant viewing direction and elevation, zoom around the Adventurer, and no free panning, settled.

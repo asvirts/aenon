@@ -1,0 +1,138 @@
+[
+  {
+    "name": "salim",
+    "preset": "low",
+    "baselineAlias": "aenon-square",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "low",
+    "baselineAlias": "aenon-riverbank",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "medium",
+    "baselineAlias": "aenon-square",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "medium",
+    "baselineAlias": "aenon-riverbank",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "high",
+    "baselineAlias": "aenon-square",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "high",
+    "baselineAlias": "aenon-riverbank",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "ultra",
+    "baselineAlias": "aenon-square",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-square",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "ultra",
+    "baselineAlias": "aenon-riverbank",
+    "source": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+    "state": {
+      "inCombat": false,
+      "name": "aenon-riverbank",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  }
+]

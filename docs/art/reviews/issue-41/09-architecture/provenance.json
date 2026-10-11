@@ -1,0 +1,73 @@
+{
+  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+  "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "canonicalBefore": {
+    "source": "/tmp/aenon-41-approved-lighting-baseline/before",
+    "frames": 32,
+    "metadata": "before/shots.json"
+  },
+  "performanceBefore": {
+    "source": "/tmp/aenon-41-approved-lighting-baseline/performance-before.json",
+    "rows": 8
+  },
+  "supplementalBefore": {
+    "status": "8 frames captured",
+    "fixtureOnlyPatch": "supplemental/baseline-fixture-only.patch",
+    "note": "The temporary DEV patch reuses two canonical hook names for Salim/Pella positions at radius44; supplemental captures must be recorded separately from canonical before frames. Other temporary entries support the parallel water review.",
+    "metadata": "supplemental/before/shots.json"
+  },
+  "productionBefore": {
+    "copiedFrom": "../04-lighting/production-*-after.*",
+    "measuredCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+    "runtimeEquivalentToBase": true,
+    "verifiedPaths": [
+      "src/",
+      "public/",
+      "package.json",
+      "package-lock.json"
+    ],
+    "verification": "git diff --name-only c38295d724e971bda802cb3bf3b6e4af95c13198 925d2e1923789bb7502c78fc444f042cc3cad51e -- src public package.json package-lock.json returned no paths. Original measured-commit fields remain intact in copied JSON."
+  },
+  "rejectedAfterCommit": "f11de682b9b59eacd6ad0a956d0f14a613105876",
+  "replacementAfterStatus": "40 corrected frames captured at db6f9dc and independently inspected",
+  "canonicalAfter": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "frames": 32,
+    "metadata": "after/shots.json"
+  },
+  "supplementalAfter": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "frames": 8,
+    "metadata": "supplemental/after/shots.json"
+  },
+  "performanceAfter": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "rows": 8,
+    "record": "performance-after.json"
+  },
+  "repeatability": {
+    "source": "/tmp/aenon-58-repeat-db6f9dc",
+    "frames": 32,
+    "metadata": "repeat-shots.json",
+    "analysis": "repeatability.json"
+  },
+  "productionAfter": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "origin": "http://127.0.0.1:5252",
+    "record": "production-transfer-after.json",
+    "requests": "production-network-after.jsonl",
+    "method": "Fresh origin logging proxy, frozen at first playable before subsequent QA navigation; includes decoder worker requests. 300 bytes per response estimated header allowance."
+  },
+  "interaction": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "origin": "http://127.0.0.1:5252",
+    "record": "interaction/house-route-qa.json",
+    "method": "Normal Settings import followed by actual Merchant label click; read-only samples and canvas capture."
+  },
+  "storageIsolation": {
+    "commit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "origin": "http://127.0.0.1:5203",
+    "record": "storage-isolation.json",
+    "initialEntries": 0
+  }
+}

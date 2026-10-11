@@ -1,0 +1,730 @@
+{
+  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+  "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "canonicalBefore": 32,
+  "canonicalAfter": 32,
+  "supplementalBefore": 8,
+  "supplementalAfter": 8,
+  "frames": [
+    {
+      "file": "before/aenon-far-high.png",
+      "sha256": "7819a63ff39b73d71afb645aa9c06ece0809b7daf8ededd562941e3134388d13",
+      "bytes": 741657,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-far-low.png",
+      "sha256": "012e318425f0c7f74a04ca486bae2c0503acdf213bdec7234b73940c76e4191f",
+      "bytes": 680575,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-far-medium.png",
+      "sha256": "5f8e2287546824e669989df6d6356a28e52aa46d58fb0ce0b72fab43ce3195e3",
+      "bytes": 720783,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-far-ultra.png",
+      "sha256": "c6b548cc30edaca9d025dd2a73c99fa9223e9605988f74a1154a2c02c16f545d",
+      "bytes": 743020,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-near-high.png",
+      "sha256": "1a3228f227df1debb365ea4c31d944312dc3a06fd196731f12170f5ac2e0bda6",
+      "bytes": 452234,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-near-low.png",
+      "sha256": "81eb65622cff86fc82bcf41d71cd1089bbcf8216d4c1886fcf48cd822d599766",
+      "bytes": 423423,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-near-medium.png",
+      "sha256": "d181ec9b42470748eca7bd2a60995f737fb80d0a59cc6fd9356be52371411cee",
+      "bytes": 428465,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-near-ultra.png",
+      "sha256": "9ddb154130f9ec636350b13d442fb6fe60e9e8f84bd3ee9cc69f615fadb557b0",
+      "bytes": 447590,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-riverbank-high.png",
+      "sha256": "c846950a9852f2a201a2359976138f174a3e6f425a376cadd1e201d4ebf6da2f",
+      "bytes": 723061,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-riverbank-low.png",
+      "sha256": "860798a4f65963bb4d7b1a4436bddde9b519a76454779c68286283d8ffaa7a4a",
+      "bytes": 678205,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-riverbank-medium.png",
+      "sha256": "d907d9d01c95996918e98b4af8f404e8519d9bdc18cc3b2d0c8c6fbd1889cbf8",
+      "bytes": 705426,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-riverbank-ultra.png",
+      "sha256": "f91334fa192b781636bfa77e5b938afa3b6bfb7b6638dcdbf817cfd5ed0c88e1",
+      "bytes": 716972,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-square-high.png",
+      "sha256": "650ef1c3f0c2a381ecf76e77b577006750dd15b2eb3e18438441f82365000bd5",
+      "bytes": 629025,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-square-low.png",
+      "sha256": "058a25cdb6831cf32699f9a5b2c45aff5d86c30fe4ede1a19db1d529583d90d3",
+      "bytes": 585432,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-square-medium.png",
+      "sha256": "6a5d394b06f8e03eeea855b77893fd73d6e24faf8ab902e34da97b922b837aa5",
+      "bytes": 602745,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/aenon-square-ultra.png",
+      "sha256": "42f64b14c0cbaaf7ee1894a5adac06d73f1b5c081ba02e5d66cb0fde5ba58cfc",
+      "bytes": 623928,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/fight-high.png",
+      "sha256": "d063d17879b92d66d5636be6b5a329a8e862e1433b4a4ec104c83bdf1c80ddaa",
+      "bytes": 327818,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/fight-low.png",
+      "sha256": "eb5f1d306a1063c10a30738284eab4e00c883f32a6cb91efed7c5e09603df45d",
+      "bytes": 271510,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/fight-medium.png",
+      "sha256": "1f63adfe0510e1d91725263b53713d0912c34fae4de3cdee1bf3b1355080d5df",
+      "bytes": 300101,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/fight-ultra.png",
+      "sha256": "7aa3481443fdb294348538c489ea11dda919a9d21c62eac66c505ff8477e7132",
+      "bytes": 326772,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/jordan-bridge-high.png",
+      "sha256": "c7e1c309bb9d8ee02dd7c9f832fdf9c7621e64f6ea37e61eeeb61a8b53673430",
+      "bytes": 480657,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/jordan-bridge-low.png",
+      "sha256": "4836d4451843422f0d028fbfeb82a771a885fb5c29c388016cef496403111605",
+      "bytes": 433431,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/jordan-bridge-medium.png",
+      "sha256": "7ffea7ce5aebb118b7c1854c3a21cfedcfc02d9a24f2d827efaf1ee1373d09ac",
+      "bytes": 487325,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/jordan-bridge-ultra.png",
+      "sha256": "f5a39d0270343ced0416a56c9a1f68e0c7ce3a865ef24932b0615d8e4c4bd05a",
+      "bytes": 476301,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/scythopolis-market-high.png",
+      "sha256": "48dc1f2061213b38d3deb6c1e637ded78ecb8939089bc1507578215cedab476f",
+      "bytes": 482905,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/scythopolis-market-low.png",
+      "sha256": "cd49d53926c439f6475c7a89ed1739559095cfb84e556f073510a390fb2a1513",
+      "bytes": 423269,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/scythopolis-market-medium.png",
+      "sha256": "7d2d9f75864a3c900e47e2946f493794c40f8a9a2ef01c2228fd268409f0c437",
+      "bytes": 480863,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/scythopolis-market-ultra.png",
+      "sha256": "2e9d6277ef27bf3f76033ac0a5280a1662d97fba3c02d1638cfe570b98fea15e",
+      "bytes": 472341,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/sea-shore-high.png",
+      "sha256": "11e0542972378d3b155c020dc6d9b6b47ea8067a4584f4894c15a537fc1e603f",
+      "bytes": 637831,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/sea-shore-low.png",
+      "sha256": "4197b85df3ab3f39e48e35111dda9f6bea7e0c7e30d47b271b9db536d8d66f64",
+      "bytes": 594410,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/sea-shore-medium.png",
+      "sha256": "2cb5ad14c889436872c6fe8636fb0181d4a9432cc3344841fb3515f55790c380",
+      "bytes": 619245,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "before/sea-shore-ultra.png",
+      "sha256": "194371e1a30a7df76a587ebaee34ead66c89b4ad793fdc1a9432548ce4e07119",
+      "bytes": 634470,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-far-high.png",
+      "sha256": "423ed5c46b8349c0609cb6fbcc431682de9164ab4d2fcd6a5f97fcad0b0d7420",
+      "bytes": 722036,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-far-low.png",
+      "sha256": "f757f6fdad9f8d9f6136712b69735b2ddfce372b765f93cdccfdc14522445ec0",
+      "bytes": 650511,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-far-medium.png",
+      "sha256": "681fc6e6ec334b40fb40db98df8a5c39383a96408e2fc25497a587878a895866",
+      "bytes": 699101,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-far-ultra.png",
+      "sha256": "1c49341ad82768574018f17097223d94b0b87c22fa155050ba076d5e7b4fa8d0",
+      "bytes": 721903,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-near-high.png",
+      "sha256": "fb2819607c166947731f66bd3533f65b88f84e29d6b8028457021094cb89d4ab",
+      "bytes": 452894,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-near-low.png",
+      "sha256": "8d1e199640ca1092ede7b19bfb4202372b6c78091eae922ad95fc906387a75f7",
+      "bytes": 419585,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-near-medium.png",
+      "sha256": "18dae47601192c51590648874b34d12f73ef6dfe2689c1edf2bbc54abeb5504e",
+      "bytes": 435064,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-near-ultra.png",
+      "sha256": "0b19d2ff82e69daf12288cd4fac47c71fbf03ff921c83e911fdd20817a86cc21",
+      "bytes": 448236,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-riverbank-high.png",
+      "sha256": "b35903aa99e4eea582f4e82847af597ff29db8839848ac4751cba593703e769c",
+      "bytes": 729291,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-riverbank-low.png",
+      "sha256": "ffe5f79d588c11aef42440489d6425cabe9f695857631fdc0723ea58258c557e",
+      "bytes": 668772,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-riverbank-medium.png",
+      "sha256": "32743bd0d9cdcd72c45a969e6576e4c1519fee0a8d24511f94e5ba0d9635ac32",
+      "bytes": 714165,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-riverbank-ultra.png",
+      "sha256": "77026b22908eaeb90426d9093f7b1f79a99c4bf7f0dcf58be936c294a468c165",
+      "bytes": 724344,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-square-high.png",
+      "sha256": "eb382fcc4e4ffea55181533c481b1d01668c979b1f5987d358a085c17ccd327d",
+      "bytes": 625186,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-square-low.png",
+      "sha256": "6b00fe9f3cbf3c108e326207d53a20058d2a87016be29dbbbc669005f2ce4917",
+      "bytes": 568931,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-square-medium.png",
+      "sha256": "5870f67bd02bf421a724a648a471d684da28838264fb9260b9ac0ea9a29282ea",
+      "bytes": 604072,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/aenon-square-ultra.png",
+      "sha256": "ce12ebecbc465b7b8271277cb37198739c5bf004f6fd6fca4b7849eeba3fa83a",
+      "bytes": 620484,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/fight-high.png",
+      "sha256": "fa62ecc0cc5786cfbeceeace5e9558a6940963cae791527ca820270e4a8b20be",
+      "bytes": 327954,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/fight-low.png",
+      "sha256": "2001c6ec69653c14986a47203c7026645f61057feac778de287f2cd3d4f38970",
+      "bytes": 271572,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/fight-medium.png",
+      "sha256": "26d21312b9731f780fe48d067ce1dd7ef8d2e99b283df65aea0c8bfcbc331fa0",
+      "bytes": 300209,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/fight-ultra.png",
+      "sha256": "e6865941d03be8440bb0c290eb11da316c13021e2bacdacf90367592d44e63bf",
+      "bytes": 326563,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/jordan-bridge-high.png",
+      "sha256": "ecb8e26bad18579f288397438322c4e0ad620b24914f48928eb88034a804fc85",
+      "bytes": 585552,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/jordan-bridge-low.png",
+      "sha256": "02b43a5a7ef9a0d7631a17abc033f7bbe44f63c9ecf0e25e9e1a23f0ad95cf5d",
+      "bytes": 516023,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/jordan-bridge-medium.png",
+      "sha256": "6e6af4c72c1ca73fa2a2d224440be511d0efd3bf91e897611cbb463a49dfa20d",
+      "bytes": 582330,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/jordan-bridge-ultra.png",
+      "sha256": "64424b9d43517e4fe9dcb383015381774c3d530e24e0fb52e2d8633249a4adcb",
+      "bytes": 584019,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/scythopolis-market-high.png",
+      "sha256": "874ba7379ecbe411265c1a20ba449baa3f3bafbc49799c2fe5328fa56f2727c4",
+      "bytes": 493340,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/scythopolis-market-low.png",
+      "sha256": "17f1ae31bd033a10df3cea5e63310806ad0d61c5356365d6b308146f064e9ee2",
+      "bytes": 415619,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/scythopolis-market-medium.png",
+      "sha256": "19ce064e11163decc36bb7be1ec5c7889eb31bf30090aa232fae145275e3976d",
+      "bytes": 480940,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/scythopolis-market-ultra.png",
+      "sha256": "37c0ff3474a8b549992661c1257b6d6f67033654107371301c3b2bc4a465f6f3",
+      "bytes": 484377,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/sea-shore-high.png",
+      "sha256": "a4910148d50e9b11e5552c0238f25c31772ca9b173cdf05e48266b2d0b4d653f",
+      "bytes": 656402,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/sea-shore-low.png",
+      "sha256": "7f1c46c8d9a4508f31a377af3a0d7b7bc31b719047c7232acb9909e944849775",
+      "bytes": 606125,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/sea-shore-medium.png",
+      "sha256": "97e7953324bf3f191b9a3bdf2044d613be96a182b3d60506eb967f62236faf20",
+      "bytes": 637816,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "after/sea-shore-ultra.png",
+      "sha256": "b01ed24e52bd566fbe1e7983579d4f5cd27a05a4663c811d866dc28a00b3f9dc",
+      "bytes": 652824,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/pella-high.png",
+      "sha256": "49ce6fd985a5bb8c3ada13d17d3702436d51d1c5e813005f9ed730d20bf4612c",
+      "bytes": 572761,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/pella-low.png",
+      "sha256": "912a90707c58df38ed4147a114ebb67bb646b7b4d2d1627f96ffebf21931261f",
+      "bytes": 523616,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/pella-medium.png",
+      "sha256": "ef50c51f33e791b65a03bdbc1617fc242e61c244ab9d3f41eb48c170ad701194",
+      "bytes": 554782,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/pella-ultra.png",
+      "sha256": "06d5f18e13b93b00f6d4a0c5d63b4aca38c40a7615ee1805f9005690ac9df99e",
+      "bytes": 567143,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/salim-high.png",
+      "sha256": "c79e83692cbf2f9f3640b3df44bb75651b2b245d6dfd7563b1e55c4f7743374a",
+      "bytes": 518250,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/salim-low.png",
+      "sha256": "8be6c46ea3b804bc8479311d989d6d166628e01acf8e5b9ade28e98c1471a6dc",
+      "bytes": 451681,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/salim-medium.png",
+      "sha256": "30d12d8679e2c86a7d68bbb056cb81fce419dbaebd1bdbbf819ab52504c8c440",
+      "bytes": 494538,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/before/salim-ultra.png",
+      "sha256": "ec606306b99f14aea460dddacef009f20a998fb5ff035641bf4065bd26286beb",
+      "bytes": 517576,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/pella-high.png",
+      "sha256": "a84c53f3912b63182f88a25fef3e5a3b831b76409c43dcec11a93f95a74b261e",
+      "bytes": 538774,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/pella-low.png",
+      "sha256": "15e8e649d9013f9b6055ffb31a1b2ce156b000bd99ffd5e4ca11a03ed177e0a2",
+      "bytes": 482797,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/pella-medium.png",
+      "sha256": "d5db0beb24cae810730b1708862d24244e878468523461504032d12b95fd8a06",
+      "bytes": 525549,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/pella-ultra.png",
+      "sha256": "5a5c10a36050df9d15219175eba86e654938f871d2ab6c059444e54d033ec9e7",
+      "bytes": 537236,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/salim-high.png",
+      "sha256": "fe6b36c662da27c989f4e4080086c9d07d3b6363504a3b05f3d3cdb94016e1ea",
+      "bytes": 494902,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/salim-low.png",
+      "sha256": "d87a14fbe237092fdb48d343671dfeddd04db5a7ebf08518a94babf394f12076",
+      "bytes": 421975,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/salim-medium.png",
+      "sha256": "38743940446da133d5bf616fe1a29c2ab37c0bac3dae3d0143c90cd1fdbd997c",
+      "bytes": 470443,
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "supplemental/after/salim-ultra.png",
+      "sha256": "070c0fed8e5a369804ca3d0b9456065dbbd63167e7916e5a77b33898ce86303f",
+      "bytes": 494306,
+      "dimensions": [
+        1280,
+        720
+      ]
+    }
+  ]
+}

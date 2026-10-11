@@ -1,0 +1,1477 @@
+{
+  "version": 3,
+  "layoutRevision": 2,
+  "season": {
+    "placeId": "aenon",
+    "adventurerExperience": 0,
+    "trainedExperience": {
+      "Woodcutting": 0,
+      "Mining": 0,
+      "Fishing": 0,
+      "Herbalism": 0,
+      "Harvesting": 0,
+      "Hunting": 0,
+      "Scripture": 0,
+      "Blacksmithing": 0,
+      "Tailoring": 0,
+      "Leatherworking": 0,
+      "Cooking": 0
+    },
+    "currentHitpoints": 1,
+    "coin": 0,
+    "pack": [],
+    "worn": {
+      "weapon": null,
+      "shield": null,
+      "head": null,
+      "body": null,
+      "legs": null,
+      "feet": null
+    },
+    "lastSettlementId": "aenon",
+    "outing": "closed",
+    "hadAcquaintance": false,
+    "fight": null,
+    "fallenHostiles": [],
+    "carcasses": [],
+    "pickups": [],
+    "mealBuff": null,
+    "referenceJournal": [],
+    "playedSetScenes": [],
+    "playingSceneId": null,
+    "questProgress": [],
+    "openedCaches": []
+  },
+  "runtime": {
+    "time": 0,
+    "position": {
+      "x": -12,
+      "z": 195
+    },
+    "cooldowns": {
+      "offence": 0,
+      "guard": 0,
+      "dash": 0
+    },
+    "guardRemaining": 0,
+    "basicAttackIn": 0,
+    "hostiles": [
+      {
+        "x": -4,
+        "z": 157,
+        "id": "wolf",
+        "hitpoints": 5,
+        "maxHitpoints": 5,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -20,
+        "z": 140,
+        "id": "wolf-east",
+        "hitpoints": 6,
+        "maxHitpoints": 6,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -34,
+        "z": 143,
+        "id": "bandit",
+        "hitpoints": 9,
+        "maxHitpoints": 9,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -117,
+        "z": 188,
+        "id": "salim-threat-0",
+        "hitpoints": 20,
+        "maxHitpoints": 20,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 40,
+        "z": -55,
+        "id": "scythopolis-threat-0",
+        "hitpoints": 45,
+        "maxHitpoints": 45,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 166,
+        "z": -42,
+        "id": "pella-threat-0",
+        "hitpoints": 80,
+        "maxHitpoints": 80,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 106,
+        "z": -152,
+        "id": "gadara-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -104,
+        "z": -169,
+        "id": "nazareth-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -86,
+        "z": -232,
+        "id": "cana-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -153,
+        "z": -213,
+        "id": "sepphoris-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -51,
+        "z": -209,
+        "id": "gath-hepher-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -71,
+        "z": -114,
+        "id": "nain-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -178,
+        "z": -60,
+        "id": "legio-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -143,
+        "z": -279,
+        "id": "jotapata-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 27,
+        "z": -232,
+        "id": "tiberias-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 41.70389940580946,
+        "z": -377.54327719506773,
+        "id": "capernaum-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 107,
+        "z": -386,
+        "id": "bethsaida-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 166,
+        "z": -327,
+        "id": "gamla-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": 148,
+        "z": -251,
+        "id": "hippus-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -103,
+        "z": -72,
+        "id": "jezreel-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -99,
+        "z": -79,
+        "id": "jezreel-threat-1",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -95,
+        "z": -86,
+        "id": "jezreel-threat-2",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -182,
+        "z": -139,
+        "id": "kishon-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -178,
+        "z": -146,
+        "id": "kishon-threat-1",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -174,
+        "z": -153,
+        "id": "kishon-threat-2",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -32,
+        "z": -159,
+        "id": "tabor-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -28,
+        "z": -166,
+        "id": "tabor-threat-1",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -24,
+        "z": -173,
+        "id": "tabor-threat-2",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -41,
+        "z": -25,
+        "id": "gilboa-threat-0",
+        "hitpoints": 20,
+        "maxHitpoints": 20,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -37,
+        "z": -34,
+        "id": "gilboa-threat-1",
+        "hitpoints": 20,
+        "maxHitpoints": 20,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -31,
+        "z": -31,
+        "id": "gilboa-threat-2",
+        "hitpoints": 20,
+        "maxHitpoints": 20,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -82,
+        "z": -134,
+        "id": "moreh-threat-0",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -84,
+        "z": -135,
+        "id": "moreh-threat-1",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -86,
+        "z": -136,
+        "id": "moreh-threat-2",
+        "hitpoints": 90,
+        "maxHitpoints": 90,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -16,
+        "z": -337,
+        "id": "gennesaret-threat-0",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -12,
+        "z": -344,
+        "id": "gennesaret-threat-1",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      },
+      {
+        "x": -8,
+        "z": -351,
+        "id": "gennesaret-threat-2",
+        "hitpoints": 200,
+        "maxHitpoints": 200,
+        "status": "idle",
+        "respawnIn": 0,
+        "windup": 0,
+        "attackPoint": null,
+        "stunned": 0,
+        "burning": false
+      }
+    ],
+    "spots": [
+      {
+        "id": "timber-stand",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "ore-vein",
+        "stock": 4,
+        "capacity": 4,
+        "replenishIn": 0
+      },
+      {
+        "id": "river-fish",
+        "stock": 4,
+        "capacity": 4,
+        "replenishIn": 0
+      },
+      {
+        "id": "herb-patch",
+        "stock": 4,
+        "capacity": 4,
+        "replenishIn": 0
+      },
+      {
+        "id": "flax-patch",
+        "stock": 4,
+        "capacity": 4,
+        "replenishIn": 0
+      },
+      {
+        "id": "salim-woodcutting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "salim-mining",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "salim-herbalism",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "salim-harvesting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "salim-fishing",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "scythopolis-woodcutting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "scythopolis-mining",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "scythopolis-herbalism",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "scythopolis-harvesting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "scythopolis-fishing",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "pella-woodcutting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "pella-mining",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "pella-herbalism",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "pella-harvesting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "pella-fishing",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "gadara-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gadara-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gadara-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gadara-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gadara-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nazareth-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nazareth-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nazareth-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nazareth-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nazareth-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "cana-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "cana-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "cana-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "cana-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "cana-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "sepphoris-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "sepphoris-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "sepphoris-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "sepphoris-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "sepphoris-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gath-hepher-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gath-hepher-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gath-hepher-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gath-hepher-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gath-hepher-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nain-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nain-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nain-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nain-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "nain-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "legio-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "legio-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "legio-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "legio-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "legio-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jotapata-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jotapata-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jotapata-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jotapata-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jotapata-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tiberias-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "tiberias-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "tiberias-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "tiberias-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "tiberias-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "magdala-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "magdala-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "magdala-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "magdala-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "magdala-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "capernaum-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "capernaum-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "capernaum-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "capernaum-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "capernaum-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "bethsaida-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "bethsaida-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "bethsaida-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "bethsaida-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "bethsaida-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gamla-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gamla-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gamla-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gamla-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gamla-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "hippus-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "hippus-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "hippus-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "hippus-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "hippus-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "jordan-woodcutting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "jordan-mining",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "jordan-herbalism",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "jordan-harvesting",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "jordan-fishing",
+        "stock": 5,
+        "capacity": 5,
+        "replenishIn": 0
+      },
+      {
+        "id": "jezreel-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jezreel-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jezreel-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jezreel-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "jezreel-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "kishon-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "kishon-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "kishon-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "kishon-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "kishon-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tabor-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tabor-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tabor-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tabor-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "tabor-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gilboa-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gilboa-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gilboa-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gilboa-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gilboa-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "moreh-woodcutting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "moreh-mining",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "moreh-herbalism",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "moreh-harvesting",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "moreh-fishing",
+        "stock": 7,
+        "capacity": 7,
+        "replenishIn": 0
+      },
+      {
+        "id": "gennesaret-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gennesaret-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gennesaret-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gennesaret-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "gennesaret-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "sea-of-galilee-woodcutting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "sea-of-galilee-mining",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "sea-of-galilee-herbalism",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "sea-of-galilee-harvesting",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      },
+      {
+        "id": "sea-of-galilee-fishing",
+        "stock": 9,
+        "capacity": 9,
+        "replenishIn": 0
+      }
+    ],
+    "carcasses": [],
+    "pickups": [],
+    "hostileTimers": {
+      "wolf": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "wolf-east": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "bandit": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "salim-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "scythopolis-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "pella-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gadara-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "nazareth-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "cana-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "sepphoris-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gath-hepher-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "nain-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "legio-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "jotapata-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "tiberias-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "capernaum-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "bethsaida-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gamla-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "hippus-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "jezreel-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "jezreel-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "jezreel-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "kishon-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "kishon-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "kishon-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "tabor-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "tabor-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "tabor-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gilboa-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gilboa-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gilboa-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "moreh-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "moreh-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "moreh-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gennesaret-threat-0": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gennesaret-threat-1": {
+        "attackIn": 0.35,
+        "burns": []
+      },
+      "gennesaret-threat-2": {
+        "attackIn": 0.35,
+        "burns": []
+      }
+    },
+    "pendingTechnique": null
+  }
+}

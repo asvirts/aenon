@@ -1,0 +1,1054 @@
+{
+  "implementationCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "method": "Compare 32 final PNGs to separately recaptured PNGs from the same source. RGB pixel differs when any channel changes by more than 8 of 255. No alignment or masks. Bounding boxes use exclusive right/bottom coordinates. PNG SHA-256 is recorded separately from decoded pixel differences.",
+  "dimensions": [
+    1280,
+    720
+  ],
+  "sourceMetadata": "after/shots.json",
+  "repeatMetadataSource": "/tmp/aenon-58-repeat-db6f9dc/shots.json",
+  "semanticStateFields": [
+    "name",
+    "position",
+    "quality",
+    "simulationTime",
+    "zoom",
+    "inCombat"
+  ],
+  "all32RepeatStatesEqual": true,
+  "all32BaselineStatesEqual": true,
+  "all8SupplementalBaselineStatesEqual": true,
+  "supplementalNormalization": "Use outer name salim/pella to normalize documented baseline hook aliases; position, quality, simulationTime, zoom and inCombat compared unchanged.",
+  "pixelDifferencePercentRange": [
+    0.0007595486111111111,
+    0.1824001736111111
+  ],
+  "byteIdenticalPngCount": 0,
+  "interpretation": "Fixture-state equality is distinct from pixel identity. Held simulation does not freeze all skeletal animation and renderer temporal state. Small changes are quantified, not asserted to be exact pixel repeatability.",
+  "rows": [
+    {
+      "name": "aenon-square",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-square-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-square-low.png",
+      "firstSha256": "6b00fe9f3cbf3c108e326207d53a20058d2a87016be29dbbbc669005f2ce4917",
+      "repeatSha256": "9a2b172b49bc81f0ff2a8ed7222efee4a80e37aea79c32df87cc0bcae9dfdc40",
+      "pixelCount": 921600,
+      "differentPixelCount": 44,
+      "differentPixelPercent": 0.004774305555555556,
+      "meanAbsoluteChannelDifference": 0.0012120225694444444,
+      "maximumChannelDifference": 41,
+      "differenceBoundingBox": [
+        102,
+        157,
+        1081,
+        394
+      ]
+    },
+    {
+      "name": "aenon-near",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-near-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-near-low.png",
+      "firstSha256": "8d1e199640ca1092ede7b19bfb4202372b6c78091eae922ad95fc906387a75f7",
+      "repeatSha256": "8f47a53feedc6f93d1fc86db5f0ea603506f55522926ff82451cdddac6f20e26",
+      "pixelCount": 921600,
+      "differentPixelCount": 20,
+      "differentPixelPercent": 0.002170138888888889,
+      "meanAbsoluteChannelDifference": 0.00048502604166666665,
+      "maximumChannelDifference": 20,
+      "differenceBoundingBox": [
+        479,
+        2,
+        671,
+        427
+      ]
+    },
+    {
+      "name": "aenon-far",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-far-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-far-low.png",
+      "firstSha256": "f757f6fdad9f8d9f6136712b69735b2ddfce372b765f93cdccfdc14522445ec0",
+      "repeatSha256": "035dcf619415f41b81a8e356c3a8e212cc691fa78e687d81a15dc2167734503a",
+      "pixelCount": 921600,
+      "differentPixelCount": 7,
+      "differentPixelPercent": 0.0007595486111111111,
+      "meanAbsoluteChannelDifference": 0.00022533275462962964,
+      "maximumChannelDifference": 14,
+      "differenceBoundingBox": [
+        352,
+        254,
+        587,
+        276
+      ]
+    },
+    {
+      "name": "aenon-riverbank",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-riverbank-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-riverbank-low.png",
+      "firstSha256": "ffe5f79d588c11aef42440489d6425cabe9f695857631fdc0723ea58258c557e",
+      "repeatSha256": "f1cdef036dd3003194ec34b71976c69005211a674f1cc2a3fa9d3e635b4befb6",
+      "pixelCount": 921600,
+      "differentPixelCount": 33,
+      "differentPixelPercent": 0.0035807291666666665,
+      "meanAbsoluteChannelDifference": 0.0009765625,
+      "maximumChannelDifference": 35,
+      "differenceBoundingBox": [
+        55,
+        191,
+        657,
+        399
+      ]
+    },
+    {
+      "name": "jordan-bridge",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/jordan-bridge-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/jordan-bridge-low.png",
+      "firstSha256": "02b43a5a7ef9a0d7631a17abc033f7bbe44f63c9ecf0e25e9e1a23f0ad95cf5d",
+      "repeatSha256": "25fd0a9e74ba9b1b9582655356b769a5615d73ccf6dbd853252f1682a41a2c1f",
+      "pixelCount": 921600,
+      "differentPixelCount": 13,
+      "differentPixelPercent": 0.0014105902777777778,
+      "meanAbsoluteChannelDifference": 0.0005935329861111111,
+      "maximumChannelDifference": 20,
+      "differenceBoundingBox": [
+        620,
+        319,
+        651,
+        374
+      ]
+    },
+    {
+      "name": "scythopolis-market",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/scythopolis-market-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/scythopolis-market-low.png",
+      "firstSha256": "17f1ae31bd033a10df3cea5e63310806ad0d61c5356365d6b308146f064e9ee2",
+      "repeatSha256": "24355f97ec3acc0ce5670f36453645a7767140277cfbed198392d1a55557bc6d",
+      "pixelCount": 921600,
+      "differentPixelCount": 7,
+      "differentPixelPercent": 0.0007595486111111111,
+      "meanAbsoluteChannelDifference": 0.00018844039351851853,
+      "maximumChannelDifference": 20,
+      "differenceBoundingBox": [
+        633,
+        329,
+        657,
+        371
+      ]
+    },
+    {
+      "name": "sea-shore",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "low",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/sea-shore-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/sea-shore-low.png",
+      "firstSha256": "7f1c46c8d9a4508f31a377af3a0d7b7bc31b719047c7232acb9909e944849775",
+      "repeatSha256": "7a97e3032825eb32966798601e1a9f9b0181d9162017658b9f5cbacc7b51cc51",
+      "pixelCount": 921600,
+      "differentPixelCount": 33,
+      "differentPixelPercent": 0.0035807291666666665,
+      "meanAbsoluteChannelDifference": 0.0008742042824074074,
+      "maximumChannelDifference": 35,
+      "differenceBoundingBox": [
+        158,
+        27,
+        657,
+        386
+      ]
+    },
+    {
+      "name": "fight",
+      "preset": "low",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "low",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      },
+      "firstFile": "after/fight-low.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/fight-low.png",
+      "firstSha256": "2001c6ec69653c14986a47203c7026645f61057feac778de287f2cd3d4f38970",
+      "repeatSha256": "aaef4dbbbc54282adfe26654000f4d2cb60f2503e1cb162585486f6a6cee81b4",
+      "pixelCount": 921600,
+      "differentPixelCount": 364,
+      "differentPixelPercent": 0.039496527777777776,
+      "meanAbsoluteChannelDifference": 0.010110315393518518,
+      "maximumChannelDifference": 96,
+      "differenceBoundingBox": [
+        597,
+        326,
+        711,
+        437
+      ]
+    },
+    {
+      "name": "aenon-square",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-square-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-square-medium.png",
+      "firstSha256": "5870f67bd02bf421a724a648a471d684da28838264fb9260b9ac0ea9a29282ea",
+      "repeatSha256": "939c6b50756a4aadc10bbd31de39368859ae2927a581772e53bcd7a879b30d4c",
+      "pixelCount": 921600,
+      "differentPixelCount": 90,
+      "differentPixelPercent": 0.009765625,
+      "meanAbsoluteChannelDifference": 0.0022920283564814817,
+      "maximumChannelDifference": 68,
+      "differenceBoundingBox": [
+        112,
+        136,
+        1069,
+        400
+      ]
+    },
+    {
+      "name": "aenon-near",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-near-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-near-medium.png",
+      "firstSha256": "18dae47601192c51590648874b34d12f73ef6dfe2689c1edf2bbc54abeb5504e",
+      "repeatSha256": "7eac3f2ae5cbf7d43552c4fdaefc043a1ea40ef8f128e4865cb463e915cde1f0",
+      "pixelCount": 921600,
+      "differentPixelCount": 84,
+      "differentPixelPercent": 0.009114583333333334,
+      "meanAbsoluteChannelDifference": 0.0019733796296296296,
+      "maximumChannelDifference": 74,
+      "differenceBoundingBox": [
+        469,
+        6,
+        669,
+        423
+      ]
+    },
+    {
+      "name": "aenon-far",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-far-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-far-medium.png",
+      "firstSha256": "681fc6e6ec334b40fb40db98df8a5c39383a96408e2fc25497a587878a895866",
+      "repeatSha256": "4a08c2ec8e73480350aca365ed53f2472488c491b6723c0b1b36f7a0f266f79a",
+      "pixelCount": 921600,
+      "differentPixelCount": 37,
+      "differentPixelPercent": 0.004014756944444445,
+      "meanAbsoluteChannelDifference": 0.0008998842592592592,
+      "maximumChannelDifference": 65,
+      "differenceBoundingBox": [
+        354,
+        240,
+        875,
+        366
+      ]
+    },
+    {
+      "name": "aenon-riverbank",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-riverbank-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-riverbank-medium.png",
+      "firstSha256": "32743bd0d9cdcd72c45a969e6576e4c1519fee0a8d24511f94e5ba0d9635ac32",
+      "repeatSha256": "4bb83f503bdd0121cad34ba08808214b7b4365644a496f81270a6605a35fe8d9",
+      "pixelCount": 921600,
+      "differentPixelCount": 64,
+      "differentPixelPercent": 0.006944444444444444,
+      "meanAbsoluteChannelDifference": 0.0013856336805555555,
+      "maximumChannelDifference": 44,
+      "differenceBoundingBox": [
+        55,
+        191,
+        654,
+        401
+      ]
+    },
+    {
+      "name": "jordan-bridge",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/jordan-bridge-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/jordan-bridge-medium.png",
+      "firstSha256": "6e6af4c72c1ca73fa2a2d224440be511d0efd3bf91e897611cbb463a49dfa20d",
+      "repeatSha256": "1bd26c101d56fb5e388c5e9884009abbb6d09e6d6342f122ca3f8b0a3bc1fc4f",
+      "pixelCount": 921600,
+      "differentPixelCount": 14,
+      "differentPixelPercent": 0.0015190972222222222,
+      "meanAbsoluteChannelDifference": 0.0003150318287037037,
+      "maximumChannelDifference": 31,
+      "differenceBoundingBox": [
+        628,
+        346,
+        649,
+        400
+      ]
+    },
+    {
+      "name": "scythopolis-market",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/scythopolis-market-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/scythopolis-market-medium.png",
+      "firstSha256": "19ce064e11163decc36bb7be1ec5c7889eb31bf30090aa232fae145275e3976d",
+      "repeatSha256": "3c6008dc2edf73d8465ca574ada0296239252c1d2d512b7424187ee5f121c070",
+      "pixelCount": 921600,
+      "differentPixelCount": 9,
+      "differentPixelPercent": 0.0009765625,
+      "meanAbsoluteChannelDifference": 0.00024558738425925925,
+      "maximumChannelDifference": 35,
+      "differenceBoundingBox": [
+        637,
+        365,
+        655,
+        395
+      ]
+    },
+    {
+      "name": "sea-shore",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "medium",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/sea-shore-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/sea-shore-medium.png",
+      "firstSha256": "97e7953324bf3f191b9a3bdf2044d613be96a182b3d60506eb967f62236faf20",
+      "repeatSha256": "4dd2ba25525a5c6522bf172047b27a7a8700361c4b4ffec091911f58b0ebb2ef",
+      "pixelCount": 921600,
+      "differentPixelCount": 14,
+      "differentPixelPercent": 0.0015190972222222222,
+      "meanAbsoluteChannelDifference": 0.0004322193287037037,
+      "maximumChannelDifference": 51,
+      "differenceBoundingBox": [
+        156,
+        4,
+        656,
+        386
+      ]
+    },
+    {
+      "name": "fight",
+      "preset": "medium",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "medium",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      },
+      "firstFile": "after/fight-medium.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/fight-medium.png",
+      "firstSha256": "26d21312b9731f780fe48d067ce1dd7ef8d2e99b283df65aea0c8bfcbc331fa0",
+      "repeatSha256": "68ffdc2d5e4e85336e349a76d55b46cca571f42d3c59ea0bbdd6766c2061e369",
+      "pixelCount": 921600,
+      "differentPixelCount": 24,
+      "differentPixelPercent": 0.002604166666666667,
+      "meanAbsoluteChannelDifference": 0.0009827112268518518,
+      "maximumChannelDifference": 72,
+      "differenceBoundingBox": [
+        608,
+        330,
+        695,
+        442
+      ]
+    },
+    {
+      "name": "aenon-square",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-square-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-square-high.png",
+      "firstSha256": "eb382fcc4e4ffea55181533c481b1d01668c979b1f5987d358a085c17ccd327d",
+      "repeatSha256": "1e7ca6ef453d1bf4acde7cab011e3d27597712a9c51b8507f39c1233c630ea9b",
+      "pixelCount": 921600,
+      "differentPixelCount": 1681,
+      "differentPixelPercent": 0.1824001736111111,
+      "meanAbsoluteChannelDifference": 0.1125734230324074,
+      "maximumChannelDifference": 144,
+      "differenceBoundingBox": [
+        96,
+        53,
+        1131,
+        510
+      ]
+    },
+    {
+      "name": "aenon-near",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-near-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-near-high.png",
+      "firstSha256": "fb2819607c166947731f66bd3533f65b88f84e29d6b8028457021094cb89d4ab",
+      "repeatSha256": "0a8371d49e46e48bca3d9b0f894763e74e569876a414672455ec2271b184d2e2",
+      "pixelCount": 921600,
+      "differentPixelCount": 38,
+      "differentPixelPercent": 0.004123263888888889,
+      "meanAbsoluteChannelDifference": 0.04989221643518518,
+      "maximumChannelDifference": 45,
+      "differenceBoundingBox": [
+        469,
+        7,
+        674,
+        428
+      ]
+    },
+    {
+      "name": "aenon-far",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-far-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-far-high.png",
+      "firstSha256": "423ed5c46b8349c0609cb6fbcc431682de9164ab4d2fcd6a5f97fcad0b0d7420",
+      "repeatSha256": "4269aff1ece3bdf35c6b470cdea11cb2b7c9a003daead3d354b3a407dbbd3bc0",
+      "pixelCount": 921600,
+      "differentPixelCount": 47,
+      "differentPixelPercent": 0.005099826388888889,
+      "meanAbsoluteChannelDifference": 0.07986508969907408,
+      "maximumChannelDifference": 28,
+      "differenceBoundingBox": [
+        272,
+        25,
+        873,
+        378
+      ]
+    },
+    {
+      "name": "aenon-riverbank",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-riverbank-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-riverbank-high.png",
+      "firstSha256": "b35903aa99e4eea582f4e82847af597ff29db8839848ac4751cba593703e769c",
+      "repeatSha256": "2b17d59e709c0fb40b81f9d133a40e3249ce81fa76563857860ee7bf1cfd4c8b",
+      "pixelCount": 921600,
+      "differentPixelCount": 69,
+      "differentPixelPercent": 0.007486979166666666,
+      "meanAbsoluteChannelDifference": 0.0704441550925926,
+      "maximumChannelDifference": 58,
+      "differenceBoundingBox": [
+        50,
+        47,
+        657,
+        400
+      ]
+    },
+    {
+      "name": "jordan-bridge",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/jordan-bridge-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/jordan-bridge-high.png",
+      "firstSha256": "ecb8e26bad18579f288397438322c4e0ad620b24914f48928eb88034a804fc85",
+      "repeatSha256": "f5b03866bb5ea625ef61dda281645419a1621004ebb291ac89c22391897bf9a4",
+      "pixelCount": 921600,
+      "differentPixelCount": 9,
+      "differentPixelPercent": 0.0009765625,
+      "meanAbsoluteChannelDifference": 0.049059244791666665,
+      "maximumChannelDifference": 32,
+      "differenceBoundingBox": [
+        629,
+        331,
+        658,
+        396
+      ]
+    },
+    {
+      "name": "scythopolis-market",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/scythopolis-market-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/scythopolis-market-high.png",
+      "firstSha256": "874ba7379ecbe411265c1a20ba449baa3f3bafbc49799c2fe5328fa56f2727c4",
+      "repeatSha256": "4e924c0c873b87df56c89a427a5ce6750e017f3ff0c5c1b75c336caef38cc37d",
+      "pixelCount": 921600,
+      "differentPixelCount": 42,
+      "differentPixelPercent": 0.004557291666666667,
+      "meanAbsoluteChannelDifference": 0.07707175925925926,
+      "maximumChannelDifference": 38,
+      "differenceBoundingBox": [
+        69,
+        132,
+        1201,
+        624
+      ]
+    },
+    {
+      "name": "sea-shore",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "high",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/sea-shore-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/sea-shore-high.png",
+      "firstSha256": "a4910148d50e9b11e5552c0238f25c31772ca9b173cdf05e48266b2d0b4d653f",
+      "repeatSha256": "bccaf50d9fb395ad79d0cac7e6f3a67bc5d8377cdc7bace363cad6b412d675e5",
+      "pixelCount": 921600,
+      "differentPixelCount": 68,
+      "differentPixelPercent": 0.007378472222222222,
+      "meanAbsoluteChannelDifference": 0.07282479745370371,
+      "maximumChannelDifference": 62,
+      "differenceBoundingBox": [
+        128,
+        0,
+        905,
+        384
+      ]
+    },
+    {
+      "name": "fight",
+      "preset": "high",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "high",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      },
+      "firstFile": "after/fight-high.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/fight-high.png",
+      "firstSha256": "fa62ecc0cc5786cfbeceeace5e9558a6940963cae791527ca820270e4a8b20be",
+      "repeatSha256": "cc3e71ad0668b8f06a83f2e7bcc7954fe72f9019901e5d7f3c51cb3c96576dea",
+      "pixelCount": 921600,
+      "differentPixelCount": 144,
+      "differentPixelPercent": 0.015625,
+      "meanAbsoluteChannelDifference": 0.022688078703703703,
+      "maximumChannelDifference": 65,
+      "differenceBoundingBox": [
+        608,
+        327,
+        734,
+        449
+      ]
+    },
+    {
+      "name": "aenon-square",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-square",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-square-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-square-ultra.png",
+      "firstSha256": "ce12ebecbc465b7b8271277cb37198739c5bf004f6fd6fca4b7849eeba3fa83a",
+      "repeatSha256": "2dc60be1dcb7a54b9051f6b1baa0b88c9c3739a7863e0b626e782d04fb07b341",
+      "pixelCount": 921600,
+      "differentPixelCount": 1348,
+      "differentPixelPercent": 0.14626736111111113,
+      "meanAbsoluteChannelDifference": 0.06820855034722222,
+      "maximumChannelDifference": 144,
+      "differenceBoundingBox": [
+        96,
+        128,
+        1120,
+        412
+      ]
+    },
+    {
+      "name": "aenon-near",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-near",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 12,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-near-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-near-ultra.png",
+      "firstSha256": "0b19d2ff82e69daf12288cd4fac47c71fbf03ff921c83e911fdd20817a86cc21",
+      "repeatSha256": "ae90446eb3715c05c729155c34067d7185f3c8667099fb87cadfa649963e436a",
+      "pixelCount": 921600,
+      "differentPixelCount": 35,
+      "differentPixelPercent": 0.0037977430555555555,
+      "meanAbsoluteChannelDifference": 0.021868851273148148,
+      "maximumChannelDifference": 56,
+      "differenceBoundingBox": [
+        460,
+        22,
+        674,
+        435
+      ]
+    },
+    {
+      "name": "aenon-far",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-far",
+        "position": {
+          "x": -0.8,
+          "z": 209
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 44,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-far-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-far-ultra.png",
+      "firstSha256": "1c49341ad82768574018f17097223d94b0b87c22fa155050ba076d5e7b4fa8d0",
+      "repeatSha256": "dff58e0380666bf53834b977209533efbad17b199b5a52ccd56667ca57f6ab9b",
+      "pixelCount": 921600,
+      "differentPixelCount": 19,
+      "differentPixelPercent": 0.0020616319444444445,
+      "meanAbsoluteChannelDifference": 0.03728732638888889,
+      "maximumChannelDifference": 44,
+      "differenceBoundingBox": [
+        356,
+        253,
+        873,
+        378
+      ]
+    },
+    {
+      "name": "aenon-riverbank",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "aenon-riverbank",
+        "position": {
+          "x": 4.7,
+          "z": 201
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/aenon-riverbank-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/aenon-riverbank-ultra.png",
+      "firstSha256": "77026b22908eaeb90426d9093f7b1f79a99c4bf7f0dcf58be936c294a468c165",
+      "repeatSha256": "01fe043441b9e88da53c24ad06e7d581a2e35948baefe665c43264c3cf8d0d51",
+      "pixelCount": 921600,
+      "differentPixelCount": 33,
+      "differentPixelPercent": 0.0035807291666666665,
+      "meanAbsoluteChannelDifference": 0.033371672453703705,
+      "maximumChannelDifference": 50,
+      "differenceBoundingBox": [
+        45,
+        194,
+        658,
+        396
+      ]
+    },
+    {
+      "name": "jordan-bridge",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "jordan-bridge",
+        "position": {
+          "x": 24,
+          "z": -77.98
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/jordan-bridge-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/jordan-bridge-ultra.png",
+      "firstSha256": "64424b9d43517e4fe9dcb383015381774c3d530e24e0fb52e2d8633249a4adcb",
+      "repeatSha256": "fae9a5a9df72cc5648864a77ea2c86a5451eb6d21060354658c6b6101c899f81",
+      "pixelCount": 921600,
+      "differentPixelCount": 9,
+      "differentPixelPercent": 0.0009765625,
+      "meanAbsoluteChannelDifference": 0.019486400462962964,
+      "maximumChannelDifference": 48,
+      "differenceBoundingBox": [
+        624,
+        340,
+        651,
+        398
+      ]
+    },
+    {
+      "name": "scythopolis-market",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "scythopolis-market",
+        "position": {
+          "x": -20,
+          "z": -65
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/scythopolis-market-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/scythopolis-market-ultra.png",
+      "firstSha256": "37c0ff3474a8b549992661c1257b6d6f67033654107371301c3b2bc4a465f6f3",
+      "repeatSha256": "0dc2bda66303b89662832481be8a6e6de70942d1fb8e7a305c65c38b28a7be63",
+      "pixelCount": 921600,
+      "differentPixelCount": 7,
+      "differentPixelPercent": 0.0007595486111111111,
+      "meanAbsoluteChannelDifference": 0.03396954571759259,
+      "maximumChannelDifference": 29,
+      "differenceBoundingBox": [
+        232,
+        331,
+        653,
+        535
+      ]
+    },
+    {
+      "name": "sea-shore",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "sea-shore",
+        "position": {
+          "x": 31,
+          "z": -374
+        },
+        "quality": "ultra",
+        "simulationTime": 0,
+        "zoom": 22,
+        "inCombat": false
+      },
+      "firstFile": "after/sea-shore-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/sea-shore-ultra.png",
+      "firstSha256": "b01ed24e52bd566fbe1e7983579d4f5cd27a05a4663c811d866dc28a00b3f9dc",
+      "repeatSha256": "78f69d8c75f76c376377d33e99f0327377b5959834b15035d32a9bd72c1ca814",
+      "pixelCount": 921600,
+      "differentPixelCount": 53,
+      "differentPixelPercent": 0.005750868055555555,
+      "meanAbsoluteChannelDifference": 0.033942780671296295,
+      "maximumChannelDifference": 49,
+      "differenceBoundingBox": [
+        124,
+        0,
+        904,
+        463
+      ]
+    },
+    {
+      "name": "fight",
+      "preset": "ultra",
+      "stateEqual": true,
+      "baselineStateEqual": true,
+      "state": {
+        "name": "fight",
+        "position": {
+          "x": -118.2,
+          "z": 188
+        },
+        "quality": "ultra",
+        "simulationTime": 0.4,
+        "zoom": 22,
+        "inCombat": true
+      },
+      "firstFile": "after/fight-ultra.png",
+      "repeatFile": "/tmp/aenon-58-repeat-db6f9dc/fight-ultra.png",
+      "firstSha256": "e6865941d03be8440bb0c290eb11da316c13021e2bacdacf90367592d44e63bf",
+      "repeatSha256": "00a25ec7cf45e2ba1d905a8d73524591df8c66d8b3f86056df1598c1e6fc5b8b",
+      "pixelCount": 921600,
+      "differentPixelCount": 233,
+      "differentPixelPercent": 0.025282118055555556,
+      "meanAbsoluteChannelDifference": 0.01579246238425926,
+      "maximumChannelDifference": 81,
+      "differenceBoundingBox": [
+        608,
+        321,
+        730,
+        449
+      ]
+    }
+  ]
+}

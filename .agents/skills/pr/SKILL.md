@@ -165,6 +165,8 @@ For a graphics slice, identify the base and implementation commits beside the be
 
 After a rendering or interaction fix, refresh the affected evidence on the final implementation commit before publishing the PR. Test occlusion in the actual compound model: a passing ray test against one primitive does not prove that its roof, walls and attached details fade together.
 
+When changing a shared model loader, inspect existing asset families on every graphics preset as well as the new models. Protect clone/instance behavior with an actual imported-mesh regression that checks independent visibility and enabled state; shared geometry alone does not prove that every render pass draws the asset.
+
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
 ### Merge Danger

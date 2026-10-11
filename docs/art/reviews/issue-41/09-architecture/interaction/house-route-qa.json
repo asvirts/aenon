@@ -1,0 +1,73 @@
+{
+  "sourceCommit": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+  "baseCommit": "925d2e1923789bb7502c78fc444f042cc3cad51e",
+  "method": "Normal production build, fresh save fixture imported through Settings. Browser operator clicked the Merchant label, captured read-only status samples and a 30-second canvas video. Independent CLI analysis checks every sampled position and consecutive segment with the unchanged production navigation; independent image inspection verifies complete-house fade and restoration.",
+  "fixture": "house-close-import.json",
+  "samples": "house-route-samples.json",
+  "video": "house-route.webm",
+  "sampleCount": 304,
+  "movingSampleCount": 43,
+  "merchantTargetSampleCount": 42,
+  "start": {
+    "x": -6,
+    "z": 197.5
+  },
+  "final": {
+    "x": -8.15572916927467,
+    "z": 205.8812101200353
+  },
+  "totalSampledDistanceMetres": 13.0584509569382,
+  "simulationTimeAtFirstSample": 43.66139999997687,
+  "simulationTimeAtLastSample": 61.20809999996517,
+  "firstObservedQueuedRoute": [
+    {
+      "x": -9.772619516686095,
+      "z": 197.47
+    },
+    {
+      "x": -9.772619516686095,
+      "z": 205.12
+    },
+    {
+      "x": -8.422619516686094,
+      "z": 205.57
+    },
+    {
+      "x": -7.942619516686095,
+      "z": 206.11709083237432
+    }
+  ],
+  "westDetourMinimumX": -9.772076356741875,
+  "directStartToMerchantTraversable": false,
+  "allSampledPositionsWalkable": true,
+  "all303ConsecutiveSampleSegmentsTraversable": true,
+  "allQueuedRouteSegmentsTraversable": true,
+  "invalidPositionIndices": [],
+  "invalidConsecutiveSegmentIndices": [],
+  "invalidQueuedRouteSampleIndices": [],
+  "merchantTradeOpened": {
+    "operatorObserved": true,
+    "image": "merchant-opened.png",
+    "finalPaused": true,
+    "finalRouteEmpty": true,
+    "finalTargetCleared": true
+  },
+  "occlusion": {
+    "fadedImage": "whole-house-faded.png",
+    "clearImage": "whole-house-clear.png",
+    "independentImageReview": "Whole house including roof, walls, ladder, courtyard wall and awning is translucent at the imported close start; Adventurer remains visible. After routing around the house and closing trade, the same building is opaque again.",
+    "result": "pass"
+  },
+  "limitations": "Sampled geometry checks supplement browser movement; the short video is canvas-only and does not include DOM labels/panels. Separate PNG records retain those UI states. The distant initial fixture was not occluded and its image is named route-start-distant.png; it is not fade evidence.",
+  "result": "pass",
+  "videoMetadata": {
+    "codec": "vp9",
+    "dimensions": [
+      1280,
+      720
+    ],
+    "framesPerSecond": 20,
+    "durationSeconds": 30.413988,
+    "verifiedWith": "ffprobe"
+  }
+}

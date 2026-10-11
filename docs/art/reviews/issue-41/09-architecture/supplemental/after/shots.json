@@ -1,0 +1,130 @@
+[
+  {
+    "name": "salim",
+    "preset": "low",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "salim",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "low",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "pella",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "medium",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "salim",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "medium",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "pella",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "high",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "salim",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "high",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "pella",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "salim",
+    "preset": "ultra",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "salim",
+      "position": {
+        "x": -206,
+        "z": 164
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  },
+  {
+    "name": "pella",
+    "preset": "ultra",
+    "source": "db6f9dc836433463e87ec94c6d2d849eb8f5458b",
+    "state": {
+      "inCombat": false,
+      "name": "pella",
+      "position": {
+        "x": 210,
+        "z": -73
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    }
+  }
+]

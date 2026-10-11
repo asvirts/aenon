@@ -12,7 +12,7 @@ import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 import type { ViewCoverage } from './view.ts'
 import { occlusionGroup, type OcclusionGroup } from './occlusion.ts'
 import { surfaceMaterial, cueMaterial } from './materials.ts'
-import { createArchitecture, houseAsset, bridgePlacements } from './architecture.ts'
+import { cloneStaticModel, createArchitecture, houseAsset, bridgePlacements } from './architecture.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
 export async function createWorld(scene: Scene, interact: (id: string) => void) {
@@ -105,9 +105,9 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     model.culled = !visible
   }
   async function staticModel(filename: string, id: string, point: Point, scale: number, rotation = 0, objectId?: string) {
-    const source = await container(filename), entries = source.instantiateModelsToScene(name => `${id}|${name}`, false, { doNotInstantiate: filename.includes('/architecture/') })
+    const source = await container(filename)
     const root = new TransformNode(id, scene)
-    for (const child of entries.rootNodes) child.parent = root
+    cloneStaticModel(source, root)
     setPosition(root, point); root.scaling.setAll(scale); root.rotation.y = rotation
     register(root.getChildMeshes(), objectId); scenery.push(root)
     return root

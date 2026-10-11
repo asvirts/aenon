@@ -6,6 +6,12 @@ import { regionPlaces, regionRoads } from './region.ts'
 import type { Point } from './types.ts'
 
 export const architectureRoot = '/game-assets/architecture/'
+/** Match Babylon's baseline clone default for buildings and existing olives.
+ * Keep per-tree visibility on the established Mesh path across render passes. */
+export function cloneStaticModel(source: AssetContainer, parent: TransformNode) {
+  const entries = source.instantiateModelsToScene(part => `${parent.name}|${part}`, false, { doNotInstantiate: true })
+  for (const child of entries.rootNodes) child.parent = parent
+}
 export const domesticHouseAssets = ['house-limestone', 'house-courtyard', 'house-mudbrick', 'house-workshop'] as const
 const civicPlaces = new Set(['salim', 'scythopolis', 'pella', 'sepphoris', 'tiberias', 'hippus', 'gadara', 'capernaum', 'bethsaida'])
 const colonnadedPlaces = new Set(['scythopolis', 'pella', 'sepphoris', 'tiberias', 'hippus', 'gadara'])
@@ -76,8 +82,7 @@ export async function createArchitecture(scene: Scene, load: (file: string) => P
   function attach(parent: TransformNode, name: typeof names[number], suffix: string = name) {
     const root = new TransformNode(`${parent.name}|${suffix}`, scene)
     root.parent = parent
-    const entries = assets.get(name)!.instantiateModelsToScene(part => `${root.name}|${part}`, false, { doNotInstantiate: true })
-    for (const child of entries.rootNodes) child.parent = root
+    cloneStaticModel(assets.get(name)!, root)
     return root
   }
   return {

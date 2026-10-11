@@ -5,7 +5,7 @@ import { runInNewContext } from 'node:vm'
 import { createHash } from 'node:crypto'
 import { LoadAssetContainerAsync, Mesh, NullEngine, Ray, Scene, TransformNode, Vector3 } from '@babylonjs/core'
 import '@babylonjs/loaders/glTF/index.js'
-import { bridgePlacements, domesticHouseAssets, houseAsset, createArchitecture } from '../../src/game3d/architecture.ts'
+import { bridgePlacements, cloneStaticModel, domesticHouseAssets, houseAsset, createArchitecture } from '../../src/game3d/architecture.ts'
 import { bridgeAt, heightAt, waterDistance } from '../../src/game3d/terrain.ts'
 import { ports } from '../../src/game3d/region.ts'
 import { playerOcclusionRays } from '../../src/game3d/camera.ts'
@@ -36,6 +36,24 @@ it('imports every actual house inside the asymmetric navigation footprint with i
   assert.equal(new Set(Array.from({ length: 8 }, (_, i) => houseAsset('aenon', i))).size, 4)
   assert.ok(houseAsset('scythopolis', 0).endsWith('house-assembly.glb'))
   assert.ok(houseAsset('scythopolis', 1).endsWith('house-colonnade.glb'))
+})
+
+it('keeps the existing olive asset as independently visible clones instead of hardware instances', async t => {
+  const engine = new NullEngine(); t.after(() => engine.dispose())
+  const scene = new Scene(engine); scene.useRightHandedSystem = true
+  const olive = await LoadAssetContainerAsync(new Uint8Array(await readFile(new URL('public/art-sample/olive.glb', root))), scene, { pluginExtension: '.glb', pluginOptions: { gltf: { skipMaterials: true } } })
+  const first = new TransformNode('olive-a', scene), second = new TransformNode('olive-b', scene)
+  cloneStaticModel(olive, first); cloneStaticModel(olive, second)
+  const a = first.getChildMeshes().filter(mesh => mesh.getTotalVertices()), b = second.getChildMeshes().filter(mesh => mesh.getTotalVertices())
+  assert.ok(a.length > 0)
+  assert.equal(a.length, b.length)
+  for (const [i, mesh] of a.entries()) {
+    assert.ok(mesh instanceof Mesh && b[i] instanceof Mesh, 'the world loader must preserve baseline Mesh clones across quality/render passes')
+    assert.equal(mesh.geometry, (b[i] as Mesh).geometry, 'cloning still shares geometry')
+    mesh.visibility = .23; mesh.setEnabled(false)
+    assert.equal(b[i]!.visibility, 1)
+    assert.equal(b[i]!.isEnabled(), true)
+  }
 })
 
 it('fades an actual compound imported house without affecting a neighbor sharing its geometry', async t => {

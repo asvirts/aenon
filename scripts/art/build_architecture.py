@@ -236,7 +236,17 @@ def boat():
             bpy.context.view_layer.objects.active=o;mod=o.modifiers.new('plank-thickness','SOLIDIFY');mod.thickness=.038;bpy.ops.object.modifier_apply(modifier=mod.name)
         for i in range(len(sections)-1):
             a,b=sections[i],sections[i+1];beam('rounded-gunwale',(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.075,'darkwood')
-    for i in range(5):box('interior-floorboard',(.25,2.7,.055),(-.5+i*.25,0,-.12),'wood',.007)
+    # A sealed planked sole sits above the rendered waterline. Its shaped edge
+    # meets every hull section, including the narrow bow and stern, so the
+    # ordinary lake surface cannot appear inside the open boat.
+    for plank in range(5):
+        vs=[];fs=[]
+        for y,width,top in sections:
+            floor_width=width*(.32+.68*(.075+.2)/(top+.2))
+            for side in [plank/5,(plank+1)/5]:vs.append(((side*2-1)*floor_width,y,.075))
+        for i in range(len(sections)-1):a=i*2;fs.append((a,a+1,a+3,a+2))
+        mesh=bpy.data.meshes.new('shaped-interior-plank');mesh.from_pydata(vs,[],fs);mesh.update();o=bpy.data.objects.new('dry-planked-interior',mesh);bpy.context.collection.objects.link(o);apply(o,'wood');uv(o)
+        bpy.context.view_layer.objects.active=o;mod=o.modifiers.new('floorboard-thickness','SOLIDIFY');mod.thickness=.035;bpy.ops.object.modifier_apply(modifier=mod.name)
     for y in [-1,0,1]:
         box('rowing-bench',(1.36,.28,.09),(0,y,.23),'wood')
         for x in [-.64,.64]:beam('hull-frame',(x*.35,y,-.13),(x,y,.36),.065,'darkwood')

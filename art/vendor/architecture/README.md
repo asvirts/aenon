@@ -63,9 +63,11 @@ scale after longitudinal placement so masonry does not stretch into stripes.
 Dock deck top remains local y=.155; visual piers turn and extend from the original
 ashore landing anchors to the water. Moored boats float at y=.026 and their full
 hulls clear the bank, while picking and boarding keep the original landing ID and
-position. Traveling boats retain the original journey transform.
+position. A shaped planked sole covers the full interior above the waterline,
+including between benches, while the keel remains submerged. Traveling boats
+retain the original journey transform.
 
-Final optimized payload: **4,111,213 bytes** including 11 GLBs and 22 unique shared
+Final optimized payload: **4,113,529 bytes** including 11 GLBs and 22 unique shared
 KTX2 files (previous embedded form: 9,979,264 bytes before the workshop height
 correction). Largest GLB: **193,340 bytes**. Every GLB is below the 1 MB model
 budget. Browser first-playable transfer must still be measured for the integrated

@@ -2,8 +2,8 @@
   "models": [
     {
       "file": "fishing-boat.glb",
-      "bytes": 48604,
-      "sha256": "02ef20d10ec0078dab4d7285a7d0da4160f9dac19a1ee7d8c856bb55f73d11fb",
+      "bytes": 50920,
+      "sha256": "86a7a9ab2b46ee4cbc68273596438597547a5398e81e5ac309f1adba6e33bc24",
       "images": [
         {
           "image": "Stylized_Wood_Planks_002_normal",
@@ -445,7 +445,7 @@
     }
   ],
   "uniqueTextures": 22,
-  "modelBytes": 945352,
+  "modelBytes": 947668,
   "textureBytes": 3165861,
-  "totalBytes": 4111213
+  "totalBytes": 4113529
 }

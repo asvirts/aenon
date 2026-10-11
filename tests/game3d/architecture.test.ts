@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises'
 import { it } from 'node:test'
 import { runInNewContext } from 'node:vm'
 import { createHash } from 'node:crypto'
-import { LoadAssetContainerAsync, Mesh, NullEngine, Scene, TransformNode, Vector3 } from '@babylonjs/core'
+import { LoadAssetContainerAsync, Mesh, NullEngine, Ray, Scene, TransformNode, Vector3 } from '@babylonjs/core'
 import '@babylonjs/loaders/glTF/index.js'
 import { bridgePlacements, domesticHouseAssets, houseAsset, createArchitecture } from '../../src/game3d/architecture.ts'
 import { bridgeAt, heightAt, waterDistance } from '../../src/game3d/terrain.ts'
@@ -167,5 +167,18 @@ it('floats each complete moored hull beside its landing while preserving the ori
         assert.ok(waterDistance(point.x, point.z) < -.25, `${port.placeId}: hull overlaps the bank`)
       }
     }
+  }
+})
+
+it('has an opaque interior above the waterline between the rowing benches', async t => {
+  const engine = new NullEngine(); t.after(() => engine.dispose())
+  const scene = new Scene(engine); scene.useRightHandedSystem = true
+  const boat = await source(scene, 'fishing-boat'); boat.addAllToScene()
+  const meshes = boat.meshes.filter(mesh => mesh.getTotalVertices())
+  for (const x of [-.2, 0, .2]) for (const z of [-.5, .5]) {
+    const ray = new Ray(new Vector3(x, 2, z), new Vector3(0, -1, 0), 2)
+    const hits = meshes.map(mesh => { mesh.computeWorldMatrix(true); return ray.intersectsMesh(mesh) }).filter(hit => hit.hit)
+    const highest = Math.max(...hits.map(hit => hit.pickedPoint!.y))
+    assert.ok(highest >= .074 && highest < .10, `dry floor missing at ${x},${z}: ${highest}`)
   }
 })

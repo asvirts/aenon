@@ -20,8 +20,8 @@ export const reviewShots = {
 export type ReviewShot = keyof typeof reviewShots
 /** Supplemental architecture coverage; never changes the canonical eight shots. */
 export const architectureShots = {
-  salim: { position: { x: -206, z: 172 }, zoom: 'default' },
-  pella: { position: { x: 210, z: -65 }, zoom: 'default' },
+  salim: { position: { x: -206, z: 164 }, zoom: 'max' },
+  pella: { position: { x: 210, z: -73 }, zoom: 'max' },
 } as const
 export type ArchitectureShot = keyof typeof architectureShots
 const allShots = { ...reviewShots, ...architectureShots }

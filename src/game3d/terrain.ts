@@ -1,6 +1,7 @@
 import { Color3, DynamicTexture, Mesh, MeshBuilder, ShaderMaterial, StandardMaterial, TransformNode, VertexData } from '@babylonjs/core'
 import type { Scene } from '@babylonjs/core'
 import { regionBounds, regionPlaces, regionRoads } from './region.ts'
+import { AENON_OFFSET, LOW_BAND_STREETS } from './lowBand.ts'
 
 type Point = { x: number; z: number }
 const clamp = (value: number) => Math.max(0, Math.min(1, value))
@@ -8,12 +9,20 @@ const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 
 const oldCenter = (z: number) => 10 + Math.sin(z * .12) * 1.7 + Math.sin(z * .33) * .35
 const oldWidth = (z: number) => 3 + Math.sin(z * .2) * .35
 export const lake = { x: 55, z: -310, radiusX: 62, radiusZ: 68 }
-export const riverCenter = (z: number) => {
+const northernRiverCenter = (z: number) => {
   const blend = smooth((-z - 26) / 35)
   const north = 10 + clamp((-z - 35) / 200) * 45 + Math.sin(z * .045) * 2
   return oldCenter(z) * (1 - blend) + north * blend
 }
-export const riverHalfWidth = (z: number) => oldWidth(z)
+const southernRiverBlend = (z: number) => smooth((z + 60) / (AENON_OFFSET.z - 26 + 60))
+export const riverCenter = (z: number) => {
+  const blend = southernRiverBlend(z)
+  return northernRiverCenter(z) * (1 - blend) + oldCenter(z - AENON_OFFSET.z) * blend
+}
+export const riverHalfWidth = (z: number) => {
+  const blend = southernRiverBlend(z)
+  return oldWidth(z) * (1 - blend) + oldWidth(z - AENON_OFFSET.z) * blend
+}
 export const riverEdge = (z: number) => riverCenter(z) - riverHalfWidth(z)
 const lakeDistance = (x: number, z: number) => (Math.hypot((x - lake.x) / lake.radiusX, (z - lake.z) / lake.radiusZ) - 1) * Math.min(lake.radiusX, lake.radiusZ)
 const kishonCenter = (z: number) => -216 + (z + 144) * .7 + Math.sin((z + 144) * .09) * 2
@@ -24,9 +33,10 @@ function distanceToSegment(x: number, z: number, a: Point, b: Point) {
   const t = length ? clamp(((x - a.x) * dx + (z - a.z) * dz) / length) : 0
   return Math.hypot(x - a.x - t * dx, z - a.z - t * dz)
 }
-const originalPath = [{ x: -6, z: 1 }, { x: -5, z: 4.3 }, { x: -.5, z: 5.6 }, { x: 2.8, z: 3 }, { x: 3, z: -4 }, { x: -.5, z: -11 }, { x: -3, z: -20 }]
+const originalPath = [{ x: -6, z: 1 }, { x: -5, z: 4.3 }, { x: -.5, z: 5.6 }, { x: 2.8, z: 3 }, { x: 3, z: -4 }, { x: -.5, z: -11 }, { x: -3, z: -20 }].map(point => ({ x: point.x + AENON_OFFSET.x, z: point.z + AENON_OFFSET.z }))
 const roads: { a: Point; b: Point }[] = [
   ...originalPath.slice(1).map((b, i) => ({ a: originalPath[i]!, b })),
+  ...LOW_BAND_STREETS.flatMap(street => street.points.slice(1).map((b, i) => ({ a: street.points[i]!, b }))),
   ...regionRoads.flatMap(road => { const a = regionPlaces.find(place => place.id === road.from), b = regionPlaces.find(place => place.id === road.to); return a && b ? [{ a, b }] : [] }),
 ]
 export function roadDistance(x: number, z: number) {
@@ -36,7 +46,7 @@ export function roadDistance(x: number, z: number) {
 }
 /** Roads cross the narrow Jordan on built causeways; no road crosses the open lake. */
 export function bridgeAt(x: number, z: number) {
-  return z < -27 && lakeDistance(x, z) > 2 && Math.min(Math.abs(x - riverCenter(z)) - riverHalfWidth(z), kishonDistance(x, z)) < 2 && roadDistance(x, z) < 2.4
+  return lakeDistance(x, z) > 2 && Math.min(Math.abs(x - riverCenter(z)) - riverHalfWidth(z), kishonDistance(x, z)) < 2 && roadDistance(x, z) < 2.4
 }
 export function dryLand(x: number, z: number) { return bridgeAt(x, z) || waterDistance(x, z) > .5 }
 function noise(x: number, z: number) { return Math.sin(x * .37 + Math.sin(z * .21)) * .5 + Math.cos(z * .53 - x * .18) * .28 + Math.sin(x * 1.8 + z * 1.3) * .1 }
@@ -50,10 +60,11 @@ function upland(x: number, z: number) {
   return Math.max(.45, height)
 }
 export function heightAt(x: number, z: number): number {
-  const oldDistance = Math.abs(x - oldCenter(z)) - oldWidth(z)
-  const old = oldDistance < 0 ? -.3 : Math.min(1, oldDistance / .95) * (.38 + Math.sin(x * .38) * Math.cos(z * .24) * .035)
-  if (z >= -26) return old
+  const localZ = z - AENON_OFFSET.z
+  const oldDistance = Math.abs(x - oldCenter(localZ)) - oldWidth(localZ)
+  const old = oldDistance < 0 ? -.3 : Math.min(1, oldDistance / .95) * (.38 + Math.sin(x * .38) * Math.cos(localZ * .24) * .035)
   if (bridgeAt(x, z)) return .57
+  if (localZ >= -26) return old
   const edge = waterDistance(x, z)
   if (edge < 0) return -.3 - Math.min(1.2, -edge * .1)
   let elevation = upland(x, z) + noise(x * .3, z * .3) * .22
@@ -64,7 +75,7 @@ export function heightAt(x: number, z: number): number {
     if (flatten > 0) elevation = elevation * (1 - flatten) + upland(place.x, place.z) * flatten
   }
   const next = elevation * smooth(edge / 5)
-  const blend = smooth((-z - 26) / 16)
+  const blend = smooth((-localZ - 26) / 16)
   return old * (1 - blend) + next * blend
 }
 function random(seed: number) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
@@ -91,7 +102,7 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
   const chunkSize = 32
   for (let z = Math.floor(regionBounds.minZ / chunkSize) * chunkSize; z < regionBounds.maxZ; z += chunkSize) for (let x = Math.floor(regionBounds.minX / chunkSize) * chunkSize; x < regionBounds.maxX; x += chunkSize) {
     const positions: number[] = [], indices: number[] = [], colors: number[] = [], uvs: number[] = []
-    const cells = z > -32 && x > -32 && x < 32 ? 64 : 32
+    const cells = Math.abs(z + chunkSize / 2 - AENON_OFFSET.z) < 48 && x > -32 && x < 32 ? 64 : 32
     for (let row = 0; row <= cells; row++) for (let col = 0; col <= cells; col++) {
       const px = x + col / cells * chunkSize, pz = z + row / cells * chunkSize, y = heightAt(px, pz)
       positions.push(px, y, pz); uvs.push(px / 6, pz / 6)
@@ -158,6 +169,6 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
       chunk.grass?.setEnabled(visible); chunk.stones?.setEnabled(visible)
     }
   }
-  update({ x: 0, z: 0 })
+  update(AENON_OFFSET)
   return { ground, water, waterMat, meadow, rockMesh, update }
 }

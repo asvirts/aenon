@@ -2,7 +2,7 @@ import { Color3, InstancedMesh, LoadAssetContainerAsync, Matrix, Mesh, MeshBuild
 import type { AbstractMesh, AnimationGroup, ArcRotateCamera, AssetContainer, Scene } from '@babylonjs/core'
 import '@babylonjs/loaders/glTF'
 import { heightAt, bridgeAt, waterDistance } from './terrain.ts'
-import { definition as gearDefinition, houses, trees, objects, navigation } from './content.ts'
+import { definition as gearDefinition, houses, trees, objects, navigation, landscapeDetails, layout } from './content.ts'
 import { regionPlaces, regionRoads, ports } from './region.ts'
 import { specialFindNames } from './economy.ts'
 import { canTraverseRegion } from './regionNavigation.ts'
@@ -97,7 +97,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   await Promise.all(houses.map(async (house, i) => {
     const root = await staticModel('/art-sample/house.glb', `village-house-${i}`, house, house.scale, house.rotation)
     const place = regionPlaces.filter(place => place.kind === 'settlement').reduce((a, b) => Math.hypot(a.x - house.x, a.z - house.z) < Math.hypot(b.x - house.x, b.z - house.z) ? a : b)
-    if (place.id !== 'aenon') decorateHouse(root, place.id, i)
+    decorateHouse(root, place.id, i)
   }))
   const plantedSpots = new Set<string>()
   await Promise.all(trees.map(async (tree, i) => {
@@ -106,7 +106,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     if (spot) { props.set(spot.id, root); plantedSpots.add(spot.id) }
   }))
   await Promise.all(objects.filter(object => object.model === 'tree' && !plantedSpots.has(object.id)).map(async object => { const root = await staticModel('/art-sample/olive.glb', `olive-spot-${object.id}`, object, 1, 0, object.id); props.set(object.id, root) }))
-  const player = await actor('adventurer', '/game-assets/adventurer.glb', { x: -.8, z: 5 }, true)
+  const player = await actor('adventurer', '/game-assets/adventurer.glb', layout.spawns.aenon!, true)
   await Promise.all(objects.filter(o => o.kind === 'hostile' || o.kind === 'person').map(o => actor(o.id, `/game-assets/${o.model === 'villager' ? 'merchant' : o.model}.glb`, o)))
   const companyColors = ['#ead9b8', '#a99068', '#7a8991', '#b48967', '#978b63', '#8e6350', '#768e7e', '#bea47c', '#677b85', '#977c88', '#b9ac86', '#8a735b', '#7d8b61', '#846c88', '#9f8068', '#6a9290']
   const company = await Promise.all(['Jesus', ...travelingCompany].map(async (name, i) => {
@@ -203,6 +203,14 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   }
   function decorateHouse(root: TransformNode, placeId: string, index: number) {
     // All additions remain within the house's authored navigation footprint.
+    if (placeId === 'aenon') {
+      for (let i = 0; i < 4; i++) {
+        const jar = sphere(root, 'aenon-fired-water-jar', .45, [-2.2 + i * .5, .32, 2.05], tile); jar.scaling.y = 1.25
+        cylinder(root, 'aenon-jar-neck', .15, .2, [-2.2 + i * .5, .65, 2.05], tile)
+      }
+      box(root, 'aenon-potters-bench', [1.8, .12, .6], [-1.1, .58, 2.65], wood)
+      cylinder(root, 'aenon-roof-water-store', .8, .72, [-1.5, 3.75, -.7], tile)
+    }
     if (['scythopolis', 'pella', 'sepphoris', 'tiberias', 'hippus', 'gadara'].includes(placeId)) {
       for (const x of [-2.25, 2.25]) {
         cylinder(root, 'original-portico-column', 2.35, .26, [x, 1.18, 2.25], stone)
@@ -320,6 +328,73 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   for (const object of objects) if (!['hostile', 'person'].includes(object.kind) && object.model !== 'tree') makeProp(object)
   const poolWater = material('original-irrigated-pool-water', '#294e51'); poolWater.specularColor = new Color3(.1, .15, .14); poolWater.specularPower = 38
   const poolRipple = material('original-pool-ripple', '#53736e')
+  for (const detail of landscapeDetails) {
+    const root = new TransformNode(detail.id, scene); setPosition(root, detail); root.rotation.y = detail.rotation ?? 0; root.scaling.setAll(detail.scale ?? 1); scenery.push(root)
+    switch (detail.kind) {
+      case 'pottery':
+        box(root, 'potters-drying-bench', [2.1, .15, .8], [0, .7, 0], wood)
+        for (const x of [-.8, .8]) box(root, 'potters-bench-leg', [.16, .7, .65], [x, .35, 0], wood)
+        for (let i = 0; i < 5; i++) {
+          sphere(root, 'clay-water-vessel', .35, [-.8 + i * .39, .95, 0], tile).scaling.y = 1.2
+          cylinder(root, 'clay-vessel-mouth', .1, .15, [-.8 + i * .39, 1.18, 0], tile)
+        }
+        for (const x of [-.7, .6]) { sphere(root, 'stored-water-jar', .55, [x, .35, .9], tile).scaling.y = 1.25; cylinder(root, 'stored-jar-mouth', .12, .25, [x, .71, .9], tile) }
+        break
+      case 'spring':
+        cylinder(root, 'spring-basin', .18, 4.1, [0, .07, 0], stone)
+        cylinder(root, 'spring-water', .025, 3.65, [0, .18, 0], poolWater)
+        for (let i = 0; i < 15; i++) { const angle = i * Math.PI * 2 / 15; sphere(root, 'spring-edge-stone', .5, [Math.cos(angle) * 1.96, .16, Math.sin(angle) * 1.96], stone).scaling.y = .65 }
+        box(root, 'spring-water-spout', [.5, .32, .6], [0, .37, -1.65], stone)
+        break
+      case 'garden':
+        for (const x of [-2.3, 2.3]) box(root, 'salim-garden-wall', [.35, .65, 3.8], [x, .325, 0], stone)
+        box(root, 'salim-garden-back-wall', [4.9, .65, .35], [0, .325, -1.8], stone)
+        for (const z of [-.9, .15, 1.2]) {
+          box(root, 'salim-irrigated-bed', [3.8, .16, .65], [0, .08, z], wood)
+          for (let i = 0; i < 6; i++) sphere(root, 'salim-garden-crop', .42, [-1.65 + i * .65, .31, z], garden)
+        }
+        break
+      case 'market':
+        for (const x of [-2, 2]) for (const z of [-1.6, 1.6]) {
+          cylinder(root, 'scythopolis-market-column', 2.8, .34, [x, 1.4, z], stone)
+          box(root, 'scythopolis-market-capital', [.62, .19, .62], [x, 2.83, z], stone)
+        }
+        box(root, 'scythopolis-market-awning', [4.8, .1, 4.1], [0, 2.96, 0], indigo)
+        box(root, 'scythopolis-market-table', [2.7, .15, .8], [0, .88, .2], wood)
+        for (const x of [-1, 1]) box(root, 'scythopolis-table-leg', [.16, .8, .6], [x, .4, .2], wood)
+        for (let i = 0; i < 5; i++) sphere(root, 'scythopolis-grain-sack', .52, [-1.4 + i * .67, .32, -1], linen).scaling.y = 1.15
+        break
+      case 'terrace':
+        for (let row = 0; row < 3; row++) {
+          const z = -.9 + row * 1.05, y = .16 + row * .14
+          box(root, 'pella-terrace-retaining-wall', [4.7, y * 2, .32], [0, y, z], stone)
+          for (let i = 0; i < 6; i++) sphere(root, 'pella-terrace-planting', .4, [-1.8 + i * .7, y * 2 + .1, z + .44], garden).scaling.y = .75
+        }
+        break
+      case 'reeds':
+        for (let i = 0; i < 13; i++) {
+          const x = Math.sin(i * 2.4) * 1.4, z = Math.cos(i * 1.7) * .85, height = 1.05 + (i % 4) * .22
+          cylinder(root, 'jordan-reed-stem', height, .035, [x, height / 2, z], garden)
+          cylinder(root, 'jordan-reed-head', .28, .1, [x, height, z], wood)
+          const blade = box(root, 'jordan-reed-blade', [.035, .6, .14], [x + .13, height * .48, z], leaf); blade.rotation.z = -.4
+        }
+        break
+      case 'rocks':
+        for (let i = 0; i < 4; i++) { const rock = sphere(root, 'valley-weathered-outcrop', .75 + i * .13, [Math.sin(i * 2.6) * .67, .28, Math.cos(i * 2.6) * .67], stone); rock.scaling.y = .72; rock.rotation.y = i }
+        break
+      case 'waymarker':
+        cylinder(root, 'valley-road-distance-stone', 1.5, .45, [0, .75, 0], stone)
+        for (let mark = 0; mark < 3; mark++) box(root, 'road-stone-carved-mark', [.2, .03, .025], [0, .85 + mark * .13, -.23], wood)
+        break
+      case 'camp':
+        for (const x of [-1.8, 1.8]) cylinder(root, 'roadside-shelter-post', 2.25, .1, [x, 1.12, -.9], wood)
+        const cloth = box(root, 'roadside-shade-cloth', [4, .05, 2.9], [0, 1.86, 0], linen); cloth.rotation.x = -.2
+        for (let i = 0; i < 7; i++) sphere(root, 'old-campfire-ring', .25, [Math.sin(i) * .52, .12, Math.cos(i) * .52 + 1.35], stone)
+        box(root, 'roadside-resting-bench', [1.7, .35, .45], [-.9, .18, .5], wood)
+        break
+    }
+    register(root.getChildMeshes(), undefined, true)
+  }
   for (const object of objects.filter(object => object.model === 'fish' && waterDistance(object.x, object.z) > 4)) {
     // A shallow, managed pool sits beside the approach marker, leaving its route intact.
     let center = { x: object.x + 1.85, z: object.z }

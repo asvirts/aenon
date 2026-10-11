@@ -147,7 +147,8 @@ describe("the authored Aenon-to-Jordan journey", () => {
 
   it("leaves the one-time legendary cache drop collectible without duplicating it", () => {
     const saved = createGame(options).exportSave()
-    saved.runtime.position = { x: -18.5, z: -18 }; saved.season.placeId = "jordan"
+    const cache = layout.objects.find(object => object.id === "river-cache")!
+    saved.runtime.position = { x: cache.x - 1, z: cache.z }; saved.season.placeId = "jordan"
     for (const hostile of saved.runtime.hostiles) { hostile.status = "dead"; hostile.hitpoints = 0; hostile.respawnIn = 1000 }
     const game = createGame({ ...options, saved })
     assert.equal(game.act({ type: "cache", id: "river-cache" }).ok, true)
@@ -161,7 +162,8 @@ describe("the authored Aenon-to-Jordan journey", () => {
 
   it("preserves ground Gear and its location across a full pack and reload, then approaches to collect it", () => {
     const saved = createGame(options).exportSave()
-    saved.runtime.position = { x: -18.5, z: -18 }; saved.season.placeId = "jordan"
+    const cache = layout.objects.find(object => object.id === "river-cache")!
+    saved.runtime.position = { x: cache.x - 1, z: cache.z }; saved.season.placeId = "jordan"
     saved.season.pack = Array.from({ length: definition.packSize }, () => ({ kind: "gear" as const, id: "bronze-sword" }))
     for (const hostile of saved.runtime.hostiles) { hostile.status = "dead"; hostile.hitpoints = 0; hostile.respawnIn = 1000 }
     const original = createGame({ ...options, saved })
@@ -169,7 +171,7 @@ describe("the authored Aenon-to-Jordan journey", () => {
     const drop = original.snapshot().pickups[0]!
     assert.deepEqual(original.act({ type: "pick-up", id: drop.id }), { ok: false, reason: "pack-full" })
     const continued = original.exportSave()
-    continued.runtime.position = { x: -20, z: -18 }
+    continued.runtime.position = { x: cache.x - 2.5, z: cache.z }
     const game = createGame({ ...options, saved: continued })
     assert.deepEqual(game.snapshot().pickups, original.snapshot().pickups)
     assert.deepEqual(game.act({ type: "pick-up", id: drop.id }), { ok: false, reason: "not-present" })

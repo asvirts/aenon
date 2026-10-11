@@ -1,5 +1,7 @@
 import { gearSlots } from '../season/lib/types.ts'
 import { regionPlaces, regionRoads, regionBounds, ports } from './region.ts'
+import { lake, riverCenter, riverHalfWidth } from './terrain.ts'
+import { cameraZoom } from './view.ts'
 import { sceneNarratives, personStories, passageMetadata } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
@@ -122,7 +124,7 @@ export function createUI(options: UIOptions) {
   let craftingRarity = 'all'
   let contextId: string | undefined
   let currentQuality = options.quality ?? 'high'
-  let zoomDistance = options.zoom ?? 17
+  let zoomDistance = options.zoom ?? cameraZoom.default
   let performanceText = 'Measuring…'
   let saveMessage = 'Progress is saved in this browser.'
   let saveBlocked = false
@@ -262,9 +264,15 @@ export function createUI(options: UIOptions) {
     body.append(description('A connected region to explore. Click a place below to inspect it and plan a walk. Boats leave from the five lake landings.'))
     const chart = node('canvas', 'region-chart'); chart.width = 690; chart.height = 570; chart.setAttribute('aria-label', 'Map of eighteen settlements and eight wilderness places')
     const ctx = chart.getContext('2d')!, width = regionBounds.maxX - regionBounds.minX, height = regionBounds.maxZ - regionBounds.minZ
-    const x = (value: number) => (value - regionBounds.minX) / width * chart.width, z = (value: number) => (value - regionBounds.minZ) / height * chart.height
+    const scale = Math.min((chart.width - 36) / width, (chart.height - 36) / height)
+    const x = (value: number) => (value - regionBounds.minX) * scale + (chart.width - width * scale) / 2
+    const z = (value: number) => (value - regionBounds.minZ) * scale + (chart.height - height * scale) / 2
     ctx.fillStyle = '#ded4b4'; ctx.fillRect(0, 0, chart.width, chart.height)
-    ctx.fillStyle = '#729d9a'; ctx.beginPath(); ctx.ellipse(x(55), z(-310), 62 / width * chart.width, 68 / height * chart.height, 0, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#729d9a'; ctx.beginPath(); ctx.ellipse(x(lake.x), z(lake.z), lake.radiusX * scale, lake.radiusZ * scale, 0, 0, Math.PI * 2); ctx.fill()
+    ctx.beginPath()
+    for (let north = regionBounds.minZ; north <= regionBounds.maxZ; north += 2) { const west = x(riverCenter(north) - riverHalfWidth(north)); if (north === regionBounds.minZ) ctx.moveTo(west, z(north)); else ctx.lineTo(west, z(north)) }
+    for (let north = regionBounds.maxZ; north >= regionBounds.minZ; north -= 2) ctx.lineTo(x(riverCenter(north) + riverHalfWidth(north)), z(north))
+    ctx.closePath(); ctx.fill()
     ctx.strokeStyle = '#8a805e'; ctx.lineWidth = 2
     for (const road of regionRoads) { const a = regionPlaces.find(p => p.id === road.from)!, b = regionPlaces.find(p => p.id === road.to)!; ctx.beginPath(); ctx.moveTo(x(a.x), z(a.z)); ctx.lineTo(x(b.x), z(b.z)); ctx.stroke() }
     ctx.font = '12px Georgia'; ctx.textAlign = 'center'
@@ -542,7 +550,7 @@ export function createUI(options: UIOptions) {
     select.addEventListener('change', () => { currentQuality = select.value as Quality; options.onQuality(currentQuality) })
     body.append(label, select, description('Choose a level of detail that runs smoothly on your device.'))
     const zoomLabel = node('label', 'setting-label', 'Camera distance'); zoomLabel.htmlFor = 'game-zoom'
-    const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = '10'; zoom.max = '24'; zoom.step = '1'; zoom.value = String(zoomDistance)
+    const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = String(cameraZoom.min); zoom.max = String(cameraZoom.max); zoom.step = '1'; zoom.value = String(zoomDistance)
     zoom.addEventListener('input', () => { zoomDistance = Number(zoom.value); options.onZoom(zoomDistance) })
     body.append(zoomLabel, zoom, row('Live performance', 'Current device only; hardware and resolution affect results.', node('output', 'performance-output', performanceText)), heading('Your Season'))
     body.append(description(saveMessage, saveBlocked ? 'panel-note warning' : 'panel-description'))

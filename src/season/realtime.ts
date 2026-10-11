@@ -689,7 +689,7 @@ export function createGame(options: GameOptions): Game {
         hostileTimers: Object.fromEntries(enemies.map(enemy => [enemy.view.id, { attackIn: enemy.attackIn, burns: structuredClone(enemy.burns) }])), pendingTechnique: null }
       if (goodsPickups.length) runtime.goodsPickups = structuredClone(goodsPickups)
       if (journey) runtime.journey = { id: journey.definition.id, progress: journey.progress }
-      return { version: 3, season: copyState(state), runtime }
+      return { version: 3, layoutRevision: layout.revision ?? 1, season: copyState(state), runtime }
     },
     drainEvents() { return events.splice(0) },
   }

@@ -9,6 +9,7 @@ import { createUI } from './ui.ts'
 import { createWorld } from './world.ts'
 import { regionPlaces, regionRoads } from './region.ts'
 import { lake } from './terrain.ts'
+import { cameraZoom } from './view.ts'
 import type { GameSnapshot, Panel } from './types.ts'
 import './style.css'
 import './world.css'
@@ -43,7 +44,7 @@ async function boot() {
   const environment = createEnvironment(scene, 110)
   loadingDetail.textContent = 'Preparing the village, riverbank, and their inhabitants…'
   const world = await createWorld(scene, id => { if (!game.snapshot().paused) { keys.clear(); game.interact(id) } })
-  let shadows: ShadowGenerator | null = null, zoom = 14
+  let shadows: ShadowGenerator | null = null, zoom = cameraZoom.default
   const savedQuality = (() => { try { return storage.getItem('aenon-graphics-quality') } catch { return null } })()
   let quality: Quality = qualities.includes(savedQuality as Quality) ? savedQuality as Quality : navigator.hardwareConcurrency <= 4 ? 'low' : 'high'
   const keys = new Set<string>()
@@ -104,7 +105,7 @@ async function boot() {
   setQuality(quality)
   const map = document.querySelector<HTMLCanvasElement>('#minimap')!, mapContext = map.getContext('2d')!
   function drawMap(snapshot: GameSnapshot) {
-    const ctx = mapContext, radius = 32
+    const ctx = mapContext, radius = 48
     const sx = (x: number) => (x - snapshot.position.x + radius) / (radius * 2) * map.width
     const sz = (z: number) => (z - snapshot.position.z + radius) / (radius * 2) * map.height
     ctx.fillStyle = '#a5a77b'; ctx.fillRect(0, 0, map.width, map.height)
@@ -133,7 +134,7 @@ async function boot() {
     const hit = scene.pick(x, y, mesh => Boolean(mesh.metadata?.walkSurface))
     if (hit?.pickedPoint) game.moveTo({ x: hit.pickedPoint.x, z: hit.pickedPoint.z })
   })
-  canvas.addEventListener('wheel', event => { event.preventDefault(); zoom = Math.max(10, Math.min(24, zoom + Math.sign(event.deltaY) * .8)); ui.setZoom(zoom); resize() }, { passive: false })
+  canvas.addEventListener('wheel', event => { event.preventDefault(); zoom = Math.max(cameraZoom.min, Math.min(cameraZoom.max, zoom + Math.sign(event.deltaY) * .8)); ui.setZoom(zoom); resize() }, { passive: false })
   window.addEventListener('keydown', event => {
     const key = event.key.toLowerCase()
     if (key === 'escape') { if (ui.isPanelOpen()) ui.closePanel(); else game.cancel(); keys.clear(); return }

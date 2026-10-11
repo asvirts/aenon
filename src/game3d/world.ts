@@ -1,9 +1,9 @@
 import { Color3, InstancedMesh, LoadAssetContainerAsync, Matrix, Mesh, MeshBuilder, MultiMaterial, PBRMaterial, Quaternion, StandardMaterial, TransformNode, Vector3, VertexData } from '@babylonjs/core'
 import type { AbstractMesh, AnimationGroup, ArcRotateCamera, AssetContainer, Scene } from '@babylonjs/core'
 import '@babylonjs/loaders/glTF'
-import { heightAt, bridgeAt, waterDistance } from './terrain.ts'
+import { heightAt, waterDistance } from './terrain.ts'
 import { definition as gearDefinition, houses, trees, objects, navigation, landscapeDetails, layout } from './content.ts'
-import { regionPlaces, regionRoads, ports } from './region.ts'
+import { regionPlaces, ports } from './region.ts'
 import { specialFindNames } from './economy.ts'
 import { canTraverseRegion } from './regionNavigation.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
@@ -12,6 +12,7 @@ import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 import type { ViewCoverage } from './view.ts'
 import { occlusionGroup, type OcclusionGroup } from './occlusion.ts'
 import { surfaceMaterial, cueMaterial } from './materials.ts'
+import { createArchitecture, houseAsset, bridgePlacements } from './architecture.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
 export async function createWorld(scene: Scene, interact: (id: string) => void) {
@@ -25,8 +26,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   const material = (name: string, hex: string, glow = 0) => surfaceMaterial(scene, name, hex, glow)
   const wood = material('olive-wood', '#795331'), stone = material('worked-limestone', '#b9ad8f'), iron = material('hammered-bronze', '#846840'), leaf = material('herb-green', '#56704c'), linen = material('woven-linen', '#c7bda0'), copper = material('exposed-copper', '#a36d44'), flower = material('flax-blossom', '#809caf'), ember = material('hearth-coals', '#df8744', .7)
   iron.metallic = .55; iron.roughness = .5; copper.metallic = .7; copper.roughness = .4
-  const tile = material('regional-terracotta', '#9f6547'), basalt = material('Galilee-basalt', '#5d6258'), indigo = material('regional-indigo-cloth', '#556571'), garden = material('garden-vine', '#59764b')
-  const hullMat = material('original-hull-pigments', '#ddcbaa'); hullMat.backFaceCulling = false
+  const tile = material('regional-terracotta', '#9f6547'), garden = material('garden-vine', '#59764b')
   const register = (meshes: AbstractMesh[], id?: string) => {
     for (const mesh of meshes) {
       if (!mesh.getTotalVertices()) continue
@@ -105,17 +105,18 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     model.culled = !visible
   }
   async function staticModel(filename: string, id: string, point: Point, scale: number, rotation = 0, objectId?: string) {
-    const source = await container(filename), entries = source.instantiateModelsToScene(name => `${id}|${name}`)
+    const source = await container(filename), entries = source.instantiateModelsToScene(name => `${id}|${name}`, false, { doNotInstantiate: filename.includes('/architecture/') })
     const root = new TransformNode(id, scene)
     for (const child of entries.rootNodes) child.parent = root
     setPosition(root, point); root.scaling.setAll(scale); root.rotation.y = rotation
     register(root.getChildMeshes(), objectId); scenery.push(root)
     return root
   }
+  const architecture = await createArchitecture(scene, container), houseOrdinals = new Map<string, number>()
   await Promise.all(houses.map(async (house, i) => {
-    const root = await staticModel('/game-assets/house-painted.glb', `village-house-${i}`, house, house.scale, house.rotation)
     const place = regionPlaces.filter(place => place.kind === 'settlement').reduce((a, b) => Math.hypot(a.x - house.x, a.z - house.z) < Math.hypot(b.x - house.x, b.z - house.z) ? a : b)
-    decorateHouse(root, place.id, i)
+    const ordinal = houseOrdinals.get(place.id) ?? 0; houseOrdinals.set(place.id, ordinal + 1)
+    const root = await staticModel(houseAsset(place.id, ordinal), `village-house-${i}`, house, house.scale, house.rotation)
     occlusionGroups.push(occlusionGroup(root))
   }))
   const plantedSpots = new Set<string>()
@@ -221,80 +222,16 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   function cylinder(parent: TransformNode, name: string, height: number, diameter: number, position: [number, number, number], mat: PBRMaterial) {
     const mesh = MeshBuilder.CreateCylinder(name, { height, diameter, tessellation: 8 }, scene); mesh.parent = parent; mesh.position.set(...position); mesh.material = mat; return mesh
   }
-  function decorateHouse(root: TransformNode, placeId: string, index: number) {
-    // All additions remain within the house's authored navigation footprint.
-    if (placeId === 'aenon') {
-      for (let i = 0; i < 4; i++) {
-        const jar = sphere(root, 'aenon-fired-water-jar', .45, [-2.2 + i * .5, .32, 2.05], tile); jar.scaling.y = 1.25
-        cylinder(root, 'aenon-jar-neck', .15, .2, [-2.2 + i * .5, .65, 2.05], tile)
-      }
-      box(root, 'aenon-potters-bench', [1.8, .12, .6], [-1.1, .58, 2.65], wood)
-      cylinder(root, 'aenon-roof-water-store', .8, .72, [-1.5, 3.75, -.7], tile)
-    }
-    if (['scythopolis', 'pella', 'sepphoris', 'tiberias', 'hippus', 'gadara'].includes(placeId)) {
-      for (const x of [-2.25, 2.25]) {
-        cylinder(root, 'original-portico-column', 2.35, .26, [x, 1.18, 2.25], stone)
-        box(root, 'column-capital', [.46, .14, .44], [x, 2.37, 2.25], stone)
-        cylinder(root, 'column-base', .15, .43, [x, .075, 2.25], stone)
-      }
-      box(root, 'portico-lintel', [5.1, .24, .5], [0, 2.55, 2.25], stone)
-      for (let t = 0; t < 12; t++) { const roofTile = cylinder(root, 'original-roof-tile', 3.9, .18, [-2.1 + t * .38, 3.55, -.2], tile); roofTile.rotation.x = Math.PI / 2 }
-    }
-    if (['capernaum', 'bethsaida', 'gamla', 'hippus'].includes(placeId)) {
-      for (let row = 0; row < 5; row++) for (let col = 0; col < 8; col++) {
-        const x = -2.52 + col * .72 + (row % 2 ? .18 : 0)
-        if (Math.abs(x) < .85 && row < 4) continue
-        box(root, 'original-basalt-facing', [.68, .4, .10], [x, .23 + row * .43, 1.87], basalt)
-      }
-    }
-    if (['jotapata', 'nazareth', 'gath-hepher', 'gamla', 'nain'].includes(placeId)) {
-      cylinder(root, 'roof-cistern', .9, 1.1, [-1.25, 3.8, -.6], stone)
-      cylinder(root, 'cistern-mouth', .14, .45, [-1.25, 4.3, -.6], basalt)
-      for (let rung = 0; rung < 8; rung++) box(root, 'roof-ladder-rung', [.66, .065, .09], [2.58, .24 + rung * .36, -.5], wood)
-      for (const x of [2.23, 2.92]) box(root, 'roof-ladder-upright', [.065, 3.25, .09], [x, 1.63, -.5], wood)
-    }
-    if (['salim', 'cana', 'magdala', 'legio'].includes(placeId)) {
-      for (const x of [-2.35, 2.35]) cylinder(root, 'garden-lattice-post', 2.5, .09, [x, 1.25, 2.55], wood)
-      for (let i = 0; i < 7; i++) box(root, 'garden-lattice', [.08, .07, 1.1], [-2.25 + i * .75, 2.47, 2.2], wood)
-      for (let i = 0; i < 5; i++) { const foliage = sphere(root, 'garden-vine-leaves', .9, [-1.9 + i * .92, 2.52, 2.25], garden); foliage.scaling.y = .24 }
-      for (let i = 0; i < (placeId === 'cana' ? 6 : 2); i++) cylinder(root, 'courtyard-water-jar', .75, .42, [-2.35 + i * .45, .38, 2.2], tile)
-    }
-    if (index % 2) { const cloth = box(root, 'dyed-linen-screen', [1.2, 1.45, .035], [-1.8, 1.5, 1.96], indigo); cloth.rotation.z = .06 }
-    register(root.getChildMeshes().filter(mesh => !shadowCasters.includes(mesh)))
-  }
-  function boat(parent: TransformNode, name: string) {
-    // Hand-authored clinker-like hull: tapered ends, open gunwales and cross benches.
-    const positions: number[] = [], indices: number[] = [], colors: number[] = []
-    const sections = [{ z: -2.05, w: .04, y: .46 }, { z: -1.5, w: .59, y: .31 }, { z: -.65, w: .83, y: .26 }, { z: .65, w: .83, y: .26 }, { z: 1.5, w: .59, y: .31 }, { z: 2.05, w: .04, y: .46 }]
-    for (const [j, section] of sections.entries()) for (const [k, factor] of [-1, -.7, .7, 1].entries()) {
-      positions.push(section.w * factor, Math.abs(factor) === 1 ? section.y + .22 : -.12, section.z)
-      const c = ((j + k) % 2 ? new Color3(.42, .29, .17) : new Color3(.53, .38, .23)).toLinearSpace(); colors.push(c.r, c.g, c.b, 1)
-      if (j && k) { const i = j * 4 + k; indices.push(i - 5, i - 4, i, i - 5, i, i - 1) }
-    }
-    const hull = new Mesh(name, scene), data = new VertexData(), normals: number[] = []; VertexData.ComputeNormals(positions, indices, normals)
-    data.positions = positions; data.indices = indices; data.normals = normals; data.colors = colors; data.applyToMesh(hull); hull.useVertexColors = true; hull.parent = parent; hull.material = hullMat
-    for (const z of [-1.08, 0, 1.08]) box(parent, 'boat-cross-bench', [1.25, .09, .24], [0, .2, z], wood)
-    for (const x of [-.76, .76]) { const oar = cylinder(parent, 'olive-wood-oar', 2.6, .04, [x, .49, -.6], wood); oar.rotation.x = Math.PI / 2; box(parent, 'oar-blade', [.16, .035, .48], [x, .49, -1.8], wood) }
-    register(parent.getChildMeshes())
-  }
-  const travelingBoat = new TransformNode('Adventurer-lake-boat', scene); boat(travelingBoat, 'original-traveling-hull'); travelingBoat.setEnabled(false)
+  const travelingBoat = new TransformNode('Adventurer-lake-boat', scene); architecture.boat(travelingBoat); register(travelingBoat.getChildMeshes()); travelingBoat.setEnabled(false)
   for (const port of ports) {
     const dock = new TransformNode(`landing-${port.placeId}`, scene); setPosition(dock, port); scenery.push(dock)
-    for (let i = 0; i < 8; i++) box(dock, 'landing-plank', [2.1, .11, .29], [0, .10, -.95 + i * .3], wood)
-    for (const x of [-.97, .97]) for (const z of [-.9, .9]) cylinder(dock, 'landing-mooring-post', 1.15, .13, [x, .24, z], wood)
+    architecture.dock(dock)
     register(dock.getChildMeshes())
   }
-  for (const road of regionRoads) {
-    const from = regionPlaces.find(place => place.id === road.from)!, to = regionPlaces.find(place => place.id === road.to)!
-    const dx = to.x - from.x, dz = to.z - from.z, steps = Math.ceil(Math.hypot(dx, dz) * 2)
-    const wet: Point[] = []
-    for (let i = 0; i <= steps; i++) { const p = { x: from.x + dx * i / steps, z: from.z + dz * i / steps }; if (waterDistance(p.x, p.z) < 1.3 && bridgeAt(p.x, p.z)) wet.push(p) }
-    if (!wet.length) continue
-    const a = wet[0]!, b = wet.at(-1)!, bridge = new TransformNode(`bridge-${road.from}-${road.to}`, scene)
-    bridge.position.set((a.x + b.x) / 2, .57, (a.z + b.z) / 2); bridge.rotation.y = Math.atan2(dx, dz); scenery.push(bridge)
-    const length = Math.hypot(a.x - b.x, a.z - b.z) + 2
-    box(bridge, 'stone-causeway-deck', [5.6, .18, length], [0, -.09, 0], stone)
-    for (const x of [-2.65, 2.65]) { box(bridge, 'causeway-low-rail', [.22, .38, length], [x, .25, 0], stone); for (let i = 0; i < length; i += 2) cylinder(bridge, 'causeway-pier', 1.2, .56, [x, -.55, i - length / 2 + .4], stone) }
+  for (const placement of bridgePlacements()) {
+    const bridge = new TransformNode(placement.id, scene)
+    bridge.position.set(placement.center.x, placement.elevation, placement.center.z); bridge.rotation.y = placement.rotation; scenery.push(bridge)
+    architecture.bridge(bridge, placement.length)
     register(bridge.getChildMeshes())
   }
   function makeProp(object: WorldObject) {
@@ -336,7 +273,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
         for (const x of [-.27, .27]) box(root, 'chest-band', [.06, .56, .495], [x, .3, 0], iron)
         break
       case 'boat':
-        boat(root, `moored-hull-${object.id}`)
+        architecture.boat(root)
         break
       case 'signpost':
         cylinder(root, 'road-sign-post', 1.75, .1, [0, .87, 0], wood)
@@ -375,14 +312,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
         }
         break
       case 'market':
-        for (const x of [-2, 2]) for (const z of [-1.6, 1.6]) {
-          cylinder(root, 'scythopolis-market-column', 2.8, .34, [x, 1.4, z], stone)
-          box(root, 'scythopolis-market-capital', [.62, .19, .62], [x, 2.83, z], stone)
-        }
-        box(root, 'scythopolis-market-awning', [4.8, .1, 4.1], [0, 2.96, 0], indigo)
-        box(root, 'scythopolis-market-table', [2.7, .15, .8], [0, .88, .2], wood)
-        for (const x of [-1, 1]) box(root, 'scythopolis-table-leg', [.16, .8, .6], [x, .4, .2], wood)
-        for (let i = 0; i < 5; i++) sphere(root, 'scythopolis-grain-sack', .52, [-1.4 + i * .67, .32, -1], linen).scaling.y = 1.15
+        architecture.market(root)
         break
       case 'terrace':
         for (let row = 0; row < 3; row++) {

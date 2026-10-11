@@ -1,0 +1,306 @@
+[
+  {
+    "activeMeshes": 148,
+    "averageFps": 119.90527483245354,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 144,
+    "frameCount": 1200,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 9.400000035762789,
+    "renderSize": {
+      "height": 514,
+      "width": 914
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.007900000035765,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    "triangles": 76212,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.007099999964237
+  },
+  {
+    "activeMeshes": 589,
+    "averageFps": 119.99880001242904,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 575,
+    "frameCount": 1200,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 9.399999976158142,
+    "renderSize": {
+      "height": 514,
+      "width": 914
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.000099999964236,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "low",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    "triangles": 200682,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.005800000011921
+  },
+  {
+    "activeMeshes": 159,
+    "averageFps": 112.43141683546231,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 999,
+    "frameCount": 1125,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 17.5,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.006100000023842,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    "triangles": 255388,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.004599999964237
+  },
+  {
+    "activeMeshes": 612,
+    "averageFps": 104.27184660154188,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 1587,
+    "frameCount": 1043,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 17.799999952316284,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.00269999998808,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "medium",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    "triangles": 447052,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.009600000023842
+  },
+  {
+    "activeMeshes": 159,
+    "averageFps": 101.89796204088066,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 1007,
+    "frameCount": 1019,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 18.200000047683716,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.000199999988078,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    "triangles": 255388,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.005300000011921
+  },
+  {
+    "activeMeshes": 612,
+    "averageFps": 73.14785246721698,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 1595,
+    "frameCount": 733,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 24.400000035762787,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.020799999952317,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "high",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    "triangles": 447052,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.005200000047684
+  },
+  {
+    "activeMeshes": 159,
+    "averageFps": 83.32334252448017,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 3533,
+    "frameCount": 834,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 20.19999998807907,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.009200000047684,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-near",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 12
+    },
+    "triangles": 776614,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.010899999976158
+  },
+  {
+    "activeMeshes": 612,
+    "averageFps": 73.89187189435587,
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "drawCalls": 4556,
+    "frameCount": 739,
+    "gpu": {
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "vendor": "Google Inc. (Apple)",
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+    },
+    "hardwareConcurrency": 15,
+    "p95FrameMs": 22.19999998807907,
+    "renderSize": {
+      "height": 720,
+      "width": 1280
+    },
+    "requestedSeconds": 10,
+    "sampleSeconds": 10.001099999964238,
+    "shot": {
+      "inCombat": false,
+      "name": "aenon-far",
+      "position": {
+        "x": -0.8,
+        "z": 209
+      },
+      "quality": "ultra",
+      "simulationTime": 0,
+      "zoom": 44
+    },
+    "triangles": 1152880,
+    "viewport": {
+      "devicePixelRatio": 1,
+      "height": 720,
+      "width": 1280
+    },
+    "warmupSeconds": 5.011
+  }
+]

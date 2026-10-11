@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2020/06/02/stylized-grass-001/",
+  "folder": "https://drive.google.com/drive/folders/1BM_QHmnC_3KQAVM32Wxuh8hA8yIvG6Oa?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Grass_001_basecolor.jpg",
+      "id": "1mY4rsy0AUldtqSH_o4bl972NppMJdl65",
+      "download": "https://drive.google.com/uc?export=download&id=1mY4rsy0AUldtqSH_o4bl972NppMJdl65",
+      "bytes": 530065,
+      "sha256": "52dda7f1c7ca2e8a0e9e14c511c28eedbd6b0a43cfadd9dc76b01c1b63bda7bf"
+    },
+    {
+      "name": "Stylized_Grass_001_normal.jpg",
+      "id": "1CYfgk4u9oxWSmkMNc2m0rOvns0uQgJ_g",
+      "download": "https://drive.google.com/uc?export=download&id=1CYfgk4u9oxWSmkMNc2m0rOvns0uQgJ_g",
+      "bytes": 543092,
+      "sha256": "d0e89b3ff5b4179c218ec14c46d9d03a34ece2ea5119d9a0b01fa85530a292a7"
+    }
+  ]
+}

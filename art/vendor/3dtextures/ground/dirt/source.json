@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2024/06/07/stylized-ground-002/",
+  "folder": "https://drive.google.com/drive/folders/1nuJznXRETe27QnccAh6789e850RCfzVu?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Ground_002_basecolor.png",
+      "id": "1peUj0q2b-GpyJybO5ZCYxlyZLN4y_oaQ",
+      "download": "https://drive.google.com/uc?export=download&id=1peUj0q2b-GpyJybO5ZCYxlyZLN4y_oaQ",
+      "bytes": 1020228,
+      "sha256": "0588a73d9b9bbb843673e9b323ee3ab62fd25f17ea11f571b2dc72dcd558fc81"
+    },
+    {
+      "name": "Stylized_Ground_002_normal.png",
+      "id": "14ZDwEXqbensV2UjGsG_y_vk4Y-bdoD7X",
+      "download": "https://drive.google.com/uc?export=download&id=14ZDwEXqbensV2UjGsG_y_vk4Y-bdoD7X",
+      "bytes": 978204,
+      "sha256": "350d086a235d5d917aff9db089daebc8084ba9e41f67c0d5c20c23366df9fddb"
+    }
+  ]
+}

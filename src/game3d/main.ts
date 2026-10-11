@@ -163,6 +163,7 @@ async function boot() {
     engine.setHardwareScalingLevel(preset.resolutionScale / dpr)
     environment.meadow.setEnabled(value !== 'low'); environment.rockMesh?.setEnabled(value !== 'low')
     lighting.setQuality(value)
+    environment.setGroundQuality(value)
     updateShadowCasters(game.snapshot().position)
     try { storage.setItem('aenon-graphics-quality', value) } catch { /* Preferences must not prevent playing. */ }
     resize()

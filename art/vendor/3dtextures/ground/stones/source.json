@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2024/10/28/stylized-stone-floor-010/",
+  "folder": "https://drive.google.com/drive/folders/1LtR5dpXYaHeObp2yPBd5uIAoW482OpzB?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Stone_Floor_010_basecolor.png",
+      "id": "18JNKloxYlYAepUjkNGAltqSdsB6tnGO8",
+      "download": "https://drive.google.com/uc?export=download&id=18JNKloxYlYAepUjkNGAltqSdsB6tnGO8",
+      "bytes": 1640060,
+      "sha256": "08cc795639346b538b02c93e394d4b250501d7bd67c82be571831056f4fb7ec2"
+    },
+    {
+      "name": "Stylized_Stone_Floor_010_normal.png",
+      "id": "1MD8w06VgMXNbtdk735O8KKnv_cT1lqY3",
+      "download": "https://drive.google.com/uc?export=download&id=1MD8w06VgMXNbtdk735O8KKnv_cT1lqY3",
+      "bytes": 1699826,
+      "sha256": "6bb1a601dc0d2c276ba95d4b49e70ffa3540c4bfbf97a3b1e79cc8ba4242e47f"
+    }
+  ]
+}

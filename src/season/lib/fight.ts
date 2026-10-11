@@ -1,6 +1,13 @@
 import type { SeasonState } from "./begin.ts"
-import { experienceAfterDefeat } from "./experience.ts"
+import { readAdventurerLevel, experienceAfterDefeat } from "./experience.ts"
+import { wornGear } from "./gear.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
+
+export type Blow = {
+  accuracy: number
+  strength: number
+  defence: number
+}
 
 export type EnterResult = { ok: true } | { ok: false; reason: "not-present" | "fight-underway" }
 
@@ -61,26 +68,37 @@ export function swingAtHostile(
   state: SeasonState,
   definition: SeasonDefinition,
   curve: ExperienceCurve,
-  rollDamage: () => number,
-  rollHostileDamage: () => number = () => 0,
+  rollDamage: (blow: Blow) => number,
+  rollHostileDamage: (blow: Blow) => number = () => 0,
 ): SwingResult {
   if (!state.fight) return { ok: false, reason: "not-facing" }
-  const damage = rollDamage()
-  const remaining = state.fight.hostileHitpoints - damage
+  const fight = state.fight
+  const hostile = definition.hostiles.find((candidate) => candidate.id === fight.hostileId)
+  const level = readAdventurerLevel(curve, state.adventurerExperience)
+  const gear = wornGear(state, definition)
+  const damage = rollDamage({
+    accuracy: level + gear.accuracyModifier,
+    strength: level + gear.strengthModifier,
+    defence: hostile?.defence ?? 0,
+  })
+  const remaining = fight.hostileHitpoints - damage
   if (remaining > 0) {
     state.fight = {
-      hostileId: state.fight.hostileId,
+      hostileId: fight.hostileId,
       hostileHitpoints: remaining,
       phase: "underway",
     }
-    const nextHitpoints = state.currentHitpoints - rollHostileDamage()
+    const hostileDamage = rollHostileDamage({
+      accuracy: hostile?.accuracy ?? 0,
+      strength: hostile?.strength ?? 0,
+      defence: level + gear.defence,
+    })
+    const nextHitpoints = state.currentHitpoints - hostileDamage
     state.currentHitpoints = nextHitpoints > 0 ? nextHitpoints : 0
     if (state.currentHitpoints === 0) wakeInLastSettlement(state, definition.defeatLoss)
     return { ok: true, damage, hostileFell: false }
   }
 
-  const hostileId = state.fight.hostileId
-  const hostile = definition.hostiles.find((candidate) => candidate.id === hostileId)
   const place = hostile
     ? definition.places.find((candidate) => candidate.id === hostile.placeId)
     : undefined

@@ -1,5 +1,5 @@
 import { readAdventurerLevel } from "./experience.ts"
-import type { ExperienceCurve } from "./types.ts"
+import { gearSlots, type ExperienceCurve, type GearSlot } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -26,10 +26,6 @@ export type TrainedSkillState = {
   experience: number
 }
 
-export const gearSlots = ["weapon", "shield", "head", "body", "legs", "feet"] as const
-
-export type GearSlot = (typeof gearSlots)[number]
-
 export type Fight = {
   hostileId: string
   hostileHitpoints: number
@@ -44,8 +40,8 @@ export type SeasonState = {
   trainedExperience: Record<TrainedSkill, number>
   currentHitpoints: number
   coin: number
-  pack: readonly []
-  worn: Record<GearSlot, null>
+  pack: readonly string[]
+  worn: Record<GearSlot, string | null>
   lastSettlementId: string
   outing: Outing
   fight: Fight | null
@@ -64,8 +60,8 @@ export type Adventurer = {
   trainedSkills: Record<TrainedSkill, TrainedSkillState>
   currentHitpoints: number
   coin: number
-  pack: readonly []
-  worn: Record<GearSlot, null>
+  pack: readonly string[]
+  worn: Record<GearSlot, string | null>
   lastSettlementId: string
   outing: Outing
   fight: Fight | null
@@ -76,8 +72,8 @@ export type Adventurer = {
   questJournal: readonly []
 }
 
-function emptyWorn(): Record<GearSlot, null> {
-  const worn = {} as Record<GearSlot, null>
+function emptyWorn(): Record<GearSlot, string | null> {
+  const worn = {} as Record<GearSlot, string | null>
   for (const slot of gearSlots) worn[slot] = null
   return worn
 }

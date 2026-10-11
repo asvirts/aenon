@@ -1,4 +1,5 @@
 import { copyState, initialState, presentAdventurer, type Adventurer, type Fight, type SeasonState } from "./lib/begin.ts"
+import { requireGearCatalog } from "./lib/catalog.ts"
 import { holdAdventurerExperience } from "./lib/experience.ts"
 import {
   enterPlace,
@@ -8,8 +9,10 @@ import {
   type EnterResult,
   type FaceResult,
   type StepBackResult,
+  type Blow,
   type SwingResult,
 } from "./lib/fight.ts"
+import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
 import {
   requireDefeatGrants,
   requireHostilesInWilderness,
@@ -18,11 +21,12 @@ import {
   requirePositiveSmallerGrant,
   type DefinitionFailure,
 } from "./lib/definition.ts"
-import type { ExperienceCurve, SeasonDefinition } from "./lib/types.ts"
+import type { ExperienceCurve, GearSlot, SeasonDefinition } from "./lib/types.ts"
 
-export type { ExperienceCurve, Hostile, LevelBand, Place, SeasonDefinition } from "./lib/types.ts"
+export type { ExperienceCurve, Gear, Hostile, LevelBand, Place, SeasonDefinition } from "./lib/types.ts"
 export type { Adventurer, Fight, SeasonState }
-export type { EnterResult, FaceResult, StepBackResult, SwingResult }
+export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
+export type { TakeOffResult, WearResult }
 
 export type Season = {
   adventurer: () => Adventurer
@@ -30,7 +34,9 @@ export type Season = {
   enter: (placeId: string) => EnterResult
   face: (hostileId: string) => FaceResult
   stepBack: () => StepBackResult
-  swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
+  swing: (rollDamage: (blow: Blow) => number, rollHostileDamage?: (blow: Blow) => number) => SwingResult
+  wear: (pieceId: string) => WearResult
+  takeOff: (slot: GearSlot) => TakeOffResult
 }
 
 export type SeasonLoad =
@@ -52,6 +58,8 @@ export function loadSeason(
   if (!defeatLoss.ok) return defeatLoss
   const wildernessHostiles = requireHostilesInWilderness(definition)
   if (!wildernessHostiles.ok) return wildernessHostiles
+  const gearCatalog = requireGearCatalog(definition)
+  if (!gearCatalog.ok) return gearCatalog
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -66,6 +74,8 @@ export function loadSeason(
       stepBack: () => stepBack(seasonState),
       swing: (rollDamage, rollHostileDamage) =>
         swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
+      wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
+      takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
     },
   }
 }

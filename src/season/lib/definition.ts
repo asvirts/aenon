@@ -7,6 +7,10 @@ export type DefinitionFailure =
   | "defeat-grant-not-greater-than-smaller-grant"
   | "hostile-not-in-wilderness"
   | "defeat-loss-not-non-negative"
+  | "gear-accuracy"
+  | "sword-mace-gap"
+  | "weapon-strength"
+  | "armor-defence"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

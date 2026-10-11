@@ -702,8 +702,8 @@ function higherBandHostiles(): SeasonDefinition {
       { id: "lake", kind: "wilderness", band: "high" },
     ],
     hostiles: [
-      { id: "wolf", placeId: "hills", hitpoints: 2, defeatGrant: 4 },
-      { id: "bandit", placeId: "lake", hitpoints: 2, defeatGrant: 4 },
+      { id: "wolf", kind: "animal", placeId: "hills", hitpoints: 2, defeatGrant: 4, huntingExperience: 1 },
+      { id: "bandit", kind: "bandit", placeId: "lake", hitpoints: 2, defeatGrant: 4 },
     ],
   }
 }

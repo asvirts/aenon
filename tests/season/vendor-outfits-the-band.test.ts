@@ -242,7 +242,10 @@ describe("a vendor outfits the band", () => {
 
   it("refuses a trade when the vendor is not in this place", () => {
     const season = begin(market([{ kind: "everyday", id: "rope", price: 3 }]), { coin: 5 })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const before = season.adventurer()
 
     assert.deepEqual(season.buy("merchant", { kind: "everyday", id: "rope" }), {
@@ -369,7 +372,10 @@ describe("a cache opens once", () => {
     const definition = market([], [common, legendary])
     definition.caches = [{ id: "jar", placeId: "jordan" }]
     const season = begin(definition)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
 
     let rolls = 0
     assert.deepEqual(
@@ -397,7 +403,10 @@ describe("a cache opens once", () => {
     const definition = market([])
     definition.caches = [{ id: "jar", placeId: "jordan" }]
     const season = begin(definition)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.openCache("jar", () => ({ coin: 4, gear: [{ id: "low-legendary-sword" }] })), {
       ok: true,
     })
@@ -498,7 +507,10 @@ describe("a cache opens once", () => {
       { id: "chest", placeId: "jordan" },
     ]
     const season = begin(definition)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.openCache("jar", () => ({ coin: 1, gear: [] })), { ok: true })
     assert.deepEqual(season.openCache("chest", () => ({ coin: 2, gear: [{ id: "low-epic-sword" }] })), {
       ok: true,
@@ -512,7 +524,10 @@ describe("a cache opens once", () => {
     const definition = market([])
     definition.caches = [{ id: "jar", placeId: "jordan" }]
     const season = begin(definition)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.openCache("jar", () => ({ coin: 4, gear: [{ id: "blade" }] })), { ok: true })
     assert.deepEqual(season.pickUp("blade"), { ok: true })
     assert.equal(season.adventurer().coin, 4)
@@ -524,7 +539,10 @@ describe("a cache opens once", () => {
     const definition = market([])
     definition.caches = [{ id: "jar", placeId: "jordan" }]
     const season = begin(definition)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.openCache("jar", () => ({ coin: 4, gear: [{ id: "blade" }] })), { ok: true })
 
     const saved = season.exportState()

@@ -276,6 +276,7 @@ export type SeasonDefinition = {
   people?: readonly Person[]
   quests?: readonly QuestDefinition[]
   setScenes?: readonly SetScene[]
+  acquaintance?: { line: string }
   gear?: readonly Gear[]
   stations?: readonly Station[]
   gearPieces?: readonly GearPiece[]

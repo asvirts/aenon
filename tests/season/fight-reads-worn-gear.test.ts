@@ -283,7 +283,10 @@ describe("the fight reads the worn gear", () => {
     assert.deepEqual(season.wear(sword.id), { ok: true })
     assert.deepEqual(season.wear(shield.id), { ok: true })
     assert.deepEqual(season.wear(body.id), { ok: true })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     let adventurerBlow: Blow | undefined
@@ -334,7 +337,10 @@ describe("the fight reads the worn gear", () => {
     const loaded = loadSeason(definition, onePointPerLevel, state)
     if (!loaded.ok) throw new Error(loaded.reason)
     const season = loaded.season
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     let adventurerBlow: Blow | undefined
@@ -383,7 +389,10 @@ describe("the fight reads the worn gear", () => {
     assert.deepEqual(season.wear(greatsword.id), { ok: true })
     const ready = loadSeason(definition, onePointPerLevel, season.exportState())
     if (!ready.ok) throw new Error(ready.reason)
-    assert.deepEqual(ready.season.enter("jordan"), { ok: true })
+    assert.deepEqual(ready.season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(ready.season.face("wolf"), { ok: true })
 
     let adventurerBlow: Blow | undefined
@@ -424,7 +433,10 @@ describe("the fight reads the worn gear", () => {
     assert.deepEqual(season.wear(robe.id), { ok: true })
     const ready = loadSeason(definition, onePointPerLevel, season.exportState())
     if (!ready.ok) throw new Error(ready.reason)
-    assert.deepEqual(ready.season.enter("jordan"), { ok: true })
+    assert.deepEqual(ready.season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(ready.season.face("wolf"), { ok: true })
 
     let adventurerBlow: Blow | undefined

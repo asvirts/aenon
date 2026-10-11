@@ -132,7 +132,10 @@ describe("a meal restores a share of Hitpoints", () => {
     assert.equal(season.adventurer().placeId, "aenon")
     assert.equal(season.adventurer().currentHitpoints, 2)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.eat({ kind: "food", id: "bream-meal" }), { ok: true })
     assert.equal(season.adventurer().placeId, "jordan")
     assert.equal(season.adventurer().currentHitpoints, 3)
@@ -150,7 +153,10 @@ describe("a meal restores a share of Hitpoints", () => {
       [{ kind: "food", id: "bream-meal", count: 1 }],
       { adventurerExperience: 9, currentHitpoints: 4, coin: 3 },
     )
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: false })
     const before = season.adventurer()
@@ -173,7 +179,10 @@ describe("a meal restores a share of Hitpoints", () => {
       [{ kind: "food", id: "bream-meal", count: 1 }],
       { adventurerExperience: 9, currentHitpoints: 4 },
     )
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 8), { ok: true, damage: 8, hostileFell: true })
     assert.equal(season.adventurer().fight, null)
@@ -357,7 +366,10 @@ describe("a meal restores a share of Hitpoints", () => {
     assert.deepEqual(season.enter("aenon"), { ok: true })
     assert.deepEqual(season.adventurer().mealBuff, { kind: "added-defence", amount: 4 })
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.equal(season.adventurer().outing, "open")
     assert.deepEqual(season.adventurer().mealBuff, { kind: "added-defence", amount: 4 })
 
@@ -376,7 +388,10 @@ describe("a meal restores a share of Hitpoints", () => {
     )
     assert.deepEqual(season.eat({ kind: "food", id: "orange-stew" }), { ok: true })
     assert.equal(season.adventurer().currentHitpoints, 7)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1, () => 20), { ok: true, damage: 1, hostileFell: false })
 
@@ -422,7 +437,10 @@ describe("a meal restores a share of Hitpoints", () => {
     assert.deepEqual(season.eat({ kind: "food", id: "orange-stew" }), { ok: true })
     assert.equal(season.adventurer().adventurerLevel, 4)
     assert.equal(season.adventurer().combatLevels.Defence, 4)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     let hostileBlow: Blow | undefined
@@ -470,7 +488,10 @@ describe("a meal restores a share of Hitpoints", () => {
     assert.equal(restored.season.adventurer().pace, "faster")
     assert.equal(restored.season.adventurer().adventurerLevel, 4)
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     let hostileBlow: Blow | undefined
     assert.deepEqual(

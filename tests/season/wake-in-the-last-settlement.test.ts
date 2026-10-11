@@ -35,7 +35,10 @@ describe("wake in the last settlement", () => {
     assert.equal(season.adventurer().lastSettlementId, "aenon")
     assert.equal(season.adventurer().outing, "closed")
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.equal(season.adventurer().placeId, "jordan")
     assert.equal(season.adventurer().lastSettlementId, "aenon")
     assert.equal(season.adventurer().outing, "open")
@@ -49,7 +52,10 @@ describe("wake in the last settlement", () => {
     assert.equal(season.adventurer().lastSettlementId, "salim")
     assert.equal(season.adventurer().outing, "closed")
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.equal(season.adventurer().lastSettlementId, "salim")
     assert.equal(season.adventurer().outing, "open")
   })
@@ -112,7 +118,10 @@ describe("wake in the last settlement", () => {
     if (!loaded.ok) return
     const season = loaded.season
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const before = season.adventurer()
     assert.equal(before.currentHitpoints, 0)
     const faced = season.face("wolf")
@@ -123,7 +132,10 @@ describe("wake in the last settlement", () => {
   it("stepping back before the first swing pays nothing and leaves the hostile standing", () => {
     const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
     assert.equal(season.adventurer().adventurerLevel, 4)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.adventurer().fight, {
       hostileId: "wolf",
@@ -153,7 +165,10 @@ describe("wake in the last settlement", () => {
 
   it("refuses to leave from the first swing until the hostile falls", () => {
     const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 5, defeatGrant: 2 }], 6, 3)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     const swung = season.swing(() => 2)
@@ -194,7 +209,10 @@ describe("wake in the last settlement", () => {
 
   it("leaves before the first swing, pays nothing, and the hostile stays standing", () => {
     const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     const left = season.enter("salim")
@@ -209,7 +227,10 @@ describe("wake in the last settlement", () => {
     assert.equal(after.lastSettlementId, "salim")
     assert.equal(after.outing, "closed")
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.equal(season.adventurer().fight?.hostileHitpoints, 4)
   })
@@ -219,7 +240,10 @@ describe("wake in the last settlement", () => {
       { id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 5, defeatGrant: 2 },
       { id: "bandit", kind: "bandit", placeId: "jordan", hitpoints: 4, defeatGrant: 3 },
     ])
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     assert.deepEqual(season.swing(() => 1), { ok: true, damage: 1, hostileFell: false })
 
@@ -241,7 +265,10 @@ describe("wake in the last settlement", () => {
     )
     assert.equal(season.adventurer().adventurerLevel, 5)
     assert.deepEqual(season.enter("salim"), { ok: true })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.equal(season.adventurer().lastSettlementId, "salim")
     assert.equal(season.adventurer().outing, "open")
     assert.equal(season.adventurer().currentHitpoints, 2)
@@ -281,7 +308,10 @@ describe("wake in the last settlement", () => {
       feet: null,
     })
 
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const back = season.adventurer()
     assert.equal(back.currentHitpoints, 0)
     assert.equal(back.outing, "open")
@@ -300,7 +330,10 @@ describe("wake in the last settlement", () => {
     const wolf = { id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 } as const
 
     const short = loadRoads([wolf], 2, 3, 1, 5)
-    assert.deepEqual(short.enter("jordan"), { ok: true })
+    assert.deepEqual(short.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(short.face("wolf"), { ok: true })
     assert.deepEqual(short.swing(() => 0, () => 1), { ok: true, damage: 0, hostileFell: false })
     assert.equal(short.adventurer().placeId, "aenon")
@@ -311,21 +344,30 @@ describe("wake in the last settlement", () => {
     assert.equal(short.adventurer().fight, null)
 
     const exact = loadRoads([wolf], 5, 0, 1, 5)
-    assert.deepEqual(exact.enter("jordan"), { ok: true })
+    assert.deepEqual(exact.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(exact.face("wolf"), { ok: true })
     assert.deepEqual(exact.swing(() => 0, () => 4), { ok: true, damage: 0, hostileFell: false })
     assert.equal(exact.adventurer().coin, 0)
     assert.equal(exact.adventurer().currentHitpoints, 0)
 
     const empty = loadRoads([wolf], 0, 0, 3, 5)
-    assert.deepEqual(empty.enter("jordan"), { ok: true })
+    assert.deepEqual(empty.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(empty.face("wolf"), { ok: true })
     assert.deepEqual(empty.swing(() => 0, () => 3), { ok: true, damage: 0, hostileFell: false })
     assert.equal(empty.adventurer().coin, 0)
     assert.equal(empty.adventurer().currentHitpoints, 0)
 
     const unpaid = loadRoads([wolf], 7, 0, 2, 0)
-    assert.deepEqual(unpaid.enter("jordan"), { ok: true })
+    assert.deepEqual(unpaid.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(unpaid.face("wolf"), { ok: true })
     assert.deepEqual(unpaid.swing(() => 0, () => 2), { ok: true, damage: 0, hostileFell: false })
     assert.equal(unpaid.adventurer().coin, 7)
@@ -335,7 +377,10 @@ describe("wake in the last settlement", () => {
 
   it("keeps the fight underway when the hostile's damage leaves Hitpoints above 0", () => {
     const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 6, defeatGrant: 2 }], 8, 0, 5, 3)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     const swung = season.swing(
       () => 1,
@@ -355,7 +400,10 @@ describe("wake in the last settlement", () => {
 
   it("stays for the fall and does not take the defeat loss", () => {
     const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 2, defeatGrant: 4 }], 9, 1, 4, 3)
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
     const swung = season.swing(
       () => 2,

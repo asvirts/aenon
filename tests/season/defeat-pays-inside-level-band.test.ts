@@ -82,7 +82,10 @@ describe("a defeat pays inside its level band", () => {
     const season: Season = loaded.season
 
     const entered = season.enter("jordan")
-    assert.deepEqual(entered, { ok: true })
+    assert.deepEqual(entered, {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.equal(season.adventurer().placeId, "jordan")
 
     const faced = season.face("wolf")
@@ -130,7 +133,10 @@ describe("a defeat pays inside its level band", () => {
     )
     if (!loaded.ok) throw new Error(loaded.reason)
     const season = loaded.season
-    assert.deepEqual(season.enter("hills"), { ok: true })
+    assert.deepEqual(season.enter("hills"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const before = season.adventurer()
     const faced = season.face("wolf")
     assert.deepEqual(faced, { ok: false, reason: "not-present" })
@@ -139,7 +145,10 @@ describe("a defeat pays inside its level band", () => {
 
   it("applies the defeat grant when the hostile falls and does not clamp the supplied damage", () => {
     const season = loadWild({ band: "low", placeId: "jordan", hitpoints: 3, defeatGrant: 4 })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     const swung = season.swing(() => 10)
@@ -318,7 +327,10 @@ describe("a defeat pays inside its level band", () => {
 
   it("refuses a swing when the Adventurer is not facing a hostile", () => {
     const season = loadWild({ band: "low", placeId: "jordan", hitpoints: 4, defeatGrant: 3 })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     const before = season.adventurer()
     const swung = season.swing(() => 4)
     assert.deepEqual(swung, { ok: false, reason: "not-facing" })
@@ -327,7 +339,10 @@ describe("a defeat pays inside its level band", () => {
 
   it("swings until the hostile falls and pays the grant only on the fall", () => {
     const season = loadWild({ band: "low", placeId: "jordan", hitpoints: 5, defeatGrant: 4 })
-    assert.deepEqual(season.enter("jordan"), { ok: true })
+    assert.deepEqual(season.enter("jordan"), {
+      ok: true,
+      acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+    })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
     const first = season.swing(() => 2)
@@ -436,7 +451,10 @@ function loadAt(options: WildOptions, experience: number, currentHitpoints = 1):
 }
 
 function fell(season: Season, placeId: string, damage: number) {
-  assert.deepEqual(season.enter(placeId), { ok: true })
+  assert.deepEqual(season.enter(placeId), {
+    ok: true,
+    acquaintance: { kind: "acquaintance", speaker: "Jesus" },
+  })
   assert.deepEqual(season.face("wolf"), { ok: true })
   return season.swing(() => damage)
 }

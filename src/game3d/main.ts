@@ -7,6 +7,7 @@ import { definition, curves, layout, navigation } from './content.ts'
 import { loadGameSave, saveGame, importGameSave, restartGameSave, SAVE_KEY, LEGACY_SAVE_KEY } from './persistence.ts'
 import { createUI } from './ui.ts'
 import { createWorld } from './world.ts'
+import { configureAssetDecoders } from './assetDecoders.ts'
 import { regionPlaces, regionRoads } from './region.ts'
 import { lake } from './terrain.ts'
 import { cameraZoom } from './view.ts'
@@ -21,6 +22,7 @@ const loading = document.querySelector<HTMLElement>('#loading')!
 const loadingDetail = document.querySelector<HTMLElement>('#loading-detail')!
 const qualities: Quality[] = ['low', 'medium', 'high', 'ultra']
 async function boot() {
+  configureAssetDecoders()
   let storage: Storage, temporaryStorage = false
   try { storage = window.localStorage } catch {
     temporaryStorage = true; const entries = new Map<string, string>()

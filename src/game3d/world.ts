@@ -10,10 +10,11 @@ import { travelingCompany } from '../season/lib/scene.ts'
 import { anchorHeight, plateKind, subtitleFor } from './nameplates.ts'
 import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 import type { ViewCoverage } from './view.ts'
+import { occlusionGroup, type OcclusionGroup } from './occlusion.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
 export async function createWorld(scene: Scene, interact: (id: string) => void) {
-  const shadowCasters: AbstractMesh[] = [], occluders: AbstractMesh[] = []
+  const shadowCasters: AbstractMesh[] = [], occlusionGroups: OcclusionGroup[] = []
   const actors = new Map<string, Actor>(), props = new Map<string, TransformNode>()
   const scenery: TransformNode[] = [], containers = new Map<string, Promise<AssetContainer>>()
   const objectById = new Map(objects.map(object => [object.id, object]))
@@ -26,14 +27,13 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   const wood = material('olive-wood', '#795331'), stone = material('worked-limestone', '#b9ad8f'), iron = material('hammered-bronze', '#846840'), leaf = material('herb-green', '#56704c'), linen = material('woven-linen', '#c7bda0'), copper = material('exposed-copper', '#a36d44'), flower = material('flax-blossom', '#809caf'), ember = material('hearth-coals', '#df8744', .7)
   const tile = material('regional-terracotta', '#9f6547'), basalt = material('Galilee-basalt', '#5d6258'), indigo = material('regional-indigo-cloth', '#556571'), garden = material('garden-vine', '#59764b')
   const hullMat = material('original-hull-pigments', '#ddcbaa'); hullMat.backFaceCulling = false
-  const register = (meshes: AbstractMesh[], id?: string, fade = false) => {
+  const register = (meshes: AbstractMesh[], id?: string) => {
     for (const mesh of meshes) {
       if (!mesh.getTotalVertices()) continue
       mesh.metadata = id ? { objectId: id } : {}; mesh.isPickable = Boolean(id)
       // Babylon instances inherit shadow reception from their shared source mesh.
       ;(mesh instanceof InstancedMesh ? mesh.sourceMesh : mesh).receiveShadows = true
       shadowCasters.push(mesh)
-      if (fade) { occluders.push(mesh); if (mesh.material) mesh.material.transparencyMode = null }
     }
   }
   const nameplateContext = {
@@ -109,21 +109,23 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     const root = new TransformNode(id, scene)
     for (const child of entries.rootNodes) child.parent = root
     setPosition(root, point); root.scaling.setAll(scale); root.rotation.y = rotation
-    register(root.getChildMeshes(), objectId, true); scenery.push(root)
+    register(root.getChildMeshes(), objectId); scenery.push(root)
     return root
   }
   await Promise.all(houses.map(async (house, i) => {
     const root = await staticModel('/game-assets/house-painted.glb', `village-house-${i}`, house, house.scale, house.rotation)
     const place = regionPlaces.filter(place => place.kind === 'settlement').reduce((a, b) => Math.hypot(a.x - house.x, a.z - house.z) < Math.hypot(b.x - house.x, b.z - house.z) ? a : b)
     decorateHouse(root, place.id, i)
+    occlusionGroups.push(occlusionGroup(root))
   }))
   const plantedSpots = new Set<string>()
   await Promise.all(trees.map(async (tree, i) => {
     const spot = objects.find(object => object.model === 'tree' && Math.hypot(object.x - tree.x, object.z - tree.z) < .5)
     const root = await staticModel('/art-sample/olive.glb', `olive-${i}`, tree, tree.scale, i * 1.4, spot?.id)
+    occlusionGroups.push(occlusionGroup(root))
     if (spot) { props.set(spot.id, root); plantedSpots.add(spot.id) }
   }))
-  await Promise.all(objects.filter(object => object.model === 'tree' && !plantedSpots.has(object.id)).map(async object => { const root = await staticModel('/art-sample/olive.glb', `olive-spot-${object.id}`, object, 1, 0, object.id); props.set(object.id, root) }))
+  await Promise.all(objects.filter(object => object.model === 'tree' && !plantedSpots.has(object.id)).map(async object => { const root = await staticModel('/art-sample/olive.glb', `olive-spot-${object.id}`, object, 1, 0, object.id); props.set(object.id, root); occlusionGroups.push(occlusionGroup(root)) }))
   const player = await actor('adventurer', '/game-assets/adventurer.glb', layout.spawns.aenon!, true)
   await Promise.all(objects.filter(o => o.kind === 'hostile' || o.kind === 'person').map(o => actor(o.id, `/game-assets/${o.model === 'villager' ? 'merchant' : o.model}.glb`, o)))
   const companyColors = ['#ead9b8', '#a99068', '#7a8991', '#b48967', '#978b63', '#8e6350', '#768e7e', '#bea47c', '#677b85', '#977c88', '#b9ac86', '#8a735b', '#7d8b61', '#846c88', '#9f8068', '#6a9290']
@@ -258,7 +260,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       for (let i = 0; i < (placeId === 'cana' ? 6 : 2); i++) cylinder(root, 'courtyard-water-jar', .75, .42, [-2.35 + i * .45, .38, 2.2], tile)
     }
     if (index % 2) { const cloth = box(root, 'dyed-linen-screen', [1.2, 1.45, .035], [-1.8, 1.5, 1.96], indigo); cloth.rotation.z = .06 }
-    register(root.getChildMeshes().filter(mesh => !shadowCasters.includes(mesh)), undefined, true)
+    register(root.getChildMeshes().filter(mesh => !shadowCasters.includes(mesh)))
   }
   function boat(parent: TransformNode, name: string) {
     // Hand-authored clinker-like hull: tapered ends, open gunwales and cross benches.
@@ -411,7 +413,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
         box(root, 'roadside-resting-bench', [1.7, .35, .45], [-.9, .18, .5], wood)
         break
     }
-    register(root.getChildMeshes(), undefined, true)
+    register(root.getChildMeshes()); occlusionGroups.push(occlusionGroup(root))
   }
   for (const object of objects.filter(object => object.model === 'fish' && waterDistance(object.x, object.z) > 4)) {
     // A shallow, managed pool sits beside the approach marker, leaving its route intact.
@@ -689,5 +691,5 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       item.element.style.transform = `translate(${pos.x}px,${pos.y}px)`; item.element.style.opacity = String(Math.min(1, left * 2))
     }
   }
-  return { player: player.model.root, actors, shadowCasters, occluders, update, events }
+  return { player: player.model.root, actors, shadowCasters, occlusionGroups, update, events }
 }

@@ -11,7 +11,8 @@ import { configureAssetDecoders } from './assetDecoders.ts'
 import { regionPlaces, regionRoads } from './region.ts'
 import { lake } from './terrain.ts'
 import { cameraZoom, clampCameraRadius, viewCoverage } from './view.ts'
-import { createFollowCamera, occlusionRay } from './camera.ts'
+import { createFollowCamera, occlusionRay, playerOcclusionRays } from './camera.ts'
+import { updateOcclusionGroups } from './occlusion.ts'
 import type { GameSnapshot, Panel } from './types.ts'
 import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
 import { openStorage } from './storage.ts'
@@ -283,11 +284,10 @@ async function boot() {
     if (fadeTime > .1) {
       fadeTime = 0
       updateShadowCasters(snapshot.position)
-      const focusPoints = [world.player.position.add(new Vector3(0, 1, 0))]
+      const rays = playerOcclusionRays(camera.globalPosition, world.player.position)
       const target = snapshot.targetId ? snapshot.hostiles.find(o => o.id === snapshot.targetId) ?? layout.objects.find(o => o.id === snapshot.targetId) : undefined
-      if (target) focusPoints.push(new Vector3(target.x, heightAt(target.x, target.z) + 1, target.z))
-      const rays = focusPoints.map(point => occlusionRay(camera.globalPosition, point))
-      for (const mesh of world.occluders) mesh.visibility = rays.some(ray => ray.intersectsMesh(mesh, true).hit) ? .23 : 1
+      if (target) rays.push(occlusionRay(camera.globalPosition, new Vector3(target.x, heightAt(target.x, target.z) + 1, target.z)))
+      updateOcclusionGroups(world.occlusionGroups, rays)
     }
     uiTime += dt; saveTime += dt; meterTime += dt
     if (uiTime > .1) { uiTime = 0; ui.render(game.snapshot()); drawMap(snapshot) }

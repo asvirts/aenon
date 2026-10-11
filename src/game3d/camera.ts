@@ -20,3 +20,8 @@ export function occlusionRay(cameraPosition: Vector3, focus: Vector3): Ray {
   const direction = focus.subtract(cameraPosition), distance = direction.length()
   return new Ray(cameraPosition.clone(), direction.normalize(), Math.max(0, distance - .4))
 }
+
+/** Protect the entire standing silhouette when roof/wall primitives differ. */
+export function playerOcclusionRays(cameraPosition: Vector3, feet: Vector3): Ray[] {
+  return [.15, 1, 1.7].map(height => occlusionRay(cameraPosition, feet.add(new Vector3(0, height, 0))))
+}

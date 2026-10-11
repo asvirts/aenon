@@ -3,7 +3,7 @@ import test from 'node:test'
 import { definition, houses, landscapeDetails, layout, navigation, objects } from '../../src/game3d/content.ts'
 import { objects as originalObjects } from '../../src/game3d/aenonContent.ts'
 import { AENON_OFFSET } from '../../src/game3d/lowBand.ts'
-import { regionPlaces } from '../../src/game3d/region.ts'
+import { regionPlaces, regionRoads } from '../../src/game3d/region.ts'
 import { canTraverseRegion, findRegionPath } from '../../src/game3d/regionNavigation.ts'
 
 const towns = regionPlaces.filter(place => place.kind === 'settlement' && place.band === 'low')
@@ -47,6 +47,18 @@ test('low-band settlements and their wilderness have authored visual landmarks',
     assert.ok(landscapeDetails.some(detail => detail.kind === kind && layout.placeAt(detail) === placeId), `${placeId}: missing ${kind}`)
   }
   for (const kind of ['reeds', 'rocks', 'waymarker', 'camp']) assert.ok(landscapeDetails.filter(detail => detail.kind === kind).length >= 2, `wilderness needs ${kind}`)
+})
+
+test('band-crossing roads have low-band landmarks without extending new dressing into the north', () => {
+  for (const [from, to] of [['salim', 'gilboa'], ['pella', 'gadara']]) {
+    const index = regionRoads.findIndex(road => road.from === from && road.to === to)
+    const landmarks = landscapeDetails.filter(detail => detail.id.startsWith(`low-road-${index}-`))
+    assert.ok(landmarks.length >= 2, `${from} to ${to}: long low-band approach lacks landmarks`)
+    for (const landmark of landmarks) {
+      assert.equal(regionPlaces.find(place => place.id === layout.placeAt(landmark))!.band, 'low', `${landmark.id}: new scenery crossed into the northern band`)
+    }
+    assert.ok(findRegionPath(layout.spawns[from!]!, layout.spawns[to!]!, navigation), `${from} to ${to}: new scenery obstructs the approach`)
+  }
 })
 
 test('moving towns does not change established regional quest defeat targets', () => {

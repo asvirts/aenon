@@ -208,9 +208,12 @@ const clearScenery = (point: Point, radius = 3) => dryLand(point.x, point.z)
   && objects.every(object => distance(point, object) > 3 + radius)
   && trees.every(tree => distance(point, tree) > 2 + radius)
   && landscapeDetails.every(detail => distance(point, detail) > 5 + radius)
+const inLowBand = (point: Point) => regionPlaces.find(place => place.id === placeAt(point))!.band === 'low'
 for (const [roadIndex, road] of regionRoads.entries()) {
   const from = regionPlaces.find(place => place.id === road.from)!, to = regionPlaces.find(place => place.id === road.to)!
-  if (from.band !== 'low' || to.band !== 'low') continue
+  // A road crossing a band boundary still needs landmarks on its low-band
+  // approach. Classify every addition separately to retain northern scenery.
+  if (from.band !== 'low' && to.band !== 'low') continue
   const length = distance(from, to), count = Math.floor(length / 24)
   const across = { x: -(to.z - from.z) / length, z: (to.x - from.x) / length }
   for (let step = 1; step < count; step++) {
@@ -218,10 +221,10 @@ for (const [roadIndex, road] of regionRoads.entries()) {
     const center = { x: from.x + (to.x - from.x) * fraction, z: from.z + (to.z - from.z) * fraction }
     if (settlements.some(place => distance(center, place) < place.radius + 12)) continue
     const point = { x: center.x + across.x * side * 7, z: center.z + across.z * side * 7 }
-    if (clearScenery(point, 2)) landscapeDetails.push({ ...point, id: `low-road-${roadIndex}-${step}`, kind: step % 5 === 0 ? 'camp' : step % 3 === 0 ? 'waymarker' : 'rocks', rotation: Math.atan2(to.x - from.x, to.z - from.z) })
+    if (inLowBand(point) && clearScenery(point, 2)) landscapeDetails.push({ ...point, id: `low-road-${roadIndex}-${step}`, kind: step % 5 === 0 ? 'camp' : step % 3 === 0 ? 'waymarker' : 'rocks', rotation: Math.atan2(to.x - from.x, to.z - from.z) })
     for (let tree = 0; tree < 3; tree++) {
       const at = { x: center.x - across.x * side * (11 + tree * 3.7) + tree * 2, z: center.z - across.z * side * (11 + tree * 3.7) - tree * 3 }
-      if (clearScenery(at, 1)) trees.push({ ...at, scale: .67 + ((roadIndex + step + tree) % 5) * .11 })
+      if (inLowBand(at) && clearScenery(at, 1)) trees.push({ ...at, scale: .67 + ((roadIndex + step + tree) % 5) * .11 })
     }
   }
 }
@@ -249,6 +252,6 @@ export const navigation: NavigationConfig = {
     }),
     ...trees.map(tree => ({ kind: 'circle' as const, x: tree.x, z: tree.z, radius: .48 * tree.scale })),
     ...objects.filter(object => object.kind === 'station').map(object => ({ kind: 'circle' as const, x: object.x, z: object.z, radius: .5 })),
-    ...landscapeDetails.filter(detail => detail.kind !== 'reeds').map(detail => ({ kind: 'circle' as const, x: detail.x, z: detail.z, radius: (detail.kind === 'rocks' ? 1.35 : detail.kind === 'waymarker' ? .45 : detail.kind === 'pottery' ? 1.2 : 2.6) * (detail.scale ?? 1) })),
+    ...landscapeDetails.filter(detail => detail.kind !== 'reeds').map(detail => ({ kind: 'circle' as const, x: detail.x, z: detail.z, radius: (detail.kind === 'rocks' ? 1.35 : detail.kind === 'waymarker' ? .45 : detail.kind === 'pottery' ? 1.5 : ['garden', 'market', 'terrace'].includes(detail.kind) ? 3.3 : 2.6) * (detail.scale ?? 1) })),
   ],
 }

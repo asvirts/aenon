@@ -16,7 +16,7 @@ The issue tracker should have been provided to you. If not, tell the user to run
 
 ### 1. Pin the fixed point
 
-Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). If they didn't specify one, ask for it.
+Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). When reviewing changes implemented in the current task, use the recorded clean starting commit and state that choice. For a standalone review without a supplied or recorded baseline, ask for it.
 
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
@@ -87,3 +87,7 @@ A change can pass one axis and fail the other:
 - Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
 
 Reporting them separately stops one axis from masking the other.
+
+## Aenon world-layout review
+
+For geometry changes, compare generated Season definitions with the baseline as well as checking IDs: nearest-place generation can silently change quest targets or encounter bands. Review actual routes through the changed area, including the low-band portions of roads whose other endpoint is outside scope. Check scenery collision against the rendered footprint, including rotated corners and offset props. A clean test run does not replace the Codex in-app browser journey and reload checks.

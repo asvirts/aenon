@@ -1,0 +1,9 @@
+{
+  "implementation": "c9f0a05",
+  "shots": 32,
+  "repeated": 32,
+  "sameShotStates": true,
+  "storedSaveAndPreferencesByteIdentical": true,
+  "fightTarget": "salim-threat-0",
+  "johnAnimation": "Idle"
+}

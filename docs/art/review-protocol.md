@@ -37,6 +37,8 @@ Zoom names resolve through `cameraZoom`, so the perspective-camera slice can cha
 
 Capture **every shot on every preset**: 32 PNGs per before/after set. Use `<shot>-<preset>.png`, for example `aenon-near-low.png`. Capture the browser viewport, excluding Codex chrome. Wait for fonts and assets to load, move the pointer off any game object, then await `reviewShot` and capture. Repeat each shot once to check reproducibility apart from animation; retain the first matching set. Do not substitute a build or HTTP response for inspecting the actual frames.
 
+For in-app CDP PNG capture, use `Page.captureScreenshot` with `fromSurface: true`, `captureBeyondViewport: false`, and an explicit CSS viewport clip `{ x: 0, y: 0, width: 1280, height: 720, scale: 1 }`. On a Retina host, omitting the clip after a DPR override can capture only the upper-left portion. Check a saved PNG against the ordinary in-app screenshot before batching. `fromSurface: false` can capture the surrounding desktop app instead of the game; do not use it for review evidence.
+
 The initial set belongs in `docs/art/reviews/issue-41/baseline/`. For each subsequent slice use `docs/art/reviews/issue-41/<slice-number>-<slug>/before/` and `after/`. State both commit SHAs. Slice 1 changes the harness only, so its baseline on the unchanged renderer is also its before/after visual evidence. The final full set belongs in `docs/art/reviews/issue-41/final/`.
 
 ## Performance and download measurements

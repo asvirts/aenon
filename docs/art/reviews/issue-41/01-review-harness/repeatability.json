@@ -1,0 +1,290 @@
+[
+  {
+    "shot": "aenon-far-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 1,
+    "fractionOver8": 1.0850694444444444e-06
+  },
+  {
+    "shot": "aenon-far-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "aenon-far-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 2,
+    "fractionOver8": 2.170138888888889e-06
+  },
+  {
+    "shot": "aenon-far-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 0,
+    "fractionOver8": 0.0
+  },
+  {
+    "shot": "aenon-near-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 27,
+    "fractionOver8": 2.9296875e-05
+  },
+  {
+    "shot": "aenon-near-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 8,
+    "fractionOver8": 8.680555555555556e-06
+  },
+  {
+    "shot": "aenon-near-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "aenon-near-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 1,
+    "fractionOver8": 1.0850694444444444e-06
+  },
+  {
+    "shot": "aenon-riverbank-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 10,
+    "fractionOver8": 1.0850694444444445e-05
+  },
+  {
+    "shot": "aenon-riverbank-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 11,
+    "fractionOver8": 1.193576388888889e-05
+  },
+  {
+    "shot": "aenon-riverbank-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 8,
+    "fractionOver8": 8.680555555555556e-06
+  },
+  {
+    "shot": "aenon-riverbank-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 4,
+    "fractionOver8": 4.340277777777778e-06
+  },
+  {
+    "shot": "aenon-square-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 8,
+    "fractionOver8": 8.680555555555556e-06
+  },
+  {
+    "shot": "aenon-square-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "aenon-square-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 7,
+    "fractionOver8": 7.595486111111111e-06
+  },
+  {
+    "shot": "aenon-square-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 1,
+    "fractionOver8": 1.0850694444444444e-06
+  },
+  {
+    "shot": "fight-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "fight-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 19,
+    "fractionOver8": 2.0616319444444445e-05
+  },
+  {
+    "shot": "fight-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 13,
+    "fractionOver8": 1.4105902777777777e-05
+  },
+  {
+    "shot": "fight-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 43,
+    "fractionOver8": 4.6657986111111113e-05
+  },
+  {
+    "shot": "jordan-bridge-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 4,
+    "fractionOver8": 4.340277777777778e-06
+  },
+  {
+    "shot": "jordan-bridge-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 7,
+    "fractionOver8": 7.595486111111111e-06
+  },
+  {
+    "shot": "jordan-bridge-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 2,
+    "fractionOver8": 2.170138888888889e-06
+  },
+  {
+    "shot": "jordan-bridge-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "scythopolis-market-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 0,
+    "fractionOver8": 0.0
+  },
+  {
+    "shot": "scythopolis-market-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 11,
+    "fractionOver8": 1.193576388888889e-05
+  },
+  {
+    "shot": "scythopolis-market-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 6,
+    "fractionOver8": 6.510416666666667e-06
+  },
+  {
+    "shot": "scythopolis-market-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 2,
+    "fractionOver8": 2.170138888888889e-06
+  },
+  {
+    "shot": "sea-shore-high.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 3,
+    "fractionOver8": 3.2552083333333335e-06
+  },
+  {
+    "shot": "sea-shore-low.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 4,
+    "fractionOver8": 4.340277777777778e-06
+  },
+  {
+    "shot": "sea-shore-medium.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 5,
+    "fractionOver8": 5.4253472222222224e-06
+  },
+  {
+    "shot": "sea-shore-ultra.png",
+    "size": [
+      1280,
+      720
+    ],
+    "pixelsOver8": 7,
+    "fractionOver8": 7.595486111111111e-06
+  }
+]

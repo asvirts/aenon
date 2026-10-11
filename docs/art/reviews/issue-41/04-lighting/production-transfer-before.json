@@ -1,0 +1,17 @@
+{
+  "baseCommit": "9887b9425a10a68aee5f8f2529e18b2313484f6c",
+  "productionCommit": "8be0484c9f05e5e77f30444d33fc8ecffc09aee6",
+  "equivalence": "src/, public/, package.json and package-lock.json identical to base 9887b942; base only appends reviewed evidence and skill guidance.",
+  "origin": "http://127.0.0.1:5231",
+  "firstLoadRequests": 228,
+  "encodedBodyBytes": 6988650,
+  "headerAllowancePerResponse": 300,
+  "estimatedTransferBytes": 7057050,
+  "method": "Fresh-origin production load via transparent localhost request logging including decoder worker traffic; encoded payload plus 300 bytes per response is an estimate, not a packet capture.",
+  "gameReady": true,
+  "mainPageResourceOrigins": [
+    "http://127.0.0.1:5231"
+  ],
+  "measure": "undefined",
+  "reviewShot": "undefined"
+}

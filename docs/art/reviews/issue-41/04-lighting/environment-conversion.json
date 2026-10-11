@@ -1,0 +1,740 @@
+{
+  "byteLength": 567390,
+  "info": {
+    "binaryDataPosition": 2528,
+    "imageType": "image/png",
+    "irradiance": {
+      "x": [
+        0.09394043153174096,
+        0.10704805181159736,
+        0.1300076130600533
+      ],
+      "xx": [
+        0.20577672772524824,
+        0.2625208741903326,
+        0.4017337766236974
+      ],
+      "xy": [
+        0.01964126464158809,
+        0.020309726792758824,
+        0.021889875306217107
+      ],
+      "y": [
+        0.06302557169139182,
+        0.07127229907246879,
+        0.09826931570694014
+      ],
+      "yy": [
+        0.19014559979869125,
+        0.24189371265281187,
+        0.3728864005478543
+      ],
+      "yz": [
+        0.027154599169075384,
+        0.02807424305622396,
+        0.030211907637336173
+      ],
+      "z": [
+        0.12896441654969248,
+        0.14636043865102738,
+        0.17692082921815588
+      ],
+      "zx": [
+        0.0412814644949826,
+        0.045322347251778736,
+        0.05338105900368546
+      ],
+      "zz": [
+        0.21914105879432672,
+        0.27744547245635237,
+        0.4194908717812021
+      ]
+    },
+    "specular": {
+      "lodGenerationScale": 0.8,
+      "mipmaps": [
+        {
+          "length": 76685,
+          "position": 0
+        },
+        {
+          "length": 63533,
+          "position": 76685
+        },
+        {
+          "length": 70693,
+          "position": 140218
+        },
+        {
+          "length": 50379,
+          "position": 210911
+        },
+        {
+          "length": 86489,
+          "position": 261290
+        },
+        {
+          "length": 62326,
+          "position": 347779
+        },
+        {
+          "length": 19042,
+          "position": 410105
+        },
+        {
+          "length": 17029,
+          "position": 429147
+        },
+        {
+          "length": 15816,
+          "position": 446176
+        },
+        {
+          "length": 13232,
+          "position": 461992
+        },
+        {
+          "length": 22807,
+          "position": 475224
+        },
+        {
+          "length": 16758,
+          "position": 498031
+        },
+        {
+          "length": 5848,
+          "position": 514789
+        },
+        {
+          "length": 4771,
+          "position": 520637
+        },
+        {
+          "length": 5258,
+          "position": 525408
+        },
+        {
+          "length": 4092,
+          "position": 530666
+        },
+        {
+          "length": 7051,
+          "position": 534758
+        },
+        {
+          "length": 4792,
+          "position": 541809
+        },
+        {
+          "length": 1989,
+          "position": 546601
+        },
+        {
+          "length": 1497,
+          "position": 548590
+        },
+        {
+          "length": 1901,
+          "position": 550087
+        },
+        {
+          "length": 1387,
+          "position": 551988
+        },
+        {
+          "length": 2285,
+          "position": 553375
+        },
+        {
+          "length": 1484,
+          "position": 555660
+        },
+        {
+          "length": 741,
+          "position": 557144
+        },
+        {
+          "length": 564,
+          "position": 557885
+        },
+        {
+          "length": 757,
+          "position": 558449
+        },
+        {
+          "length": 514,
+          "position": 559206
+        },
+        {
+          "length": 797,
+          "position": 559720
+        },
+        {
+          "length": 552,
+          "position": 560517
+        },
+        {
+          "length": 319,
+          "position": 561069
+        },
+        {
+          "length": 256,
+          "position": 561388
+        },
+        {
+          "length": 322,
+          "position": 561644
+        },
+        {
+          "length": 272,
+          "position": 561966
+        },
+        {
+          "length": 324,
+          "position": 562238
+        },
+        {
+          "length": 241,
+          "position": 562562
+        },
+        {
+          "length": 155,
+          "position": 562803
+        },
+        {
+          "length": 155,
+          "position": 562958
+        },
+        {
+          "length": 155,
+          "position": 563113
+        },
+        {
+          "length": 155,
+          "position": 563268
+        },
+        {
+          "length": 155,
+          "position": 563423
+        },
+        {
+          "length": 144,
+          "position": 563578
+        },
+        {
+          "length": 102,
+          "position": 563722
+        },
+        {
+          "length": 101,
+          "position": 563824
+        },
+        {
+          "length": 102,
+          "position": 563925
+        },
+        {
+          "length": 101,
+          "position": 564027
+        },
+        {
+          "length": 102,
+          "position": 564128
+        },
+        {
+          "length": 101,
+          "position": 564230
+        },
+        {
+          "length": 89,
+          "position": 564331
+        },
+        {
+          "length": 88,
+          "position": 564420
+        },
+        {
+          "length": 89,
+          "position": 564508
+        },
+        {
+          "length": 88,
+          "position": 564597
+        },
+        {
+          "length": 89,
+          "position": 564685
+        },
+        {
+          "length": 88,
+          "position": 564774
+        }
+      ]
+    },
+    "version": 2,
+    "width": 256
+  },
+  "engineVersion": "9.30.0",
+  "progress": [
+    {
+      "elapsedMs": 82,
+      "message": "Ready. Start conversion."
+    },
+    {
+      "elapsedMs": 3862,
+      "message": "Babylon.js 9.30.0; WebGL 2; loading source HDR"
+    },
+    {
+      "elapsedMs": 3956,
+      "message": "Source HDR loaded; prefiltering 256px cubemap (4096 samples)"
+    },
+    {
+      "elapsedMs": 3976,
+      "message": "Prefilter complete; encoding 54 PNG RGBD mip faces"
+    },
+    {
+      "elapsedMs": 3977,
+      "message": "Encoding mip face 1/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4342,
+      "message": "Encoding mip face 1/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4383,
+      "message": "Encoding mip face 2/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4385,
+      "message": "Encoding mip face 2/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4410,
+      "message": "Encoding mip face 3/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4413,
+      "message": "Encoding mip face 3/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4439,
+      "message": "Encoding mip face 4/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4441,
+      "message": "Encoding mip face 4/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4466,
+      "message": "Encoding mip face 5/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4469,
+      "message": "Encoding mip face 5/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4494,
+      "message": "Encoding mip face 6/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4496,
+      "message": "Encoding mip face 6/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4521,
+      "message": "Encoding mip face 7/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4522,
+      "message": "Encoding mip face 7/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4545,
+      "message": "Encoding mip face 8/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4546,
+      "message": "Encoding mip face 8/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4604,
+      "message": "Encoding mip face 9/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4605,
+      "message": "Encoding mip face 9/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4629,
+      "message": "Encoding mip face 10/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4629,
+      "message": "Encoding mip face 10/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4654,
+      "message": "Encoding mip face 11/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4654,
+      "message": "Encoding mip face 11/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4679,
+      "message": "Encoding mip face 12/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4680,
+      "message": "Encoding mip face 12/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4704,
+      "message": "Encoding mip face 13/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4705,
+      "message": "Encoding mip face 13/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4729,
+      "message": "Encoding mip face 14/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4729,
+      "message": "Encoding mip face 14/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4753,
+      "message": "Encoding mip face 15/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4754,
+      "message": "Encoding mip face 15/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4778,
+      "message": "Encoding mip face 16/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4779,
+      "message": "Encoding mip face 16/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4832,
+      "message": "Encoding mip face 17/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4832,
+      "message": "Encoding mip face 17/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4853,
+      "message": "Encoding mip face 18/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4854,
+      "message": "Encoding mip face 18/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4877,
+      "message": "Encoding mip face 19/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4878,
+      "message": "Encoding mip face 19/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4902,
+      "message": "Encoding mip face 20/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4903,
+      "message": "Encoding mip face 20/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4928,
+      "message": "Encoding mip face 21/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4929,
+      "message": "Encoding mip face 21/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4953,
+      "message": "Encoding mip face 22/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4954,
+      "message": "Encoding mip face 22/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 4978,
+      "message": "Encoding mip face 23/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 4979,
+      "message": "Encoding mip face 23/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5003,
+      "message": "Encoding mip face 24/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5004,
+      "message": "Encoding mip face 24/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5029,
+      "message": "Encoding mip face 25/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5029,
+      "message": "Encoding mip face 25/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5053,
+      "message": "Encoding mip face 26/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5054,
+      "message": "Encoding mip face 26/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5079,
+      "message": "Encoding mip face 27/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5079,
+      "message": "Encoding mip face 27/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5104,
+      "message": "Encoding mip face 28/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5104,
+      "message": "Encoding mip face 28/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5128,
+      "message": "Encoding mip face 29/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5129,
+      "message": "Encoding mip face 29/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5154,
+      "message": "Encoding mip face 30/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5155,
+      "message": "Encoding mip face 30/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5180,
+      "message": "Encoding mip face 31/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5180,
+      "message": "Encoding mip face 31/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5204,
+      "message": "Encoding mip face 32/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5205,
+      "message": "Encoding mip face 32/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5228,
+      "message": "Encoding mip face 33/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5229,
+      "message": "Encoding mip face 33/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5252,
+      "message": "Encoding mip face 34/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5253,
+      "message": "Encoding mip face 34/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5278,
+      "message": "Encoding mip face 35/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5279,
+      "message": "Encoding mip face 35/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5303,
+      "message": "Encoding mip face 36/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5304,
+      "message": "Encoding mip face 36/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5328,
+      "message": "Encoding mip face 37/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5329,
+      "message": "Encoding mip face 37/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5353,
+      "message": "Encoding mip face 38/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5354,
+      "message": "Encoding mip face 38/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5378,
+      "message": "Encoding mip face 39/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5379,
+      "message": "Encoding mip face 39/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5403,
+      "message": "Encoding mip face 40/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5403,
+      "message": "Encoding mip face 40/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5428,
+      "message": "Encoding mip face 41/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5429,
+      "message": "Encoding mip face 41/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5453,
+      "message": "Encoding mip face 42/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5453,
+      "message": "Encoding mip face 42/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5479,
+      "message": "Encoding mip face 43/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5479,
+      "message": "Encoding mip face 43/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5504,
+      "message": "Encoding mip face 44/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5504,
+      "message": "Encoding mip face 44/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5530,
+      "message": "Encoding mip face 45/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5530,
+      "message": "Encoding mip face 45/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5553,
+      "message": "Encoding mip face 46/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5554,
+      "message": "Encoding mip face 46/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5579,
+      "message": "Encoding mip face 47/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5579,
+      "message": "Encoding mip face 47/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5604,
+      "message": "Encoding mip face 48/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5604,
+      "message": "Encoding mip face 48/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5629,
+      "message": "Encoding mip face 49/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5629,
+      "message": "Encoding mip face 49/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5654,
+      "message": "Encoding mip face 50/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5654,
+      "message": "Encoding mip face 50/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5680,
+      "message": "Encoding mip face 51/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5680,
+      "message": "Encoding mip face 51/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5703,
+      "message": "Encoding mip face 52/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5703,
+      "message": "Encoding mip face 52/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5728,
+      "message": "Encoding mip face 53/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5729,
+      "message": "Encoding mip face 53/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5753,
+      "message": "Encoding mip face 54/54; reading GPU pixels"
+    },
+    {
+      "elapsedMs": 5754,
+      "message": "Encoding mip face 54/54; GPU read complete"
+    },
+    {
+      "elapsedMs": 5779,
+      "message": "Exported 567390 bytes; validating environment header"
+    },
+    {
+      "elapsedMs": 5779,
+      "message": "Complete: 256px cubemap, 54 PNG RGBD mip faces and diffuse harmonics"
+    },
+    {
+      "elapsedMs": 5780,
+      "message": "Complete: 567,390 bytes. Ready to download."
+    }
+  ]
+}

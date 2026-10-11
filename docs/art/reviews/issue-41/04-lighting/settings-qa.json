@@ -1,0 +1,135 @@
+{
+  "implementationCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "freshRecommendation": "medium",
+  "checks": [
+    {
+      "description": "Richer contact shadows, softer sunlight and a subtle glow.",
+      "lighting": {
+        "aoOutput": {
+          "height": 360,
+          "width": 640
+        },
+        "aoSamples": 16,
+        "bloom": true,
+        "cascades": 0,
+        "environmentReady": true,
+        "exposure": 1.35,
+        "fxaa": false,
+        "prePassSamples": 4,
+        "quality": "high",
+        "samples": 4,
+        "shadowFrustum": 73,
+        "shadowMapSize": {
+          "height": 2048,
+          "width": 2048
+        },
+        "shadows": "ShadowGenerator",
+        "toneMapping": "ACES"
+      },
+      "saved": "high",
+      "selected": "high"
+    },
+    {
+      "description": "Clear, simple lighting, sparse decoration and reduced resolution for smoother play.",
+      "lighting": {
+        "aoOutput": null,
+        "aoSamples": 0,
+        "bloom": false,
+        "cascades": 0,
+        "environmentReady": true,
+        "exposure": 1.35,
+        "fxaa": false,
+        "prePassSamples": 0,
+        "quality": "low",
+        "samples": 1,
+        "shadowFrustum": 73,
+        "shadowMapSize": null,
+        "shadows": "none",
+        "toneMapping": "ACES"
+      },
+      "saved": "low",
+      "selected": "low"
+    },
+    {
+      "description": "The finest shadows and surface depth at the highest resolution.",
+      "lighting": {
+        "aoOutput": {
+          "height": 720,
+          "width": 1280
+        },
+        "aoSamples": 32,
+        "bloom": true,
+        "cascades": 4,
+        "environmentReady": true,
+        "exposure": 1.35,
+        "fxaa": false,
+        "prePassSamples": 4,
+        "quality": "ultra",
+        "samples": 4,
+        "shadowFrustum": 73,
+        "shadowMapSize": {
+          "height": 2048,
+          "width": 2048
+        },
+        "shadows": "CascadedShadowGenerator",
+        "toneMapping": "ACES"
+      },
+      "saved": "ultra",
+      "selected": "ultra"
+    },
+    {
+      "description": "Richer contact shadows, softer sunlight and a subtle glow.",
+      "lighting": {
+        "aoOutput": {
+          "height": 360,
+          "width": 640
+        },
+        "aoSamples": 16,
+        "bloom": true,
+        "cascades": 0,
+        "environmentReady": true,
+        "exposure": 1.35,
+        "fxaa": false,
+        "prePassSamples": 4,
+        "quality": "high",
+        "samples": 4,
+        "shadowFrustum": 73,
+        "shadowMapSize": {
+          "height": 2048,
+          "width": 2048
+        },
+        "shadows": "ShadowGenerator",
+        "toneMapping": "ACES"
+      },
+      "saved": "high",
+      "selected": "high"
+    }
+  ],
+  "reloaded": {
+    "lighting": {
+      "aoOutput": {
+        "height": 360,
+        "width": 640
+      },
+      "aoSamples": 16,
+      "bloom": true,
+      "cascades": 0,
+      "environmentReady": true,
+      "exposure": 1.35,
+      "fxaa": false,
+      "prePassSamples": 4,
+      "quality": "high",
+      "samples": 4,
+      "shadowFrustum": 73,
+      "shadowMapSize": {
+        "height": 2048,
+        "width": 2048
+      },
+      "shadows": "ShadowGenerator",
+      "toneMapping": "ACES"
+    },
+    "quality": "high",
+    "saved": "high"
+  },
+  "note": "Final native keyboard selection verified persistence. An earlier Playwright selectOption hit its 3-second evaluation timeout during initial Ultra shader compilation; it was excluded and repeated through native input."
+}

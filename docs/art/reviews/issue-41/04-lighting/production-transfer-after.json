@@ -1,0 +1,43 @@
+{
+  "productionCommit": "c38295d724e971bda802cb3bf3b6e4af95c13198",
+  "origin": "http://127.0.0.1:5234",
+  "firstLoadRequests": 230,
+  "encodedBodyBytes": 7554960,
+  "headerAllowancePerResponse": 300,
+  "estimatedTransferBytes": 7623960,
+  "method": "Fresh-origin production load via transparent localhost request logging including decoder worker traffic; encoded payload plus 300 bytes per response is an estimate, not a packet capture.",
+  "gameReady": true,
+  "lighting": {
+    "aoOutput": null,
+    "aoSamples": 0,
+    "bloom": false,
+    "cascades": 0,
+    "environmentReady": true,
+    "exposure": 1.35,
+    "fxaa": true,
+    "prePassSamples": 0,
+    "quality": "medium",
+    "samples": 1,
+    "shadowFrustum": 73,
+    "shadowMapSize": {
+      "height": 1024,
+      "width": 1024
+    },
+    "shadows": "ShadowGenerator",
+    "toneMapping": "ACES"
+  },
+  "mainPageResourceOrigins": [
+    "http://127.0.0.1:5234"
+  ],
+  "measure": "undefined",
+  "quality": "medium",
+  "reviewShot": "undefined",
+  "environmentResponse": [
+    {
+      "path": "/game-assets/environment/qwantani-puresky.env",
+      "status": 200,
+      "encodedBytes": 563276,
+      "contentEncoding": "gzip"
+    }
+  ]
+}

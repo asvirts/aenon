@@ -161,9 +161,9 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
     if (positions.length) { const grass = vertexMesh(`grass-${chunk.x}-${chunk.z}`, positions, indices, colors, scene); grass.parent = meadow; grass.material = grassMat; grass.isPickable = false; grass.receiveShadows = true; chunk.grass = grass }
     if (rocks.length) { const merged = Mesh.MergeMeshes(rocks, true, true); if (merged) { merged.parent = rockMesh; merged.isPickable = false; merged.receiveShadows = true; chunk.stones = merged } }
   }
-  function update(position: Point) {
+  function update(position: Point, visibleRadius = 87) {
     for (const chunk of chunks) {
-      const visible = Math.hypot(chunk.x - position.x, chunk.z - position.z) < 87
+      const visible = Math.hypot(chunk.x - position.x, chunk.z - position.z) < visibleRadius
       chunk.ground.setEnabled(visible)
       if (visible && !chunk.decorated) decorate(chunk)
       chunk.grass?.setEnabled(visible); chunk.stones?.setEnabled(visible)

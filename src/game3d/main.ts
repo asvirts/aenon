@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, Color4, DirectionalLight, Engine, HemisphericLight, Ray, Scene, ShadowGenerator, Vector3 } from '@babylonjs/core'
+import { Color3, Color4, DirectionalLight, Engine, HemisphericLight, Scene, ShadowGenerator, Vector3 } from '@babylonjs/core'
 import { createEnvironment, heightAt, riverCenter, riverHalfWidth } from './terrain.ts'
 import { lockCameraToPlayer } from '../art-sample/camera.ts'
 import { canTraverseRegion as canTraverse, findRegionPath as findPath } from './regionNavigation.ts'
@@ -9,7 +9,8 @@ import { createUI } from './ui.ts'
 import { createWorld } from './world.ts'
 import { regionPlaces, regionRoads } from './region.ts'
 import { lake } from './terrain.ts'
-import { cameraZoom } from './view.ts'
+import { cameraZoom, clampCameraRadius, viewCoverage } from './view.ts'
+import { createFollowCamera, occlusionRay } from './camera.ts'
 import type { GameSnapshot, Panel } from './types.ts'
 import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
 import { openStorage } from './storage.ts'
@@ -35,8 +36,7 @@ async function boot() {
   scene.clearColor = Color4.FromHexString('#b7b69aff'); scene.ambientColor = new Color3(.34, .35, .29)
   scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0035; scene.fogColor = Color3.FromHexString('#b7b69a')
   scene.imageProcessingConfiguration.exposure = 1; scene.imageProcessingConfiguration.contrast = 1.12
-  const camera = new ArcRotateCamera('Adventurer-follow-camera', Math.PI / 4, .83, 36, Vector3.Zero(), scene)
-  camera.mode = ArcRotateCamera.ORTHOGRAPHIC_CAMERA; camera.minZ = .1; camera.maxZ = 150
+  const camera = createFollowCamera(scene)
   const sky = new HemisphericLight('valley-sky', new Vector3(0, 1, 0), scene)
   sky.intensity = .72; sky.diffuse = new Color3(.92, .96, 1); sky.groundColor = new Color3(.33, .29, .21)
   const sun = new DirectionalLight('afternoon-sun', new Vector3(.55, -1, -.4), scene)
@@ -46,6 +46,7 @@ async function boot() {
   loadingDetail.textContent = 'Preparing the village, riverbank, and their inhabitants…'
   const world = await createWorld(scene, id => { if (!game.snapshot().paused) { keys.clear(); game.interact(id) } })
   let shadows: ShadowGenerator | null = null, zoom = cameraZoom.default
+  let coverage = viewCoverage(zoom, engine.getRenderWidth() / engine.getRenderHeight(), heightAt(game.snapshot().position.x, game.snapshot().position.z))
   const savedQuality = (() => { try { return storage.getItem('aenon-graphics-quality') } catch { return null } })()
   let quality: Quality = qualities.includes(savedQuality as Quality) ? savedQuality as Quality : navigator.hardwareConcurrency <= 4 ? 'low' : 'high'
   const keys = new Set<string>()
@@ -100,7 +101,7 @@ async function boot() {
     stepPanelValue(1)
   }
   function applyZoom(next: number): void {
-    zoom = Math.max(cameraZoom.min, Math.min(cameraZoom.max, next))
+    zoom = clampCameraRadius(next)
     ui.setZoom(zoom); resize()
   }
   function pollGamepad(snapshot: GameSnapshot, dt: number): void {
@@ -158,8 +159,7 @@ async function boot() {
     else if (intents.menu) ui.openPanel('settings')
   }
   function resize() {
-    engine.resize(); const aspect = engine.getRenderWidth() / engine.getRenderHeight()
-    camera.orthoLeft = -zoom; camera.orthoRight = zoom; camera.orthoTop = zoom / aspect; camera.orthoBottom = -zoom / aspect
+    engine.resize(); camera.radius = zoom
   }
   function setQuality(value: Quality) {
     quality = value; const dpr = Math.min(window.devicePixelRatio || 1, value === 'ultra' ? 2 : value === 'high' ? 1.5 : 1)
@@ -180,7 +180,7 @@ async function boot() {
     const nearby = world.shadowCasters.filter(mesh => {
       mesh.computeWorldMatrix(true)
       const center = mesh.getBoundingInfo().boundingSphere.centerWorld
-      return mesh.isEnabled() && Math.hypot(center.x - position.x, center.z - position.z) < 42
+      return mesh.isEnabled() && Math.hypot(center.x - position.x, center.z - position.z) < coverage.shadowCasters
     })
     // Babylon observes mutations to recompile receivers when the list becomes nonempty.
     // Replacing the array after the first frame can leave terrain without shadow shaders.
@@ -203,7 +203,7 @@ async function boot() {
     location.reload()
   }
   const ui = createUI({ game, definition, layout, quality, zoom,
-    onQuality: setQuality, onZoom: value => { zoom = value; resize() },
+    onQuality: setQuality, onZoom: applyZoom,
     onPanel: open => { keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
     onSaveExport: () => { let original: string | null = null; if (savingBlocked) try { original = storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { /* Export the live state if reading is blocked. */ } download(original ?? JSON.stringify(game.exportSave(), null, 2)) },
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
@@ -244,7 +244,7 @@ async function boot() {
     const hit = scene.pick(x, y, mesh => Boolean(mesh.metadata?.walkSurface))
     if (hit?.pickedPoint) game.moveTo({ x: hit.pickedPoint.x, z: hit.pickedPoint.z })
   })
-  canvas.addEventListener('wheel', event => { event.preventDefault(); zoom = Math.max(cameraZoom.min, Math.min(cameraZoom.max, zoom + Math.sign(event.deltaY) * .8)); ui.setZoom(zoom); resize() }, { passive: false })
+  canvas.addEventListener('wheel', event => { event.preventDefault(); applyZoom(zoom + Math.sign(event.deltaY) * .8) }, { passive: false })
   window.addEventListener('keydown', event => {
     const key = event.key.toLowerCase()
     if (key === 'escape') { if (ui.isPanelOpen()) ui.closePanel(); else game.cancel(); keys.clear(); return }
@@ -267,21 +267,24 @@ async function boot() {
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
     if (!reviewHarness) pollGamepad(snapshot, dt)
     world.events(events, snapshot)
-    environment.update(snapshot.position)
+    const playerHeight = heightAt(snapshot.position.x, snapshot.position.z)
+    coverage = viewCoverage(zoom, engine.getRenderWidth() / engine.getRenderHeight(), playerHeight)
+    environment.update(snapshot.position, coverage.terrain)
     environment.waterMat.setFloat('time', snapshot.time)
-    lockCameraToPlayer(camera, new Vector3(snapshot.position.x, heightAt(snapshot.position.x, snapshot.position.z), snapshot.position.z))
-    world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight)
-    sun.position.set(snapshot.position.x - 22, heightAt(snapshot.position.x, snapshot.position.z) + 40, snapshot.position.z + 16)
+    lockCameraToPlayer(camera, new Vector3(snapshot.position.x, playerHeight, snapshot.position.z))
+    scene.updateTransformMatrix()
+    world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight, coverage)
+    sun.position.set(snapshot.position.x - 22, playerHeight + 40, snapshot.position.z + 16)
+    sun.shadowFrustumSize = coverage.shadowFrustum
     scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt
     if (fadeTime > .1) {
       fadeTime = 0
       updateShadowCasters(snapshot.position)
       const focusPoints = [world.player.position.add(new Vector3(0, 1, 0))]
-      const target = snapshot.targetId ? layout.objects.find(o => o.id === snapshot.targetId) : undefined
+      const target = snapshot.targetId ? snapshot.hostiles.find(o => o.id === snapshot.targetId) ?? layout.objects.find(o => o.id === snapshot.targetId) : undefined
       if (target) focusPoints.push(new Vector3(target.x, heightAt(target.x, target.z) + 1, target.z))
-      const direction = camera.getForwardRay().direction
-      const rays = focusPoints.map(point => new Ray(point.subtract(direction.scale(60)), direction, 59.6))
+      const rays = focusPoints.map(point => occlusionRay(camera.globalPosition, point))
       for (const mesh of world.occluders) mesh.visibility = rays.some(ray => ray.intersectsMesh(mesh, true).hit) ? .23 : 1
     }
     uiTime += dt; saveTime += dt; meterTime += dt

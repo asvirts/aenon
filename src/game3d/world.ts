@@ -9,6 +9,7 @@ import { canTraverseRegion } from './regionNavigation.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
 import { anchorHeight, plateKind, subtitleFor } from './nameplates.ts'
 import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
+import type { ViewCoverage } from './view.ts'
 
 type Actor = { root: TransformNode; clips: AnimationGroup[]; active?: AnimationGroup; actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean }
 export async function createWorld(scene: Scene, interact: (id: string) => void) {
@@ -139,9 +140,9 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     return { name, ...result }
   }))
   let companyKey = ''
-  function positionCompany(snapshot: GameSnapshot) {
+  function positionCompany(snapshot: GameSnapshot, actorDistance: number) {
     const presence = snapshot.company
-    const close = presence && Math.hypot(presence.anchor.x - snapshot.position.x, presence.anchor.z - snapshot.position.z) < 58
+    const close = presence && Math.hypot(presence.anchor.x - snapshot.position.x, presence.anchor.z - snapshot.position.z) < actorDistance
     if (!presence || !close) { for (const member of company) showActor(member.model, false); if (!presence) companyKey = ''; return }
     const key = `${presence.kind}:${presence.sceneId ?? ''}:${presence.anchor.x}:${presence.anchor.z}`
     if (key !== companyKey) {
@@ -178,12 +179,12 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     return result.model
   }))
   let episodeKey = ''
-  function positionEpisodePeople(snapshot: GameSnapshot) {
+  function positionEpisodePeople(snapshot: GameSnapshot, actorDistance: number) {
     const sceneId = snapshot.adventurer.playingScene?.sceneId
     const names = sceneId ? episodeStanding(sceneId) : []
     const sceneObject = sceneId ? objects.find(object => object.sceneId === sceneId) : undefined
     const anchor = snapshot.company && snapshot.company.sceneId === sceneId ? snapshot.company.anchor : sceneObject
-    if (!sceneId || !anchor || !names.length || Math.hypot(anchor.x - snapshot.position.x, anchor.z - snapshot.position.z) >= 58) {
+    if (!sceneId || !anchor || !names.length || Math.hypot(anchor.x - snapshot.position.x, anchor.z - snapshot.position.z) >= actorDistance) {
       for (const person of episodePeople) showActor(person, false)
       episodeKey = ''; return
     }
@@ -584,7 +585,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     }
   }
   let previousTime = 0
-  function update(snapshot: GameSnapshot, camera: ArcRotateCamera, width: number, height: number) {
+  function update(snapshot: GameSnapshot, camera: ArcRotateCamera, width: number, height: number, coverage: ViewCoverage) {
     const frameSeconds = Math.max(.0001, snapshot.time - previousTime); previousTime = snapshot.time
     const p = snapshot.position; setPosition(player.model.root, p); player.model.root.rotation.y = snapshot.heading
     const onBoat = snapshot.journey?.kind === 'boat'
@@ -605,14 +606,14 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     else if (snapshot.time >= player.model.actionUntil) animate(player.model, 'Idle')
     player.model.prior = { x: p.x, z: p.z }
     updateHeldGear(snapshot)
-    updateAttire(snapshot); positionCompany(snapshot); positionEpisodePeople(snapshot)
+    updateAttire(snapshot); positionCompany(snapshot, coverage.actors); positionEpisodePeople(snapshot, coverage.actors)
     const visiblePeople = snapshot.visiblePeople ? new Set(snapshot.visiblePeople) : undefined
-    for (const root of scenery) root.setEnabled(Math.hypot(root.position.x - p.x, root.position.z - p.z) < 78)
-    for (const root of props.values()) root.setEnabled(Math.hypot(root.position.x - p.x, root.position.z - p.z) < 70)
+    for (const root of scenery) root.setEnabled(Math.hypot(root.position.x - p.x, root.position.z - p.z) < coverage.scenery)
+    for (const root of props.values()) root.setEnabled(Math.hypot(root.position.x - p.x, root.position.z - p.z) < coverage.props)
     for (const object of objects) if (object.kind === 'person') {
       const model = actors.get(object.id)
       const jesusScene = Boolean(object.sceneId && gearDefinition.setScenes?.some(scene => scene.id === object.sceneId && scene.figure === 'jesus'))
-      if (model) showActor(model, !jesusScene && (!visiblePeople || visiblePeople.has(object.id)) && Math.hypot(object.x - p.x, object.z - p.z) < 60)
+      if (model) showActor(model, !jesusScene && (!visiblePeople || visiblePeople.has(object.id)) && Math.hypot(object.x - p.x, object.z - p.z) < coverage.actors)
     }
     const points = new Map<string, Point>(objects.map(o => [o.id, o]))
     for (const enemy of snapshot.hostiles) {
@@ -621,7 +622,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       if (enemy.status === 'dead') model.deathUntil ??= snapshot.time + 1.1
       else model.deathUntil = undefined
       // Keep non-huntable enemies visible through their one-shot collapse.
-      const nearby = Math.hypot(enemy.x - p.x, enemy.z - p.z) < 60
+      const nearby = Math.hypot(enemy.x - p.x, enemy.z - p.z) < coverage.actors
       showActor(model, nearby && (enemy.status !== 'dead' || hasCarcass || snapshot.time < (model.deathUntil ?? 0)))
       setPosition(model.root, enemy)
       if (!nearby) { telegraphs.get(enemy.id)?.setEnabled(false); model.prior = { x: enemy.x, z: enemy.z }; continue }
@@ -673,7 +674,7 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
       if (point && visible) {
         const anchor = anchorHeight(object?.model ?? (enemy ? objectById.get(enemy.id)?.model : undefined))
         const pos = Vector3.Project(new Vector3(point.x, heightAt(point.x, point.z) + anchor, point.z), Matrix.Identity(), scene.getTransformMatrix(), camera.viewport.toGlobal(width, height))
-        element.style.transform = `translate(${pos.x}px,${pos.y}px) translate(-50%,-100%)`; element.hidden = pos.x < 15 || pos.x > width - 15 || pos.y < 55 || pos.y > height - 95
+        element.style.transform = `translate(${pos.x}px,${pos.y}px) translate(-50%,-100%)`; element.hidden = pos.z < 0 || pos.z > 1 || pos.x < 15 || pos.x > width - 15 || pos.y < 55 || pos.y > height - 95
         element.classList.toggle('selected', snapshot.targetId === id)
       }
       if (!point && (id.startsWith('carcass:') || id.startsWith('pickup:') || id.startsWith('goods:'))) { element.remove(); labels.delete(id); props.get(id)?.dispose(); props.delete(id) }

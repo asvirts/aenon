@@ -44,7 +44,7 @@ export function createLighting(scene: Scene, engine: Engine, camera: ArcRotateCa
   const environment = CubeTexture.CreateFromPrefilteredData('/game-assets/environment/qwantani-puresky.env', scene)
   environment.gammaSpace = false
   scene.environmentTexture = environment; scene.environmentIntensity = .55
-  let quality: Quality = 'low'
+  let quality: Quality | null = null
   let shadows: ShadowGenerator | null = null
   let pipeline: DefaultRenderingPipeline | null = null
   let ao: ReviewableSSAO | null = null
@@ -58,6 +58,7 @@ export function createLighting(scene: Scene, engine: Engine, camera: ArcRotateCa
     shadows?.dispose(); shadows = null
   }
   function setQuality(value: Quality) {
+    if (quality === value) return
     clearEffects(); quality = value
     const preset = lightingPresets[value]
     if (preset.shadow !== 'none') {

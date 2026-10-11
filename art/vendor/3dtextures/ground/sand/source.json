@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2024/08/02/stylized-sand-002/",
+  "folder": "https://drive.google.com/drive/folders/1G_ox8IUHCGsJSc1g7vJuI-GYpg2v7PRo?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Sand_002_basecolor.png",
+      "id": "17wH3hq4IOgy3VtlPY41gr_ABiaRcw64w",
+      "download": "https://drive.google.com/uc?export=download&id=17wH3hq4IOgy3VtlPY41gr_ABiaRcw64w",
+      "bytes": 882840,
+      "sha256": "06a9a0458bb026e52dba31d79a601bfd8d7479b7cdc0b542b492aaac4d6440ae"
+    },
+    {
+      "name": "Stylized_Sand_002_normal.png",
+      "id": "1A6lApSGLGCR2g8AeVuafjrUvPNNXpGoH",
+      "download": "https://drive.google.com/uc?export=download&id=1A6lApSGLGCR2g8AeVuafjrUvPNNXpGoH",
+      "bytes": 933016,
+      "sha256": "327d1e32b08baa15d85fd3a67ccf5c74929069915289cbe3a861186f43d207f0"
+    }
+  ]
+}

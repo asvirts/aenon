@@ -36,6 +36,8 @@ export type DefinitionFailure =
   | "cooking-count-not-positive"
   | "cooking-fish-missing"
   | "cooking-food-missing"
+  | "restore-shares"
+  | "meal-buff"
 
 export function requireLowBandAenon(
   definition: SeasonDefinition,

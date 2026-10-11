@@ -6,6 +6,7 @@ import {
   type Adventurer,
   type Carcass,
   type Fight,
+  type Pace,
   type Pickup,
   type QuestJournalEntry,
   type QuestProgress,
@@ -30,6 +31,7 @@ import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/ga
 import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import { makePiece, requireCooking, requireGearMaking, type MakeResult } from "./lib/make.ts"
+import { eatMeal, requireMealBuffs, requireRestoreShares, type EatResult, type EatTarget } from "./lib/meal.ts"
 import {
   lookAtPerson,
   presentQuestJournal,
@@ -74,6 +76,8 @@ export type {
   CookingRecipe,
   Fish,
   Food,
+  MealBuff,
+  RestoreShares,
   Gear,
   GearPiece,
   GearRecipe,
@@ -100,7 +104,7 @@ export type {
   VendorStockLine,
 } from "./lib/types.ts"
 export type { GearSlot }
-export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState, StoredBurn }
+export type { Adventurer, Carcass, Fight, Pace, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState, StoredBurn }
 export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }
@@ -108,6 +112,7 @@ export type { Drop, HuntResult, PickUpResult }
 export type { TakeOffResult, WearResult }
 export type { LookResult, QuestLoadFailure, ReportResult, SpeakResult }
 export type { MakeResult }
+export type { EatResult, EatTarget }
 export type { BuyGood, BuyResult, OpenCacheResult, SellGood, SellResult }
 
 export type Season = {
@@ -131,6 +136,7 @@ export type Season = {
   wear: (pieceId: string) => WearResult
   takeOff: (slot: GearSlot) => TakeOffResult
   make: (stationId: string, recipeId: string) => MakeResult
+  eat: (target: EatTarget) => EatResult
   buy: (personId: string, good: BuyGood) => BuyResult
   sell: (personId: string, good: SellGood) => SellResult
   openCache: (cacheId: string, rollDrop: () => Drop) => OpenCacheResult
@@ -171,6 +177,10 @@ export function loadSeason(
   if (!caches.ok) return caches
   const cooking = requireCooking(definition)
   if (!cooking.ok) return cooking
+  const shares = requireRestoreShares(definition)
+  if (!shares.ok) return shares
+  const mealBuffs = requireMealBuffs(definition)
+  if (!mealBuffs.ok) return mealBuffs
 
   const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
   seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
@@ -199,6 +209,7 @@ export function loadSeason(
       wear: (pieceId) => wearPiece(seasonState, definition, pieceId),
       takeOff: (slot) => takeOffPiece(seasonState, definition, slot),
       make: (stationId, recipeId) => makePiece(seasonState, definition, curve, stationId, recipeId),
+      eat: (target) => eatMeal(seasonState, definition, curve, target),
       buy: (personId, good) => buyFromVendor(seasonState, definition, personId, good),
       sell: (personId, good) => sellToVendor(seasonState, definition, personId, good),
       openCache: (cacheId, rollDrop) => openCache(seasonState, definition, cacheId, rollDrop),

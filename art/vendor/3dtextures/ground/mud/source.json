@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2021/08/01/stylized-dry-mud-001/",
+  "folder": "https://drive.google.com/drive/folders/1lr4Nu4oQ1zPBRDoOX5jXuINhNAUsxbvA?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Dry_Mud_001_basecolor.jpg",
+      "id": "1LpcO0XhZ-rjznNCShsh6yPQJ6884Lhu2",
+      "download": "https://drive.google.com/uc?export=download&id=1LpcO0XhZ-rjznNCShsh6yPQJ6884Lhu2",
+      "bytes": 333975,
+      "sha256": "827871522501cc90c1bc27491599d8a203e7c80f503b18a579846c72c69c5d8a"
+    },
+    {
+      "name": "Stylized_Dry_Mud_001_normal.jpg",
+      "id": "1fLpLKWazzPv9rWVfy_NlDvuOlmC_J-WI",
+      "download": "https://drive.google.com/uc?export=download&id=1fLpLKWazzPv9rWVfy_NlDvuOlmC_J-WI",
+      "bytes": 573703,
+      "sha256": "1b9db693768b7bcc61a1016d84f019f04581cb378b5e9023e838beb1ab4dfe75"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source": "https://3dtextures.me/2024/08/21/stylized-cliff-rock-005/",
+  "folder": "https://drive.google.com/drive/folders/1kuBXoYblm9rV_sbzkGtqMqK2yBN859eb?usp=sharing",
+  "author": "Katsukagi",
+  "license": "CC0-1.0",
+  "licenseDeclaration": "https://3dtextures.me/about/",
+  "retrieved": "2026-10-11",
+  "files": [
+    {
+      "name": "Stylized_Cliff_Rock_005_basecolor.png",
+      "id": "1MrJUFig-IJyzHJphWQE06yc6iRpwYC6l",
+      "download": "https://drive.google.com/uc?export=download&id=1MrJUFig-IJyzHJphWQE06yc6iRpwYC6l",
+      "bytes": 1440408,
+      "sha256": "c903ea8d4a517bb6f9c23dbf434b0effba595bc5fe40bb9538d4e3c9bcd53c11"
+    },
+    {
+      "name": "Stylized_Cliff_Rock_005_normal.png",
+      "id": "1sUgGH4HMjCOK3RQM6lvfJ3MmKYuyjhPO",
+      "download": "https://drive.google.com/uc?export=download&id=1sUgGH4HMjCOK3RQM6lvfJ3MmKYuyjhPO",
+      "bytes": 1374751,
+      "sha256": "8c9199556be41a066960ee5d0af6bcd655cf5dc38bc9c5d47748e9a0d69f18c5"
+    }
+  ]
+}

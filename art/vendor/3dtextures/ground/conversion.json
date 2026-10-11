@@ -1,0 +1,149 @@
+{
+  "tool": "ktx version: v4.4.2",
+  "outputs": [
+    {
+      "file": "public/game-assets/terrain/dirt-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/dirt/Stylized_Ground_002_basecolor.png",
+      "bytes": 50992,
+      "sha256": "f29eb9bb7e2bca714a64514637c14c79aa943bac9bb6bdb43e28e92a332f6143",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/dirt-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/dirt/Stylized_Ground_002_normal.png",
+      "bytes": 270832,
+      "sha256": "3fb98537ea9a31a244143f00436683424d99e3ef62a27ed4bd0790d7f06b3782",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/grass-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/grass/Stylized_Grass_001_basecolor.jpg",
+      "bytes": 90322,
+      "sha256": "1a7cb8311e1c19c583223a95508fa24d1673c4da48585fb6dda3967282bca387",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/grass-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/grass/Stylized_Grass_001_normal.jpg",
+      "bytes": 323883,
+      "sha256": "3fe7ea531857aae76cea2125e33b3d503c1c54c4ccdc22f1a798cec4e50c5f89",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/mud-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/mud/Stylized_Dry_Mud_001_basecolor.jpg",
+      "bytes": 79011,
+      "sha256": "bbb748eb4fdc699d51e450c8b5f3023dea06723eb893cda74af380a0de825b1f",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/mud-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/mud/Stylized_Dry_Mud_001_normal.jpg",
+      "bytes": 330761,
+      "sha256": "e77e665939e6e75826d4eb3f00872c00cc1f818bff5fb9c5be866590c2ce07ce",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/rock-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/rock/Stylized_Cliff_Rock_005_basecolor.png",
+      "bytes": 81216,
+      "sha256": "db23d206179e67d52c250c66e8899de6234b27fc85784bfd956592db044c9c2d",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/rock-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/rock/Stylized_Cliff_Rock_005_normal.png",
+      "bytes": 286809,
+      "sha256": "358a076727558cfe877c82a648502020fec8e19e8b1a4ef9fe3e153f17875281",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/sand-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/sand/Stylized_Sand_002_basecolor.png",
+      "bytes": 50214,
+      "sha256": "2affbd431412ce281f172bafb6903201d121271c896f9afe378db2c781c340c6",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/sand-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/sand/Stylized_Sand_002_normal.png",
+      "bytes": 283563,
+      "sha256": "7b7226fb6f3b0e31f519ead6d61cfbade5576b36101d84e1c7098ccc86f79ed8",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/stones-color.ktx2",
+      "source": "art/vendor/3dtextures/ground/stones/Stylized_Stone_Floor_010_basecolor.png",
+      "bytes": 84303,
+      "sha256": "c70f7ec5fe9ce429e0abd237d1c45499687e75f452d50219462a435042a78e70",
+      "encoding": "ETC1S, sRGB colour",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    },
+    {
+      "file": "public/game-assets/terrain/stones-normal.ktx2",
+      "source": "art/vendor/3dtextures/ground/stones/Stylized_Stone_Floor_010_normal.png",
+      "bytes": 302533,
+      "sha256": "9d670c06ffefcb51eed76fa4ffdad461caff512c13bd8ceabbcadd0b8f155a95",
+      "encoding": "UASTC + Zstd, linear RGB normals",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mipLevels": 10
+    }
+  ]
+}

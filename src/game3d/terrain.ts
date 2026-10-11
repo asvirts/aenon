@@ -1,9 +1,10 @@
-import { Color3, DynamicTexture, Mesh, MeshBuilder, TransformNode, VertexData } from '@babylonjs/core'
+import { Color3, Mesh, MeshBuilder, TransformNode, VertexData } from '@babylonjs/core'
 import type { Scene } from '@babylonjs/core'
 import { regionBounds, regionPlaces, regionRoads } from './region.ts'
 import { AENON_OFFSET, LOW_BAND_STREETS } from './lowBand.ts'
 import { surfaceMaterial } from './materials.ts'
 import { createWaterMaterial } from './waterMaterial.ts'
+import { createGroundMaterial } from './groundMaterial.ts'
 
 type Point = { x: number; z: number }
 const clamp = (value: number) => Math.max(0, Math.min(1, value))
@@ -90,36 +91,26 @@ function vertexMesh(name: string, positions: number[], indices: number[], colors
 /** One continuous region, split into independently culled terrain and decoration meshes. */
 export function createEnvironment(scene: Scene, _legacySize = 110) {
   const ground = new TransformNode('region-earth', scene), meadow = new TransformNode('regional-meadow', scene), rockMesh = new TransformNode('regional-stones', scene)
-  const groundMat = surfaceMaterial(scene, 'original-regional-earth', '#ffffff'); groundMat.roughness = 1
-  const texture = new DynamicTexture('original-regional-brushwork', { width: 512, height: 512 }, scene, true), ctx = texture.getContext(), paint = random(72028)
-  ctx.fillStyle = '#efebd9'; ctx.fillRect(0, 0, 512, 512)
-  for (let i = 0; i < 18000; i++) { const v = Math.floor(185 + paint() * 65); ctx.fillStyle = `rgba(${v},${v - 2},${v - 10},.13)`; ctx.fillRect(paint() * 512, paint() * 512, 1 + paint() * 8, .5 + paint() * 2) }
-  for (let i = 0; i < 950; i++) { ctx.fillStyle = paint() > .42 ? 'rgba(92,78,52,.18)' : 'rgba(255,246,216,.30)'; ctx.fillRect(paint() * 512, paint() * 512, 1 + paint() * 3, 1 + paint() * 2) }
-  texture.update(); groundMat.albedoTexture = texture
+  const groundPaint = createGroundMaterial(scene), groundMat = groundPaint.material
   const grassMat = surfaceMaterial(scene, 'regional-grass-pigments', '#ffffff'); grassMat.roughness = 1; grassMat.backFaceCulling = false
   const stoneMat = surfaceMaterial(scene, 'regional-limestone', '#9c947b')
-  const sand = Color3.FromHexString('#c8b586'), sage = Color3.FromHexString('#929669'), dark = Color3.FromHexString('#737f52'), pathColor = Color3.FromHexString('#94784e'), courtyard = Color3.FromHexString('#baa780')
   const settlements = regionPlaces.filter(place => place.kind === 'settlement')
   const chunks: { x: number; z: number; ground: Mesh; grass?: Mesh; stones?: Mesh; decorated: boolean }[] = []
   const chunkSize = 32
   for (let z = Math.floor(regionBounds.minZ / chunkSize) * chunkSize; z < regionBounds.maxZ; z += chunkSize) for (let x = Math.floor(regionBounds.minX / chunkSize) * chunkSize; x < regionBounds.maxX; x += chunkSize) {
-    const positions: number[] = [], indices: number[] = [], colors: number[] = [], uvs: number[] = []
+    const positions: number[] = [], indices: number[] = [], colors: number[] = [], uvs: number[] = [], surfaces: number[] = []
     const cells = Math.abs(z + chunkSize / 2 - AENON_OFFSET.z) < 48 && x > -32 && x < 32 ? 64 : 32
     for (let row = 0; row <= cells; row++) for (let col = 0; col <= cells; col++) {
       const px = x + col / cells * chunkSize, pz = z + row / cells * chunkSize, y = heightAt(px, pz)
       positions.push(px, y, pz); uvs.push(px / 6, pz / 6)
-      const green = clamp(.27 + noise(px * .5, pz * .5) * .25 + (pz < -210 ? .18 : 0))
-      let color = Color3.Lerp(sand, pz < -210 ? dark : sage, green)
-      const village = settlements.find(place => Math.hypot(px - place.x, pz - place.z) < place.radius * .68)
-      if (village) color = Color3.Lerp(color, courtyard, .45 + noise(px * .7, pz * .7) * .18)
-      color = Color3.Lerp(color, pathColor.scale(.96 + noise(px, pz) * .075), clamp((2.25 - roadDistance(px, pz) + noise(px, pz) * .2) / 1.05))
-      if (waterDistance(px, pz) < 2) color = Color3.Lerp(color, sand, .55)
-      if (y > 9) color = Color3.Lerp(color, Color3.FromHexString('#a29c7e'), .35)
-      color.toLinearSpaceToRef(color)
-      colors.push(color.r, color.g, color.b, 1)
+      let village = 0
+      for (const place of settlements) village = Math.max(village, 1 - smooth((Math.hypot(px - place.x, pz - place.z) - place.radius * .40) / (place.radius * .36)))
+      // Geometric and navigation inputs stay unchanged; only the material consumes these distances.
+      surfaces.push(waterDistance(px, pz), roadDistance(px, pz), village, y)
       if (col < cells && row < cells) { const i = row * (cells + 1) + col; indices.push(i, i + 1, i + cells + 1, i + 1, i + cells + 2, i + cells + 1) }
     }
     const mesh = vertexMesh(`terrain-${x}-${z}`, positions, indices, colors, scene, uvs)
+    mesh.setVerticesData('groundSurface', new Float32Array(surfaces), false, 4)
     mesh.parent = ground; mesh.material = groundMat; mesh.receiveShadows = true; mesh.metadata = { walkSurface: true }
     chunks.push({ x: x + chunkSize / 2, z: z + chunkSize / 2, ground: mesh, decorated: false })
   }
@@ -169,5 +160,5 @@ export function createEnvironment(scene: Scene, _legacySize = 110) {
     }
   }
   update(AENON_OFFSET)
-  return { ground, water, waterMat, meadow, rockMesh, update }
+  return { ground, water, waterMat, meadow, rockMesh, update, setGroundQuality: groundPaint.setQuality }
 }

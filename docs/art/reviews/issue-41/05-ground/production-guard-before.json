@@ -1,0 +1,28 @@
+{
+  "gameReady": true,
+  "lighting": {
+    "aoOutput": null,
+    "aoSamples": 0,
+    "bloom": false,
+    "cascades": 0,
+    "environmentReady": true,
+    "exposure": 1.35,
+    "fxaa": true,
+    "prePassSamples": 0,
+    "quality": "medium",
+    "samples": 1,
+    "shadowFrustum": 73,
+    "shadowMapSize": {
+      "height": 1024,
+      "width": 1024
+    },
+    "shadows": "ShadowGenerator",
+    "toneMapping": "ACES"
+  },
+  "mainPageResourceOrigins": [
+    "http://127.0.0.1:5234"
+  ],
+  "measure": "undefined",
+  "quality": "medium",
+  "reviewShot": "undefined"
+}

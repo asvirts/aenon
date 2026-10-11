@@ -324,6 +324,174 @@
       "retrieved": "2026-10-11",
       "changes": "Plaster 002, Stylized Wood Planks 002 and Stylized Stone Wall 002 maps resized, tinted and encoded as ETC1S colour or UASTC data maps. Identical KTX2 payloads are shared by SHA-256 across all architecture models, preserving complete mip chains.",
       "notes": "Original source maps and their exact download/source URLs are separately registered above. These files are required same-origin GLB dependencies; their content hashes and model references are recorded in art/source/architecture/runtime-manifest.json."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/dirt-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Ground 002 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/06/07/stylized-ground-002/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/dirt-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Ground 002 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/06/07/stylized-ground-002/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/grass-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Grass 001 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2020/06/02/stylized-grass-001/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/grass-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Grass 001 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2020/06/02/stylized-grass-001/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/mud-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Dry Mud 001 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2021/08/01/stylized-dry-mud-001/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/mud-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Dry Mud 001 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2021/08/01/stylized-dry-mud-001/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/rock-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Cliff Rock 005 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/08/21/stylized-cliff-rock-005/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/rock-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Cliff Rock 005 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/08/21/stylized-cliff-rock-005/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/sand-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Sand 002 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/08/02/stylized-sand-002/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/sand-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Sand 002 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/08/02/stylized-sand-002/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/stones-color.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Stone Floor 010 — color map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/10/28/stylized-stone-floor-010/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. ETC1S sRGB colour. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-assets/terrain/stones-normal.ktx2"
+      ],
+      "category": "Ground materials",
+      "title": "Stylized Stone Floor 010 — normal map",
+      "author": "Katsukagi",
+      "authorUrl": "https://3dtextures.me/",
+      "source": "https://3dtextures.me/2024/10/28/stylized-stone-floor-010/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://3dtextures.me/about/",
+      "retrieved": "2026-10-11",
+      "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
     }
   ],
   "software": [

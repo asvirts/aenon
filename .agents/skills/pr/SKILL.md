@@ -167,6 +167,8 @@ After a rendering or interaction fix, refresh the affected evidence on the final
 
 When changing a shared model loader, inspect existing asset families on every graphics preset as well as the new models. Protect clone/instance behavior with an actual imported-mesh regression that checks independent visibility and enabled state; shared geometry alone does not prove that every render pass draws the asset.
 
+For terrain or material changes, inspect combat warnings and selection rings against the new surface on Low as well as High. A pigment that looks good in a settlement can hide a warning on a wilderness road. Remove temporary browser-QA pages from public assets before the credits audit.
+
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
 ### Merge Danger

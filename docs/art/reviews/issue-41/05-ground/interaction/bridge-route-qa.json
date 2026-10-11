@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "97182d109671a68f1a6a93f6b90a1bf8d8da6dbc",
+  "fixtureStart": {
+    "x": 8,
+    "z": -79.09302325581395
+  },
+  "destination": "Pella, selected in the normal Map panel",
+  "preset": "medium",
+  "samples": 89,
+  "sampleIntervalMs": 250,
+  "nominalDurationSeconds": 22,
+  "first": {
+    "x": 8,
+    "z": -79.09302325581395
+  },
+  "last": {
+    "x": 78.03487966310442,
+    "z": -74.20686886071354
+  },
+  "distanceTravelled": 70.20511999988517,
+  "maxDistanceFromExistingRoadCenter": 1.4635283153585007e-13,
+  "movingSamples": 88,
+  "allMovingAfterFirst": true,
+  "activityCounts": {
+    "idle": 1,
+    "run": 88
+  },
+  "recording": "bridge-route.webm",
+  "recordingMethod": "Canvas MediaRecorder VP9 at 20 fps; HUD and DOM panels excluded; route selected through normal UI. Escape stops the walk.",
+  "limits": "Recorded route segment reaches the east bank but does not reach Pella. Sampled positions support alignment with the existing road; they are not a complete-world navigation test."
+}

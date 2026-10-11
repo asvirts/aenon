@@ -1,6 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
+import { fetchPassage, fetchVersion } from "./youversion.ts"
 
 /**
  * The only caller of the YouVersion Platform. The App Key lives in the
@@ -10,7 +11,6 @@ import { join } from "node:path"
  * Terms grant no stored copy of the text.
  */
 
-const API_BASE = "https://api.youversion.com/v1"
 const USFM_PATTERN = /^[A-Z0-9]{3}\.[0-9]+(\.[0-9]+(-[0-9]+)?)?$/
 
 function platformKey(): string {
@@ -19,52 +19,13 @@ function platformKey(): string {
   return key
 }
 
-function bibleId(): string {
-  return process.env["YVP_BIBLE_ID"] ?? "111"
-}
-
-type VersionInfo = {
-  title: string
-  abbreviation: string
-  copyright: string
-}
-
-async function fetchVersion(key: string, id: string): Promise<VersionInfo> {
-  const response = await fetch(`${API_BASE}/bibles/${id}`, {
-    headers: { "X-YVP-App-Key": key, Accept: "application/json" },
-  })
-  if (response.status === 403 || response.status === 401) {
-    throw new Error(
-      `Version ${id} unavailable (HTTP ${response.status}). The key works but this version is not licensed to it yet — accept its license at the YouVersion Platform Portal, then restart.`,
-    )
+function bibleId(): number {
+  const id = process.env["YVP_BIBLE_ID"] ?? "111"
+  const numericId = Number(id)
+  if (!/^\d+$/.test(id) || !Number.isSafeInteger(numericId) || numericId < 1) {
+    throw new Error("YVP_BIBLE_ID must be a positive Bible ID (111 for NIV).")
   }
-  if (!response.ok) throw new Error(`Version ${id} unavailable (HTTP ${response.status}).`)
-  const body = (await response.json()) as {
-    localized_title?: string
-    title?: string
-    localized_abbreviation?: string
-    abbreviation?: string
-    copyright?: string
-  }
-  return {
-    title: body.localized_title ?? body.title ?? `Bible ${id}`,
-    abbreviation: body.localized_abbreviation ?? body.abbreviation ?? "",
-    copyright: body.copyright ?? "",
-  }
-}
-
-async function fetchPassage(
-  key: string,
-  id: string,
-  usfm: string,
-): Promise<{ reference: string; html: string }> {
-  const response = await fetch(`${API_BASE}/bibles/${id}/passages/${usfm}?format=html`, {
-    headers: { "X-YVP-App-Key": key, Accept: "application/json" },
-  })
-  if (!response.ok) throw new Error(`Passage ${usfm} unavailable (HTTP ${response.status}).`)
-  const body = (await response.json()) as { reference?: string; content?: string }
-  if (typeof body.content !== "string") throw new Error(`Passage ${usfm} returned no content.`)
-  return { reference: body.reference ?? usfm, html: body.content }
+  return numericId
 }
 
 function sendJson(response: ServerResponse, status: number, value: unknown): void {
@@ -119,7 +80,7 @@ const server = createServer((request, response) => {
         sendJson(response, 200, {
           reference: passage.reference,
           html: passage.html,
-          version: { title: version.title, abbreviation: version.abbreviation, copyright: version.copyright },
+          version,
         })
       } catch (error) {
         sendJson(response, 502, { error: error instanceof Error ? error.message : "Passage lookup failed." })

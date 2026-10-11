@@ -57,6 +57,10 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible. Which is right?"
 
+### Reconcile revised decisions
+
+When a later user answer replaces only part of an earlier decision, record what changes and what remains. Reconcile dependent ADRs and glossary definitions so contradictory rules do not remain simultaneously current; distinguish accepted design from current implementation and from proposed defaults still awaiting confirmation. Changes to a boundary such as when combat ends can also change food, gear, pause, and encounter rules even when those were recorded elsewhere.
+
 ### Update GLOSSARY.md inline
 
 When a term is resolved, update `GLOSSARY.md` right there. Don't batch these up: capture them as they happen. Use the format in [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).

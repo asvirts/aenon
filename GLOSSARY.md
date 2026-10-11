@@ -17,7 +17,7 @@ Traversable land that is not a settlement: lake, river, hills, mountains, and va
 _Avoid_: overworld, path
 
 **Spot**:
-A fixed place where a gathering skill other than Hunting is practiced.
+A fixed place where a gathering skill other than Hunting is practiced, with a finite supply that replenishes during active play.
 _Avoid_: node, resource
 
 **Level band**:
@@ -61,12 +61,24 @@ The Adventurer's list of started quests, each with one current line.
 _Avoid_: reference journal, quest log
 
 **Adventurer level**:
-The level shared by the four combat skills. The level bands are successive spans of it. It rises from once quests, defeats, and a smaller grant for the other ten skills, inside the place's band, except a first Scripture reading, which pays at any level.
+The level shared by the four combat skills. The level bands are successive spans of it. It rises from once quests, defeats, and a smaller grant for the other eleven skills, inside the place's band, except a first Scripture reading, which pays at any level.
 _Avoid_: skill, skill level, level band, total level
 
 **Combat skill**:
 Attack, Strength, Defence, or Hitpoints. Each is the Adventurer level.
 _Avoid_: stance, combat style
+
+**Weapon technique**:
+A player-triggered melee action with a cooldown, available alongside automatic basic attacks. It is distinct from a combat skill and a legendary piece's special effect.
+_Avoid_: spell, combat skill, special effect
+
+**Hostile**:
+An animal or bandit encountered as an opponent in the wilderness. An ordinary hostile can return after defeat, while a story-specific encounter retains its authored outcome.
+_Avoid_: biblical figure
+
+**Fight**:
+The Adventurer's active melee danger from engaged or pursuing hostiles. It ends when every threat has fallen or disengaged, or the Adventurer is defeated.
+_Avoid_: paired exchange, selected target
 
 **Current Hitpoints**:
 The Adventurer's present pool of Hitpoints, bounded by the Hitpoints skill.
@@ -133,7 +145,7 @@ _Avoid_: blueprint, scroll
 ## Skills
 
 **Skill**:
-One of the fourteen disciplines: Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking. The four combat skills are the Adventurer level. The other ten rise by doing the work.
+One of the fifteen disciplines: Attack, Strength, Defence, Hitpoints, Woodcutting, Mining, Fishing, Herbalism, Harvesting, Hunting, Scripture, Blacksmithing, Tailoring, Leatherworking, and Cooking. The four combat skills are the Adventurer level. The other eleven rise by doing the work.
 _Avoid_: profession, stat, Crafting, Smithing
 
 **Skill level**:

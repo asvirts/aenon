@@ -1,0 +1,2 @@
+# Blender's local backups are retained on disk; the current editable source is tracked.
+*.blend[0-9]

@@ -1,0 +1,3 @@
+# Original art through Blender
+
+All art is made specifically for The Season through Codex-driven Blender modeling, original rigs and animations, and AI-assisted original concept and texture work; reusable third-party art packs were considered and rejected. This carries a larger art-production workload, so first review a small playable sample showing a moving Adventurer, limestone building, olive tree, and riverbank at the actual game camera before producing the full area. The sample must establish the chosen visual style and motion in play; tool availability or a still image does not establish that quality.

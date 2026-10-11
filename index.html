@@ -1,56 +1,10 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#202b28" />
-    <title>Aenon — The Season</title>
-    <style>
-      html, body { height: 100%; }
-      body { margin: 0; background: #171e1b; color: #eee8d6; font: 15px/1.6 system-ui, sans-serif; overflow: hidden; }
-      main { margin: 0; padding: 0; height: 100dvh; position: relative; }
-      #game { width: 100vw; height: 100dvh; display: flow-root; }
-      #game canvas { display: block; margin: 0 auto; }
-      #passage-window {
-        position: absolute; left: max(22px, calc((100vw - 160dvh) / 2 + 22px)); bottom: calc((100dvh - min(100dvh, 62.5vw)) / 2 + min(15dvh, 9.375vw));
-        box-sizing: border-box; width: min(420px, calc(100vw - 44px));
-        border: 1px solid #847c5c; border-radius: 5px; padding: 24px;
-        background: rgba(32, 43, 40, 0.98); box-shadow: 0 12px 36px #10171066;
-        max-height: 48dvh; overflow: auto;
-      }
-      #passage-window:has(#passage:empty) { display: none; }
-      #passage h2 { font: 24px/1.25 Georgia, serif; margin: 0 62px 16px 0; color: #f4ecd5; }
-      #passage p { margin: 0 0 12px; color: #d2d3bf; }
-      #passage p:last-child { margin-bottom: 0; }
-      #passage p.label { margin-top: 18px; color: #c1b78f; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-      #passage p.hint { margin-top: 16px; color: #b6bbaa; font-size: 12px; }
-      #passage a { color: #dfcd91; text-underline-offset: 3px; }
-      #close-passage {
-        position: absolute; top: 24px; right: 20px; border: 1px solid #657061;
-        border-radius: 3px; padding: 4px 9px; background: #303c33;
-        color: #eee8d6; font: 12px/1.4 system-ui, sans-serif; cursor: pointer;
-      }
-      #close-passage:hover { background: #435040; }
-      #close-passage:focus-visible { outline: 2px solid #e2c98a; outline-offset: 4px; }
-      @media (max-width: 600px) {
-        #passage-window { left: 12px; width: calc(100vw - 24px); padding: 20px; font-size: 13px; }
-        #close-passage { top: 20px; }
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <div id="game" aria-label="The Season: explore Aenon with WASD or the arrow keys. Press C for your character and J for your journal."></div>
-      <aside id="passage-window" aria-label="Passage journal">
-        <button type="button" id="close-passage" aria-label="Close passage journal">Close</button>
-        <section id="passage" aria-live="polite"></section>
-      </aside>
-    </main>
-    <script type="module">
-      document.getElementById("close-passage").addEventListener("click", () => {
-        document.getElementById("passage").replaceChildren();
-      });
-    </script>
-    <script type="module" src="/src/host/main.ts"></script>
-  </body>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#303c2d"><title>Aenon — The Season</title><meta name="description" content="Explore Aenon and the Jordan valley in The Season, a single-player adventure."></head>
+<body>
+<canvas id="world" tabindex="0" aria-label="The Season. Click to move and interact. WASD to run. Q to strike, E to guard, Space to reposition. I opens Gear and J opens journals."></canvas>
+<div id="loading" role="status"><h1>The Season</h1><p id="loading-detail">Entering the Jordan valley…</p><p id="load-error" hidden></p></div>
+<noscript>The Season needs JavaScript to explore the world.</noscript>
+<script type="module" src="/src/game3d/main.ts"></script>
+</body>
 </html>

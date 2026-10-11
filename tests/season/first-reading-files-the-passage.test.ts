@@ -555,7 +555,9 @@ const jordanReading: SeasonDefinition = {
   ],
   smallerGrant: 2,
   defeatLoss: 0,
-  hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 3 }],
+  hostiles: [
+    { id: "wolf", kind: "animal", placeId: "jordan", hitpoints: 4, defeatGrant: 3, huntingExperience: 1 },
+  ],
   packSize: 1,
   spots: [],
   scriptureObjects: [

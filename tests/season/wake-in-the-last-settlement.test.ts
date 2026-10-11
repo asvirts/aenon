@@ -19,9 +19,9 @@ const roads: SeasonDefinition = {
   ],
   smallerGrant: 1,
   defeatLoss: 0,
+  packSize: 28,
   hostiles: [],
   scriptureObjects: [],
-  packSize: 1,
   spots: [],
 }
 
@@ -58,7 +58,7 @@ describe("wake in the last settlement", () => {
     const settlement = loadSeason(
       {
         ...roads,
-        hostiles: [{ id: "wolf", placeId: "aenon", hitpoints: 3, defeatGrant: 2 }],
+        hostiles: [{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "aenon", hitpoints: 3, defeatGrant: 2 }],
       },
       onePointPerLevel,
     )
@@ -67,7 +67,7 @@ describe("wake in the last settlement", () => {
     const missing = loadSeason(
       {
         ...roads,
-        hostiles: [{ id: "wolf", placeId: "nowhere", hitpoints: 3, defeatGrant: 2 }],
+        hostiles: [{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "nowhere", hitpoints: 3, defeatGrant: 2 }],
       },
       onePointPerLevel,
     )
@@ -78,7 +78,7 @@ describe("wake in the last settlement", () => {
     const loaded = loadSeason(
       {
         ...roads,
-        hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 2 }],
+        hostiles: [{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }],
       },
       onePointPerLevel,
     )
@@ -101,7 +101,7 @@ describe("wake in the last settlement", () => {
   it("refuses a fight when current Hitpoints are 0", () => {
     const definition: SeasonDefinition = {
       ...roads,
-      hostiles: [{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 2 }],
+      hostiles: [{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }],
     }
     const started = loadSeason(definition, onePointPerLevel)
     if (!started.ok) throw new Error(started.reason)
@@ -121,7 +121,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("stepping back before the first swing pays nothing and leaves the hostile standing", () => {
-    const season = loadRoads([{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
+    const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
     assert.equal(season.adventurer().adventurerLevel, 4)
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
@@ -152,7 +152,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("refuses to leave from the first swing until the hostile falls", () => {
-    const season = loadRoads([{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 2 }], 6, 3)
+    const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 5, defeatGrant: 2 }], 6, 3)
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
@@ -193,7 +193,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("leaves before the first swing, pays nothing, and the hostile stays standing", () => {
-    const season = loadRoads([{ id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
+    const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 }], 6, 3)
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
 
@@ -216,8 +216,8 @@ describe("wake in the last settlement", () => {
 
   it("refuses to start a fight that is already underway", () => {
     const season = loadRoads([
-      { id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 2 },
-      { id: "bandit", placeId: "jordan", hitpoints: 4, defeatGrant: 3 },
+      { id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 5, defeatGrant: 2 },
+      { id: "bandit", kind: "bandit", placeId: "jordan", hitpoints: 4, defeatGrant: 3 },
     ])
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
@@ -233,7 +233,7 @@ describe("wake in the last settlement", () => {
 
   it("wakes in the last settlement when current Hitpoints reach 0", () => {
     const season = loadRoads(
-      [{ id: "wolf", placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
+      [{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 5, defeatGrant: 4 }],
       10,
       4,
       2,
@@ -297,7 +297,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("takes the defeat loss and stops the purse at zero", () => {
-    const wolf = { id: "wolf", placeId: "jordan", hitpoints: 4, defeatGrant: 2 } as const
+    const wolf = { id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 4, defeatGrant: 2 } as const
 
     const short = loadRoads([wolf], 2, 3, 1, 5)
     assert.deepEqual(short.enter("jordan"), { ok: true })
@@ -334,7 +334,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("keeps the fight underway when the hostile's damage leaves Hitpoints above 0", () => {
-    const season = loadRoads([{ id: "wolf", placeId: "jordan", hitpoints: 6, defeatGrant: 2 }], 8, 0, 5, 3)
+    const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 6, defeatGrant: 2 }], 8, 0, 5, 3)
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
     const swung = season.swing(
@@ -354,7 +354,7 @@ describe("wake in the last settlement", () => {
   })
 
   it("stays for the fall and does not take the defeat loss", () => {
-    const season = loadRoads([{ id: "wolf", placeId: "jordan", hitpoints: 2, defeatGrant: 4 }], 9, 1, 4, 3)
+    const season = loadRoads([{ id: "wolf", kind: "animal", huntingExperience: 1, placeId: "jordan", hitpoints: 2, defeatGrant: 4 }], 9, 1, 4, 3)
     assert.deepEqual(season.enter("jordan"), { ok: true })
     assert.deepEqual(season.face("wolf"), { ok: true })
     const swung = season.swing(

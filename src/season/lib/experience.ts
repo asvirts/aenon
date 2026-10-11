@@ -69,3 +69,5 @@ export function experienceInsideBand(
     curve,
   )
 }
+
+export const experienceAfterDefeat = experienceInsideBand

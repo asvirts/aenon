@@ -1,5 +1,6 @@
 import type { SeasonState } from "./begin.ts"
 import { experienceInsideBand } from "./experience.ts"
+import { clearCarcasses, leaveCarcass, receiveDrop, type Drop } from "./hunt.ts"
 import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
 
 export type EnterResult = { ok: true } | { ok: false; reason: "not-present" | "fight-underway" }
@@ -22,6 +23,7 @@ export function enterPlace(
   const place = definition.places.find((candidate) => candidate.id === placeId)
   if (!place) return { ok: false, reason: "not-present" }
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
+  if (place.id !== state.placeId) clearCarcasses(state)
   state.fight = null
   state.placeId = place.id
   if (place.kind === "settlement") {
@@ -63,6 +65,7 @@ export function swingAtHostile(
   curve: ExperienceCurve,
   rollDamage: () => number,
   rollHostileDamage: () => number = () => 0,
+  rollDrop: () => Drop = () => ({ coin: 0, gear: [] }),
 ): SwingResult {
   if (!state.fight) return { ok: false, reason: "not-facing" }
   const damage = rollDamage()
@@ -92,6 +95,8 @@ export function swingAtHostile(
       hostile.defeatGrant,
     )
     state.fallenHostiles = [...state.fallenHostiles, hostile.id]
+    leaveCarcass(state, hostile)
+    receiveDrop(state, rollDrop())
   }
   state.fight = null
   return { ok: true, damage, hostileFell: true }
@@ -103,4 +108,5 @@ function wakeInLastSettlement(state: SeasonState, defeatLoss: number): void {
   state.coin = Math.max(0, state.coin - defeatLoss)
   state.outing = "closed"
   state.fight = null
+  clearCarcasses(state)
 }

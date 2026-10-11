@@ -36,6 +36,18 @@ export type Fight = {
   phase: "facing" | "underway"
 }
 
+export type HuntMaterial = "meat" | "hide" | "bone"
+
+export type Carcass = {
+  placeId: string
+  hostileId: string
+}
+
+export type Pickup = {
+  placeId: string
+  gearId: string
+}
+
 export type Outing = "open" | "closed"
 
 export const nivBibleId = 111 as const
@@ -71,6 +83,8 @@ export type SeasonState = {
   outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
+  carcasses: readonly Carcass[]
+  pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
@@ -91,6 +105,8 @@ export type Adventurer = {
   outing: Outing
   fight: Fight | null
   fallenHostiles: readonly string[]
+  carcasses: readonly Carcass[]
+  pickups: readonly Pickup[]
   mealBuff: null
   referenceJournal: readonly ReferenceFiling[]
   playedSetScenes: readonly []
@@ -120,6 +136,8 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     outing: "closed",
     fight: null,
     fallenHostiles: [],
+    carcasses: [],
+    pickups: [],
     mealBuff: null,
     referenceJournal: [],
     playedSetScenes: [],
@@ -155,6 +173,8 @@ export function presentAdventurer(
     outing: state.outing,
     fight: state.fight === null ? null : { ...state.fight },
     fallenHostiles: [...state.fallenHostiles],
+    carcasses: state.carcasses.map((carcass) => ({ ...carcass })),
+    pickups: state.pickups.map((pickup) => ({ ...pickup })),
     mealBuff: state.mealBuff,
     referenceJournal: state.referenceJournal.map((filing) => ({ ...filing })),
     playedSetScenes: [...state.playedSetScenes],

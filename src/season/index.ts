@@ -4,7 +4,9 @@ import {
   presentAdventurer,
   trainedSkills,
   type Adventurer,
+  type Carcass,
   type Fight,
+  type Pickup,
   type QuestJournalEntry,
   type QuestProgress,
   type ReferenceFiling,
@@ -22,6 +24,7 @@ import {
   type SwingResult,
 } from "./lib/fight.ts"
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
+import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import {
   lookAtPerson,
   presentQuestJournal,
@@ -58,10 +61,11 @@ export type {
   Spot,
   SpotSkill,
 } from "./lib/types.ts"
-export type { Adventurer, Fight, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
+export type { Adventurer, Carcass, Fight, Pickup, QuestJournalEntry, QuestProgress, ReferenceFiling, SeasonState }
 export type { EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }
+export type { Drop, HuntResult, PickUpResult }
 export type { LookResult, QuestLoadFailure, SpeakResult }
 
 export type Season = {
@@ -70,11 +74,17 @@ export type Season = {
   enter: (placeId: string) => EnterResult
   face: (hostileId: string) => FaceResult
   stepBack: () => StepBackResult
-  swing: (rollDamage: () => number, rollHostileDamage?: () => number) => SwingResult
+  swing: (
+    rollDamage: () => number,
+    rollHostileDamage?: () => number,
+    rollDrop?: () => Drop,
+  ) => SwingResult
   read: (scriptureObjectId: string) => ReadResult
   gather: (spotId: string) => GatherResult
   look: (personId: string) => LookResult
   speak: (personId: string) => SpeakResult
+  hunt: () => HuntResult
+  pickUp: (gearId: string) => PickUpResult
 }
 
 export type SeasonLoad =
@@ -116,12 +126,14 @@ export function loadSeason(
       enter: (placeId) => enterPlace(seasonState, definition, placeId),
       face: (hostileId) => faceHostile(seasonState, definition, hostileId),
       stepBack: () => stepBack(seasonState),
-      swing: (rollDamage, rollHostileDamage) =>
-        swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage),
+      swing: (rollDamage, rollHostileDamage, rollDrop) =>
+        swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop),
       read: (scriptureObjectId) => readScripture(seasonState, definition, curve, scriptureObjectId),
       gather: (spotId) => gatherAtSpot(seasonState, definition, curve, spotId),
       look: (personId) => lookAtPerson(seasonState, definition, curve, personId),
       speak: (personId) => speakToPerson(seasonState, definition, curve, personId),
+      hunt: () => hunt(seasonState, definition, curve),
+      pickUp: (gearId) => pickUp(seasonState, definition, gearId),
     },
   }
 }

@@ -5,5 +5,12 @@
   "sameShotStates": true,
   "storedSaveAndPreferencesByteIdentical": true,
   "fightTarget": "salim-threat-0",
-  "johnAnimation": "Idle"
+  "johnAnimation": "Idle",
+  "productionReviewQuery": {
+    "measure": "undefined",
+    "query": "?review",
+    "ready": true,
+    "reviewShot": "undefined"
+  },
+  "storedValuesByteIdenticalAcrossReload": true
 }

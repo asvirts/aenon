@@ -1,17 +1,36 @@
 import * as Phaser from "phaser"
-import { loadSeason, type Season } from "../season/index.ts"
-import { demoCurve, demoDefinition } from "./demoDefinition.ts"
+import {
+  adventurerLevelCap,
+  experienceForLevel,
+  loadSeason,
+  trainedSkillLevelCap,
+  type ExperienceCurve,
+  type Season,
+} from "../season/index.ts"
+import { demoCurves, demoDefinition } from "./demoDefinition.ts"
+import { createTerrain } from "./art/terrain.ts"
+import { addHouse, createStructureTextures } from "./art/structures.ts"
+import { UIScene } from "./ui.ts"
+import { BIPED_ART_LAYOUT, createIllustratedSprites } from "./art/sprites.ts"
 
-const SAVE_KEY = "aenon-season-save-v1"
+const SAVE_KEY = "aenon-season-save-v2"
 // Scrolling world: Aenon west of the river, the Jordan wilderness east.
 // The viewport sees a portion; the camera follows the Adventurer, zoomed in.
 const WORLD_W = 3200
 const WORLD_H = 2000
-const RIVER_WEST = 1600
-const RIVER_EAST = 1680
 const MID_X = 1640
-const HUD_TOP = 116
-const ZOOM = 1.2
+const ZOOM = 1.05
+
+function levelWithProgress(experience: number, level: number, curve: ExperienceCurve, cap: number): string {
+  if (level >= cap) return String(level)
+  const start = experienceForLevel(curve, level)
+  const next = experienceForLevel(curve, level + 1)
+  return `${level} (${experience - start}/${next - start})`
+}
+
+function field(label: string, value: string): string {
+  return `${label.padEnd(16)}${value}`
+}
 
 /**
  * Isometric projection (2:1 dimetric). Game logic thinks in logical
@@ -49,14 +68,18 @@ function bootSeason(): Season | { error: string } {
   // The save is the rules module's exported state; anything else starts fresh.
   const loaded =
     saved !== undefined && typeof saved === "object" && saved !== null
-      ? loadSeason(demoDefinition, demoCurve, saved as never)
-      : loadSeason(demoDefinition, demoCurve)
+      ? loadSeason(demoDefinition, demoCurves, saved as never)
+      : loadSeason(demoDefinition, demoCurves)
   if (!loaded.ok) return { error: loaded.reason }
   return loaded.season
 }
 
 function passageNode(): HTMLElement | null {
   return window.document.getElementById("passage")
+}
+
+function clearBottomPanel(): void {
+  passageNode()?.replaceChildren()
 }
 
 function showNotice(title: string, body: string): void {
@@ -789,11 +812,11 @@ const STALL_ROWS = [
   "..TT........................TT..",
   "..TT........................TT..",
   "..TTO......................OTT..",
-  "..TTOOFFFFFFFFYYYYGGGGGFFFOOTT..",
-  "..TTOOFFFFFFFFYYYYGGGGGFFFOOTT..",
+  "..TTOOFFFFFFYYYYYYYYGGGGGGOOTT..",
+  "..TTOOYYYYYYYFFFFFFGGGGGGGOOTT..",
   "..TTKKKKKKKKKKKKKKKKKKKKKKKKTT..",
-  "..TTKKKOOOKKKOOOKKKOOOKKKKKKTT..",
-  "..TTKKKOOOKKKOOOKKKOOOKKKKKKTT..",
+  "..TTOOOKKKKOOOKKKKOOOKKKKOOOTT..",
+  "..TTOOOKKKKOOOKKKKOOOKKKKOOOTT..",
   "..TTKKKKKKKKKKKKKKKKKKKKKKKKTT..",
   "..TTTOOOOOOOOOOOOOOOOOOOOTTT....",
   "..TTT...........................",
@@ -990,16 +1013,17 @@ const BARREL_ROWS = [
 ]
 
 const CRATE_ROWS = [
-  ".OOOOOOOOOOOO.",
-  ".OKKKKKKKKKKO.",
-  ".OKKOOOOOOKKO.",
-  ".OKOKKKKKOKKO.",
-  ".OKOKOOOOOKKO.",
-  ".OKOKOOOOOKKO.",
-  ".OKOKKKKKOKKO.",
-  ".OKKOOOOOOKKO.",
-  ".OKKKKKKKKKKO.",
-  ".OOOOOOOOOOOO.",
+  "....OOOOOOOO....",
+  "...OKKKKKKKKO...",
+  "...OKKKKKKKKO...",
+  "...OKKKKKKKKO...",
+  "..OOKKKKKKKKOO..",
+  "..OKKOOOOOOKKO..",
+  "..OKOKDDDDOKKO..",
+  "..OKOKDDDDOKKO..",
+  "..OKKOOOOOOKKO..",
+  "..OKKKKKKKKKKO..",
+  "..OOOOOOOOOOOO..",
 ]
 
 const LAMP_ROWS = [
@@ -1077,15 +1101,15 @@ class BipedRig {
     this.lx = x
     this.ly = y
     this.root = scene.add.container(isoX(x, y), isoY(x, y))
-    this.jumper = scene.add.container(0, 0)
+    this.jumper = scene.add.container(0, -18)
     this.bob = scene.add.container(0, 0)
     this.root.add(this.jumper)
     this.jumper.add(this.bob)
     this.torso = scene.add.sprite(0, 0, textures.torso)
-    this.armL = scene.add.sprite(-9, 3, textures.arm).setOrigin(0.5, 0.12)
-    this.armR = scene.add.sprite(9, 3, textures.arm).setOrigin(0.5, 0.12)
-    this.legL = scene.add.sprite(-4.5, 9, textures.leg).setOrigin(0.5, 0)
-    this.legR = scene.add.sprite(4.5, 9, textures.leg).setOrigin(0.5, 0)
+    this.armL = scene.add.sprite(-BIPED_ART_LAYOUT.armX, BIPED_ART_LAYOUT.armY, textures.arm).setOrigin(0.5, 0.12)
+    this.armR = scene.add.sprite(BIPED_ART_LAYOUT.armX, BIPED_ART_LAYOUT.armY, textures.arm).setOrigin(0.5, 0.12)
+    this.legL = scene.add.sprite(-BIPED_ART_LAYOUT.legX, BIPED_ART_LAYOUT.legY, textures.leg).setOrigin(0.5, 0)
+    this.legR = scene.add.sprite(BIPED_ART_LAYOUT.legX, BIPED_ART_LAYOUT.legY, textures.leg).setOrigin(0.5, 0)
     this.bob.add([this.legL, this.legR, this.torso, this.armL, this.armR])
     this.root.setScale(scale)
     this.root.setDepth(isoDepth(x, y))
@@ -1146,25 +1170,25 @@ class BipedRig {
 
   private pose(): void {
     const swing = Math.sin(this.phase) * this.blend
-    this.legL.y = 9 + swing * 2.2
-    this.legR.y = 9 - swing * 2.2
-    this.armL.y = 3 - swing * 2.2
-    this.armR.y = 3 + swing * 2.2
-    this.bob.y = -Math.abs(Math.cos(this.phase)) * 1.6 * this.blend
+    this.legL.y = BIPED_ART_LAYOUT.legY + swing * 1.3
+    this.legR.y = BIPED_ART_LAYOUT.legY - swing * 1.3
+    this.armL.y = BIPED_ART_LAYOUT.armY - swing * 1.4
+    this.armR.y = BIPED_ART_LAYOUT.armY + swing * 1.4
+    this.bob.y = -Math.abs(Math.cos(this.phase)) * 0.65 * this.blend
     this.bob.scaleY = 1 - 0.03 * Math.abs(swing)
   }
 
   /** Quick visual jab that never touches logic position. */
   lunge(direction: 1 | -1): void {
     this.scene.tweens.killTweensOf(this.jumper)
-    this.jumper.setPosition(0, 0)
+    this.jumper.setPosition(0, -18)
     this.scene.tweens.add({ targets: this.jumper, x: direction * 13, duration: 85, yoyo: true, ease: "quad.out" })
   }
 
   hop(height = 7): void {
     this.scene.tweens.killTweensOf(this.jumper)
-    this.jumper.setPosition(0, 0)
-    this.scene.tweens.add({ targets: this.jumper, y: -height, duration: 130, yoyo: true, ease: "quad.out" })
+    this.jumper.setPosition(0, -18)
+    this.scene.tweens.add({ targets: this.jumper, y: -18 - height, duration: 130, yoyo: true, ease: "quad.out" })
   }
 }
 
@@ -1298,163 +1322,13 @@ class QuadRig {
 /** Minimal walker surface so bipeds and quads share wander logic. */
 type WalkerVisual = {
   readonly root: Phaser.GameObjects.Container
+  readonly x: number
+  readonly y: number
+  setPosition(x: number, y: number): void
   setFacing(left: boolean): void
   step(distance: number, delta: number, cadence?: number): void
   rest(time: number, delta: number): void
   setDepth(): void
-}
-
-/** Screen-fixed interface: HUD, banners, minimap, vignette.
- *  Lives in its own scene so camera zoom and scroll never touch it. */
-class UIScene extends Phaser.Scene {
-  private hud!: Phaser.GameObjects.Text
-  private message!: Phaser.GameObjects.Text
-  private bannerTitle!: Phaser.GameObjects.Text
-  private bannerSub!: Phaser.GameObjects.Text
-  private minimapPlayer!: Phaser.GameObjects.Rectangle
-  private minimapWolf!: Phaser.GameObjects.Rectangle
-  private pendingHud: string[] | null = null
-  private pendingMessage: string | null = null
-  private pendingBanner: { title: string; sub: string } | null = null
-
-  constructor() {
-    super("ui")
-  }
-
-  private gameScene(): AenonScene | null {
-    try {
-      const scene = this.scene.get("aenon") as AenonScene | null
-      return scene && scene.player ? scene : null
-    } catch {
-      return null
-    }
-  }
-
-  private minimapXY(x: number, y: number): { x: number; y: number } {
-    return { x: 792 + x * 0.05, y: 484 + y * 0.05 }
-  }
-
-  create(): void {
-    this.add.rectangle(8, 8, 776, 100, 0x000000).setOrigin(0, 0).setFillStyle(0x101820, 1).setDepth(19)
-    this.hud = this.add
-      .text(16, 12, "", { color: "#ffffff", fontSize: "14px", lineSpacing: 4 })
-      .setDepth(20)
-    this.message = this.add
-      .text(16, 500, "", { color: "#ffe9a8", fontSize: "14px" })
-      .setDepth(20)
-    this.add
-      .rectangle(8, 492, 660, 34, 0x000000)
-      .setOrigin(0, 0)
-      .setFillStyle(0x101820, 1)
-      .setDepth(19)
-    this.message.setDepth(20)
-
-    // Cinematic vignette.
-    const vignette = this.add.graphics().setDepth(18)
-    vignette.fillStyle(0x06090d, 0.3)
-    vignette.fillRect(0, 0, 960, 40)
-    vignette.fillRect(0, 560, 960, 40)
-    vignette.fillRect(0, 0, 40, 600)
-    vignette.fillRect(920, 0, 40, 600)
-
-    // Region banner cards.
-    this.bannerTitle = this.add
-      .text(480, 140, "", {
-        fontSize: "30px",
-        fontStyle: "bold",
-        color: "#fff8e6",
-        backgroundColor: "#00000088",
-        padding: { x: 14, y: 8 },
-      })
-      .setOrigin(0.5)
-      .setDepth(60)
-      .setAlpha(0)
-    this.bannerSub = this.add
-      .text(480, 186, "", {
-        fontSize: "15px",
-        color: "#ffe9a8",
-        backgroundColor: "#00000088",
-        padding: { x: 10, y: 5 },
-      })
-      .setOrigin(0.5)
-      .setDepth(60)
-      .setAlpha(0)
-
-    // Minimap: regions, river, POIs, white Adventurer, red wolf.
-    const frame = this.add.graphics().setDepth(60)
-    frame.fillStyle(0x000000, 0.55)
-    frame.fillRect(788, 480, 168, 108)
-    frame.fillStyle(0x8a734f, 0.5)
-    frame.fillRect(792, 484, 80, 100)
-    frame.fillStyle(0x274156, 0.6)
-    frame.fillRect(872, 484, 80, 100)
-    frame.fillStyle(0x9fc6d8, 0.9)
-    frame.fillRect(871, 484, 3, 100)
-    const dot = (x: number, y: number, color: number): void => {
-      const at = this.minimapXY(x, y)
-      this.add.rectangle(at.x, at.y, 4, 4, color).setDepth(61)
-    }
-    dot(1050, 700, 0xf2c14e)
-    dot(420, 1270, 0x9a7fd0)
-    dot(1470, 950, 0x3fae5f)
-    dot(852, 1460, 0xe08a3c)
-    dot(2500, 700, 0x7fb8d4)
-    dot(800, 950, 0xfff8e6)
-    dot(830, 560, 0xc4a06a)
-    this.minimapPlayer = this.add.rectangle(0, 0, 5, 5, 0xffffff).setDepth(62)
-    this.minimapWolf = this.add.rectangle(0, 0, 5, 5, 0xd95f5f).setDepth(62)
-
-    const game = this.gameScene()
-    if (game) {
-      this.setHud(game.hudLines())
-      this.say(game.messageLine)
-    }
-    if (this.pendingHud) this.setHud(this.pendingHud)
-    if (this.pendingMessage) this.say(this.pendingMessage)
-    if (this.pendingBanner) this.showBanner(this.pendingBanner.title, this.pendingBanner.sub)
-  }
-
-  setHud(lines: string[]): void {
-    if (!this.hud) {
-      this.pendingHud = lines
-      return
-    }
-    this.pendingHud = null
-    this.hud.setText(lines.join("\n"))
-  }
-
-  say(line: string): void {
-    if (!this.message) {
-      this.pendingMessage = line
-      return
-    }
-    this.pendingMessage = null
-    this.message.setText(line)
-  }
-
-  showBanner(title: string, sub: string): void {
-    if (!this.bannerTitle) {
-      this.pendingBanner = { title, sub }
-      return
-    }
-    this.bannerTitle.setText(title)
-    this.bannerSub.setText(sub)
-    for (const banner of [this.bannerTitle, this.bannerSub]) {
-      this.tweens.killTweensOf(banner)
-      banner.setAlpha(0)
-    }
-    this.tweens.add({ targets: [this.bannerTitle, this.bannerSub], alpha: 1, duration: 450, ease: "quad.out" })
-    this.tweens.add({ targets: [this.bannerTitle, this.bannerSub], alpha: 0, duration: 700, delay: 2400 })
-  }
-
-  override update(): void {
-    const game = this.gameScene()
-    if (!game || !this.minimapPlayer) return
-    const player = this.minimapXY(game.player.x, game.player.y)
-    this.minimapPlayer.setPosition(player.x, player.y)
-    const wolf = this.minimapXY(game.wolf.x, game.wolf.y)
-    this.minimapWolf.setPosition(wolf.x, wolf.y)
-  }
 }
 
 class AenonScene extends Phaser.Scene {
@@ -1474,6 +1348,7 @@ class AenonScene extends Phaser.Scene {
   private slash!: Phaser.GameObjects.Image
   private waves: Phaser.GameObjects.Image[] = []
   private trees: Phaser.GameObjects.Sprite[] = []
+  private landmarkTags: Array<{ x: number; y: number; text: Phaser.GameObjects.Text }> = []
   private wanderers: Wanderer[] = []
   private butterflies: Butterfly[] = []
   private fishes: Phaser.GameObjects.Sprite[] = []
@@ -1506,19 +1381,19 @@ class AenonScene extends Phaser.Scene {
     this.hereId = this.season.adventurer().placeId
 
     // Overlay interface scene, started explicitly for a deterministic order.
-    // Moved above the world scene so HUD, banners, and minimap always win.
+    // Moved above the world scene so the character panel, banners, and minimap always win.
     this.scene.add("ui", UIScene, true)
     this.scene.moveUp("ui")
     this.ui = this.scene.get("ui") as UIScene
 
     this.createArt()
+    createIllustratedSprites(this)
+    createStructureTextures(this)
 
     // World: Aenon settlement (west of the river) and the Jordan
     // wilderness (east). One baked diamond floor; the camera follows the
-    // Adventurer and the HUD lives in the overlay scene.
-    this.add.rectangle(1600, 650, 3440, 1540, 0x1d3a24).setOrigin(0.5).setDepth(-200)
-    this.add.text(isoX(80, 250), isoY(80, 250), "Aenon — settlement", { color: "#f5eeda" }).setDepth(6000)
-    this.add.text(isoX(1760, 250), isoY(1760, 250), "The Jordan — wilderness", { color: "#dceef5" }).setDepth(6000)
+    // Adventurer. The character panel lives in the overlay scene.
+    this.add.rectangle(1600, 650, 3440, 1540, 0x435b3e).setOrigin(0.5).setDepth(-200)
 
     this.buildAenonDressing()
     this.buildJordanDressing()
@@ -1532,8 +1407,8 @@ class AenonScene extends Phaser.Scene {
       { x: 200, y: 650, tex: "tree-a" },
     ]
     for (const [index, spot] of treeSpots.entries()) {
-      const tree = this.add.sprite(spot.x, spot.y, spot.tex).setScale(ART_SCALE)
-      tree.setDepth(spot.y)
+      const tree = this.add.sprite(isoX(spot.x, spot.y), isoY(spot.x, spot.y), spot.tex).setScale(ART_SCALE).setOrigin(0.5, 0.94)
+      tree.setDepth(isoDepth(spot.x, spot.y))
       this.trees.push(tree)
       this.tweens.add({
         targets: tree,
@@ -1547,8 +1422,8 @@ class AenonScene extends Phaser.Scene {
     }
 
     // Reeds: the scripture object, by the west bank of the river.
-    this.reeds = this.add.sprite(1470, 950, "reeds").setScale(ART_SCALE)
-    this.reeds.setDepth(this.reeds.y)
+    this.reeds = this.add.sprite(isoX(1470, 950), isoY(1470, 950), "reeds").setScale(ART_SCALE).setOrigin(0.5, 0.94)
+    this.reeds.setDepth(isoDepth(1470, 950))
 
     // John + staff east of the plaza, on the trail to the river.
     this.john = new BipedRig(
@@ -1559,7 +1434,7 @@ class AenonScene extends Phaser.Scene {
       ART_SCALE,
     )
     this.john.setDepth()
-    const staff = this.add.sprite(15, 8, "john-staff").setOrigin(0.5, 0.9)
+    const staff = this.add.sprite(9, 17, "john-staff").setOrigin(0.5, 0.9)
     this.john.bob.add(staff)
     this.tweens.add({ targets: staff, rotation: 0.05, duration: 1600, yoyo: true, repeat: -1, ease: "sine.inout" })
     this.merchant = new BipedRig(
@@ -1570,16 +1445,16 @@ class AenonScene extends Phaser.Scene {
       ART_SCALE,
     )
     this.merchant.setDepth()
-    this.add.image(1050, 730, "shadow").setDepth(2).setAlpha(0.6)
-    this.add.image(420, 1300, "shadow").setDepth(2).setAlpha(0.6)
+    this.add.image(isoX(1050, 700), isoY(1050, 700), "shadow").setDepth(2).setAlpha(0.6)
+    this.add.image(isoX(420, 1270), isoY(420, 1270), "shadow").setDepth(2).setAlpha(0.6)
 
     // Camp: two tents + campfire with breathing glow, south of the plaza.
-    const tent = this.add.sprite(800, 1420, "tent").setScale(2)
-    tent.setDepth(1420)
-    const tent2 = this.add.sprite(905, 1440, "tent").setScale(1.7)
-    tent2.setDepth(1440)
-    this.fireGlow = this.add.image(852, 1475, "glow").setDepth(1474).setAlpha(0.5).setScale(2.4)
-    this.fire = this.add.sprite(852, 1475, "fire-a").setScale(ART_SCALE).setDepth(1476)
+    const tent = this.add.sprite(isoX(800, 1420), isoY(800, 1420), "tent").setScale(3).setOrigin(0.5, 0.9)
+    tent.setDepth(isoDepth(800, 1420))
+    const tent2 = this.add.sprite(isoX(905, 1440), isoY(905, 1440), "tent").setScale(2.4).setOrigin(0.5, 0.9)
+    tent2.setDepth(isoDepth(905, 1440))
+    this.fireGlow = this.add.image(isoX(852, 1475), isoY(852, 1475), "glow").setDepth(isoDepth(852, 1475) - 1).setAlpha(0.5).setScale(2.4)
+    this.fire = this.add.sprite(isoX(852, 1475), isoY(852, 1475), "fire-a").setScale(ART_SCALE).setOrigin(0.5, 0.9).setDepth(isoDepth(852, 1475))
     this.time.addEvent({
       delay: 280,
       loop: true,
@@ -1625,24 +1500,24 @@ class AenonScene extends Phaser.Scene {
 
     // Soft shadows follow the walkers.
     this.playerShadow = this.add.image(0, 0, "shadow").setDepth(-10).setAlpha(0.8)
-    this.wolfShadow = this.add.image(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 20, "shadow").setDepth(-10).setAlpha(0.8)
+    this.wolfShadow = this.add.image(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 10, "shadow").setDepth(-10).setAlpha(0.8)
     this.wolfTag.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) - 42)
 
     // Floating name tags keep the scene readable.
     const tag = (x: number, y: number, label: string): void => {
-      this.add
-        .text(isoX(x, y), isoY(x, y), label, { color: "#fff8e6", fontSize: "11px", backgroundColor: "#00000066", padding: { x: 4, y: 2 } })
+      const text = this.add
+        .text(isoX(x, y), isoY(x, y) - 35, label, { color: "#fff8e6", fontFamily: "Georgia, serif", fontSize: "11px", backgroundColor: "#273a2bcc", padding: { x: 7, y: 3 } })
         .setOrigin(0.5)
         .setDepth(6000)
+      this.landmarkTags.push({ x, y, text })
     }
-    tag(330, 448, "timber-stand")
-    tag(1470, 912, "reeds · read")
+    tag(330, 448, "Olive grove · G")
+    tag(1470, 912, "River reeds · R")
     tag(1050, 652, "John")
-    tag(420, 1232, "merchant · rope")
-    tag(852, 1390, "camp")
-    tag(2500, 648, "cache pool")
-    tag(800, 902, "well")
-    tag(1150, 1298, "sheep pen")
+    tag(420, 1232, "Merchant · B")
+    tag(852, 1390, "Travelers’ camp")
+    tag(2500, 648, "Spring")
+    tag(1150, 1298, "Sheepfold")
 
     const start = this.hereId === "jordan" ? { x: 2200, y: 1050 } : { x: 650, y: 1050 }
     this.player = new BipedRig(
@@ -1653,7 +1528,7 @@ class AenonScene extends Phaser.Scene {
       ART_SCALE,
     )
     this.player.setDepth()
-    this.playerShadow.setPosition(isoX(start.x, start.y), isoY(start.x, start.y) + 32)
+    this.playerShadow.setPosition(isoX(start.x, start.y), isoY(start.x, start.y))
 
     // The camera follows the Adventurer through projected space.
     const camera = this.cameras.main
@@ -1707,13 +1582,12 @@ class AenonScene extends Phaser.Scene {
     embers.setDepth(7000)
 
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      // Screen-space gate keeps HUD clicks from moving the Adventurer.
+      // Clicks on the character panel stay on the panel.
       // Unproject through the camera into logical world coordinates.
-      if (pointer.y > HUD_TOP) {
-        const camera = this.cameras.main
-        const goal = isoInverse(camera.scrollX + pointer.x / camera.zoom, camera.scrollY + pointer.y / camera.zoom)
-        this.target = { x: goal.x, y: goal.y }
-      }
+      if (this.ui.interfaceCovers(pointer.x, pointer.y)) return
+      const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y)
+      const goal = isoInverse(world.x, world.y)
+      this.target = { x: goal.x, y: goal.y }
     })
 
     const keyboard = this.input.keyboard
@@ -1726,9 +1600,16 @@ class AenonScene extends Phaser.Scene {
       keyboard.on("keydown-SPACE", () => this.doSwing())
       keyboard.on("keydown-H", () => this.doHunt())
       keyboard.on("keydown-R", () => this.doRead())
-      keyboard.on("keydown-J", () => this.doLookJohn())
+      keyboard.on("keydown-J", (event: KeyboardEvent) => {
+        if (event.repeat) return
+        this.toggleJournal()
+      })
       keyboard.on("keydown-T", () => this.doSpeakJohn())
       keyboard.on("keydown-B", () => this.doBuyRope())
+      keyboard.on("keydown-C", (event: KeyboardEvent) => {
+        if (event.repeat) return
+        this.toggleCharacter()
+      })
     }
 
     // The rigs breathe on their own; no positioned tweens needed here.
@@ -1745,17 +1626,17 @@ class AenonScene extends Phaser.Scene {
     if (this.hereId === "jordan") this.showBanner("The Jordan", "wilderness · the wolf roams here")
     else this.showBanner("Aenon", "where John is baptizing")
 
-    showNotice(
-      "Passage panel",
-      "Read the reeds at Aenon (R) to file John 1:29. The text + copyright load live from the passage server.",
+    clearBottomPanel()
+    this.refreshCharacter()
+    this.say(
+      `You wake in ${this.hereId === "jordan" ? "the Jordan." : "Aenon, where John is baptizing."} Press C for your character, J for your journal.`,
     )
-    this.refreshHud()
-    this.say(`You wake in ${this.hereId === "jordan" ? "the Jordan." : "Aenon, where John is baptizing."}`)
   }
 
   private createArt(): void {
     pixelTexture(this, "tree-a", TREE_A, TREE_PALETTE)
     pixelTexture(this, "tree-b", TREE_B, TREE_PALETTE)
+    pixelTexture(this, "pine", PINE_A, TREE_PALETTE)
     pixelTexture(this, "reeds", REEDS_ROWS, { C: 0xe8d9a0, G: 0x3fae5f, D: 0x257a48 })
     pixelTexture(this, "tent", TENT_ROWS, TENT_PALETTE)
     pixelTexture(this, "fire-a", FIRE_A, FIRE_PALETTE)
@@ -1819,8 +1700,8 @@ class AenonScene extends Phaser.Scene {
     if (!this.textures.exists("shadow")) {
       const shadow = this.make.graphics({ x: 0, y: 0 })
       shadow.fillStyle(0x000000, 0.28)
-      shadow.fillEllipse(0, 0, 26, 9)
-      shadow.generateTexture("shadow", 26, 9)
+      shadow.fillEllipse(20, 8, 38, 13)
+      shadow.generateTexture("shadow", 40, 16)
       shadow.destroy()
     }
 
@@ -1896,7 +1777,7 @@ class AenonScene extends Phaser.Scene {
       { torso: "rig-vila-t", arm: "rig-vila-arm", leg: "rig-vila-leg" },
       ART_SCALE,
     )
-    this.addWanderer(vilA, 650, 950, 850, 1100, 34, 2.5, "villager", false)
+    this.addWanderer(vilA, 650, 950, 850, 1100, 34, 1.2, null, false)
     const vilB = new BipedRig(
       this,
       420,
@@ -1904,7 +1785,7 @@ class AenonScene extends Phaser.Scene {
       { torso: "rig-vilb-t", arm: "rig-vilb-arm", leg: "rig-vilb-leg" },
       ART_SCALE,
     )
-    this.addWanderer(vilB, 280, 560, 1220, 1400, 34, 2.5, "villager", false)
+    this.addWanderer(vilB, 280, 560, 1220, 1400, 34, 1.2, null, false)
     for (const [x, y] of [
       [1130, 1340],
       [1170, 1360],
@@ -1934,7 +1815,8 @@ class AenonScene extends Phaser.Scene {
       this.fishes.push(fish)
       this.tweens.add({
         targets: fish,
-        y: fish.y + 90,
+        x: isoX(x, y + 180),
+        y: isoY(x, y + 180),
         duration: 4200,
         yoyo: true,
         repeat: -1,
@@ -2008,7 +1890,7 @@ class AenonScene extends Phaser.Scene {
       maxX,
       minY,
       maxY,
-      target: { x: visual.root.x, y: visual.root.y },
+      target: { x: visual.x, y: visual.y },
       speed,
       cadence,
       label: tag,
@@ -2055,7 +1937,7 @@ class AenonScene extends Phaser.Scene {
 
   private updateWanderers(time: number, delta: number): void {
     for (const walker of this.wanderers) {
-      const pos = walker.visual.root
+      const pos = walker.visual
       const dx = walker.target.x - pos.x
       const dy = walker.target.y - pos.y
       const distance = Math.hypot(dx, dy)
@@ -2069,9 +1951,8 @@ class AenonScene extends Phaser.Scene {
         const step = (walker.speed * delta) / 1000
         const moveX = (dx / distance) * Math.min(step, distance)
         const moveY = (dy / distance) * Math.min(step, distance)
-        pos.x += moveX
-        pos.y += moveY
-        if (Math.abs(dx) > 4) walker.visual.setFacing(dx < 0)
+        walker.visual.setPosition(pos.x + moveX, pos.y + moveY)
+        if (Math.abs(dx) > 4) walker.visual.setFacing(dx - dy < 0)
         walker.visual.step(Math.hypot(moveX, moveY), delta, walker.cadence)
       }
       walker.visual.setDepth()
@@ -2105,108 +1986,15 @@ class AenonScene extends Phaser.Scene {
     }
   }
 
-  /** Bakes the whole world floor once: diamond tiles, river, trails, plaza,
-   *  pools. One static quad instead of thousands of objects. */
+  /** Bake a continuous ground plane once; dressing remains depth-sorted. */
   private bakeGround(): void {
-    const graphics = this.make.graphics({ x: 0, y: 0 })
-    const random = mulberry32(7)
-    const shadesA = [0x8a734f, 0x877350, 0x8d7752, 0x847052]
-    const shadesB = [0x274156, 0x294659, 0x253e50, 0x2b4a60]
-    // Diamond field, one diamond per 48px logical cell.
-    for (let gx = 0; gx < 67; gx += 1) {
-      for (let gy = 0; gy < 42; gy += 1) {
-        const cx = isoX(gx * 48 + 24, gy * 48 + 24)
-        const cy = isoY(gx * 48 + 24, gy * 48 + 24)
-        const west = gx * 48 + 24 < RIVER_WEST
-        const shades = west ? shadesA : shadesB
-        graphics.fillStyle(shades[Math.floor(random() * shades.length)], 1)
-        graphics.fillPoints([v2(cx, cy - 12), v2(cx + 24, cy), v2(cx, cy + 12), v2(cx - 24, cy)], true)
-      }
-    }
-    // Speckle.
-    for (let i = 0; i < 1600; i += 1) {
-      const x = random() * WORLD_W
-      const y = random() * WORLD_H
-      const west = x < RIVER_WEST
-      graphics.fillStyle(west ? (random() < 0.5 ? 0x6f5a3c : 0xa89064) : 0x1b2f42, 0.5)
-      graphics.fillRect(isoX(x, y), isoY(x, y), 2, 2)
-    }
-    // River: water band between sandy banks, full height.
-    const riverPoly = (x0: number, x1: number, color: number): void => {
-      graphics.fillStyle(color, 1)
-      graphics.fillPoints(
-        [v2(isoX(x0, 0), isoY(x0, 0)), v2(isoX(x1, 0), isoY(x1, 0)), v2(isoX(x1, WORLD_H), isoY(x1, WORLD_H)), v2(isoX(x0, WORLD_H), isoY(x0, WORLD_H))],
-        true,
-      )
-    }
-    riverPoly(RIVER_WEST - 30, RIVER_WEST, 0x9a8258)
-    riverPoly(RIVER_EAST, RIVER_EAST + 32, 0x9a8258)
-    riverPoly(RIVER_WEST, RIVER_EAST, 0x3a6280)
-    graphics.lineStyle(3, 0x9fc6d8, 0.8)
-    graphics.lineBetween(isoX(RIVER_WEST, 0), isoY(RIVER_WEST, 0), isoX(RIVER_WEST, WORLD_H), isoY(RIVER_WEST, WORLD_H))
-    graphics.lineBetween(isoX(RIVER_EAST, 0), isoY(RIVER_EAST, 0), isoX(RIVER_EAST, WORLD_H), isoY(RIVER_EAST, WORLD_H))
-    // Dirt trails from the plaza: grove, farms, John, market, camp, pen, reeds.
-    graphics.fillStyle(0x9a8258, 0.85)
-    const dots: Array<[number, number, number, number]> = [
-      [650, 850, 60, 15],
-      [520, 750, 60, 15],
-      [420, 660, 60, 15],
-      [780, 800, 56, 15],
-      [760, 650, 56, 15],
-      [750, 520, 56, 15],
-      [920, 860, 64, 15],
-      [990, 780, 60, 15],
-      [1030, 730, 54, 14],
-      [650, 1050, 64, 15],
-      [540, 1150, 64, 15],
-      [460, 1220, 60, 15],
-      [800, 1100, 60, 15],
-      [810, 1220, 60, 15],
-      [825, 1330, 60, 15],
-      [950, 1050, 64, 15],
-      [1050, 1180, 64, 15],
-      [1120, 1280, 60, 15],
-      [1200, 760, 64, 15],
-      [1320, 830, 64, 15],
-      [1420, 900, 64, 15],
-      [550, 1350, 60, 14],
-      [650, 1400, 60, 14],
-      [750, 1420, 60, 14],
-    ]
-    for (const [x, y, w, h] of dots) graphics.fillEllipse(isoX(x, y), isoY(x, y), w, h)
-    graphics.fillStyle(0xa89064, 0.7)
-    for (const [x, y, w, h] of dots) graphics.fillEllipse(isoX(x, y), isoY(x, y), w * 0.6, h * 0.55)
-    // Plaza + cache pools, squashed to lie on the ground plane.
-    graphics.fillStyle(0x9a8258, 0.8)
-    graphics.fillEllipse(isoX(800, 950), isoY(800, 950), 230, 82)
-    graphics.fillStyle(0xa89064, 0.7)
-    graphics.fillEllipse(isoX(800, 950), isoY(800, 950), 150, 52)
-    graphics.fillStyle(0x3f6f8f, 1)
-    graphics.fillEllipse(isoX(2500, 700), isoY(2500, 700), 56, 22)
-    graphics.fillStyle(0x5a93b5, 1)
-    graphics.fillEllipse(isoX(2500, 700), isoY(2500, 700), 38, 14)
-    for (const [px, py] of [
-      [2100, 1300],
-      [2700, 1400],
-    ] as Array<[number, number]>) {
-      graphics.fillStyle(0x3f6f8f, 1)
-      graphics.fillEllipse(isoX(px, py), isoY(px, py), 44, 17)
-      graphics.fillStyle(0x5a93b5, 1)
-      graphics.fillEllipse(isoX(px, py), isoY(px, py), 30, 11)
-    }
-    const groundKey = "ground-baked"
-    if (!this.textures.exists(groundKey)) {
-      graphics.generateTexture(groundKey, WORLD_W, 1340)
-    }
-    graphics.destroy()
-    this.add.image(0, 0, groundKey).setOrigin(0, 0).setDepth(-100)
+    createTerrain(this)
   }
 
-    /** Settlement dressing on the diamond: well plaza, mudbrick house, crop
-   *  fields, market, sheep pen, groves, and verge scatter. */
+  /** Settlement landmarks and planting in logical map coordinates. */
   private buildAenonDressing(): void {
     const put = (x: number, y: number, tex: string, scale: number): Phaser.GameObjects.Sprite => {
-      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale)
+      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale).setOrigin(0.5, tex === "pine" ? 0.97 : tex === "palm" ? 0.95 : tex.startsWith("tree") ? 0.94 : 0.9)
       sprite.setDepth(isoDepth(x, y))
       return sprite
     }
@@ -2230,33 +2018,11 @@ class AenonScene extends Phaser.Scene {
     }
 
     // Well plaza: the well itself; the packed earth is baked into the floor.
-    put(800, 950, "well", 2.5)
+    put(800, 950, "well", 3.1)
 
-    // Mudbrick house with a thatch roof, north of the plaza. The drawing
-    // stays in its own local frame; only the frame origin is projected.
-    const house = this.add.graphics()
-    house.setPosition(isoX(830, 600) - 830, isoY(830, 600) - 600)
-    house.setDepth(isoDepth(830, 620))
-    house.fillStyle(0x000000, 0.25)
-    house.fillEllipse(830, 668, 150, 12)
-    house.fillStyle(0xbb9663, 1)
-    house.fillRect(775, 585, 110, 70)
-    house.fillStyle(0x8a6a3f, 0.35)
-    for (let y = 595; y <= 655; y += 10) house.fillRect(775, y, 110, 2)
-    house.fillStyle(0x8a6a3f, 1)
-    house.fillTriangle(755, 590, 905, 590, 830, 505)
-    house.fillStyle(0xa3804f, 1)
-    house.fillTriangle(775, 585, 885, 585, 830, 522)
-    house.fillStyle(0x5d3f2a, 1)
-    house.fillRect(828, 508, 4, 70)
-    house.fillStyle(0x3a2a18, 1)
-    house.fillRect(820, 620, 20, 35)
-    house.fillStyle(0xf5e6b8, 1)
-    house.fillRect(788, 610, 16, 14)
-    house.fillRect(856, 610, 16, 14)
-    house.fillStyle(0x3a2a18, 1)
-    house.fillRect(795, 610, 2, 14)
-    house.fillRect(863, 610, 2, 14)
+    // Limestone and terracotta buildings share the world's ground plane.
+    addHouse(this, isoX(830, 600), isoY(830, 600) + 35, 175, 156).setDepth(isoDepth(830, 600) + 140)
+    addHouse(this, isoX(1180, 490), isoY(1180, 490) + 20, 122, 112, 0x88734d).setDepth(isoDepth(1180, 490) + 80)
 
     // Crop fields: soil parallelograms with sprout grids, railed in.
     for (const [fx0, fy0, fx1, fy1] of [
@@ -2264,23 +2030,31 @@ class AenonScene extends Phaser.Scene {
       [920, 365, 1200, 495],
     ] as Array<[number, number, number, number]>) {
       const field = this.add.graphics().setDepth(-50)
-      field.fillStyle(0x6b5335, 1)
+      field.fillStyle(0x7b7253, 1)
       field.fillPoints(
         [v2(isoX(fx0, fy0), isoY(fx0, fy0)), v2(isoX(fx1, fy0), isoY(fx1, fy0)), v2(isoX(fx1, fy1), isoY(fx1, fy1)), v2(isoX(fx0, fy1), isoY(fx0, fy1))],
         true,
       )
-      field.fillStyle(0x46b464, 1)
-      for (let lx = fx0 + 12; lx < fx1; lx += 16) {
-        for (let ly = fy0 + 12; ly < fy1; ly += 16) {
-          field.fillRect(isoX(lx, ly), isoY(lx, ly), 3, 3)
+      for (let ly = fy0 + 12; ly < fy1; ly += 22) {
+        field.lineStyle(2, 0x413f2c, 0.5)
+        field.lineBetween(isoX(fx0 + 8, ly), isoY(fx0 + 8, ly), isoX(fx1 - 8, ly), isoY(fx1 - 8, ly))
+        for (let lx = fx0 + 14; lx < fx1; lx += 18) {
+          const px = isoX(lx, ly), py = isoY(lx, ly)
+          const wheat = fx0 > 800
+          field.lineStyle(1.4, wheat ? 0xc5b276 : 0x6f8950, 1)
+          field.lineBetween(px, py, px - 1, py - 7)
+          field.lineBetween(px - 1, py - 3, px - 4, py - 6)
+          field.lineBetween(px - 1, py - 4, px + 3, py - 7)
+          field.fillStyle(wheat ? 0xdbc990 : 0x9da770, 1)
+          field.fillEllipse(px - 1, py - 7, 2.5, 4)
         }
       }
       this.railsRect(fx0, fy0, fx1, fy1)
     }
 
     // Market stalls southwest, jars by the merchant rug.
-    put(300, 1350, "stall", 2)
-    put(560, 1360, "stall", 2).setFlipX(true)
+    put(300, 1350, "stall", 3)
+    put(560, 1360, "stall", 3).setFlipX(true)
     // Stall keepers mind the counters (breathing rigs rooted in place).
     const keeperA = new BipedRig(
       this,
@@ -2356,7 +2130,7 @@ class AenonScene extends Phaser.Scene {
       put(x, y, "sign", 2)
     }
     const rug = this.add.image(isoX(420, 1302), isoY(420, 1302), "rug").setDepth(-40)
-    rug.setRotation(Math.PI / 4)
+    rug.setAlpha(0.85)
     put(470, 1315, "jars", 2)
 
     // Sheep pen southeast: railed parallelogram.
@@ -2377,6 +2151,16 @@ class AenonScene extends Phaser.Scene {
     for (let x = 140; x <= 1520; x += 130) borderTrees.push([x, 1950, x % 260 === 0 ? "tree-b" : "tree-a"])
     for (const [x, y, tex] of borderTrees) {
       put(x, y, tex, ART_SCALE)
+    }
+
+    for (const [x, y, scale] of [
+      [190, 830, 2.7], [150, 1000, 3.1], [160, 1510, 3],
+      [510, 1620, 2.8], [690, 1740, 3.2], [1030, 1770, 2.9],
+      [1260, 1660, 3.1], [1350, 570, 2.9], [1260, 370, 2.7],
+      [450, 360, 2.8], [1050, 1590, 2.6], [1380, 1150, 2.7],
+    ] as Array<[number, number, number]>) {
+      put(x, y, x % 3 ? "tree-a" : "tree-b", scale)
+      put(x + 22, y + 26, "bush", 1.8)
     }
 
     // Growth in drifts and clumps, the way real verges grow.
@@ -2461,7 +2245,7 @@ class AenonScene extends Phaser.Scene {
     /** River life on the diamond: cache ring, rocks, ruins, reeds, waves. */
   private buildJordanDressing(): void {
     const put = (x: number, y: number, tex: string, scale: number): Phaser.GameObjects.Sprite => {
-      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale)
+      const sprite = this.add.sprite(isoX(x, y), isoY(x, y), tex).setScale(scale).setOrigin(0.5, tex === "pine" ? 0.97 : tex === "palm" ? 0.95 : tex.startsWith("tree") ? 0.94 : 0.9)
       sprite.setDepth(isoDepth(x, y))
       return sprite
     }
@@ -2515,13 +2299,21 @@ class AenonScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(6000)
-    // Dead trees dot the deep wilderness.
+    // Dead trees and pines dot the deep wilderness.
     for (const [x, y] of [
       [2000, 900],
       [2400, 1500],
       [2900, 800],
     ] as Array<[number, number]>) {
       put(x, y, "deadtree", 2.5)
+    }
+    for (const [x, y] of [
+      [2000, 600],
+      [2500, 1200],
+      [1800, 1400],
+      [2800, 500],
+    ] as Array<[number, number]>) {
+      put(x, y, "pine", 2.5)
     }
     put(1760, 1200, "reeds", 2)
     for (const [x, y] of [
@@ -2548,16 +2340,14 @@ class AenonScene extends Phaser.Scene {
       [1640, 1350],
       [1640, 1600],
       [1640, 1850],
-      [2000, 900],
-      [2500, 1100],
-      [1900, 1400],
+
     ]
     for (const [index, [x, y]] of waveSpots.entries()) {
       const wave = this.add.image(isoX(x, y), isoY(x, y), "wave").setAlpha(0.5).setDepth(1)
       this.waves.push(wave)
       this.tweens.add({
         targets: wave,
-        x: x + 26,
+        x: wave.x + 12,
         alpha: 0.2,
         duration: 2200 + index * 350,
         yoyo: true,
@@ -2639,7 +2429,10 @@ class AenonScene extends Phaser.Scene {
       this.player.rest(time, delta)
     }
     this.player.setDepth()
-    this.playerShadow.setPosition(isoX(this.player.x, this.player.y), isoY(this.player.x, this.player.y) + 32)
+    for (const tag of this.landmarkTags) {
+      tag.text.setAlpha(Phaser.Math.Clamp((550 - Math.hypot(tag.x - this.player.x, tag.y - this.player.y)) / 180, 0, 1) * 0.9)
+    }
+    this.playerShadow.setPosition(isoX(this.player.x, this.player.y), isoY(this.player.x, this.player.y))
 
     this.updateWolf(time, delta)
     this.updateWanderers(time, delta)
@@ -2675,10 +2468,10 @@ class AenonScene extends Phaser.Scene {
     const moveX = (dx / distance) * step
     const moveY = (dy / distance) * step
     this.wolf.setPosition(this.wolf.x + moveX, this.wolf.y + moveY)
-    this.wolf.setFacing(dx < 0)
+    this.wolf.setFacing(dx - dy < 0)
     this.wolf.step(Math.hypot(moveX, moveY), delta, 2.7)
     this.wolf.setDepth()
-    this.wolfShadow.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 18)
+    this.wolfShadow.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) + 10)
     this.wolfTag.setPosition(isoX(this.wolf.x, this.wolf.y), isoY(this.wolf.x, this.wolf.y) - 42)
     if (!this.wolfCry.visible) this.wolfCry.setPosition(isoX(this.wolf.x, this.wolf.y) - 4, isoY(this.wolf.x, this.wolf.y) - 52)
   }
@@ -2703,24 +2496,65 @@ class AenonScene extends Phaser.Scene {
     }
     this.hereId = placeId
     this.persist()
-    this.refreshHud()
+    this.refreshCharacter()
     playSfx("region")
     if (placeId === "aenon") this.showBanner("Aenon", "settlement · where John is baptizing")
     else this.showBanner("The Jordan", "wilderness · the wolf roams here")
   }
 
-  private refreshHud(): void {
-    this.ui.setHud(this.hudLines())
+  private refreshCharacter(): void {
+    this.ui.setCharacterLines(this.characterLines())
+    this.ui.setJournalLines(this.journalLines())
   }
 
-  hudLines(): string[] {
+  private toggleJournal(): void {
+    this.ui.toggleJournal(this.journalLines())
+  }
+
+  private journalLines(): string[] {
+    const me = this.season.adventurer()
+    const quests =
+      me.questJournal.length === 0 ? ["No quests yet."] : me.questJournal.map((entry) => entry.line)
+    const passages =
+      me.referenceJournal.length === 0
+        ? ["No passages filed."]
+        : me.referenceJournal.map((filing) => filing.reference)
+    return ["Journal", "", "Quests", ...quests, "", "Passages", ...passages, "", "Next", this.objectiveFor(me), "", "J closes"]
+  }
+
+  private toggleCharacter(): void {
+    this.ui.toggleCharacter(this.characterLines())
+  }
+
+  characterLines(): string[] {
     const me = this.season.adventurer()
     const worn = me.worn.weapon ?? "bare hands"
+    const adventurer = levelWithProgress(
+      me.adventurerExperience,
+      me.adventurerLevel,
+      demoCurves.adventurer,
+      adventurerLevelCap,
+    )
+    const skills = Object.keys(me.trainedSkills).map((name) => {
+      const skill = me.trainedSkills[name as keyof typeof me.trainedSkills]
+      return field(
+        name,
+        levelWithProgress(skill.experience, skill.level, demoCurves.trained, trainedSkillLevelCap),
+      )
+    })
     return [
-      `Aenon MVP — ${me.placeId} · Adventurer ${me.adventurerLevel} · Hitpoints ${me.currentHitpoints}/${me.combatLevels.Hitpoints} · coin ${me.coin}`,
-      `pack ${me.pack.length} · wielding ${worn} · Woodcutting ${me.trainedSkills.Woodcutting.level} · Scripture ${me.trainedSkills.Scripture.level}`,
-      `journal: ${me.questJournal.length === 0 ? "no quests yet" : me.questJournal.map((entry) => entry.line).join(" / ")}`,
-      `next: ${this.objectiveFor(me)}`,
+      "Character",
+      "",
+      field("Adventurer", adventurer),
+      field("Hitpoints", `${me.currentHitpoints}/${me.combatLevels.Hitpoints}`),
+      field("Coin", String(me.coin)),
+      field("Place", me.placeId),
+      field("Wielding", worn),
+      field("Pack", String(me.pack.length)),
+      "",
+      ...skills,
+      "",
+      "C closes",
     ]
   }
 
@@ -2740,7 +2574,7 @@ class AenonScene extends Phaser.Scene {
   private afterAction(ok: boolean, reason: string, good: string): void {
     if (ok) {
       this.persist()
-      this.refreshHud()
+      this.refreshCharacter()
       this.say(good)
     } else {
       this.say(`Nothing happens (${reason}).`)
@@ -2751,7 +2585,7 @@ class AenonScene extends Phaser.Scene {
     let best = this.trees[0]
     let bestDistance = Number.POSITIVE_INFINITY
     for (const tree of this.trees) {
-      const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, tree.x, tree.y)
+      const distance = Phaser.Math.Distance.Between(this.player.root.x, this.player.root.y, tree.x, tree.y)
       if (distance < bestDistance) {
         bestDistance = distance
         best = tree
@@ -2813,8 +2647,9 @@ class AenonScene extends Phaser.Scene {
           })
         },
       })
-      this.flashSparkle(tree.x, tree.y - 44)
-      this.leafBurst.explode(8, isoX(tree.x, tree.y - 30), isoY(tree.x, tree.y - 30))
+      const sparkleAt = isoInverse(tree.x, tree.y - 44)
+      this.flashSparkle(sparkleAt.x, sparkleAt.y)
+      this.leafBurst.explode(8, tree.x, tree.y - 65)
     }
     this.afterAction(result.ok, result.ok ? "" : result.reason, "You cut wood at the timber-stand.")
   }
@@ -2824,7 +2659,7 @@ class AenonScene extends Phaser.Scene {
     if (result.ok) {
       playSfx("face")
       this.wolfHoldUntil = this.time.now + 3000
-      this.wolf.setFacing(this.wolf.x >= this.player.x)
+      this.wolf.setFacing(this.wolf.root.x >= this.player.root.x)
       this.wolf.hop()
       this.wolfCry.setPosition(isoX(this.wolf.x, this.wolf.y) - 4, isoY(this.wolf.x, this.wolf.y) - 52).setVisible(true)
       this.time.delayedCall(900, () => this.wolfCry.setVisible(false))
@@ -2846,11 +2681,12 @@ class AenonScene extends Phaser.Scene {
     if (!result.hostileFell) {
       this.wolf.setTint(0xff8888)
       this.time.delayedCall(120, () => this.wolf.clearTint())
-      const push = this.wolf.x < this.player.x ? -10 : 10
+      const push = this.wolf.root.x < this.player.root.x ? -10 : 10
       this.tweens.add({
         targets: this.wolf.root,
-        x: Phaser.Math.Clamp(this.wolf.x + push, 1850, 3050),
+        x: this.wolf.root.x + push,
         duration: 120,
+        yoyo: true,
       })
       this.wolf.hop(5)
     } else {
@@ -2862,7 +2698,7 @@ class AenonScene extends Phaser.Scene {
       this.wolfTag.setVisible(false)
     }
     this.persist()
-    this.refreshHud()
+    this.refreshCharacter()
     this.say(result.hostileFell ? "The wolf falls. Press H to hunt it." : "You swing at the wolf.")
   }
 
@@ -2896,24 +2732,14 @@ class AenonScene extends Phaser.Scene {
       return
     }
     this.persist()
-    this.refreshHud()
+    this.refreshCharacter()
     playSfx("read")
-    this.flashSparkle(this.reeds.x, this.reeds.y - 34)
-    this.glintBurst.explode(10, isoX(this.reeds.x, this.reeds.y - 24), isoY(this.reeds.x, this.reeds.y - 24))
+    this.flashSparkle(1470, 916)
+    this.glintBurst.explode(10, this.reeds.x, this.reeds.y - 24)
     this.tweens.add({ targets: this.reeds, y: this.reeds.y - 4, duration: 140, yoyo: true, repeat: 1 })
     const usfm = SCRIPTURE_USFM["reeds"] ?? "JHN.1.29"
     void loadLivePassage(usfm)
     this.say("You read at the reeds; the passage is filed in the reference journal.")
-  }
-
-  private doLookJohn(): void {
-    const result = this.season.look("john")
-    if (!result.ok) {
-      this.say(`Nothing happens (${result.reason}).`)
-      return
-    }
-    this.john.hop(5)
-    this.say("John stands at Aenon, baptizing. (Look: presence confirmed.)")
   }
 
   private doSpeakJohn(): void {
@@ -2943,8 +2769,9 @@ new Phaser.Game({
   parent: "game",
   width: 960,
   height: 600,
-  backgroundColor: "#101820",
-  pixelArt: true,
+  backgroundColor: "#26362a",
+  pixelArt: false,
+  antialias: true,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

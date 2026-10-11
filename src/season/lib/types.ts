@@ -291,3 +291,8 @@ export type SeasonDefinition = {
 }
 
 export type ExperienceCurve = (experience: number) => number
+
+export type ExperienceCurves = {
+  adventurer: ExperienceCurve
+  trained: ExperienceCurve
+}

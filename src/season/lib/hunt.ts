@@ -1,6 +1,6 @@
 import type { HuntMaterial, SeasonState } from "./begin.ts"
 import { experienceInsideBand, holdTrainedExperience } from "./experience.ts"
-import type { ExperienceCurve, Hostile, PackEntry, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurves, Hostile, PackEntry, SeasonDefinition } from "./types.ts"
 
 export type HuntResult =
   | { ok: true }
@@ -41,7 +41,7 @@ export function pickUp(state: SeasonState, definition: SeasonDefinition, gearId:
   return { ok: true }
 }
 
-export function hunt(state: SeasonState, definition: SeasonDefinition, curve: ExperienceCurve): HuntResult {
+export function hunt(state: SeasonState, definition: SeasonDefinition, curves: ExperienceCurves): HuntResult {
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
   const index = state.carcasses.findIndex((carcass) => carcass.placeId === state.placeId)
   const carcass = state.carcasses[index]
@@ -58,11 +58,11 @@ export function hunt(state: SeasonState, definition: SeasonDefinition, curve: Ex
   state.pack = pack
   state.trainedExperience.Hunting = holdTrainedExperience(
     state.trainedExperience.Hunting + hostile.huntingExperience,
-    curve,
+    curves.trained,
   )
   state.adventurerExperience = experienceInsideBand(
     state.adventurerExperience,
-    curve,
+    curves.adventurer,
     place.band,
     definition.smallerGrant,
   )

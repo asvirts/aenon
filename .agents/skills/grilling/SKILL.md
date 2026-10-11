@@ -7,6 +7,8 @@ Interview the user relentlessly until you reach a shared understanding. Map this
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
 
+When the user or repository requires an ask/user-input tool, deliver the round through that tool, preserving question numbers and recommended answers. Respect the tool's mode, purpose, and question-count limits; split a round across calls when necessary. An asynchronous question leaves the round pending: continue independent fact-finding, then wait for answers before dependent decisions. Use the following format for the question content, adapted to the tool's fields; the format is not a reason to ask in plain chat.
+
 Format a round like so:
 
 ```

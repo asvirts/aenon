@@ -4,7 +4,7 @@ import { wornGear } from "./gear.ts"
 import { clearCarcasses, leaveCarcass, receiveDrop, type Drop } from "./hunt.ts"
 import { completeCurrentDefeat } from "./quest.ts"
 import type { Acquaintance } from "./scene.ts"
-import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurves, SeasonDefinition } from "./types.ts"
 
 export type Blow = {
   accuracy: number
@@ -76,7 +76,7 @@ export function stepBack(state: SeasonState): StepBackResult {
 export function swingAtHostile(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   rollDamage: (blow: Blow) => number,
   rollHostileDamage: (blow: Blow) => number = () => 0,
   rollDrop: () => Drop = () => ({ coin: 0, gear: [] }),
@@ -84,7 +84,7 @@ export function swingAtHostile(
   if (!state.fight) return { ok: false, reason: "not-facing" }
   const fight = state.fight
   const hostile = definition.hostiles.find((candidate) => candidate.id === fight.hostileId)
-  const level = readAdventurerLevel(curve, state.adventurerExperience)
+  const level = readAdventurerLevel(curves.adventurer, state.adventurerExperience)
   const gear = wornGear(state, definition)
   const adventurerBlow: Blow = {
     accuracy: level + gear.accuracyModifier,
@@ -146,7 +146,7 @@ export function swingAtHostile(
   if (hostile && place) {
     state.adventurerExperience = experienceInsideBand(
       state.adventurerExperience,
-      curve,
+      curves.adventurer,
       place.band,
       hostile.defeatGrant,
     )

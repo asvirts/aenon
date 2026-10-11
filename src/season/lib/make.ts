@@ -4,7 +4,7 @@ import { experienceInsideBand, holdSkillExperience, readSkillLevel } from "./exp
 import { packAfterGoods, packWithoutGoods } from "./pack.ts"
 import type {
   CookingRecipe,
-  ExperienceCurve,
+  ExperienceCurves,
   GearPiece,
   GearRecipe,
   LevelBand,
@@ -91,14 +91,14 @@ export type MakeResult =
 export function makePiece(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   stationId: string,
   recipeId: string,
 ): MakeResult {
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
 
   const cooking = (definition.cookingRecipes ?? []).find((candidate) => candidate.id === recipeId)
-  if (cooking) return cookMeal(state, definition, curve, stationId, cooking)
+  if (cooking) return cookMeal(state, definition, curves, stationId, cooking)
 
   const station = (definition.stations ?? []).find((candidate) => candidate.id === stationId)
   const recipe = (definition.gearRecipes ?? []).find((candidate) => candidate.id === recipeId)
@@ -110,7 +110,7 @@ export function makePiece(
   const piece = (definition.gearPieces ?? []).find((candidate) => candidate.id === recipe.pieceId)
   if (!place || !piece) return { ok: false, reason: "wrong-station" }
   if (place.kind !== "settlement" || place.band !== recipe.band) return { ok: false, reason: "wrong-band" }
-  if (readSkillLevel(curve, state.trainedExperience[recipe.skill]) < recipe.requiredLevel) {
+  if (readSkillLevel(curves.trained, state.trainedExperience[recipe.skill]) < recipe.requiredLevel) {
     return { ok: false, reason: "skill-too-low" }
   }
 
@@ -137,11 +137,11 @@ export function makePiece(
   state.pack = withPiece
   state.trainedExperience[recipe.skill] = holdSkillExperience(
     state.trainedExperience[recipe.skill] + recipe.skillExperience,
-    curve,
+    curves.trained,
   )
   state.adventurerExperience = experienceInsideBand(
     state.adventurerExperience,
-    curve,
+    curves.adventurer,
     place.band,
     definition.smallerGrant,
   )
@@ -151,7 +151,7 @@ export function makePiece(
 function cookMeal(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   stationId: string,
   recipe: CookingRecipe,
 ): MakeResult {
@@ -161,7 +161,7 @@ function cookMeal(
   }
   const place = definition.places.find((candidate) => candidate.id === station.placeId)
   if (!place || place.kind !== "settlement") return { ok: false, reason: "wrong-station" }
-  if (readSkillLevel(curve, state.trainedExperience.Cooking) < recipe.requiredLevel) {
+  if (readSkillLevel(curves.trained, state.trainedExperience.Cooking) < recipe.requiredLevel) {
     return { ok: false, reason: "skill-too-low" }
   }
 
@@ -182,11 +182,11 @@ function cookMeal(
   state.pack = withFood
   state.trainedExperience.Cooking = holdSkillExperience(
     state.trainedExperience.Cooking + recipe.skillExperience,
-    curve,
+    curves.trained,
   )
   state.adventurerExperience = experienceInsideBand(
     state.adventurerExperience,
-    curve,
+    curves.adventurer,
     place.band,
     definition.smallerGrant,
   )

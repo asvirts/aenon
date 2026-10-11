@@ -1,0 +1,3 @@
+# A 3D world with the existing Season rules
+
+The Season will use real 3D characters, buildings, and terrain viewed from an elevated isometric-style camera, taking Albion Online as a visual reference. This replaces the current 2D presentation rather than only refreshing its art, while retaining the game's identity and existing gameplay rules; movement, animation, camera, and interface are the redesign's scope. The added work of a 3D renderer and asset pipeline is accepted to obtain the desired depth and animation, beginning with a polished Aenon-to-Jordan playable area; the engine and browser versus downloadable delivery remain undecided.

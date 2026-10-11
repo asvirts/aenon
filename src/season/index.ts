@@ -15,6 +15,7 @@ import {
   type StoredBurn,
 } from "./lib/begin.ts"
 import { requireGearCatalog } from "./lib/catalog.ts"
+import { resolveExperienceCurves } from "./lib/curves.ts"
 import { holdAdventurerExperience, holdTrainedExperience } from "./lib/experience.ts"
 import {
   enterPlace,
@@ -70,12 +71,13 @@ import {
   requirePositiveSmallerGrant,
   type DefinitionFailure,
 } from "./lib/definition.ts"
-import type { ExperienceCurve, GearSlot, SeasonDefinition } from "./lib/types.ts"
+import type { ExperienceCurve, ExperienceCurves, GearSlot, SeasonDefinition } from "./lib/types.ts"
 
 export type {
   ArmorSlot,
   ArmorWeight,
   ExperienceCurve,
+  ExperienceCurves,
   GatheringSkill,
   CookingRecipe,
   Fish,
@@ -120,6 +122,8 @@ export type { MakeResult }
 export type { EatResult, EatTarget }
 export type { BuyGood, BuyResult, OpenCacheResult, SellGood, SellResult }
 export { travelingCompany }
+export { adventurerLevelCap, experienceForLevel, trainedSkillLevelCap } from "./lib/experience.ts"
+export { runeScapeSkillCurve, worldOfWarcraftAdventurerCurve } from "./lib/curves.ts"
 
 export type Season = {
   adventurer: () => Adventurer
@@ -155,9 +159,10 @@ export type SeasonLoad =
 
 export function loadSeason(
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curve: ExperienceCurve | ExperienceCurves,
   state?: SeasonState,
 ): SeasonLoad {
+  const curves = resolveExperienceCurves(curve)
   const aenon = requireLowBandAenon(definition)
   if (!aenon.ok) return aenon
   const smallerGrant = requirePositiveSmallerGrant(definition)
@@ -189,10 +194,13 @@ export function loadSeason(
   const mealBuffs = requireMealBuffs(definition)
   if (!mealBuffs.ok) return mealBuffs
 
-  const seasonState = copyState(state ?? initialState(aenon.placeId, curve))
-  seasonState.adventurerExperience = holdAdventurerExperience(seasonState.adventurerExperience, curve)
+  const seasonState = copyState(state ?? initialState(aenon.placeId, curves))
+  seasonState.adventurerExperience = holdAdventurerExperience(
+    seasonState.adventurerExperience,
+    curves.adventurer,
+  )
   for (const skill of trainedSkills) {
-    seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curve)
+    seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curves.trained)
   }
   resolveReadySteps(seasonState, definition)
   resolveAttendance(seasonState, definition)
@@ -205,7 +213,7 @@ export function loadSeason(
       adventurer: () =>
         presentAdventurer(
           seasonState,
-          curve,
+          curves,
           presentQuestJournal(seasonState, definition),
           presentHere(seasonState, definition),
         ),
@@ -225,7 +233,7 @@ export function loadSeason(
       swing: (rollDamage, rollHostileDamage, rollDrop) => {
         const blocked = blockedByScene()
         if (blocked) return blocked
-        const swung = swingAtHostile(seasonState, definition, curve, rollDamage, rollHostileDamage, rollDrop)
+        const swung = swingAtHostile(seasonState, definition, curves, rollDamage, rollHostileDamage, rollDrop)
         if (!swung.ok) return swung
         const scene = resolveAttendance(seasonState, definition)
         if (scene === null && swung.hostileFell) {
@@ -235,19 +243,19 @@ export function loadSeason(
         return swung
       },
       read: (scriptureObjectId) =>
-        blockedByScene() ?? readScripture(seasonState, definition, curve, scriptureObjectId),
-      gather: (spotId) => blockedByScene() ?? gatherAtSpot(seasonState, definition, curve, spotId),
-      look: (personId) => blockedByScene() ?? lookAtPerson(seasonState, definition, curve, personId),
-      speak: (personId) => blockedByScene() ?? speakToPerson(seasonState, definition, curve, personId),
+        blockedByScene() ?? readScripture(seasonState, definition, curves, scriptureObjectId),
+      gather: (spotId) => blockedByScene() ?? gatherAtSpot(seasonState, definition, curves, spotId),
+      look: (personId) => blockedByScene() ?? lookAtPerson(seasonState, definition, curves, personId),
+      speak: (personId) => blockedByScene() ?? speakToPerson(seasonState, definition, curves, personId),
       report: (mark) => blockedByScene() ?? reportMark(seasonState, definition, mark),
       finish: () => finishScene(seasonState, definition),
-      hunt: () => blockedByScene() ?? hunt(seasonState, definition, curve),
+      hunt: () => blockedByScene() ?? hunt(seasonState, definition, curves),
       pickUp: (gearId) => blockedByScene() ?? pickUp(seasonState, definition, gearId),
       wear: (pieceId) => blockedByScene() ?? wearPiece(seasonState, definition, pieceId),
       takeOff: (slot) => blockedByScene() ?? takeOffPiece(seasonState, definition, slot),
       make: (stationId, recipeId) =>
-        blockedByScene() ?? makePiece(seasonState, definition, curve, stationId, recipeId),
-      eat: (target) => blockedByScene() ?? eatMeal(seasonState, definition, curve, target),
+        blockedByScene() ?? makePiece(seasonState, definition, curves, stationId, recipeId),
+      eat: (target) => blockedByScene() ?? eatMeal(seasonState, definition, curves, target),
       buy: (personId, good) =>
         blockedByScene() ?? buyFromVendor(seasonState, definition, personId, good),
       sell: (personId, good) =>

@@ -16,7 +16,7 @@ import {
 import { packAfterGoods } from "./pack.ts"
 import { presentCompany } from "./scene.ts"
 import type { PlayingScene } from "./begin.ts"
-import type { ExperienceCurve, LevelBand, PackEntry, Person, QuestDefinition, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurves, LevelBand, PackEntry, Person, QuestDefinition, SeasonDefinition } from "./types.ts"
 
 export type OfferedQuest = {
   questId: string
@@ -176,7 +176,7 @@ export type FinishResult =
 export function lookAtPerson(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   personId: string,
 ): LookResult {
   const person = personHere(state, definition, personId)
@@ -194,7 +194,7 @@ export function lookAtPerson(
   }
 
   const underway = inProgressForGiver(state, definition, person.id)
-  const offeredQuests = offeredFor(state, definition, curve, person.id).map((quest) => ({
+  const offeredQuests = offeredFor(state, definition, curves, person.id).map((quest) => ({
     questId: quest.id,
     line: quest.steps[0]?.line ?? quest.finishedLine,
     band: bandOfQuest(definition, quest),
@@ -211,36 +211,36 @@ export function lookAtPerson(
 function offeredFor(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   giverId: string,
 ): QuestDefinition[] {
   return (definition.quests ?? []).filter(
-    (quest) => quest.giverId === giverId && isOffered(state, definition, curve, quest),
+    (quest) => quest.giverId === giverId && isOffered(state, definition, curves, quest),
   )
 }
 
 function isOffered(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   quest: QuestDefinition,
 ): boolean {
-  return meetsOfferRules(state, definition, curve, quest) && !openingWouldOpenSecondJesus(state, definition, quest)
+  return meetsOfferRules(state, definition, curves, quest) && !openingWouldOpenSecondJesus(state, definition, quest)
 }
 
 function meetsOfferRules(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   quest: QuestDefinition,
 ): boolean {
   if (inProgressForGiver(state, definition, quest.giverId)) return false
   const progress = state.questProgress.find((entry) => entry.questId === quest.id)
   if (progress?.finished && !quest.repeatable) return false
-  const level = readAdventurerLevel(curve, state.adventurerExperience)
+  const level = readAdventurerLevel(curves.adventurer, state.adventurerExperience)
   if (level < offerFloor(bandOfQuest(definition, quest))) return false
   if (level < requiredAdventurerLevel(quest)) return false
-  if (!meetsTrainedSkill(state, curve, quest)) return false
+  if (!meetsTrainedSkill(state, curves, quest)) return false
   return (quest.requiredQuestIds ?? []).every((requiredId) => {
     const required = state.questProgress.find((entry) => entry.questId === requiredId)
     return required?.finishedOnce === true
@@ -263,18 +263,18 @@ const bandBounds = {
 
 function experienceAfterQuestGrant(
   experience: number,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   band: LevelBand,
   grant: number,
 ): number {
   const bounds = bandBounds[band]
-  const level = readAdventurerLevel(curve, experience)
+  const level = readAdventurerLevel(curves.adventurer, experience)
   if (grant <= 0 || level < bounds.floor || level >= bounds.ceiling) {
-    return holdAdventurerExperience(experience, curve)
+    return holdAdventurerExperience(experience, curves.adventurer)
   }
   return holdAdventurerExperience(
-    Math.min(experience + grant, experienceForLevel(curve, bounds.ceiling)),
-    curve,
+    Math.min(experience + grant, experienceForLevel(curves.adventurer, bounds.ceiling)),
+    curves.adventurer,
   )
 }
 
@@ -290,10 +290,10 @@ function requiredAdventurerLevel(quest: QuestDefinition): number {
   return level
 }
 
-function meetsTrainedSkill(state: SeasonState, curve: ExperienceCurve, quest: QuestDefinition): boolean {
+function meetsTrainedSkill(state: SeasonState, curves: ExperienceCurves, quest: QuestDefinition): boolean {
   for (const requirement of quest.skills ?? []) {
     if (!isTrainedSkill(requirement.skill)) continue
-    if (curve(state.trainedExperience[requirement.skill]) < requirement.level) return false
+    if (curves.trained(state.trainedExperience[requirement.skill]) < requirement.level) return false
   }
   return true
 }
@@ -404,7 +404,7 @@ function blocksSecondJesusScene(state: SeasonState, definition: SeasonDefinition
 export function speakToPerson(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   personId: string,
 ): SpeakResult {
   const person = personHere(state, definition, personId)
@@ -417,15 +417,15 @@ export function speakToPerson(
   }
 
   const underway = inProgressForGiver(state, definition, person.id)
-  if (underway) return speakToCurrentStep(state, definition, curve, underway)
+  if (underway) return speakToCurrentStep(state, definition, curves, underway)
 
-  const quest = offeredFor(state, definition, curve, person.id)[0]
+  const quest = offeredFor(state, definition, curves, person.id)[0]
   if (!quest || quest.steps.length === 0) {
     const blocked = (definition.quests ?? []).some(
       (candidate) =>
         candidate.giverId === person.id &&
         candidate.steps.length > 0 &&
-        meetsOfferRules(state, definition, curve, candidate) &&
+        meetsOfferRules(state, definition, curves, candidate) &&
         openingWouldOpenSecondJesus(state, definition, candidate),
     )
     return blocked ? { ok: false, reason: "second-jesus-scene" } : { ok: false, reason: "not-offered" }
@@ -453,7 +453,7 @@ export function speakToPerson(
 function speakToCurrentStep(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   progress: QuestProgress,
 ): SpeakResult {
   const quest = questById(definition, progress.questId)
@@ -466,7 +466,7 @@ function speakToCurrentStep(
     if (!quest.repeatable) {
       state.adventurerExperience = experienceAfterQuestGrant(
         state.adventurerExperience,
-        curve,
+        curves,
         bandOfQuest(definition, quest),
         quest.reward.adventurerExperience ?? 0,
       )
@@ -474,7 +474,7 @@ function speakToCurrentStep(
       if (skillReward && isTrainedSkill(skillReward.skill)) {
         state.trainedExperience[skillReward.skill] = holdTrainedExperience(
           state.trainedExperience[skillReward.skill] + skillReward.experience,
-          curve,
+          curves.trained,
         )
       }
     }

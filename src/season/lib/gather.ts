@@ -2,7 +2,7 @@ import type { SeasonState } from "./begin.ts"
 import type { DefinitionFailure } from "./definition.ts"
 import { experienceInsideBand, holdSkillExperience, readSkillLevel } from "./experience.ts"
 import { packAfterGoods } from "./pack.ts"
-import type { ExperienceCurve, GatheringSkill, LevelBand, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurves, GatheringSkill, LevelBand, SeasonDefinition } from "./types.ts"
 
 const bandRank: Record<LevelBand, number> = { low: 0, middle: 1, high: 2 }
 
@@ -38,13 +38,13 @@ export type GatherResult =
 export function gatherAtSpot(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   spotId: string,
 ): GatherResult {
   const spot = definition.spots.find((candidate) => candidate.id === spotId)
   if (!spot || spot.placeId !== state.placeId) return { ok: false, reason: "not-present" }
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
-  if (readSkillLevel(curve, state.trainedExperience[spot.skill]) < spot.requiredLevel) {
+  if (readSkillLevel(curves.trained, state.trainedExperience[spot.skill]) < spot.requiredLevel) {
     return { ok: false, reason: "skill-too-low" }
   }
 
@@ -56,11 +56,11 @@ export function gatherAtSpot(
   state.pack = pack
   state.trainedExperience[spot.skill] = holdSkillExperience(
     state.trainedExperience[spot.skill] + spot.skillExperience,
-    curve,
+    curves.trained,
   )
   state.adventurerExperience = experienceInsideBand(
     state.adventurerExperience,
-    curve,
+    curves.adventurer,
     place.band,
     definition.smallerGrant,
   )

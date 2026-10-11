@@ -1,5 +1,5 @@
 import { readAdventurerLevel, readTrainedLevel } from "./experience.ts"
-import { gearSlots, type ExperienceCurve, type GearSlot, type LevelBand, type MealBuff, type PackEntry } from "./types.ts"
+import { gearSlots, type ExperienceCurves, type GearSlot, type LevelBand, type MealBuff, type PackEntry } from "./types.ts"
 
 export const combatSkills = ["Attack", "Strength", "Defence", "Hitpoints"] as const
 
@@ -151,7 +151,7 @@ function emptyWorn(): Record<GearSlot, string | null> {
   return worn
 }
 
-export function initialState(placeId: string, curve: ExperienceCurve): SeasonState {
+export function initialState(placeId: string, curves: ExperienceCurves): SeasonState {
   const adventurerExperience = 0
   const trainedExperience = {} as Record<TrainedSkill, number>
   for (const skill of trainedSkills) trainedExperience[skill] = 0
@@ -160,7 +160,7 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
     placeId,
     adventurerExperience,
     trainedExperience,
-    currentHitpoints: curve(adventurerExperience),
+    currentHitpoints: curves.adventurer(adventurerExperience),
     coin: 0,
     pack: [],
     worn: emptyWorn(),
@@ -182,17 +182,17 @@ export function initialState(placeId: string, curve: ExperienceCurve): SeasonSta
 
 export function presentAdventurer(
   state: SeasonState,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   questJournal: readonly QuestJournalEntry[],
   present: readonly PresentPerson[],
 ): Adventurer {
-  const adventurerLevel = readAdventurerLevel(curve, state.adventurerExperience)
+  const adventurerLevel = readAdventurerLevel(curves.adventurer, state.adventurerExperience)
   const combatLevels = {} as Record<CombatSkill, number>
   for (const skill of combatSkills) combatLevels[skill] = adventurerLevel
   const trained = {} as Record<TrainedSkill, TrainedSkillState>
   for (const skill of trainedSkills) {
     const experience = state.trainedExperience[skill]
-    trained[skill] = { experience, level: readTrainedLevel(curve, experience) }
+    trained[skill] = { experience, level: readTrainedLevel(curves.trained, experience) }
   }
 
   return {

@@ -2,7 +2,7 @@ import type { SeasonState } from "./begin.ts"
 import type { DefinitionFailure } from "./definition.ts"
 import { readAdventurerLevel } from "./experience.ts"
 import { packWithoutGoods } from "./pack.ts"
-import type { ExperienceCurve, Food, Rarity, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurves, Food, Rarity, SeasonDefinition } from "./types.ts"
 
 const rarities = ["common", "uncommon", "rare", "epic", "legendary"] as const satisfies readonly Rarity[]
 
@@ -34,7 +34,7 @@ export type EatResult =
 export function eatMeal(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   target: EatTarget,
 ): EatResult {
   if (state.fight?.phase === "underway") return { ok: false, reason: "fight-underway" }
@@ -43,7 +43,7 @@ export function eatMeal(
   const shares = definition.restoreShares
   const pack = packWithoutGoods(state.pack, { kind: "food", id: target.id }, 1)
   if (!food || !shares || !pack) return { ok: false, reason: "not-food" }
-  const skill = readAdventurerLevel(curve, state.adventurerExperience)
+  const skill = readAdventurerLevel(curves.adventurer, state.adventurerExperience)
   if (state.currentHitpoints >= skill) return { ok: false, reason: "pool-full" }
   const restored = state.currentHitpoints + Math.floor(skill * shares[food.rarity])
   state.pack = pack

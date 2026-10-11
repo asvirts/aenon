@@ -1,10 +1,23 @@
-import type { ExperienceCurve, SeasonDefinition } from "../season/index.ts"
+import {
+  runeScapeSkillCurve,
+  worldOfWarcraftAdventurerCurve,
+  type ExperienceCurves,
+  type SeasonDefinition,
+} from "../season/index.ts"
 
 /**
- * One experience per level: experience N reads as Adventurer level N + 1.
- * Matches the shape the season behavior tests use.
+ * Trained skills use the Old School RuneScape table: level 1 is 0 experience,
+ * and level 2 is 83, so one action is not a level. Adventurer level uses the
+ * vanilla World of Warcraft table and starts at 1: level 2 is 400 experience,
+ * and level 60 is 4,084,700.
+ *
+ * Early grants follow those games. A normal tree is 25 Woodcutting experience.
+ * A level-1 kill is 50 Adventurer experience. The smaller grant stays below a defeat.
  */
-export const demoCurve: ExperienceCurve = (experience) => experience + 1
+export const demoCurves: ExperienceCurves = {
+  adventurer: worldOfWarcraftAdventurerCurve,
+  trained: runeScapeSkillCurve,
+}
 
 /**
  * Minimal playable Season for the browser MVP: Aenon (settlement, low band)
@@ -19,7 +32,7 @@ export const demoDefinition: SeasonDefinition = {
     { id: "aenon", kind: "settlement", band: "low" },
     { id: "jordan", kind: "wilderness", band: "low" },
   ],
-  smallerGrant: 1,
+  smallerGrant: 10,
   defeatLoss: 2,
   hostiles: [
     {
@@ -27,11 +40,11 @@ export const demoDefinition: SeasonDefinition = {
       kind: "animal",
       placeId: "jordan",
       hitpoints: 4,
-      defeatGrant: 4,
-      huntingExperience: 1,
+      defeatGrant: 50,
+      huntingExperience: 25,
     },
   ],
-  scriptureObjects: [{ id: "reeds", placeId: "aenon", reference: "John 1:29", scriptureExperience: 1 }],
+  scriptureObjects: [{ id: "reeds", placeId: "aenon", reference: "John 1:29", scriptureExperience: 25 }],
   packSize: 8,
   spots: [
     {
@@ -41,7 +54,7 @@ export const demoDefinition: SeasonDefinition = {
       placeId: "aenon",
       good: { kind: "material", id: "wood" },
       count: 1,
-      skillExperience: 1,
+      skillExperience: 25,
     },
   ],
   people: [

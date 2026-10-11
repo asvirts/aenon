@@ -6,7 +6,7 @@ import {
   holdTrainedExperience,
   readAdventurerLevel,
 } from "./experience.ts"
-import type { ExperienceCurve, SeasonDefinition } from "./types.ts"
+import type { ExperienceCurve, ExperienceCurves, SeasonDefinition } from "./types.ts"
 
 export type PassagePresentation = {
   bibleId: typeof nivBibleId
@@ -26,7 +26,7 @@ export type ReadResult =
 export function readScripture(
   state: SeasonState,
   definition: SeasonDefinition,
-  curve: ExperienceCurve,
+  curves: ExperienceCurves,
   scriptureObjectId: string,
 ): ReadResult {
   if (state.fight) return { ok: false, reason: "fight-underway" }
@@ -50,9 +50,13 @@ export function readScripture(
   const adventurerBefore = state.adventurerExperience
   state.trainedExperience.Scripture = holdTrainedExperience(
     scriptureBefore + scriptureObject.scriptureExperience,
-    curve,
+    curves.trained,
   )
-  state.adventurerExperience = experienceAfterFirstReading(adventurerBefore, curve, definition.smallerGrant)
+  state.adventurerExperience = experienceAfterFirstReading(
+    adventurerBefore,
+    curves.adventurer,
+    definition.smallerGrant,
+  )
   state.referenceJournal = [
     ...state.referenceJournal,
     { reference: scriptureObject.reference, bibleId: nivBibleId },

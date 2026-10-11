@@ -41,6 +41,31 @@ export function createShotGame(options: GameOptions, name: ReviewShot): Game {
   return game
 }
 
+/** A review holds gameplay without using setPaused, which cancels target orders. */
+export function holdReviewGame(game: Game): Game {
+  return { ...game, advance: () => {}, setPaused: () => {} }
+}
+
+type ReviewClip = { name: string; stop: () => unknown; reset: () => unknown; start: (loop: boolean, speed: number) => unknown }
+type ReviewActor<T extends ReviewClip> = {
+  root: { rotation: { y: number } }; clips: T[]; active?: T
+  actionUntil: number; prior?: Point; deathUntil?: number; culled?: boolean
+}
+/** People only receive visibility updates, so they must retain a playing Idle. */
+export function resetReviewActors<T extends ReviewClip>(actors: Iterable<ReviewActor<T>>): void {
+  for (const actor of actors) {
+    for (const clip of actor.clips) { clip.stop(); clip.reset() }
+    const idle = actor.clips.find(clip => clip.name.toLowerCase().split(/[|.]/).pop() === 'idle')
+      ?? actor.clips.find(clip => clip.name.toLowerCase().includes('idle'))
+    actor.active = idle
+    idle?.start(true, 1)
+    actor.prior = undefined; actor.actionUntil = 0; actor.deathUntil = undefined
+    actor.root.rotation.y = 0
+    // The next visibility pass must pause newly restarted, offscreen actors.
+    actor.culled = false
+  }
+}
+
 export type FrameCounters = { drawCalls: number; activeMeshes: number; triangles: number }
 export type FrameMeasurement = FrameCounters & {
   averageFps: number; p95FrameMs: number; frameCount: number
@@ -112,7 +137,7 @@ export function installReviewHarness(context: {
       // Closing a panel cancels orders; do so on the old game before replacement.
       context.closePanel()
       // UI/world retain this object's identity, but now use the fresh methods.
-      Object.assign(game, fixture)
+      Object.assign(game, holdReviewGame(fixture))
       context.resetView(game.drainEvents())
       const zoom = cameraZoom[reviewShots[name].zoom]
       context.applyQuality(quality); context.applyZoom(zoom)

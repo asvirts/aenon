@@ -262,8 +262,7 @@ async function boot() {
   const fpsSamples: number[] = []
   engine.runRenderLoop(() => {
     const dt = Math.min(engine.getDeltaTime() / 1000, .05)
-    if (reviewHarness) game.setPaused(document.hidden)
-    else game.advance(dt)
+    if (!reviewHarness) game.advance(dt)
     const snapshot = game.snapshot(), events = game.drainEvents()
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
     if (!reviewHarness) pollGamepad(snapshot, dt)
@@ -273,7 +272,7 @@ async function boot() {
     lockCameraToPlayer(camera, new Vector3(snapshot.position.x, heightAt(snapshot.position.x, snapshot.position.z), snapshot.position.z))
     world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight)
     sun.position.set(snapshot.position.x - 22, heightAt(snapshot.position.x, snapshot.position.z) + 40, snapshot.position.z + 16)
-    scene.animationTimeScale = snapshot.paused ? 0 : 1
+    scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt
     if (fadeTime > .1) {
       fadeTime = 0
@@ -298,12 +297,8 @@ async function boot() {
     reviewHarness = review.installReviewHarness({
       game, options, scene, engine, applyQuality: setQuality, applyZoom, closePanel: ui.closePanel,
       resetView: events => {
-        ui.notice(''); keys.clear(); game.setPaused(false)
-        for (const actor of world.actors.values()) {
-          actor.active?.stop(); actor.active = undefined; actor.prior = undefined; actor.actionUntil = 0; actor.deathUntil = undefined
-          actor.root.rotation.y = 0
-        }
-        for (const group of scene.animationGroups) group.reset()
+        ui.notice(''); keys.clear()
+        review.resetReviewActors(world.actors.values())
         // An attack drives its authored clip; omit floating damage and notices.
         world.events(events.filter(event => event.kind === 'attack'), game.snapshot())
         fadeTime = 1; uiTime = 1

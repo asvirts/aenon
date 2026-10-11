@@ -1,0 +1,1266 @@
+{
+  "ready": true,
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "entries": [
+    {
+      "name": "http://127.0.0.1:5191/",
+      "transfer": 3726,
+      "encoded": 3426,
+      "decoded": 18356
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/game-D_BJPRu0.js",
+      "transfer": 71120,
+      "encoded": 70820,
+      "decoded": 212272
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/observable.pure-H-M_hi7F.js",
+      "transfer": 1402,
+      "encoded": 1102,
+      "decoded": 3207
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/performanceConfigurator-UtxC_Odd.js",
+      "transfer": 800,
+      "encoded": 500,
+      "decoded": 500
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/math.scalar.functions-BWXNux-o.js",
+      "transfer": 1331,
+      "encoded": 1031,
+      "decoded": 2197
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/engineStore-B_7KzytD.js",
+      "transfer": 664,
+      "encoded": 364,
+      "decoded": 364
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/typeStore-Cu_sj2zM.js",
+      "transfer": 380,
+      "encoded": 80,
+      "decoded": 80
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/devTools-Bh3wKyVb.js",
+      "transfer": 929,
+      "encoded": 629,
+      "decoded": 629
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logger-CuBYPcDK.js",
+      "transfer": 1126,
+      "encoded": 826,
+      "decoded": 1881
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/webRequest-dqz0dHXK.js",
+      "transfer": 1366,
+      "encoded": 1066,
+      "decoded": 2941
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/math.vector.pure-DflB6eDL.js",
+      "transfer": 16327,
+      "encoded": 16027,
+      "decoded": 64632
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/math.color.pure-jz9t-uBg.js",
+      "transfer": 3226,
+      "encoded": 2926,
+      "decoded": 12501
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/halfFloat-Ce77JD5z.js",
+      "transfer": 903,
+      "encoded": 603,
+      "decoded": 1290
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/domManagement-BqltO0ki.js",
+      "transfer": 556,
+      "encoded": 256,
+      "decoded": 256
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/precisionDate-Uyb-ubD0.js",
+      "transfer": 480,
+      "encoded": 180,
+      "decoded": 180
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/math.size-B4xBO4Vj.js",
+      "transfer": 2389,
+      "encoded": 2089,
+      "decoded": 5672
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/smartArray-BRfcgNbX.js",
+      "transfer": 737,
+      "encoded": 437,
+      "decoded": 1186
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightConstants-BJeMAAtg.js",
+      "transfer": 4333,
+      "encoded": 4033,
+      "decoded": 18242
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/guid-BXdVC_j_.js",
+      "transfer": 457,
+      "encoded": 157,
+      "decoded": 157
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/tools.functions-DFtwUXi6.js",
+      "transfer": 4747,
+      "encoded": 4447,
+      "decoded": 13386
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/decorators-D3kDnvNy.js",
+      "transfer": 1883,
+      "encoded": 1583,
+      "decoded": 3885
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/shaderStore-D-XQlhUT.js",
+      "transfer": 769,
+      "encoded": 469,
+      "decoded": 469
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/tools.pure-nRKmVnaF.js",
+      "transfer": 10579,
+      "encoded": 10279,
+      "decoded": 31644
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/internalTexture-CIqq8xFB.js",
+      "transfer": 2351,
+      "encoded": 2051,
+      "decoded": 7890
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/abstractEngine.pure-QXfq3118.js",
+      "transfer": 14969,
+      "encoded": 14669,
+      "decoded": 59880
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/buffer.pure--YP7ZMLx.js",
+      "transfer": 2786,
+      "encoded": 2486,
+      "decoded": 7560
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/thinEngine.pure-C-16tivH.js",
+      "transfer": 17359,
+      "encoded": 17059,
+      "decoded": 68087
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/keyboardEvents-CGYiptFb.js",
+      "transfer": 657,
+      "encoded": 357,
+      "decoded": 357
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/sceneComponent-PfXmK13O.js",
+      "transfer": 5243,
+      "encoded": 4943,
+      "decoded": 18073
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/easing-MRq6cQGu.js",
+      "transfer": 4767,
+      "encoded": 4467,
+      "decoded": 13726
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/math.plane-URv9-mpa.js",
+      "transfer": 1068,
+      "encoded": 768,
+      "decoded": 1811
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/animation.pure-DZvxnPTv.js",
+      "transfer": 7859,
+      "encoded": 7559,
+      "decoded": 28970
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pointerEvents-boMPhNg3.js",
+      "transfer": 1060,
+      "encoded": 760,
+      "decoded": 760
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/animationGroup.pure-BHf62vzt.js",
+      "transfer": 13062,
+      "encoded": 12762,
+      "decoded": 53860
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/scene.pure-Bgo_pTuT.js",
+      "transfer": 34849,
+      "encoded": 34549,
+      "decoded": 160579
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/preload-helper-mJ2wAMMC.js",
+      "transfer": 1428,
+      "encoded": 1128,
+      "decoded": 2255
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/postProcess.pure-C-TuPQXr.js",
+      "transfer": 8481,
+      "encoded": 8181,
+      "decoded": 27732
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/renderTargetTexture.pure-DhqiGnj5.js",
+      "transfer": 28094,
+      "encoded": 27794,
+      "decoded": 111782
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/baseTexture.pure-DD1jDgvK.js",
+      "transfer": 4139,
+      "encoded": 3839,
+      "decoded": 15107
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/effectRenderer.pure-y9zyiiG1.js",
+      "transfer": 5900,
+      "encoded": 5600,
+      "decoded": 17722
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/texture.pure-DhkHhjz_.js",
+      "transfer": 5748,
+      "encoded": 5448,
+      "decoded": 19583
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/webAudioBaseSubGraph-Dt0pq0Kf.js",
+      "transfer": 3794,
+      "encoded": 3494,
+      "decoded": 12355
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/brdfTextureTools-DsjYQsWK.js",
+      "transfer": 56024,
+      "encoded": 55724,
+      "decoded": 104301
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/spatialWebAudio-DdjhT40c.js",
+      "transfer": 3930,
+      "encoded": 3630,
+      "decoded": 15881
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/abstractSoundInstance-B5C_WUCX.js",
+      "transfer": 1201,
+      "encoded": 901,
+      "decoded": 3083
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/abstractSoundSource-vjAm2svO.js",
+      "transfer": 779,
+      "encoded": 479,
+      "decoded": 1484
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bonesDeclaration-eZsb-J1W.js",
+      "transfer": 985,
+      "encoded": 685,
+      "decoded": 1576
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/packingFunctions-CYllaKEW.js",
+      "transfer": 912,
+      "encoded": 612,
+      "decoded": 612
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bakedVertexAnimation-7XIMgH6x.js",
+      "transfer": 1228,
+      "encoded": 928,
+      "decoded": 3425
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexDeclaration-4aMxOx2b.js",
+      "transfer": 1041,
+      "encoded": 741,
+      "decoded": 741
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/instancesDeclaration-CJBvtBV5.js",
+      "transfer": 1233,
+      "encoded": 933,
+      "decoded": 933
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexGlobal-CjrOq831.js",
+      "transfer": 649,
+      "encoded": 349,
+      "decoded": 349
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertex-ogcMWae3.js",
+      "transfer": 902,
+      "encoded": 602,
+      "decoded": 2074
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/instancesVertex-C-FoRQR1.js",
+      "transfer": 1183,
+      "encoded": 883,
+      "decoded": 883
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexGlobalDeclaration-CKZ3fsoN.js",
+      "transfer": 856,
+      "encoded": 556,
+      "decoded": 1763
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/packingFunctions-Zjmt0YZ0.js",
+      "transfer": 950,
+      "encoded": 650,
+      "decoded": 650
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexGlobalDeclaration-5vBrbEWU.js",
+      "transfer": 793,
+      "encoded": 493,
+      "decoded": 1245
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bakedVertexAnimationDeclaration-C-g0vyVW.js",
+      "transfer": 1151,
+      "encoded": 851,
+      "decoded": 851
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/instancesDeclaration-DsiFqYXH.js",
+      "transfer": 663,
+      "encoded": 363,
+      "decoded": 1040
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bonesVertex-pbyGCQQC.js",
+      "transfer": 808,
+      "encoded": 508,
+      "decoded": 2168
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bonesDeclaration-SX_sSZ8J.js",
+      "transfer": 902,
+      "encoded": 602,
+      "decoded": 1229
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexDeclaration-DQ2pBC2E.js",
+      "transfer": 1094,
+      "encoded": 794,
+      "decoded": 794
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertexGlobal-DuIqJiFY.js",
+      "transfer": 665,
+      "encoded": 365,
+      "decoded": 365
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/morphTargetsVertex-DCuAuKMQ.js",
+      "transfer": 1128,
+      "encoded": 828,
+      "decoded": 4565
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/instancesVertex-Dty6qjVO.js",
+      "transfer": 693,
+      "encoded": 393,
+      "decoded": 1177
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bonesVertex-CDLHrzx0.js",
+      "transfer": 842,
+      "encoded": 542,
+      "decoded": 2822
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/cubemapToSphericalPolynomial-kiJO6xQ_.js",
+      "transfer": 3096,
+      "encoded": 2796,
+      "decoded": 9331
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bakedVertexAnimation-CP3BNGXM.js",
+      "transfer": 950,
+      "encoded": 650,
+      "decoded": 2824
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/dumpTools.pure-Dif-J2eH.js",
+      "transfer": 5176,
+      "encoded": 4876,
+      "decoded": 12407
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/constants-_wyaM_ID.js",
+      "transfer": 3515,
+      "encoded": 3215,
+      "decoded": 11770
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/meshUboDeclaration-BATNZvmb.js",
+      "transfer": 579,
+      "encoded": 279,
+      "decoded": 279
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fresnelFunction-FdYlYPwE.js",
+      "transfer": 784,
+      "encoded": 484,
+      "decoded": 484
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/sceneUboDeclaration-B96Tfx7b.js",
+      "transfer": 736,
+      "encoded": 436,
+      "decoded": 436
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/helperFunctions-DHdJUWHO.js",
+      "transfer": 2520,
+      "encoded": 2220,
+      "decoded": 6575
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/decalFragment-CvBK6CMD.js",
+      "transfer": 781,
+      "encoded": 481,
+      "decoded": 481
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphInteger.pure-CZmJgkLp.js",
+      "transfer": 858,
+      "encoded": 558,
+      "decoded": 558
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphBlock-BhsRuQUy.js",
+      "transfer": 3619,
+      "encoded": 3319,
+      "decoded": 11163
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphExecutionBlockWithOutSignal-DF_MgX8i.js",
+      "transfer": 459,
+      "encoded": 159,
+      "decoded": 159
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphEventBlock-8cKiOVI8.js",
+      "transfer": 989,
+      "encoded": 689,
+      "decoded": 689
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphAssetsContext-WtUyuDAI.js",
+      "transfer": 1036,
+      "encoded": 736,
+      "decoded": 736
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/utils-CLq_UU0_.js",
+      "transfer": 982,
+      "encoded": 682,
+      "decoded": 682
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphExecutionBlock-Bzxv07GA.js",
+      "transfer": 1230,
+      "encoded": 930,
+      "decoded": 2647
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphDelayRegistry-Dd3murvx.js",
+      "transfer": 621,
+      "encoded": 321,
+      "decoded": 321
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphAsyncExecutionBlock-B2lKtr62.js",
+      "transfer": 969,
+      "encoded": 669,
+      "decoded": 669
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphRichTypes.pure-DMzJXadt.js",
+      "transfer": 1227,
+      "encoded": 927,
+      "decoded": 2663
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphPlayAnimationBlock.pure-DqiARl5F.js",
+      "transfer": 2122,
+      "encoded": 1822,
+      "decoded": 5969
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphCachedOperationBlock-Ctkj6Ydh.js",
+      "transfer": 1268,
+      "encoded": 968,
+      "decoded": 968
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphUnaryOperationBlock-CDxdryrd.js",
+      "transfer": 602,
+      "encoded": 302,
+      "decoded": 302
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphBinaryOperationBlock-8F1wZr72.js",
+      "transfer": 672,
+      "encoded": 372,
+      "decoded": 372
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/helperFunctions-D8vur8CW.js",
+      "transfer": 2642,
+      "encoded": 2342,
+      "decoded": 6897
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneVertexDeclaration-BYIpTPFm.js",
+      "transfer": 1052,
+      "encoded": 752,
+      "decoded": 752
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneFragmentDeclaration-M3T9Lap-.js",
+      "transfer": 907,
+      "encoded": 607,
+      "decoded": 607
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneFragment-CXLYb7ZJ.js",
+      "transfer": 1104,
+      "encoded": 804,
+      "decoded": 804
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/flowGraphKeyboardEventBlock-BK9HAPng.js",
+      "transfer": 742,
+      "encoded": 442,
+      "decoded": 1057
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneFragmentDeclaration-Dztv0IA8.js",
+      "transfer": 913,
+      "encoded": 613,
+      "decoded": 613
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneVertex-DwkrJYmX.js",
+      "transfer": 952,
+      "encoded": 652,
+      "decoded": 652
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/meshVertexDeclaration-CPlGPeEg.js",
+      "transfer": 522,
+      "encoded": 222,
+      "decoded": 222
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneVertexDeclaration-B8LM6QZj.js",
+      "transfer": 1094,
+      "encoded": 794,
+      "decoded": 794
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneFragment-CWY7C38Z.js",
+      "transfer": 1206,
+      "encoded": 906,
+      "decoded": 906
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/sceneUboDeclaration-B5VhSG0v.js",
+      "transfer": 664,
+      "encoded": 364,
+      "decoded": 364
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/sceneVertexDeclaration-CluTp-RC.js",
+      "transfer": 630,
+      "encoded": 330,
+      "decoded": 330
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clipPlaneVertex-DfQm2Zia.js",
+      "transfer": 1102,
+      "encoded": 802,
+      "decoded": 802
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clusteredLightingFunctions-BFCOODPn.js",
+      "transfer": 1064,
+      "encoded": 764,
+      "decoded": 764
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/backgroundUboDeclaration-ClJLip40.js",
+      "transfer": 998,
+      "encoded": 698,
+      "decoded": 698
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/meshUboDeclaration-BmNu2KU_.js",
+      "transfer": 645,
+      "encoded": 345,
+      "decoded": 345
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogVertexDeclaration-CiHbVcSR.js",
+      "transfer": 531,
+      "encoded": 231,
+      "decoded": 231
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightVxUboDeclaration-C0zImfsf.js",
+      "transfer": 890,
+      "encoded": 590,
+      "decoded": 1422
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/clusteredLightingFunctions-DNqaoQCj.js",
+      "transfer": 1092,
+      "encoded": 792,
+      "decoded": 792
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthDeclaration-BpsZdJ7z.js",
+      "transfer": 671,
+      "encoded": 371,
+      "decoded": 371
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogVertex-D0bmc4KF.js",
+      "transfer": 632,
+      "encoded": 332,
+      "decoded": 332
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/reflectionFunction-C2zo31eT.js",
+      "transfer": 1347,
+      "encoded": 1047,
+      "decoded": 4648
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/shadowsVertex-D6v7o28N.js",
+      "transfer": 844,
+      "encoded": 544,
+      "decoded": 2473
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthVertex-DSD5XdGw.js",
+      "transfer": 676,
+      "encoded": 376,
+      "decoded": 376
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/imageProcessingDeclaration-C3mO05-O.js",
+      "transfer": 811,
+      "encoded": 511,
+      "decoded": 1075
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightUboDeclaration-invEuN9e.js",
+      "transfer": 1370,
+      "encoded": 1070,
+      "decoded": 3587
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightsFragmentFunctions-DLwHFax8.js",
+      "transfer": 2302,
+      "encoded": 2002,
+      "decoded": 9084
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/ltcHelperFunctions-D8BySwCQ.js",
+      "transfer": 2138,
+      "encoded": 1838,
+      "decoded": 6631
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/backgroundUboDeclaration-i4MsxPq1.js",
+      "transfer": 1021,
+      "encoded": 721,
+      "decoded": 721
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogFragment-C9E3EVJj.js",
+      "transfer": 626,
+      "encoded": 326,
+      "decoded": 326
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/imageProcessingFunctions-C15fM41T.js",
+      "transfer": 1921,
+      "encoded": 1621,
+      "decoded": 4114
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogVertexDeclaration-Bb9kDbrL.js",
+      "transfer": 521,
+      "encoded": 221,
+      "decoded": 221
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/shadowsFragmentFunctions-CyvG9jhk.js",
+      "transfer": 4226,
+      "encoded": 3926,
+      "decoded": 28520
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogFragmentDeclaration-B3hbo39x.js",
+      "transfer": 794,
+      "encoded": 494,
+      "decoded": 1039
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthFragment-CxtJswLx.js",
+      "transfer": 612,
+      "encoded": 312,
+      "decoded": 312
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightVxFragmentDeclaration-Cn2ZeppL.js",
+      "transfer": 819,
+      "encoded": 519,
+      "decoded": 1255
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightFragment-BkT__YJ5.js",
+      "transfer": 3581,
+      "encoded": 3281,
+      "decoded": 22248
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogVertex-B90wzaBe.js",
+      "transfer": 517,
+      "encoded": 217,
+      "decoded": 217
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthDeclaration-Dh136csG.js",
+      "transfer": 661,
+      "encoded": 361,
+      "decoded": 361
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightVxUboDeclaration-CQiAoKfZ.js",
+      "transfer": 829,
+      "encoded": 529,
+      "decoded": 1169
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/shadowsVertex-CdnfwHqg.js",
+      "transfer": 1301,
+      "encoded": 1001,
+      "decoded": 1001
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/reflectionFunction-C0UTcqMV.js",
+      "transfer": 1291,
+      "encoded": 991,
+      "decoded": 4135
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/imageProcessingDeclaration-eTCZRCGL.js",
+      "transfer": 1274,
+      "encoded": 974,
+      "decoded": 974
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthVertex-D5IUM6qd.js",
+      "transfer": 609,
+      "encoded": 309,
+      "decoded": 309
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightUboDeclaration-0GW0xpMZ.js",
+      "transfer": 1241,
+      "encoded": 941,
+      "decoded": 2825
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightFragmentDeclaration-BfzJFvAK.js",
+      "transfer": 1235,
+      "encoded": 935,
+      "decoded": 2922
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/ltcHelperFunctions-DS3Utz6C.js",
+      "transfer": 1832,
+      "encoded": 1532,
+      "decoded": 6040
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/imageProcessingFunctions-YjY3YzNA.js",
+      "transfer": 2169,
+      "encoded": 1869,
+      "decoded": 4930
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogFragmentDeclaration--w8QPs2M.js",
+      "transfer": 1237,
+      "encoded": 937,
+      "decoded": 937
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightsFragmentFunctions-CrErKaBy.js",
+      "transfer": 2119,
+      "encoded": 1819,
+      "decoded": 8009
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/shadowsFragmentFunctions-BBZeOHdF.js",
+      "transfer": 4250,
+      "encoded": 3950,
+      "decoded": 25986
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/logDepthFragment-C5lxT4l1.js",
+      "transfer": 570,
+      "encoded": 270,
+      "decoded": 270
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/fogFragment-CKCGTcJi.js",
+      "transfer": 594,
+      "encoded": 294,
+      "decoded": 294
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/mainUVVaryingDeclaration-B_7d0nc3.js",
+      "transfer": 539,
+      "encoded": 239,
+      "decoded": 239
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/lightFragment-CbTUC3ac.js",
+      "transfer": 3410,
+      "encoded": 3110,
+      "decoded": 19614
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/samplerVertexImplementation-CEwsh6W2.js",
+      "transfer": 1815,
+      "encoded": 1515,
+      "decoded": 6497
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrUboDeclaration-BPdnc_7Y.js",
+      "transfer": 964,
+      "encoded": 664,
+      "decoded": 2399
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/vertexColorMixing-DPW6Is9y.js",
+      "transfer": 734,
+      "encoded": 434,
+      "decoded": 434
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrBRDFFunctions-DxfbxN23.js",
+      "transfer": 4601,
+      "encoded": 4301,
+      "decoded": 12761
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/harmonicsFunctions-YM-AdJck.js",
+      "transfer": 867,
+      "encoded": 567,
+      "decoded": 1510
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpVertexDeclaration-I4Guxw_q.js",
+      "transfer": 694,
+      "encoded": 394,
+      "decoded": 394
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpVertex-DRq4BZvD.js",
+      "transfer": 999,
+      "encoded": 699,
+      "decoded": 699
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/vertexPullingDeclaration-bSzsf5ND.js",
+      "transfer": 1813,
+      "encoded": 1513,
+      "decoded": 11570
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/vertexColorMixing-UCrnwszu.js",
+      "transfer": 862,
+      "encoded": 562,
+      "decoded": 562
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/objectIdFunctions-B7azwFhh.js",
+      "transfer": 850,
+      "encoded": 550,
+      "decoded": 550
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/meshBlendTagFragmentOutput-DphJWeHM.js",
+      "transfer": 846,
+      "encoded": 546,
+      "decoded": 1136
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/oitFragment-BX3jW996.js",
+      "transfer": 2930,
+      "encoded": 2630,
+      "decoded": 8137
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/samplerFragmentDeclaration-CEHqUfAO.js",
+      "transfer": 1029,
+      "encoded": 729,
+      "decoded": 729
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrDebug-BrRjjwX-.js",
+      "transfer": 8151,
+      "encoded": 7851,
+      "decoded": 36563
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/hdrFilteringFunctions-Da1yugu7.js",
+      "transfer": 2804,
+      "encoded": 2504,
+      "decoded": 8688
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/subSurfaceScatteringFunctions-kzIx-1Od.js",
+      "transfer": 573,
+      "encoded": 273,
+      "decoded": 273
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragmentMainFunctions-D-SkF7GB.js",
+      "transfer": 1538,
+      "encoded": 1238,
+      "decoded": 2996
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragmentFunctions-DBY65jvy.js",
+      "transfer": 1184,
+      "encoded": 884,
+      "decoded": 2199
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrIBLFunctions-b8fwQKtH.js",
+      "transfer": 1181,
+      "encoded": 881,
+      "decoded": 2719
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragment-CxYyYLpf.js",
+      "transfer": 1331,
+      "encoded": 1031,
+      "decoded": 3272
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/samplerVertexImplementation-DUwTGCgo.js",
+      "transfer": 1369,
+      "encoded": 1069,
+      "decoded": 3850
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/mainUVVaryingDeclaration-BBamQlxR.js",
+      "transfer": 529,
+      "encoded": 229,
+      "decoded": 229
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/harmonicsFunctions-Cc7pbAzt.js",
+      "transfer": 836,
+      "encoded": 536,
+      "decoded": 1211
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrUboDeclaration--xFZEw0i.js",
+      "transfer": 975,
+      "encoded": 675,
+      "decoded": 1801
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrBRDFFunctions-BCNINF-p.js",
+      "transfer": 4424,
+      "encoded": 4124,
+      "decoded": 11931
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/samplerFragmentDeclaration-3yaLawFX.js",
+      "transfer": 975,
+      "encoded": 675,
+      "decoded": 675
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpVertexDeclaration-Cb04kLz9.js",
+      "transfer": 641,
+      "encoded": 341,
+      "decoded": 341
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/oitFragment-B_qmRcLR.js",
+      "transfer": 2855,
+      "encoded": 2555,
+      "decoded": 7087
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/objectIdFunctions-532nR7xV.js",
+      "transfer": 873,
+      "encoded": 573,
+      "decoded": 573
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/prePassDeclaration-UpIxofH8.js",
+      "transfer": 1175,
+      "encoded": 875,
+      "decoded": 3295
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrDebug-BqaGz1G1.js",
+      "transfer": 6532,
+      "encoded": 6232,
+      "decoded": 29292
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpVertex-CWhdIpqj.js",
+      "transfer": 822,
+      "encoded": 522,
+      "decoded": 522
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pbrIBLFunctions-CSlJv7qb.js",
+      "transfer": 1181,
+      "encoded": 881,
+      "decoded": 2522
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragmentFunctions-BKQoojZ_.js",
+      "transfer": 1145,
+      "encoded": 845,
+      "decoded": 2037
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/hdrFilteringFunctions-Dw0rQ8Bu.js",
+      "transfer": 2847,
+      "encoded": 2547,
+      "decoded": 8635
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/subSurfaceScatteringFunctions-D1w5631e.js",
+      "transfer": 562,
+      "encoded": 262,
+      "decoded": 262
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragmentMainFunctions-DGQe1pIX.js",
+      "transfer": 1518,
+      "encoded": 1218,
+      "decoded": 2760
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/decalFragment-DYiNNNYb.js",
+      "transfer": 690,
+      "encoded": 390,
+      "decoded": 390
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/bumpFragment-COQ64DYF.js",
+      "transfer": 1237,
+      "encoded": 937,
+      "decoded": 2453
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/openpbrUboDeclaration-DsEnzkeE.js",
+      "transfer": 1353,
+      "encoded": 1053,
+      "decoded": 5222
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/openpbrSubsurfaceLayerData-DpsV2wgM.js",
+      "transfer": 4440,
+      "encoded": 4140,
+      "decoded": 18461
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/pointCloudVertex-CmkEsLzf.js",
+      "transfer": 546,
+      "encoded": 246,
+      "decoded": 246
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/defaultUboDeclaration-DVoEMIF5.js",
+      "transfer": 836,
+      "encoded": 536,
+      "decoded": 1625
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/defaultUboDeclaration-C53xcSdv.js",
+      "transfer": 851,
+      "encoded": 551,
+      "decoded": 1262
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/openpbrUboDeclaration-CbPGRvOI.js",
+      "transfer": 1326,
+      "encoded": 1026,
+      "decoded": 3875
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/sceneFragmentDeclaration-ql3RpL9u.js",
+      "transfer": 663,
+      "encoded": 363,
+      "decoded": 363
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/screenSpaceRayTrace-Z74_Mvl0.js",
+      "transfer": 3214,
+      "encoded": 2914,
+      "decoded": 8470
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/screenSpaceRayTrace-BZRnp6Bu.js",
+      "transfer": 3053,
+      "encoded": 2753,
+      "decoded": 7876
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/geometryRenderingFragment-DZg0Y277.js",
+      "transfer": 1083,
+      "encoded": 783,
+      "decoded": 2877
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/openpbrSubsurfaceLayerData-DZgp0Qa4.js",
+      "transfer": 4194,
+      "encoded": 3894,
+      "decoded": 17050
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/kernelBlurVaryingDeclaration-g2Ge9lzd.js",
+      "transfer": 522,
+      "encoded": 222,
+      "decoded": 222
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/geometryRenderingFragment-BoxdRBy7.js",
+      "transfer": 1140,
+      "encoded": 840,
+      "decoded": 2750
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/kernelBlurVaryingDeclaration-DP2Wr9Oc.js",
+      "transfer": 512,
+      "encoded": 212,
+      "decoded": 212
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/mrtFragmentDeclaration-BZpfWb0R.js",
+      "transfer": 922,
+      "encoded": 622,
+      "decoded": 2591
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/game-DaOjzPxO.css",
+      "transfer": 5020,
+      "encoded": 4720,
+      "decoded": 16167
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js",
+      "transfer": 914,
+      "encoded": 614,
+      "decoded": 614
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js",
+      "transfer": 768,
+      "encoded": 468,
+      "decoded": 468
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/glTF-DKBl7CU2.js",
+      "transfer": 1258026,
+      "encoded": 1257726,
+      "decoded": 5926539
+    },
+    {
+      "name": "http://127.0.0.1:5191/assets/noise.fragment-DEbzbasH.js",
+      "transfer": 951,
+      "encoded": 651,
+      "decoded": 1249
+    },
+    {
+      "name": "http://127.0.0.1:5191/art-sample/house.glb",
+      "transfer": 1234324,
+      "encoded": 1234024,
+      "decoded": 1234024
+    },
+    {
+      "name": "http://127.0.0.1:5191/art-sample/olive.glb",
+      "transfer": 1213696,
+      "encoded": 1213396,
+      "decoded": 1213396
+    },
+    {
+      "name": "http://127.0.0.1:5191/game-assets/adventurer.glb",
+      "transfer": 647256,
+      "encoded": 646956,
+      "decoded": 646956
+    },
+    {
+      "name": "http://127.0.0.1:5191/game-assets/merchant.glb",
+      "transfer": 685016,
+      "encoded": 684716,
+      "decoded": 684716
+    },
+    {
+      "name": "http://127.0.0.1:5191/game-assets/john.glb",
+      "transfer": 723764,
+      "encoded": 723464,
+      "decoded": 723464
+    },
+    {
+      "name": "http://127.0.0.1:5191/game-assets/wolf.glb",
+      "transfer": 431380,
+      "encoded": 431080,
+      "decoded": 431080
+    },
+    {
+      "name": "http://127.0.0.1:5191/game-assets/bandit.glb",
+      "transfer": 694284,
+      "encoded": 693984,
+      "decoded": 693984
+    }
+  ]
+}

@@ -19,16 +19,22 @@ it('keeps the complete visible valley within the sun map at both zoom limits and
   assert.ok(shadowView(cameraZoom.max, 16 / 9, .38).frustum > shadowView(cameraZoom.default, 16 / 9, .38).frustum)
 })
 
-it('uses linear matte PBR pigments for surfaces while preserving cue opacity and emission', t => {
+it('uses linear matte PBR pigments while keeping warning and selection cues independent of the sun', t => {
   const engine = new NullEngine(); t.after(() => engine.dispose())
   const scene = new Scene(engine)
   const stone = surfaceMaterial(scene, 'stone', '#b9ad8f')
   assert.equal(stone.getClassName(), 'PBRMaterial')
   assert.deepEqual(stone.albedoColor, Color3.FromHexString('#b9ad8f').toLinearSpace())
   assert.equal(stone.metallic, 0); assert.equal(stone.roughness, .88)
-  const cue = cueMaterial(scene, 'warning', '#c54a2e', .65)
+  const cue = cueMaterial(scene, 'warning', '#c54a2e', 1.25)
   cue.alpha = .3
   assert.equal(cue.getClassName(), 'StandardMaterial')
-  assert.deepEqual(cue.emissiveColor, Color3.FromHexString('#c54a2e').scale(.65))
+  assert.equal(cue.disableLighting, true, 'sun intensity cannot wash warning red into selection gold')
+  assert.deepEqual(cue.diffuseColor, Color3.Black())
+  assert.deepEqual(cue.emissiveColor, Color3.FromHexString('#c54a2e').scale(1.25))
   assert.equal(cue.alpha, .3)
+  const selection = cueMaterial(scene, 'selection', '#efd18c', 1.2)
+  assert.equal(selection.disableLighting, true)
+  assert.ok(selection.emissiveColor.g / selection.emissiveColor.r > .8)
+  assert.ok(cue.emissiveColor.g / cue.emissiveColor.r < .4, 'danger remains red-orange, distinct from gold')
 })

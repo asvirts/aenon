@@ -570,12 +570,12 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     for (const root of footArmor) root.setEnabled(Boolean(feet && feet.id !== 'leather-sandals'))
   }
   const target = MeshBuilder.CreateTorus('selected-target', { diameter: 1.3, thickness: .045, tessellation: 40 }, scene)
-  target.material = cueMaterial(scene, 'selection-gold', '#efd18c', .4); target.isPickable = false; target.setEnabled(false)
+  target.material = cueMaterial(scene, 'selection-gold', '#efd18c', 1.2); target.isPickable = false; target.setEnabled(false)
   const destination = MeshBuilder.CreateTorus('destination', { diameter: .48, thickness: .025, tessellation: 32 }, scene)
   destination.material = target.material; destination.isPickable = false; destination.setEnabled(false)
   for (const object of objects.filter(o => o.kind === 'hostile')) {
     const disc = MeshBuilder.CreateCylinder(`danger-${object.id}`, { height: .018, diameter: 2.3, tessellation: 48 }, scene)
-    const mat = cueMaterial(scene, `danger-red-${object.id}`, '#c54a2e', .65); mat.alpha = .3; disc.material = mat; disc.isPickable = false; disc.setEnabled(false); telegraphs.set(object.id, disc)
+    const mat = cueMaterial(scene, `danger-red-${object.id}`, '#c54a2e', 1.25); mat.alpha = .3; disc.material = mat; disc.isPickable = false; disc.setEnabled(false); telegraphs.set(object.id, disc)
   }
   function float(point: Point, text: string, isPlayer: boolean, time: number) {
     const element = document.createElement('span'); element.className = `world-float${isPlayer ? ' hurt' : ''}`; element.textContent = text; labelLayer.append(element); floating.push({ element, point: { ...point }, until: time + 1.05 })

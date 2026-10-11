@@ -35,7 +35,7 @@ export function createLighting(scene: Scene, engine: Engine, camera: ArcRotateCa
   scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0045; scene.fogColor = haze
   const image = scene.imageProcessingConfiguration
   image.toneMappingEnabled = true; image.toneMappingType = ImageProcessingConfiguration.TONEMAPPING_ACES
-  image.exposure = 1.18; image.contrast = 1.12
+  image.exposure = 1.35; image.contrast = 1.15
   const sky = new HemisphericLight('valley-sky', Vector3.Up(), scene)
   sky.intensity = .55; sky.diffuse = Color3.FromHexString('#c4ddff'); sky.groundColor = Color3.FromHexString('#6e664c')
   const sun = new DirectionalLight('afternoon-sun', new Vector3(.55, -1, -.4).normalize(), scene)

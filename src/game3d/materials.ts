@@ -10,10 +10,11 @@ export function surfaceMaterial(scene: Scene, name: string, hex: string, glow = 
   return mat
 }
 
-/** Keep interaction cues' existing emission and opacity independent of surface tuning. */
-export function cueMaterial(scene: Scene, name: string, hex: string, glow: number) {
+/** Cues retain their hue as sunlight changes; shared ACES still finishes their colour. */
+export function cueMaterial(scene: Scene, name: string, hex: string, intensity: number) {
   const mat = new StandardMaterial(name, scene)
-  mat.diffuseColor = Color3.FromHexString(hex); mat.specularColor = Color3.Black()
-  mat.emissiveColor = mat.diffuseColor.scale(glow)
+  mat.disableLighting = true
+  mat.diffuseColor = Color3.Black(); mat.specularColor = Color3.Black()
+  mat.emissiveColor = Color3.FromHexString(hex).scale(intensity)
   return mat
 }

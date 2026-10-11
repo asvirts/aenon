@@ -43,6 +43,7 @@ export type QuestLoadFailure =
   | "repeatable-adventurer-experience"
   | "repeatable-skill-experience"
   | "repeatable-gear"
+  | "repeatable-defeat"
 
 export function requireQuests(
   definition: SeasonDefinition,
@@ -79,6 +80,9 @@ export function requireQuests(
     }
     if (quest.repeatable && (quest.reward.gear ?? []).length > 0) {
       return { ok: false, reason: "repeatable-gear" }
+    }
+    if (quest.repeatable && quest.steps.some((step) => step.kind === "defeat")) {
+      return { ok: false, reason: "repeatable-defeat" }
     }
     for (const requiredId of quest.requiredQuestIds ?? []) {
       const required = questById(definition, requiredId)
@@ -117,6 +121,10 @@ function settlementOf(definition: SeasonDefinition, giverId: string): string | u
 export type SpeakResult =
   | { ok: true; action: "start" | "repeat" | "turn-in"; questId: string; line: string }
   | { ok: false; reason: "not-present" | "not-offered" | "step-not-ready" | "pack-full" }
+
+export type ReportResult =
+  | { ok: true; questId: string; line: string }
+  | { ok: false; reason: "step-not-ready" }
 
 export function lookAtPerson(
   state: SeasonState,
@@ -241,6 +249,22 @@ function lineOf(definition: SeasonDefinition, progress: QuestProgress): string |
   return step?.line ?? null
 }
 
+export function reportMark(state: SeasonState, definition: SeasonDefinition, mark: string): ReportResult {
+  let reported: { questId: string; line: string } | undefined
+  const questProgress = state.questProgress.map((progress) => {
+    if (progress.finished) return progress
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (!quest || step?.kind !== "mark" || step.mark !== mark) return progress
+    const next = stepPastCurrent(state, quest, progress)
+    reported ??= { questId: quest.id, line: lineOf(definition, next) ?? quest.finishedLine }
+    return next
+  })
+  if (!reported) return { ok: false, reason: "step-not-ready" }
+  state.questProgress = questProgress
+  return { ok: true, questId: reported.questId, line: reported.line }
+}
+
 export function speakToPerson(
   state: SeasonState,
   definition: SeasonDefinition,
@@ -263,7 +287,7 @@ export function speakToPerson(
     finished: false,
     finishedOnce: previous?.finishedOnce ?? false,
   }
-  advanceReadyHolds(state, quest, progress)
+  advanceReadySteps(state, quest, progress)
   state.questProgress = previous
     ? state.questProgress.map((entry) => (entry.questId === quest.id ? progress : entry))
     : [...state.questProgress, progress]
@@ -345,12 +369,30 @@ function packAfterReturn(
   return { ok: true, pack: packed }
 }
 
-function advanceReadyHolds(state: SeasonState, quest: QuestDefinition, progress: QuestProgress): void {
+function stepPastCurrent(
+  state: SeasonState,
+  quest: QuestDefinition,
+  progress: QuestProgress,
+): QuestProgress {
+  const next = { ...progress, stepIndex: progress.stepIndex + 1 }
+  advanceReadySteps(state, quest, next)
+  return next
+}
+
+function advanceReadySteps(state: SeasonState, quest: QuestDefinition, progress: QuestProgress): void {
   while (progress.stepIndex < quest.steps.length) {
     const step = quest.steps[progress.stepIndex]
-    if (!step || step.kind !== "hold") return
-    if (countOf(state.pack, step.goodId) < step.count) return
-    progress.stepIndex += 1
+    if (!step) return
+    if (step.kind === "hold") {
+      if (countOf(state.pack, step.goodId) < step.count) return
+      progress.stepIndex += 1
+      continue
+    }
+    if (step.kind === "defeat" && state.fallenHostiles.includes(step.hostileId)) {
+      progress.stepIndex += 1
+      continue
+    }
+    return
   }
 }
 
@@ -361,13 +403,27 @@ function countOf(pack: SeasonState["pack"], goodId: string): number {
   }, 0)
 }
 
-export function resolveReadyHolds(state: SeasonState, definition: SeasonDefinition): void {
+export function completeCurrentDefeat(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  hostileId: string,
+): void {
+  state.questProgress = state.questProgress.map((progress) => {
+    if (progress.finished) return progress
+    const quest = questById(definition, progress.questId)
+    const step = quest?.steps[progress.stepIndex]
+    if (!quest || step?.kind !== "defeat" || step.hostileId !== hostileId) return progress
+    return stepPastCurrent(state, quest, progress)
+  })
+}
+
+export function resolveReadySteps(state: SeasonState, definition: SeasonDefinition): void {
   state.questProgress = state.questProgress.map((progress) => {
     if (progress.finished) return progress
     const quest = questById(definition, progress.questId)
     if (!quest) return progress
     const next = { ...progress }
-    advanceReadyHolds(state, quest, next)
+    advanceReadySteps(state, quest, next)
     return next
   })
 }

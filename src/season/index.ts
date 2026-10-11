@@ -32,11 +32,13 @@ import { makePiece, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import {
   lookAtPerson,
   presentQuestJournal,
+  reportMark,
   requireQuests,
-  resolveReadyHolds,
+  resolveReadySteps,
   speakToPerson,
   type LookResult,
   type QuestLoadFailure,
+  type ReportResult,
   type SpeakResult,
 } from "./lib/quest.ts"
 import { readScripture, type ReadResult } from "./lib/scripture.ts"
@@ -81,7 +83,7 @@ export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scrip
 export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
 export type { TakeOffResult, WearResult }
-export type { LookResult, QuestLoadFailure, SpeakResult }
+export type { LookResult, QuestLoadFailure, ReportResult, SpeakResult }
 export type { MakeResult }
 
 export type Season = {
@@ -99,6 +101,7 @@ export type Season = {
   gather: (spotId: string) => GatherResult
   look: (personId: string) => LookResult
   speak: (personId: string) => SpeakResult
+  report: (mark: string) => ReportResult
   hunt: () => HuntResult
   pickUp: (gearId: string) => PickUpResult
   wear: (pieceId: string) => WearResult
@@ -139,7 +142,7 @@ export function loadSeason(
   for (const skill of trainedSkills) {
     seasonState.trainedExperience[skill] = holdTrainedExperience(seasonState.trainedExperience[skill], curve)
   }
-  resolveReadyHolds(seasonState, definition)
+  resolveReadySteps(seasonState, definition)
 
   return {
     ok: true,
@@ -155,6 +158,7 @@ export function loadSeason(
       gather: (spotId) => gatherAtSpot(seasonState, definition, curve, spotId),
       look: (personId) => lookAtPerson(seasonState, definition, curve, personId),
       speak: (personId) => speakToPerson(seasonState, definition, curve, personId),
+      report: (mark) => reportMark(seasonState, definition, mark),
       hunt: () => hunt(seasonState, definition, curve),
       pickUp: (gearId) => pickUp(seasonState, definition, gearId),
       wear: (pieceId) => wearPiece(seasonState, definition, pieceId),

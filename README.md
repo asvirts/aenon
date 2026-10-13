@@ -22,7 +22,19 @@ The Season's rules are specified in [Season rules on the logic surface](https://
 ```sh
 npm test          # behavior tests
 npm run typecheck # tsc --noEmit
+npm run build     # production bundle in dist/
+npm run size      # first-load download against the 40 MB budget; reads dist/
 ```
+
+GitHub Actions runs these four, in this order, on every pull request and every push to `main` (`.github/workflows/ci.yml`). It uses Node 24 from `package.json`, needs no secrets and never calls YouVersion. Vercel still builds and deploys from Git; CI does not deploy.
+
+`npm run size` fails above 40,000,000 bytes, the first-load budget in [Improve the graphics](https://github.com/asvirts/aenon/issues/41) (decision 9). It prints the figure on every run, beside the budget and the first harness measurement (7,056,561 bytes at `dc507f4`). The figure is a static upper bound taken from `dist/` without a browser:
+
+- Every file in `dist/` counts except source maps and the separate art-sample page: `art-sample.html`, the script and stylesheet only it loads, and the `art-sample/` models no root-route script names by URL.
+- HTML, JavaScript, CSS, JSON and SVG count at their size under gzip's fastest level, which compresses least. Those under 4 KB count at the larger of their full and gzip sizes, because servers may send small files uncompressed. Everything else counts at full size.
+- Each file adds 300 bytes for response headers, the allowance the [review protocol](docs/art/review-protocol.md) uses.
+
+The review harness measures the real cold load in a browser, and its figure is the one each graphics PR reports. On the same shipped code (`4cee146`), the harness measured 13,718,658 bytes and `npm run size` reports 14,621,465. Every file the browser received was counted at no less than its measured size. The difference is mostly 60 files the first load never requested, such as Babylon chunks loaded on demand and GPU transcoders that machine didn't need.
 
 ## Run the 3D game
 

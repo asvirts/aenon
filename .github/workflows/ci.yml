@@ -27,5 +27,7 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
+      # Temporary: 30 MB of incompressible data stands in for an over-budget asset, to show the size step failing.
+      - run: head -c 30000000 /dev/urandom > dist/over-budget-stand-in.bin
       # Fails above the 40 MB first-load budget from #41 and prints the figure on every run.
       - run: npm run size

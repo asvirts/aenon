@@ -104,6 +104,7 @@ export function createUI(options: UIOptions) {
   let mapSelection: string | undefined
   let craftingRarity = 'all'
   let inventorySelection: { index: number; key: string } | undefined
+  let tradeSide: 'buy' | 'sell' | undefined
   let contextId: string | undefined
   let currentQuality = options.quality ?? 'high'
   let zoomDistance = options.zoom ?? cameraZoom.default
@@ -191,7 +192,7 @@ export function createUI(options: UIOptions) {
     passageRequest?.abort(); passageRequest = null
     if (contextId === '__acquaintance' && id !== contextId) game.act({ type: 'finish-acquaintance' })
     if (!currentPanel) priorFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    currentPanel = panel; contextId = id; dialogueLine = ''
+    currentPanel = panel; contextId = id; dialogueLine = ''; tradeSide = undefined
     options.onPanel(true)
     snapshot = game.snapshot()
     modal.hidden = false
@@ -457,7 +458,18 @@ export function createUI(options: UIOptions) {
         actions: [button('Sell one', () => action({ type: 'sell', vendorId: vendor.personId, good }), 'text-button', snapshot.inCombat)],
       }))
     }
-    body.append(section('Buy', ...buying), section('Sell', ...(selling.length ? selling : [description('This Vendor buys none of the goods you carry.')])))
+    // One list at a time. Opens on Sell when there is something to sell, and holds the choice until the window closes.
+    const side = tradeSide ??= selling.length ? 'sell' : 'buy'
+    const sides = node('div', 'place-list')
+    sides.setAttribute('role', 'group')
+    sides.setAttribute('aria-label', 'Buy or sell')
+    for (const [choice, label] of [['buy', 'Buy'], ['sell', 'Sell']] as const) {
+      const chip = button(label, () => { tradeSide = choice; refreshPanel(); body.querySelector<HTMLButtonElement>(`[data-trade-side="${choice}"]`)?.focus() }, `place-chip ${choice === side ? 'selected' : ''}`)
+      chip.dataset.tradeSide = choice
+      chip.setAttribute('aria-pressed', String(choice === side))
+      sides.append(chip)
+    }
+    body.append(sides, side === 'buy' ? section('Buy', ...buying) : section('Sell', ...(selling.length ? selling : [description('This Vendor buys none of the goods you carry.')])))
   }
   function personPanel(): void {
     if (contextId === '__acquaintance') {

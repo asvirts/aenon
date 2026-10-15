@@ -7,6 +7,8 @@
 # Node
 node_modules/
 dist/
+# Written from content by scripts/season-passages.ts before test, typecheck, build and server.
+src/server/servedPassages.generated.ts
 # Local secrets: the YouVersion App Key lives here, never in git.
 .env
 .env.*

@@ -676,6 +676,163 @@ describe("an ordinary person gives a quest", () => {
     )
   })
 
+  it("starts the chosen offered quest when spoken to about it", () => {
+    const season = load(dyeThenCord())
+
+    assert.deepEqual(season.speak("tanner", "cord"), {
+      ok: true,
+      action: "start",
+      questId: "cord",
+      line: "Bring two measures of flax.",
+    })
+    assert.deepEqual(
+      season.adventurer().questJournal.map((entry) => entry.questId),
+      ["cord"],
+    )
+  })
+
+  it("speaks about the quest in progress when that quest is chosen, and changes nothing", () => {
+    const season = load(dyeThenCord())
+    assert.equal(season.speak("tanner", "dye").ok, true)
+    const saved = season.exportState()
+
+    assert.deepEqual(season.speak("tanner", "dye"), {
+      ok: true,
+      action: "repeat",
+      questId: "dye",
+      line: "Carry two measures of flax.",
+    })
+    assert.deepEqual(season.exportState(), saved)
+  })
+
+  it("turns in the chosen quest when it is the one in progress", () => {
+    const season = loadCarrying(dyeThenCord(), [{ kind: "everyday", id: "flax", count: 2 }])
+    assert.equal(season.speak("tanner", "dye").ok, true)
+
+    assert.deepEqual(season.speak("tanner", "dye"), {
+      ok: true,
+      action: "turn-in",
+      questId: "dye",
+      line: "The cloth is dyed.",
+    })
+    assert.equal(season.adventurer().coin, 4)
+  })
+
+  it("refuses a chosen quest while another of that person's quests is in progress", () => {
+    const season = load(dyeThenCord())
+    assert.equal(season.speak("tanner", "dye").ok, true)
+    const saved = season.exportState()
+
+    assert.deepEqual(season.speak("tanner", "cord"), { ok: false, reason: "not-offered" })
+    assert.deepEqual(season.exportState(), saved)
+  })
+
+  it("refuses a chosen quest that is not offered, and changes nothing", () => {
+    const definition = dyeThenCord()
+    definition.quests = (definition.quests ?? []).map((quest) =>
+      quest.id === "dye" ? { ...quest, adventurerLevel: 8 } : quest,
+    )
+    const season = load(definition)
+    const saved = season.exportState()
+
+    assert.deepEqual(season.speak("tanner", "dye"), { ok: false, reason: "not-offered" })
+    assert.deepEqual(season.speak("tanner", "unknown"), { ok: false, reason: "not-offered" })
+    assert.deepEqual(season.exportState(), saved)
+  })
+
+  it("shows each of a person's quests as available or locked, with what each lock needs", () => {
+    const definition = cordAfterDyeAndWash()
+    definition.quests = [
+      ...(definition.quests ?? []),
+      {
+        id: "rope",
+        giverId: "tanner",
+        repeatable: false,
+        finishedLine: "The rope is laid.",
+        adventurerLevel: 6,
+        skills: [{ skill: "Woodcutting", level: 3 }],
+        steps: [{ kind: "return", goodId: "flax", count: 4, line: "Bring four measures of flax." }],
+        reward: { coin: 2, goods: [] },
+      },
+    ]
+    const season = load(definition)
+    const saved = season.exportState()
+
+    assert.deepEqual(season.quests("tanner"), [
+      { questId: "dye", band: "low", standing: "available", line: "Carry two measures of flax.", finishedOnce: false, locks: [] },
+      { questId: "wash", band: "low", standing: "available", line: "Hand over the cord.", finishedOnce: false, locks: [] },
+      {
+        questId: "cord",
+        band: "low",
+        standing: "locked",
+        line: "Bring two measures of flax.",
+        finishedOnce: false,
+        locks: [{ kind: "quests", questIds: ["dye", "wash"] }],
+      },
+      {
+        questId: "rope",
+        band: "low",
+        standing: "locked",
+        line: "Bring four measures of flax.",
+        finishedOnce: false,
+        locks: [
+          { kind: "adventurer-level", level: 6 },
+          { kind: "skill", skill: "Woodcutting", level: 3 },
+        ],
+      },
+    ])
+    assert.deepEqual(season.exportState(), saved)
+  })
+
+  it("shows a finished quest, the active quest, and the work that waits on it", () => {
+    const season = loadCarrying(cordAfterDyeAndWash(), [{ kind: "everyday", id: "flax", count: 2 }])
+    assert.equal(season.speak("tanner", "dye").ok, true)
+    assert.equal(season.speak("tanner", "dye").ok, true)
+    assert.equal(season.speak("tanner", "wash").ok, true)
+
+    assert.deepEqual(season.quests("tanner"), [
+      { questId: "dye", band: "low", standing: "finished", line: "The cloth is dyed.", finishedOnce: true, locks: [] },
+      { questId: "wash", band: "low", standing: "active", line: "Hand over the cord.", finishedOnce: false, locks: [] },
+      {
+        questId: "cord",
+        band: "low",
+        standing: "locked",
+        line: "Bring two measures of flax.",
+        finishedOnce: false,
+        locks: [{ kind: "quests", questIds: ["wash"] }],
+      },
+    ])
+  })
+
+  it("shows an otherwise open quest as waiting while another of that person's quests is in progress", () => {
+    const season = load(dyeThenCord())
+    assert.equal(season.speak("tanner", "dye").ok, true)
+
+    assert.deepEqual(season.quests("tanner")[1], {
+      questId: "cord",
+      band: "low",
+      standing: "locked",
+      line: "Bring two measures of flax.",
+      finishedOnce: false,
+      locks: [{ kind: "other-work", questId: "dye" }],
+    })
+  })
+
+  it("shows a finished repeatable quest as available again", () => {
+    const season = loadCarrying(repeatableDye(), [{ kind: "everyday", id: "flax", count: 2 }])
+    assert.equal(season.speak("tanner", "dye").ok, true)
+    assert.equal(season.speak("tanner", "dye").ok, true)
+
+    assert.deepEqual(season.quests("tanner"), [
+      { questId: "dye", band: "low", standing: "available", line: "Carry two measures of flax.", finishedOnce: true, locks: [] },
+    ])
+  })
+
+  it("shows no quests for someone who is not here", () => {
+    const season = load(cordDefinition())
+    assert.deepEqual(season.quests("nobody"), [])
+  })
+
   it("leaves a hold current when the pack is short of the named count", () => {
     const season = loadCarrying(dyeThenCord(), [{ kind: "everyday", id: "flax", count: 1 }])
     assert.deepEqual(season.speak("tanner"), {

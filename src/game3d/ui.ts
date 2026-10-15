@@ -2,15 +2,16 @@ import { gearSlots } from '../season/lib/types.ts'
 import { regionPlaces, regionRoads, regionBounds, ports } from './region.ts'
 import { lake, riverCenter, riverHalfWidth } from './terrain.ts'
 import { cameraZoom } from './view.ts'
-import { sceneNarratives, personStories, passageMetadata } from './content.ts'
+import { sceneNarratives, personStories, passageMetadata, curves } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { travelingCompany } from '../season/lib/scene.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
-import { actionBar, button, description, heading, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLine, stateRow } from './panelFrame.ts'
+import { actionBar, button, description, heading, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLabels, stateLine, stateRow } from './panelFrame.ts'
 import { backTarget, footerText, isPage, menuEntries, pageTab, reachedFromMenu, turnPage } from './pages.ts'
-import { gearTotals, previewWear, type Gear, type GearTotals, type MaterialCost, type PackEntry, type SeasonDefinition, type SellGood, type SpecialEffect } from '../season/index.ts'
+import { controllerButtons, journalTallies, levelMeter, levelProgress, progressText, questJournalRows, tally } from './pageContent.ts'
+import { adventurerLevelCap, gearTotals, previewWear, trainedSkillLevelCap, type Gear, type GearTotals, type MaterialCost, type PackEntry, type SeasonDefinition, type SellGood, type SpecialEffect } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
 export type UIOptions = {
@@ -136,7 +137,7 @@ export function createUI(options: UIOptions) {
   const close = get<HTMLButtonElement>('.panel-close')
   const navigation = get('.game-navigation')
   const tabs = get('.page-tabs')
-  const titles: Record<Panel, string> = { menu: 'Menu', gear: 'Gear', inventory: 'Inventory', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
+  const titles: Record<Panel, string> = { menu: 'Menu', gear: 'Gear', inventory: 'Inventory', journal: 'Journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'Settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
   for (const { panel, label, symbol } of menuEntries) {
     const control = button('', () => openPanel(panel), 'nav-button')
     control.append(node('span', 'nav-symbol', symbol), node('span', '', label))
@@ -292,7 +293,7 @@ export function createUI(options: UIOptions) {
   function mapPanel(): void {
     const current = regionPlaces.find(p => p.id === snapshot.adventurer.placeId)!
     const selected = regionPlaces.find(p => p.id === mapSelection) ?? current
-    body.append(description('A connected region to explore. Choose a place on the map or in the list to inspect it and plan a walk. Boats leave from the five lake landings.'))
+    body.append(lead('Choose a place on the map or in the list to see it and plan a walk there. Boats cross the lake from five landings.'))
     const chart = node('canvas', 'region-chart'); chart.width = 690; chart.height = 570; chart.setAttribute('aria-label', 'Map of eighteen settlements and eight wilderness places')
     const ctx = chart.getContext('2d')!, width = regionBounds.maxX - regionBounds.minX, height = regionBounds.maxZ - regionBounds.minZ
     const scale = Math.min((chart.width - 36) / width, (chart.height - 36) / height)
@@ -319,18 +320,26 @@ export function createUI(options: UIOptions) {
     const columns = node('div', 'map-columns')
     columns.append(chart, side)
     body.append(columns)
-    side.append(heading(selected.name), description(`${pretty(selected.kind)} · ${pretty(selected.band)} band`), description(selected.character))
-    const controls = node('div', 'save-controls')
-    controls.append(button('Set walking route', () => { closePanel(); game.moveTo(layout.spawns[selected.id]!); notice(`Following the road toward ${selected.name}. Movement or Escape cancels the route.`) }, 'game-button', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)))
+    // The chosen place is one card: what it is, then the same three routes as before.
+    const here = selected.id === current.id
     const giver = definition.people?.find(p => p.placeId === selected.id && p.kind === 'ordinary' && !p.vendor)
-    if (giver) controls.append(button('Find local work', () => goTo(giver.id), 'game-button secondary', snapshot.inCombat))
     const landing = layout.objects.find(object => object.placeId === selected.id && object.kind === 'travel')
-    if (landing) controls.append(button('Find lake landing', () => goTo(landing.id), 'game-button secondary', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)))
-    side.append(controls)
-    const list = node('div', 'place-list')
-    for (const p of regionPlaces) list.append(button(p.name, () => { mapSelection = p.id; refreshPanel() }, `place-chip ${p.id === selected.id ? 'selected' : ''}`))
-    side.append(list)
-    body.append(description('The map compresses distance for play and gathers different Gospel episodes into one Season. It is not an archaeological reconstruction.', 'small-note'))
+    side.append(stateRow({
+      state: here ? 'active' : 'available', chip: here ? 'You are here' : false, title: selected.name,
+      lines: [`${pretty(selected.kind)} · ${pretty(selected.band)} band`, selected.character],
+      notes: snapshot.inCombat ? ['You can plan a walk once the fight is over.'] : [],
+      actions: [
+        button(`Walk to ${selected.name}`, () => { closePanel(); game.moveTo(layout.spawns[selected.id]!); notice(`Walking to ${selected.name}. Move or press Escape to stop.`) }, 'game-button', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)),
+        giver ? button(`Find work in ${selected.name}`, () => goTo(giver.id), 'game-button secondary', snapshot.inCombat) : undefined,
+        landing ? button('Find the lake landing', () => goTo(landing.id), 'game-button secondary', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)) : undefined,
+      ],
+    }))
+    for (const [kind, title] of [['settlement', 'Settlements'], ['wilderness', 'Wilderness']] as const) {
+      const list = node('div', 'place-list')
+      for (const p of regionPlaces.filter(place => place.kind === kind)) list.append(button(p.name, () => { mapSelection = p.id; refreshPanel() }, `place-chip ${p.id === selected.id ? 'selected' : ''}`))
+      side.append(node('h4', 'place-list-title', title), list)
+    }
+    body.append(description('Distances are shorter than in life, and Gospel episodes from different times share one Season. The map is not an archaeological reconstruction.', 'small-note'))
   }
   function travelPanel(): void {
     const portObject = layout.objects.find(o => o.id === contextId && o.kind === 'travel')
@@ -480,29 +489,46 @@ export function createUI(options: UIOptions) {
   }
   function gearDetailOrKind(id: string): string { const piece = definition.gear?.find(candidate => candidate.id === id); return piece ? gearDetail(piece) : 'Gear' }
   function journalPanel(): void {
+    const adventurer = snapshot.adventurer
     const once = definition.quests?.filter(q => !q.repeatable) ?? []
-    const finished = once.filter(q => snapshot.adventurer.questJournal.some(j => j.questId === q.id && j.finished))
-    body.append(heading('Your Season'), description(`${finished.length} / ${once.length} local works completed · ${snapshot.adventurer.playedSetScenes.length} / ${definition.setScenes?.length ?? 0} encounters witnessed · ${snapshot.adventurer.referenceJournal.length} NIV passages filed.`))
-    if (finished.length === once.length && once.length) body.append(description('From the springs at Aenon to the northern lake, you have served the people of the region. The Season remains open: return to the words you have read, perfect your crafts, or walk the roads again.', 'panel-note'))
-    body.append(heading('Current work'))
-    if (!snapshot.adventurer.questJournal.length) body.append(description('Speak with ordinary people in Aenon to find work.'))
-    for (const quest of [...snapshot.adventurer.questJournal].sort((a, b) => Number(a.finished) - Number(b.finished))) {
-      const authored = definition.quests?.find(q => q.id === quest.questId)
-      body.append(row(pretty(quest.questId), `${quest.finished ? 'Completed · ' : ''}${quest.line}`, !quest.finished && authored ? button('Find next step', () => seekQuest(authored.id), 'text-button') : undefined))
-    }
-    body.append(heading('Reference journal'))
-    if (!snapshot.adventurer.referenceJournal.length) body.append(description('Passages you read are filed here. Look for Scripture objects in the world.'))
-    for (const filing of snapshot.adventurer.referenceJournal) body.append(row(filing.reference, 'NIV · filed passage', button('Read', () => { openPanel('scripture'); void showPassage(filing.reference) }, 'text-button', snapshot.inCombat)))
+    const finished = once.filter(q => adventurer.questJournal.some(j => j.questId === q.id && j.finished))
+    body.append(tally(journalTallies(finished.length, once.length, adventurer.playedSetScenes.length, definition.setScenes?.length ?? 0, adventurer.referenceJournal.length)))
+    if (finished.length === once.length && once.length) body.append(description('You have finished every quest in the region. The Season stays open: read passages again, train your skills or walk the roads.', 'panel-note'))
+    const placeName = (id: string) => regionPlaces.find(place => place.id === id)?.name ?? pretty(id)
+    const quests = questJournalRows(adventurer.questJournal, definition, objectName, placeName).map(quest => stateRow({
+      state: quest.state, title: quest.title, compact: quest.state === 'finished', chip: quest.state === 'finished' ? stateLabels.finished : undefined,
+      lines: [quest.line], details: quest.from ? [node('p', 'quest-from', quest.from)] : [], notes: quest.repeatable ? ['Repeatable'] : [],
+      actions: [quest.state === 'active' && quest.known ? button('Find next step', () => seekQuest(quest.questId), 'game-button secondary') : undefined],
+    }))
+    body.append(section('Quest journal', ...(quests.length ? quests : [description('No quests yet. Speak with a townsperson in Aenon to find work.')])))
+    const filings = adventurer.referenceJournal.map(filing => stateRow({
+      state: 'available', compact: true, title: filing.reference, lines: ['NIV'],
+      actions: [button(`Read ${filing.reference}`, () => { openPanel('scripture'); void showPassage(filing.reference) }, 'text-button', snapshot.inCombat)],
+    }))
+    const reading = filings.length && snapshot.inCombat ? [description('You can read these again once the fight is over.', 'panel-note')] : []
+    body.append(section('Reference journal', ...reading, ...(filings.length ? filings : [description('No passages yet. When you read a passage at a Scripture object, its reference is filed here.')])))
   }
   function skillsPanel(): void {
-    body.append(description(`Adventurer level ${snapshot.adventurer.adventurerLevel} · ${format(snapshot.adventurer.adventurerExperience)} experience`))
-    body.append(heading('Combat skills'))
-    const combat = node('div', 'skill-grid')
-    for (const [skill, level] of Object.entries(snapshot.adventurer.combatLevels)) combat.append(row(skill, 'Shared Adventurer level', node('b', 'skill-level', String(level))))
-    body.append(combat, heading('Trained skills'))
-    const trained = node('div', 'skill-grid')
-    for (const [skill, state] of Object.entries(snapshot.adventurer.trainedSkills)) trained.append(row(skill, `${format(state.experience)} experience`, node('b', 'skill-level', String(state.level))))
-    body.append(trained)
+    const adventurer = snapshot.adventurer
+    const progress = levelProgress(curves.adventurer, adventurer.adventurerLevel, adventurer.adventurerExperience, adventurerLevelCap)
+    const card = node('div', 'level-card')
+    const top = node('div', 'level-card-top')
+    top.append(node('span', 'level-card-label', 'Adventurer level'), node('strong', 'level-card-value', String(adventurer.adventurerLevel)))
+    card.append(top, levelMeter(progress, `Adventurer level ${adventurer.adventurerLevel}`), node('p', 'level-card-progress', progressText(progress, format)))
+    card.append(tally(Object.entries(adventurer.combatLevels).map(([skill, level]) => [skill, String(level)] as const), 'combat'))
+    body.append(section('Combat skills', description('Attack, Strength, Defence and Hitpoints are each the Adventurer level. It rises from quests and defeats, and a little from the other skills.'), card))
+    const others = node('div', 'skill-cards')
+    for (const [skill, state] of Object.entries(adventurer.trainedSkills)) {
+      const trained = levelProgress(curves.trained, state.level, state.experience, trainedSkillLevelCap)
+      const skillCard = node('article', 'skill-card')
+      const cardTop = node('div', 'skill-card-top')
+      const level = node('span', 'skill-card-level')
+      level.append(node('small', '', 'Level'), ` ${state.level}`)
+      cardTop.append(node('h4', 'skill-card-name', skill), level)
+      skillCard.append(cardTop, levelMeter(trained, `${skill} level ${state.level}`), node('p', 'skill-card-progress', progressText(trained, format)))
+      others.append(skillCard)
+    }
+    body.append(section('Other skills', description('These rise by doing the work: gathering, making and reading.'), others))
   }
   function tradePanel(): void {
     const vendor = definition.vendors?.find(candidate => candidate.personId === contextId)
@@ -719,9 +745,11 @@ export function createUI(options: UIOptions) {
       element.href = href; element.target = '_blank'; element.rel = 'noopener noreferrer'
       return element
     }
-    body.append(description('The artists and open-source projects behind The Season.'), button('Back to Settings', () => openPanel('settings'), 'game-button secondary'))
+    body.append(lead('The art and software in The Season, with their authors and licences.'), actionBar(button('Back to Settings', () => openPanel('settings'), 'game-button secondary')))
     for (const [category, entries] of creditGroups()) {
-      body.append(heading(category))
+      const group = section(category)
+      group.classList.add('credit-group')
+      body.append(group)
       for (const entry of entries) {
         const article = node('article', 'credit-entry')
         const title = node('h4'); title.append(link(entry.title, entry.source))
@@ -736,29 +764,51 @@ export function createUI(options: UIOptions) {
           details.append(link('Tool terms', entry.ai.termsUrl))
           article.append(details, description(`Prompt: ${entry.ai.prompt}`, 'small-note'))
         }
-        body.append(article)
+        group.append(article)
       }
     }
   }
+  // Settings is a column of groups. Each builder returns one; an Audio group (#40) slots in after Graphics.
   function settingsPanel(): void {
-    body.append(button('Credits', () => openPanel('credits'), 'game-button secondary'))
+    body.append(graphicsSettings(), controllerSettings(), saveSettings(), creditsSettings())
+  }
+  function settingsGroup(title: string, ...children: HTMLElement[]): HTMLElement {
+    const group = section(title, ...children)
+    group.classList.add('settings-group')
+    return group
+  }
+  function graphicsSettings(): HTMLElement {
     const label = node('label', 'setting-label', 'Visual quality')
     label.htmlFor = 'game-quality'
     const select = node('select'); select.id = 'game-quality'
-    for (const quality of qualities) { const item = node('option', '', `${pretty(quality)} — ${qualityDescriptions[quality]}`); item.value = quality; select.append(item) }
+    for (const quality of qualities) { const item = node('option', '', pretty(quality)); item.value = quality; select.append(item) }
     select.value = currentQuality
-    const qualityDetail = description(qualityDescriptions[currentQuality]); qualityDetail.id = 'game-quality-detail'; qualityDetail.setAttribute('aria-live', 'polite')
+    const qualityDetail = description(qualityDescriptions[currentQuality], 'setting-detail'); qualityDetail.id = 'game-quality-detail'; qualityDetail.setAttribute('aria-live', 'polite')
     select.setAttribute('aria-describedby', qualityDetail.id)
     select.addEventListener('change', () => { currentQuality = select.value as Quality; qualityDetail.textContent = qualityDescriptions[currentQuality]; options.onQuality(currentQuality) })
-    body.append(label, select, qualityDetail)
     const zoomLabel = node('label', 'setting-label', 'Camera distance'); zoomLabel.htmlFor = 'game-zoom'
     const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = String(cameraZoom.min); zoom.max = String(cameraZoom.max); zoom.step = '1'; zoom.value = String(zoomDistance)
     zoom.addEventListener('input', () => { zoomDistance = Number(zoom.value); options.onZoom(zoomDistance) })
-    body.append(zoomLabel, zoom, row('Live performance', 'Current device only; hardware and resolution affect results.', node('output', 'performance-output', performanceText)), heading('Controller'))
+    return settingsGroup('Graphics', label, select, qualityDetail, zoomLabel, zoom, row('Live performance', 'Frame rate and render size on this device.', node('output', 'performance-output', performanceText)))
+  }
+  function controllerSettings(): HTMLElement {
     const connectedPads = typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function' ? [] : [...navigator.getGamepads()].filter((pad): pad is Gamepad => pad !== null)
     const controllerName = connectedPads[0]?.id?.trim()
-    body.append(description(controllerName ? `${controllerName.slice(0, 64)} connected. Left stick runs, A acts, X strikes, Y guards, RB repositions, B cancels, Start opens the menu. On a page, LB and RB move to the previous or next page, and B goes back to the menu.` : 'No controller detected. Connect a gamepad, press any button, then reopen settings.', 'small-note'), heading('Your Season'))
-    body.append(description(saveMessage, saveBlocked ? 'panel-note warning' : 'panel-description'))
+    const status = controllerName ? stateLine('available', 'Connected', controllerName.slice(0, 64)) : stateLine('locked', 'Not connected')
+    const buttons = (title: string, pairs: readonly (readonly [string, string])[]) => {
+      const list = node('dl', 'controller-buttons')
+      for (const [control, effect] of pairs) list.append(node('dt', '', control), node('dd', '', effect))
+      const group = node('div', 'controller-group')
+      group.append(node('h4', 'controller-group-title', title), list)
+      return group
+    }
+    const columns = node('div', 'controller-columns')
+    columns.append(buttons('In the world', controllerButtons.world), buttons('On a page', controllerButtons.page))
+    return settingsGroup('Controller', status, ...(controllerName ? [] : [description('Connect a controller and press any button, then open Settings again.', 'setting-detail')]), columns)
+  }
+  // The save safeguards: verified backups before import and before a new Season, and export at any time.
+  function saveSettings(): HTMLElement {
+    const status = description(saveMessage, saveBlocked ? 'panel-note warning' : 'setting-detail')
     const controls = node('div', 'save-controls')
     controls.append(button(saveBlocked ? 'Export original save' : 'Export save', options.onSaveExport))
     if (options.onSaveImport) {
@@ -771,15 +821,19 @@ export function createUI(options: UIOptions) {
       })
       controls.append(button('Import 3D save', () => input.click(), 'game-button secondary'), input)
     }
-    body.append(controls, description('Import keeps a backup of the current 3D save. Your earlier 2D save is retained separately.', 'small-note'))
+    const group = settingsGroup('Saves', status, controls, description('Importing backs up your current 3D save first. A save from the earlier 2D game is kept separately.', 'small-note'))
     if (options.onRestart) {
       const restart = button('Start a new Season…', () => {
         const confirmation = node('div', 'restart-confirmation')
-        confirmation.append(description('Start again at Aenon? Your current saved Season will be backed up first.'), button('Back up & start again', () => options.onRestart?.(), 'game-button danger'), button('Keep this Season', () => refreshPanel(), 'text-button'))
+        confirmation.append(description('Start again at Aenon? Your current Season is backed up first.'), button('Back up and start again', () => options.onRestart?.(), 'game-button danger'), button('Keep this Season', () => refreshPanel(), 'text-button'))
         restart.replaceWith(confirmation)
       }, 'text-button danger')
-      body.append(restart)
+      group.append(restart)
     }
+    return group
+  }
+  function creditsSettings(): HTMLElement {
+    return settingsGroup('Credits', description('The art and software in The Season, with their authors and licences.', 'setting-detail'), actionBar(button('Open Credits', () => openPanel('credits'), 'game-button secondary')))
   }
   function render(next: GameSnapshot): void {
     snapshot = next

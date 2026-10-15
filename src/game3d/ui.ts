@@ -9,6 +9,7 @@ import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
 import { actionBar, button, description, heading, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLine, stateRow } from './panelFrame.ts'
+import { backTarget, footerText, isPage, menuEntries, pageTab, reachedFromMenu, turnPage } from './pages.ts'
 import { gearTotals, previewWear, type Gear, type GearTotals, type MaterialCost, type PackEntry, type SeasonDefinition, type SellGood, type SpecialEffect } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
@@ -101,10 +102,15 @@ export function createUI(options: UIOptions) {
   const { game, definition, layout } = options
   let snapshot = game.snapshot()
   let currentPanel: Panel | null = null
+  /** Whether the open page was reached from the Start menu, so B goes back there. */
+  let fromMenu = false
+  /** The page the menu was reopened from, so its entry takes focus. */
+  let menuReturn: Panel | undefined
   let mapSelection: string | undefined
   let craftingRarity = 'all'
   let inventorySelection: { index: number; key: string } | undefined
   let tradeSide: 'buy' | 'sell' | undefined
+  let tradeVendor: string | undefined
   let contextId: string | undefined
   let currentQuality = options.quality ?? 'high'
   let zoomDistance = options.zoom ?? cameraZoom.default
@@ -115,9 +121,10 @@ export function createUI(options: UIOptions) {
   let passageRequest: AbortController | null = null
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
   let dialogueLine = ''
+  const focusable = 'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled)'
   const root = node('div', 'game-ui')
   root.id = 'game-ui'
-  root.innerHTML = `<header class="game-masthead"><div class="game-brand"><h1>The Season</h1><p id="game-place">Aenon <span>·</span> The Jordan valley</p></div><div class="adventurer-status"><div class="status-line"><strong>Adventurer <span id="game-level">1</span></strong><span id="game-coin">0 coin</span></div><div class="hitpoints-track" role="progressbar" aria-label="Current Hitpoints" id="hitpoints-bar"><span id="hitpoints-fill"></span></div><div class="status-line small"><span id="hitpoints-text"></span><span id="combat-status">At peace</span></div></div></header><nav class="game-navigation" aria-label="Game panels"></nav><aside class="game-map"><div class="map-title"><span id="map-place">Aenon</span><span>↑ N</span></div><canvas id="minimap" width="168" height="124" aria-label="Local map with the Adventurer’s position"></canvas><p>Galilee &amp; the Jordan</p></aside><div id="game-notice" class="game-notice" role="status" aria-live="polite"></div><div class="target-status" id="target-status" hidden><span id="target-kind"></span><strong id="target-name"></strong><span id="target-detail"></span><div class="activity-track" id="activity-track" hidden><span id="activity-fill"></span></div></div><div class="technique-bar" aria-label="Weapon techniques"></div><div class="game-controls-hint">Click to move &amp; act <span>·</span> WASD to run <span>·</span> Scroll to zoom <span>·</span> Esc to cancel <span>·</span> Controller: left stick runs <span>·</span> A acts <span>·</span> Start opens settings</div><div class="paused-label" id="game-paused" hidden>Ⅱ World paused</div><div class="game-modal" id="game-panel" hidden><section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-panel-title"><header class="game-panel-heading"><div><p class="eyebrow" id="game-panel-eyebrow">A moment of stillness</p><h2 id="game-panel-title"></h2></div><button class="panel-close" type="button" aria-label="Close panel">×</button></header><div id="game-panel-body" class="game-panel-body"></div><footer class="game-panel-footer">World paused <span>·</span> Close to return to the world</footer></section></div>`
+  root.innerHTML = `<header class="game-masthead"><div class="game-brand"><h1>The Season</h1><p id="game-place">Aenon <span>·</span> The Jordan valley</p></div><div class="adventurer-status"><div class="status-line"><strong>Adventurer <span id="game-level">1</span></strong><span id="game-coin">0 coin</span></div><div class="hitpoints-track" role="progressbar" aria-label="Current Hitpoints" id="hitpoints-bar"><span id="hitpoints-fill"></span></div><div class="status-line small"><span id="hitpoints-text"></span><span id="combat-status">At peace</span></div></div></header><nav class="game-navigation" aria-label="Game panels"></nav><aside class="game-map"><div class="map-title"><span id="map-place">Aenon</span><span>↑ N</span></div><canvas id="minimap" width="168" height="124" aria-label="Local map with the Adventurer’s position"></canvas><p>Galilee &amp; the Jordan</p></aside><div id="game-notice" class="game-notice" role="status" aria-live="polite"></div><div class="target-status" id="target-status" hidden><span id="target-kind"></span><strong id="target-name"></strong><span id="target-detail"></span><div class="activity-track" id="activity-track" hidden><span id="activity-fill"></span></div></div><div class="technique-bar" aria-label="Weapon techniques"></div><div class="game-controls-hint">Click to move &amp; act <span>·</span> WASD to run <span>·</span> Scroll to zoom <span>·</span> Esc to cancel <span>·</span> Controller: left stick runs <span>·</span> A acts <span>·</span> Start opens the menu</div><div class="paused-label" id="game-paused" hidden>Ⅱ World paused</div><div class="game-modal" id="game-panel" hidden><section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-panel-title"><header class="game-panel-heading"><div><p class="eyebrow" id="game-panel-eyebrow">A moment of stillness</p><h2 id="game-panel-title"></h2></div><button class="panel-close" type="button" aria-label="Close panel">×</button></header><nav class="page-tabs" aria-label="Pages" hidden></nav><div id="game-panel-body" class="game-panel-body"></div><footer class="game-panel-footer">World paused <span>·</span> Close to return to the world</footer></section></div>`
   document.body.append(root)
   const get = <T extends HTMLElement = HTMLElement>(selector: string): T => {
     const found = root.querySelector<T>(selector)
@@ -128,13 +135,24 @@ export function createUI(options: UIOptions) {
   const body = get('#game-panel-body')
   const close = get<HTMLButtonElement>('.panel-close')
   const navigation = get('.game-navigation')
-  const titles: Record<Panel, string> = { gear: 'Gear', inventory: 'Inventory', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
-  for (const [panel, label, symbol] of [['map', 'Map', '⌖'], ['gear', 'Gear', '◇'], ['inventory', 'Inventory', '▦'], ['journal', 'Journal', '☷'], ['skills', 'Skills', '✧'], ['trade', 'Trade', '◈'], ['scripture', 'Scripture', '▤'], ['settings', 'Settings', '⚙']] as const) {
+  const tabs = get('.page-tabs')
+  const titles: Record<Panel, string> = { menu: 'Menu', gear: 'Gear', inventory: 'Inventory', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
+  for (const { panel, label, symbol } of menuEntries) {
     const control = button('', () => openPanel(panel), 'nav-button')
     control.append(node('span', 'nav-symbol', symbol), node('span', '', label))
     control.setAttribute('aria-controls', 'game-panel')
     navigation.append(control)
   }
+  // The tab strip along the top of a full-screen page. LB and RB move along it on a controller.
+  tabs.append(node('span', 'page-tab-hint', 'LB'))
+  for (const { panel, label, symbol } of menuEntries) {
+    const tab = button('', () => openPage(panel), 'page-tab')
+    tab.dataset.page = panel
+    tab.append(node('span', 'page-tab-symbol', symbol), node('span', '', label))
+    tabs.append(tab)
+  }
+  tabs.append(node('span', 'page-tab-hint', 'RB'))
+  root.addEventListener('pointerdown', () => root.classList.remove('controller-input'))
   const techniqueButtons = new Map<Technique, HTMLButtonElement>()
   for (const [technique, key, name, symbol, hint] of [
     ['offence', 'Q', 'Strike', '╱', 'A committed weapon strike.'],
@@ -154,7 +172,7 @@ export function createUI(options: UIOptions) {
   modal.addEventListener('keydown', event => {
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closePanel(); return }
     if (event.key !== 'Tab') return
-    const controls = [...modal.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled)')].filter(element => element.offsetParent !== null)
+    const controls = [...modal.querySelectorAll<HTMLElement>(focusable)].filter(element => element.offsetParent !== null)
     const first = controls[0]; const last = controls.at(-1)
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
@@ -182,7 +200,7 @@ export function createUI(options: UIOptions) {
     }
     passageRequest?.abort(); passageRequest = null
     if (contextId === '__acquaintance') game.act({ type: 'finish-acquaintance' })
-    currentPanel = null; contextId = undefined; dialogueLine = ''
+    currentPanel = null; contextId = undefined; dialogueLine = ''; fromMenu = false; menuReturn = undefined; tradeVendor = undefined
     modal.hidden = true
     body.replaceChildren()
     options.onPanel(false)
@@ -192,12 +210,42 @@ export function createUI(options: UIOptions) {
     passageRequest?.abort(); passageRequest = null
     if (contextId === '__acquaintance' && id !== contextId) game.act({ type: 'finish-acquaintance' })
     if (!currentPanel) priorFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    currentPanel = panel; contextId = id; dialogueLine = ''; tradeSide = undefined
+    fromMenu = reachedFromMenu(currentPanel, panel, fromMenu)
+    if (panel === 'menu') menuReturn = currentPanel ? pageTab(currentPanel) : undefined
+    // Trade keeps its Vendor and its Buy or Sell list while LB, RB or the tabs move to other pages and back.
+    if (panel === 'trade' && id !== tradeVendor) { tradeVendor = id; tradeSide = undefined }
+    currentPanel = panel; contextId = id; dialogueLine = ''
     options.onPanel(true)
     snapshot = game.snapshot()
     modal.hidden = false
     refreshPanel()
-    close.focus()
+    // The menu starts on the page it was reopened from; a page starts on its own tab; a window starts on Close.
+    const start = panel === 'menu' ? body.querySelector<HTMLElement>(`[data-page="${menuReturn ?? menuEntries[0]!.panel}"]`) : isPage(panel) ? tabs.querySelector<HTMLElement>('[aria-current="page"]') : null
+    ;(start ?? close).focus()
+  }
+  /** B on a controller: from a page reached through the Start menu, back to the menu; otherwise back to the world. */
+  function back(): void {
+    if (!currentPanel) return
+    if (backTarget(currentPanel, fromMenu) === 'menu') openPanel('menu')
+    else closePanel()
+  }
+  /** LB and RB: the previous or next full-screen page. Does nothing in the menu or a window opened from the world. */
+  function turn(step: 1 | -1): void {
+    const next = currentPanel ? turnPage(currentPanel, step) : undefined
+    if (next) openPage(next)
+  }
+  function openPage(panel: Panel): void {
+    openPanel(panel, panel === 'trade' ? tradeVendor : undefined)
+  }
+  function menuPanel(): void {
+    const entries = node('div', 'menu-entries')
+    for (const { panel, label, symbol, summary } of menuEntries) {
+      const entry = button('', () => openPanel(panel), 'menu-entry')
+      entry.dataset.page = panel
+      entry.append(node('span', 'menu-entry-symbol', symbol), node('span', 'menu-entry-label', label), node('span', 'menu-entry-summary', summary))
+      entries.append(entry)
+    }
+    body.append(entries)
   }
   function action(command: GameAction): ActionResult {
     const result = game.act(command)
@@ -244,7 +292,7 @@ export function createUI(options: UIOptions) {
   function mapPanel(): void {
     const current = regionPlaces.find(p => p.id === snapshot.adventurer.placeId)!
     const selected = regionPlaces.find(p => p.id === mapSelection) ?? current
-    body.append(description('A connected region to explore. Click a place below to inspect it and plan a walk. Boats leave from the five lake landings.'))
+    body.append(description('A connected region to explore. Choose a place on the map or in the list to inspect it and plan a walk. Boats leave from the five lake landings.'))
     const chart = node('canvas', 'region-chart'); chart.width = 690; chart.height = 570; chart.setAttribute('aria-label', 'Map of eighteen settlements and eight wilderness places')
     const ctx = chart.getContext('2d')!, width = regionBounds.maxX - regionBounds.minX, height = regionBounds.maxZ - regionBounds.minZ
     const scale = Math.min((chart.width - 36) / width, (chart.height - 36) / height)
@@ -266,17 +314,23 @@ export function createUI(options: UIOptions) {
     }
     ctx.fillStyle = '#fffaf0'; ctx.strokeStyle = '#333d2b'; ctx.beginPath(); ctx.arc(x(snapshot.position.x), z(snapshot.position.z), 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke()
     chart.addEventListener('click', event => { const rect = chart.getBoundingClientRect(); const px = (event.clientX - rect.left) / rect.width * chart.width, pz = (event.clientY - rect.top) / rect.height * chart.height; const nearest = [...regionPlaces].sort((a, b) => Math.hypot(x(a.x) - px, z(a.z) - pz) - Math.hypot(x(b.x) - px, z(b.z) - pz))[0]!; mapSelection = nearest.id; refreshPanel() })
-    body.append(chart, heading(selected.name), description(`${pretty(selected.kind)} · ${pretty(selected.band)} band`), description(selected.character))
+    // On a wide page the chosen place, its routes and the place list sit beside the chart.
+    const side = node('div', 'map-side')
+    const columns = node('div', 'map-columns')
+    columns.append(chart, side)
+    body.append(columns)
+    side.append(heading(selected.name), description(`${pretty(selected.kind)} · ${pretty(selected.band)} band`), description(selected.character))
     const controls = node('div', 'save-controls')
     controls.append(button('Set walking route', () => { closePanel(); game.moveTo(layout.spawns[selected.id]!); notice(`Following the road toward ${selected.name}. Movement or Escape cancels the route.`) }, 'game-button', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)))
     const giver = definition.people?.find(p => p.placeId === selected.id && p.kind === 'ordinary' && !p.vendor)
     if (giver) controls.append(button('Find local work', () => goTo(giver.id), 'game-button secondary', snapshot.inCombat))
     const landing = layout.objects.find(object => object.placeId === selected.id && object.kind === 'travel')
     if (landing) controls.append(button('Find lake landing', () => goTo(landing.id), 'game-button secondary', snapshot.inCombat || Boolean(snapshot.adventurer.playingScene)))
-    body.append(controls)
+    side.append(controls)
     const list = node('div', 'place-list')
     for (const p of regionPlaces) list.append(button(p.name, () => { mapSelection = p.id; refreshPanel() }, `place-chip ${p.id === selected.id ? 'selected' : ''}`))
-    body.append(list, description('The map compresses distance for play and gathers different Gospel episodes into one Season. It is not an archaeological reconstruction.', 'small-note'))
+    side.append(list)
+    body.append(description('The map compresses distance for play and gathers different Gospel episodes into one Season. It is not an archaeological reconstruction.', 'small-note'))
   }
   function travelPanel(): void {
     const portObject = layout.objects.find(o => o.id === contextId && o.kind === 'travel')
@@ -288,15 +342,36 @@ export function createUI(options: UIOptions) {
     }
     if (!ports.some(port => port.placeId === portObject.placeId)) body.append(description('This landing has no scheduled crossings.'))
   }
+  /** Identifies a control across a re-render: an Inventory space by its index, anything else by its label. */
+  function focusKey(element: HTMLElement): string { return element.dataset.cell ? `cell:${element.dataset.cell}` : `${element.tagName}:${element.textContent}` }
+  /** After a re-render, puts focus back on the same control, or the nearest one with the same label, so a controller keeps its place. */
+  function restoreFocus(key: string, at: number): void {
+    if (!currentPanel || body.contains(document.activeElement)) return
+    const same = [...body.querySelectorAll<HTMLElement>(focusable)].map((element, index) => ({ element, index })).filter(({ element }) => focusKey(element) === key)
+    same.sort((a, b) => Math.abs(a.index - at) - Math.abs(b.index - at))
+    ;(same[0]?.element ?? (isPage(currentPanel) ? tabs.querySelector<HTMLElement>('[aria-current="page"]') : close))?.focus()
+  }
   function refreshPanel(): void {
     if (!currentPanel) return
+    const focused = document.activeElement instanceof HTMLElement && body.contains(document.activeElement) ? document.activeElement : null
+    const focusedAt = focused ? [...body.querySelectorAll(focusable)].indexOf(focused) : -1
     modal.classList.toggle('encounter-view', currentPanel === 'person' && (contextId === '__acquaintance' || Boolean(snapshot.adventurer.playingScene)))
+    const page = isPage(currentPanel)
+    modal.classList.toggle('page-view', page)
+    get('.game-panel').dataset.panel = currentPanel
+    tabs.hidden = !page
+    const tab = pageTab(currentPanel)
+    for (const control of tabs.querySelectorAll<HTMLElement>('.page-tab')) {
+      if (control.dataset.page === tab) control.setAttribute('aria-current', 'page')
+      else control.removeAttribute('aria-current')
+    }
     body.replaceChildren()
     get('#game-panel-title').textContent = contextId && ['person', 'trade', 'craft'].includes(currentPanel) ? objectName(contextId) : titles[currentPanel]
     get('#game-panel-eyebrow').textContent = snapshot.inCombat ? 'Fight paused · threats remain' : 'A moment of stillness'
-    get('.game-panel-footer').textContent = snapshot.adventurer.playingScene ? 'World paused · Finish the encounter to return to the world' : 'World paused · Close to return to the world'
-    const renderers: Record<Panel, () => void> = { gear: gearPanel, inventory: inventoryPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, credits: creditsPanel, map: mapPanel, travel: travelPanel }
+    get('.game-panel-footer').textContent = footerText(currentPanel, fromMenu, Boolean(snapshot.adventurer.playingScene))
+    const renderers: Record<Panel, () => void> = { menu: menuPanel, gear: gearPanel, inventory: inventoryPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, credits: creditsPanel, map: mapPanel, travel: travelPanel }
     renderers[currentPanel]()
+    if (focused) restoreFocus(focusKey(focused), focusedAt)
   }
   function gearPanel(): void {
     if (snapshot.inCombat) body.append(description('You can look at your Gear during a fight. Change it once the fight is over.', 'panel-note'))
@@ -362,10 +437,14 @@ export function createUI(options: UIOptions) {
       if (count > 1) { cell.classList.add('has-count'); cell.append(node('span', 'inventory-cell-count', String(count))) }
       grid.append(cell)
     }
-    body.append(grid)
+    // On a wide page the selected space's detail sits beside the grid, so Wear and Eat stay in view.
+    const side = node('div', 'inventory-side')
+    const columns = node('div', 'inventory-columns')
+    columns.append(grid, side)
+    body.append(columns)
     const selected = inventorySelection ? pack[inventorySelection.index] : undefined
     if (!selected || !inventorySelection) {
-      body.append(description(pack.length ? 'Select a space to see what it holds.' : 'Your Inventory is empty. Gather goods in the wilderness, or buy them from a Vendor.', 'small-note'))
+      side.append(description(pack.length ? 'Select a space to see what it holds.' : 'Your Inventory is empty. Gather goods in the wilderness, or buy them from a Vendor.', 'small-note'))
       return
     }
     const index = inventorySelection.index
@@ -388,7 +467,7 @@ export function createUI(options: UIOptions) {
     const discard = button('Discard…', () => { controls.replaceChildren(button('Discard one', () => action({ type: 'discard', index, count: 1 }), 'text-button danger', snapshot.inCombat), button('Keep', () => refreshPanel(), 'text-button')); controls.querySelector('button')?.focus() }, 'text-button', snapshot.inCombat)
     controls.append(discard)
     detail.append(controls)
-    body.append(detail)
+    side.append(detail)
   }
   function itemRarity(id: string): string | undefined { return definition.gear?.find(g => g.id === id)?.rarity ?? definition.fish?.find(f => f.id === id)?.rarity ?? definition.foods?.find(f => f.id === id)?.rarity }
   function foodDetail(id: string): string {
@@ -678,7 +757,7 @@ export function createUI(options: UIOptions) {
     body.append(zoomLabel, zoom, row('Live performance', 'Current device only; hardware and resolution affect results.', node('output', 'performance-output', performanceText)), heading('Controller'))
     const connectedPads = typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function' ? [] : [...navigator.getGamepads()].filter((pad): pad is Gamepad => pad !== null)
     const controllerName = connectedPads[0]?.id?.trim()
-    body.append(description(controllerName ? `${controllerName.slice(0, 64)} connected. Left stick runs, A acts, X strikes, Y guards, RB repositions, B cancels, Start opens settings.` : 'No controller detected. Connect a gamepad, press any button, then reopen settings.', 'small-note'), heading('Your Season'))
+    body.append(description(controllerName ? `${controllerName.slice(0, 64)} connected. Left stick runs, A acts, X strikes, Y guards, RB repositions, B cancels, Start opens the menu. On a page, LB and RB move to the previous or next page, and B goes back to the menu.` : 'No controller detected. Connect a gamepad, press any button, then reopen settings.', 'small-note'), heading('Your Season'))
     body.append(description(saveMessage, saveBlocked ? 'panel-note warning' : 'panel-description'))
     const controls = node('div', 'save-controls')
     controls.append(button(saveBlocked ? 'Export original save' : 'Export save', options.onSaveExport))
@@ -742,7 +821,12 @@ export function createUI(options: UIOptions) {
   }
   render(snapshot)
   return {
-    render, openPanel, closePanel, notice,
+    render, openPanel, closePanel, back, notice,
+    turnPage: turn,
+    /** Shows the LB and RB hints on the page tabs while a controller is connected. */
+    setController(connected: boolean) { root.classList.toggle('controller-connected', connected) },
+    /** Marks that focus is moving by controller, so the focused control shows a ring until the pointer is used. */
+    controllerInput() { root.classList.add('controller-input') },
     setZoom(value: number) { zoomDistance = value; const input = root.querySelector<HTMLInputElement>('#game-zoom'); if (input) input.value = String(value) },
     setPerformance(text: string) { performanceText = text; const output = root.querySelector('.performance-output'); if (output) output.textContent = text },
     setSaveStatus(text: string, blocked = false) { saveMessage = text; saveBlocked = blocked; if (currentPanel === 'settings') refreshPanel() },

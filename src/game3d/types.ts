@@ -8,7 +8,7 @@ export type JourneyView = Pick<WorldJourney, 'id' | 'from' | 'to' | 'kind'> & { 
 export type CompanyView = { kind: 'scene' | 'acquaintance'; anchor: Point; sceneId?: string }
 export type WorldLayout = { revision?: number; objects: readonly WorldObject[]; spawns: Record<string, Point>; placeAt: (point: Point) => string; journeys?: readonly WorldJourney[] }
 export type Technique = 'offence' | 'guard' | 'dash'
-export type Panel = 'gear' | 'inventory' | 'journal' | 'skills' | 'trade' | 'scripture' | 'person' | 'craft' | 'settings' | 'credits' | 'travel' | 'map'
+export type Panel = 'menu' | 'gear' | 'inventory' | 'journal' | 'skills' | 'trade' | 'scripture' | 'person' | 'craft' | 'settings' | 'credits' | 'travel' | 'map'
 export type HostileView = Point & { id: string; hitpoints: number; maxHitpoints: number; status: 'idle' | 'chase' | 'windup' | 'return' | 'dead'; respawnIn: number; windup: number; attackPoint: Point | null; stunned: number; burning: boolean }
 export type SpotView = { id: string; stock: number; capacity: number; replenishIn: number }
 export type CarcassView = Point & { id: string; hostileId: string }

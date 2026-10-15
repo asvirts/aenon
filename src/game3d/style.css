@@ -251,3 +251,40 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 @media (max-width: 480px) {
   .inventory-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* The Start menu, and the full-screen pages it reaches (#36). The world pauses behind every page. */
+.controller-input .game-panel :is(button, input, select, a):focus { outline: 2px solid #bc944b; outline-offset: 3px; }
+.menu-entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0 4px; }
+.menu-entry { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 2px; align-items: center; padding: 12px 14px; color: #37402f; text-align: left; border: 1px solid #ddd2b5; border-radius: 6px; background: #efe7d2; }
+.menu-entry:hover, .controller-input .menu-entry:focus { border-color: #626e46; background: #e7dec3; }
+.menu-entry-symbol { grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; color: #fff8e6; background: #4d5a39; border-radius: 5px; font-size: 16px; }
+.menu-entry-label { font: 400 17px / 1.2 Georgia, serif; }
+.menu-entry-summary { color: #6f6a52; font-size: 10px; line-height: 1.4; }
+.game-modal.page-view { padding: 0; background: var(--game-paper); backdrop-filter: none; }
+.page-view .game-panel { align-self: stretch; width: 100%; height: 100%; max-height: none; border: 0; border-radius: 0; box-shadow: none; }
+.page-view .game-panel-heading, .page-view .page-tabs, .page-view .game-panel-body { padding-inline: max(29px, calc((100% - 1040px) / 2)); }
+.page-view .game-panel-heading { padding-bottom: 8px; border-bottom: 0; }
+/* Reading pages keep a comfortable line length; Gear, Inventory and the Map use the full width. */
+.page-view .game-panel:not([data-panel="gear"], [data-panel="inventory"], [data-panel="map"]) .game-panel-body > * { max-width: 760px; }
+.page-tabs { display: flex; align-items: center; gap: 4px; padding-block: 10px; border-bottom: 1px solid #ded3b8; overflow-x: auto; scrollbar-width: none; }
+.page-tab { display: inline-flex; flex: none; align-items: center; gap: 7px; min-height: 34px; padding: 7px 12px; color: #6f6a52; background: transparent; border: 1px solid transparent; border-radius: 5px; font-size: 11px; font-weight: 600; letter-spacing: .03em; }
+.page-tab:hover { background: #e6dcc3; }
+.page-tab[aria-current="page"] { color: #fff8e6; background: #4d5a39; }
+.page-tab-symbol { font-size: 13px; font-weight: 400; }
+.page-tab-hint { display: none; flex: none; padding: 2px 6px; color: #8a8067; border: 1px solid #c5baa0; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: .05em; }
+.controller-connected .page-tab-hint { display: inline-block; }
+@media (min-width: 900px) {
+  .page-view .gear-slots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .page-view .inventory-columns, .page-view .map-columns { display: grid; gap: 28px; align-items: start; }
+  .page-view .inventory-columns { grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr); }
+  .page-view .map-columns { grid-template-columns: minmax(0, 4fr) minmax(280px, 3fr); }
+  .page-view .inventory-side { position: sticky; top: 14px; margin-top: 14px; }
+  .page-view .map-side > .section-title:first-child { margin-top: 14px; }
+}
+@media (max-width: 700px) {
+  .page-view .game-panel-heading, .page-view .page-tabs, .page-view .game-panel-body { padding-inline: 18px; }
+  .page-tab { padding: 6px 10px; font-size: 10px; }
+}
+@media (max-width: 480px) {
+  .menu-entries { grid-template-columns: minmax(0, 1fr); }
+}

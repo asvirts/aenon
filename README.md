@@ -72,8 +72,11 @@ Click the ground to run, or click a person, Spot, hostile, station, cache, carca
 | O | Settings, graphics quality and save controls |
 | Mouse wheel | Zoom around the Adventurer |
 | Escape | Close a panel or cancel the current order |
+| Controller Start | Open the menu of pages; on any panel, return to the world |
+| Controller LB / RB | On a page, move to the previous or next page |
+| Controller B | On a page reached from the menu, go back to the menu; otherwise close the panel or cancel the current order |
 
-Panels and hidden tabs pause all timed gameplay. Closing a panel leaves the Adventurer idle. Food and changing worn Gear remain blocked while any hostile is engaged or pursuing; defeat returns to the last settlement with full Hitpoints, possessions retained and a small coin loss.
+The menu's pages (Map, Gear, Inventory, Journal, Skills, Trade, Scripture and Settings) fill the screen. Panels and hidden tabs pause all timed gameplay. Closing a panel leaves the Adventurer idle. Food and changing worn Gear remain blocked while any hostile is engaged or pursuing; defeat returns to the last settlement with full Hitpoints, possessions retained and a small coin loss.
 
 The potter starts the first quest. Gather wood, earn and equip a weapon, venture north beyond Aenon's safe boundary, then return with Hunting materials. Later steps lead to John. Settings include save export/import and a deliberate new-Season control. Compatible earlier saves migrate to a safe entry in their saved place, with the original save retained. Invalid or incompatible saves are blocked rather than silently overwritten.
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
-import { GAMEPAD_DEADZONE, cycleTarget, decodeGamepad, nearestTarget, type GamepadSnapshot } from '../../src/game3d/gamepad.ts'
+import { GAMEPAD_DEADZONE, createStickNavigator, cycleTarget, decodeGamepad, nearestTarget, type GamepadSnapshot } from '../../src/game3d/gamepad.ts'
 
 const SQRT1_2 = Math.SQRT1_2
 
@@ -89,6 +89,51 @@ describe('gamepad button edges', () => {
   it('accepts a prior pressed-index list for hosts that keep button state', () => {
     const intents = decodeGamepad(snapshot({ pressed: [0] }), [])
     assert.equal(intents.interact, true)
+  })
+
+  it('reads LB and RB as page turns as well as guard and reposition', () => {
+    const previous = snapshot()
+    const lb = decodeGamepad(snapshot({ pressed: [4] }), previous)
+    const rb = decodeGamepad(snapshot({ pressed: [5] }), previous)
+    assert.equal(lb.previousPage, true)
+    assert.equal(lb.nextPage, false)
+    assert.equal(rb.nextPage, true)
+    assert.equal(decodeGamepad(snapshot({ pressed: [5] }), snapshot({ pressed: [5] })).nextPage, false)
+  })
+})
+
+describe('left stick in panels', () => {
+  const frame = 1 / 60
+  function run(navigator: ReturnType<typeof createStickNavigator>, axes: number[], seconds: number) {
+    const steps: string[] = []
+    for (let elapsed = 0; elapsed < seconds - 1e-9; elapsed += frame) { const step = navigator.step(axes, frame); if (step) steps.push(step) }
+    return steps
+  }
+
+  it('moves one step on leaning, then repeats while held', () => {
+    const navigator = createStickNavigator()
+    assert.deepEqual(run(navigator, [0, 1], 0.3), ['down'])
+    assert.ok(run(navigator, [0, 1], 0.5).length >= 2, 'a held stick keeps stepping')
+  })
+
+  it('ignores a light lean and follows the stronger axis', () => {
+    const navigator = createStickNavigator()
+    assert.deepEqual(run(navigator, [0.4, 0.3], 0.5), [])
+    assert.deepEqual(run(navigator, [0.9, -0.6], 0.1), ['right'])
+    assert.deepEqual(run(navigator, [-0.6, -0.9], 0.1), ['up'])
+  })
+
+  it('steps again each time the stick returns to centre', () => {
+    const navigator = createStickNavigator()
+    assert.deepEqual([...run(navigator, [-1, 0], 0.1), ...run(navigator, [0, 0], 0.1), ...run(navigator, [-1, 0], 0.1)], ['left', 'left'])
+  })
+
+  it('waits for centre after hold, so running into a panel does not move focus', () => {
+    const navigator = createStickNavigator()
+    navigator.hold()
+    assert.deepEqual(run(navigator, [0, -1], 1), [])
+    run(navigator, [0, 0], frame)
+    assert.deepEqual(run(navigator, [0, -1], 0.1), ['up'])
   })
 })
 

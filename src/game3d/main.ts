@@ -14,7 +14,8 @@ import { cameraZoom, clampCameraRadius, viewCoverage } from './view.ts'
 import { createFollowCamera, occlusionRay, playerOcclusionRays } from './camera.ts'
 import { updateOcclusionGroups } from './occlusion.ts'
 import type { GameSnapshot, Panel } from './types.ts'
-import { cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
+import { createStickNavigator, cycleTarget, decodeGamepad, nearestTarget } from './gamepad.ts'
+import { nextFocus, type Direction } from './panelFocus.ts'
 import { openStorage } from './storage.ts'
 import type { ReviewHarness } from './review.ts'
 import { createLighting, lightingPresets } from './lighting.ts'
@@ -50,6 +51,8 @@ async function boot() {
   let gamepadWasMoving = false
   let gamepadWelcomed = false
   let gamepadLabel: string | null = null
+  let panelWasOpen = false
+  const stick = createStickNavigator()
   function readGamepad(): Gamepad | null {
     if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null
     for (const pad of navigator.getGamepads()) if (pad && pad.connected !== false) return pad
@@ -70,11 +73,16 @@ async function boot() {
     }
     return candidates
   }
-  function movePanelFocus(delta: 1 | -1): void {
+  function movePanelFocus(direction: Direction): void {
     const controls = [...document.querySelectorAll<HTMLElement>('#game-panel button:not(:disabled), #game-panel a[href], #game-panel input:not(:disabled), #game-panel select:not(:disabled), #game-panel textarea:not(:disabled)')].filter(element => element.offsetParent !== null)
     if (!controls.length) return
-    const index = controls.indexOf(document.activeElement as HTMLElement)
-    controls[(index < 0 ? (delta > 0 ? 0 : controls.length - 1) : index + delta + controls.length) % controls.length].focus()
+    const index = nextFocus(controls.map(element => element.getBoundingClientRect()), controls.indexOf(document.activeElement as HTMLElement), direction)
+    controls[index]?.focus()
+  }
+  /** Left and right change a focused list or slider; up and down always move on, so a list never traps focus. */
+  function navigatePanel(direction: Direction): void {
+    if ((direction === 'left' || direction === 'right') && stepPanelValue(direction === 'left' ? -1 : 1)) return
+    movePanelFocus(direction)
   }
   function stepPanelValue(delta: 1 | -1): boolean {
     const active = document.activeElement
@@ -105,6 +113,7 @@ async function boot() {
     const pad = readGamepad()
     if (!pad) {
       if (priorGamepadButtons) ui.notice('Controller disconnected. Keyboard and mouse remain ready.')
+      if (gamepadWelcomed) ui.setController(false)
       priorGamepadButtons = null
       gamepadWelcomed = false
       gamepadLabel = null
@@ -114,19 +123,28 @@ async function boot() {
     if (!gamepadWelcomed) {
       gamepadWelcomed = true
       gamepadLabel = pad.id?.trim() ? pad.id.trim().slice(0, 48) : 'Controller'
-      ui.notice(`${gamepadLabel} ready. Left stick runs · A acts · Start opens settings.`)
+      ui.notice(`${gamepadLabel} ready. Left stick runs · A acts · Start opens the menu.`)
+      ui.setController(true)
     }
     const intents = decodeGamepad(pad, priorGamepadButtons)
     priorGamepadButtons = pad.buttons.map(button => button.pressed)
     if (ui.isPanelOpen()) {
-      if (intents.up) { if (!stepPanelValue(-1)) movePanelFocus(-1) }
-      if (intents.down) { if (!stepPanelValue(1)) movePanelFocus(1) }
-      if (intents.left) { if (!stepPanelValue(-1)) movePanelFocus(-1) }
-      if (intents.right) { if (!stepPanelValue(1)) movePanelFocus(1) }
+      // A stick still leaning from running must not move focus the moment a panel opens.
+      if (!panelWasOpen) { panelWasOpen = true; stick.hold() }
+      const directions = (['up', 'down', 'left', 'right'] as const).filter(direction => intents[direction])
+      const leaning = stick.step(pad.axes, dt)
+      if (leaning) directions.push(leaning)
+      if (directions.length || intents.interact || intents.previousPage || intents.nextPage) ui.controllerInput()
+      for (const direction of directions) navigatePanel(direction)
       if (intents.interact) activatePanelControl()
-      if (intents.cancel || intents.menu) ui.closePanel()
+      // LB and RB turn pages here, so they never guard or reposition while the world is paused.
+      if (intents.previousPage) ui.turnPage(-1)
+      else if (intents.nextPage) ui.turnPage(1)
+      if (intents.menu) ui.closePanel()
+      else if (intents.cancel) ui.back()
       return
     }
+    panelWasOpen = false
     if (intents.move) { game.moveInput(intents.move.x, intents.move.z); gamepadWasMoving = true }
     else if (gamepadWasMoving) { gamepadWasMoving = false; if (keys.size === 0) game.moveInput(0, 0) }
     if (intents.zoomAxis !== 0) applyZoom(zoom + intents.zoomAxis * dt * 14)
@@ -152,7 +170,7 @@ async function boot() {
       else game.technique('dash')
     }
     if (intents.cancel) { game.cancel(); keys.clear() }
-    else if (intents.menu) ui.openPanel('settings')
+    else if (intents.menu) { ui.controllerInput(); ui.openPanel('menu') }
   }
   function resize() {
     engine.resize(); camera.radius = zoom

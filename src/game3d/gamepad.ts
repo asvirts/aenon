@@ -1,6 +1,11 @@
 /** Standard gamepad mapping for the Season's browser host. Pure and renderer-free so tests can drive it. */
+import type { Direction } from './panelFocus.ts'
 
 export const GAMEPAD_DEADZONE = 0.2
+/** How far the left stick must lean to move focus in a panel. Higher than the running deadzone so a resting thumb does not wander. */
+export const STICK_NAVIGATION_THRESHOLD = 0.5
+const STICK_FIRST_REPEAT = 0.4
+const STICK_REPEAT_EVERY = 0.14
 
 export type GamepadSnapshot = {
   axes: readonly number[]
@@ -19,6 +24,9 @@ export type GamepadIntents = {
   dash: boolean
   cancel: boolean
   menu: boolean
+  /** LB and RB. In the world they are guard and reposition; on a page they turn to the previous or next page. */
+  previousPage: boolean
+  nextPage: boolean
   up: boolean
   down: boolean
   left: boolean
@@ -80,10 +88,45 @@ export function decodeGamepad(
     dash: edge(current, previous, 5),
     cancel: edge(current, previous, 1) || edge(current, previous, 8),
     menu: edge(current, previous, 9),
+    previousPage: edge(current, previous, 4),
+    nextPage: edge(current, previous, 5),
     up: edge(current, previous, 12),
     down: edge(current, previous, 13),
     left: edge(current, previous, 14),
     right: edge(current, previous, 15),
+  }
+}
+
+function stickDirection(axes: readonly number[]): Direction | null {
+  const x = Number.isFinite(axes[0]) ? axes[0]! : 0
+  const y = Number.isFinite(axes[1]) ? axes[1]! : 0
+  if (Math.max(Math.abs(x), Math.abs(y)) < STICK_NAVIGATION_THRESHOLD) return null
+  if (Math.abs(x) > Math.abs(y)) return x > 0 ? 'right' : 'left'
+  return y > 0 ? 'down' : 'up'
+}
+
+/**
+ * Turns left-stick lean into focus steps for an open panel: one step on leaning, then repeats while held.
+ * After `hold()` it ignores the stick until it returns to centre, so a stick still leaning from running
+ * does not move focus the moment a panel opens.
+ */
+export function createStickNavigator() {
+  let direction: Direction | null = null
+  let held = 0
+  let nextStepAt = 0
+  let waitForCentre = false
+  return {
+    hold(): void { waitForCentre = true },
+    step(axes: readonly number[], seconds: number): Direction | null {
+      const leaning = stickDirection(axes)
+      if (!leaning) { direction = null; waitForCentre = false; return null }
+      if (waitForCentre) return null
+      if (leaning !== direction) { direction = leaning; held = 0; nextStepAt = STICK_FIRST_REPEAT; return leaning }
+      held += seconds
+      if (held < nextStepAt) return null
+      nextStepAt += STICK_REPEAT_EVERY
+      return leaning
+    },
   }
 }
 

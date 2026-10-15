@@ -317,7 +317,7 @@ async function boot() {
         fadeTime = 1; uiTime = 1
       },
     })
-    Object.assign(debug, { reviewShot: reviewHarness.reviewShot, architectureShot: reviewHarness.architectureShot, measure: reviewHarness.measure, reviewState: reviewHarness.reviewState })
+    Object.assign(debug, { reviewShot: reviewHarness.reviewShot, architectureShot: reviewHarness.architectureShot, companyShot: reviewHarness.companyShot, measure: reviewHarness.measure, reviewState: reviewHarness.reviewState })
   }
   Object.defineProperty(window, '__aenonGame', { configurable: true, value: debug })
   loading.hidden = true; canvas.focus(); ui.render(game.snapshot()); drawMap(game.snapshot()); save()

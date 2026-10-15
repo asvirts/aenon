@@ -314,6 +314,15 @@ describe("regional people and acquaintances", () => {
     assert.equal(resumed.snapshot().company?.kind, "acquaintance")
   })
 
+  it("speaks Scripture on the road without filing it or granting experience", () => {
+    const current = game({ definition: { ...definition, acquaintance: { passage: { reference: "Matthew 11:28", usfm: "MAT.11.28" } } } })
+    current.moveTo({ x: -6, z: -2 }); current.advance(3)
+    assert.deepEqual(current.drainEvents().filter(event => event.kind === "acquaintance"), [{ kind: "acquaintance" }])
+    assert.equal(current.act({ type: "finish-acquaintance" }).ok, true)
+    assert.deepEqual(current.snapshot().adventurer.referenceJournal, [])
+    assert.equal(current.snapshot().adventurer.adventurerExperience, 0)
+  })
+
   it("holds the acquaintance until the final threat has ended", () => {
     const current = game({ saved: at({ x: 0, z: -4 }) })
     current.advance(.1)

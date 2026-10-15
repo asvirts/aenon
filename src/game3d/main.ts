@@ -245,7 +245,7 @@ async function boot() {
     if (ui.isPanelOpen() || document.hidden || (event.target as HTMLElement).matches('input,select,textarea')) return
     if (['w', 'a', 's', 'd', 'arrowup', 'arrowleft', 'arrowdown', 'arrowright'].includes(key)) { event.preventDefault(); keys.add(key); movement() }
     else if (!event.repeat && ['q', 'e', ' '].includes(key)) { event.preventDefault(); game.technique(key === 'q' ? 'offence' : key === 'e' ? 'guard' : 'dash') }
-    else if (!event.repeat) { const panel: Record<string, Panel> = { i: 'gear', g: 'gear', j: 'journal', k: 'skills', o: 'settings', m: 'map' }; if (panel[key]) ui.openPanel(panel[key]) }
+    else if (!event.repeat) { const panel: Record<string, Panel> = { b: 'inventory', c: 'gear', j: 'journal', k: 'skills', o: 'settings', m: 'map' }; if (panel[key]) ui.openPanel(panel[key]) }
   })
   window.addEventListener('keyup', event => { if (keys.delete(event.key.toLowerCase())) movement() })
   window.addEventListener('blur', () => { keys.clear(); game.setPaused(true); scene.animationTimeScale = 0; save() })

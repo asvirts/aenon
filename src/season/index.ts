@@ -29,7 +29,7 @@ import {
   type SwingResult,
 } from "./lib/fight.ts"
 import { gatherAtSpot, requireGatheringSpots, type GatherResult } from "./lib/gather.ts"
-import { takeOffPiece, wearPiece, type TakeOffResult, type WearResult } from "./lib/gear.ts"
+import { gearTotals, previewWear, takeOffPiece, wearPiece, type GearTotals, type TakeOffResult, type WearPreview, type WearResult } from "./lib/gear.ts"
 import { hunt, pickUp, type Drop, type HuntResult, type PickUpResult } from "./lib/hunt.ts"
 import { makePiece, requireCooking, requireGearMaking, type MakeResult } from "./lib/make.ts"
 import { eatMeal, requireMealBuffs, requireRestoreShares, type EatResult, type EatTarget } from "./lib/meal.ts"
@@ -37,6 +37,7 @@ import {
   finishScene,
   lookAtPerson,
   presentQuestJournal,
+  presentQuestStandings,
   reportMark,
   requireQuests,
   resolveAttendance,
@@ -45,6 +46,8 @@ import {
   type FinishResult,
   type LookResult,
   type QuestLoadFailure,
+  type QuestLock,
+  type QuestStanding,
   type ReportResult,
   type SpeakResult,
 } from "./lib/quest.ts"
@@ -116,8 +119,9 @@ export type { Blow, EnterResult, FaceResult, StepBackResult, SwingResult }
 export type { PassagePresentation, ReadingGrants, ReadResult } from "./lib/scripture.ts"
 export type { GatherResult }
 export type { Drop, HuntResult, PickUpResult }
-export type { TakeOffResult, WearResult }
-export type { FinishResult, LookResult, QuestLoadFailure, ReportResult, SpeakResult }
+export type { GearTotals, TakeOffResult, WearPreview, WearResult }
+export { gearTotals, previewWear }
+export type { FinishResult, LookResult, QuestLoadFailure, QuestLock, QuestStanding, ReportResult, SpeakResult }
 export type { MakeResult }
 export type { EatResult, EatTarget }
 export type { BuyGood, BuyResult, OpenCacheResult, SellGood, SellResult }
@@ -139,7 +143,10 @@ export type Season = {
   read: (scriptureObjectId: string) => ReadResult
   gather: (spotId: string) => GatherResult
   look: (personId: string) => LookResult
-  speak: (personId: string) => SpeakResult
+  /** Every quest this person gives, each locked, available, active or finished. */
+  quests: (personId: string) => readonly QuestStanding[]
+  /** With a questId, speaks about that quest: it starts it, or continues it if it is underway. */
+  speak: (personId: string, questId?: string) => SpeakResult
   report: (mark: string) => ReportResult
   finish: () => FinishResult
   hunt: () => HuntResult
@@ -246,7 +253,9 @@ export function loadSeason(
         blockedByScene() ?? readScripture(seasonState, definition, curves, scriptureObjectId),
       gather: (spotId) => blockedByScene() ?? gatherAtSpot(seasonState, definition, curves, spotId),
       look: (personId) => blockedByScene() ?? lookAtPerson(seasonState, definition, curves, personId),
-      speak: (personId) => blockedByScene() ?? speakToPerson(seasonState, definition, curves, personId),
+      quests: (personId) => presentQuestStandings(seasonState, definition, curves, personId),
+      speak: (personId, questId) =>
+        blockedByScene() ?? speakToPerson(seasonState, definition, curves, personId, questId),
       report: (mark) => blockedByScene() ?? reportMark(seasonState, definition, mark),
       finish: () => finishScene(seasonState, definition),
       hunt: () => blockedByScene() ?? hunt(seasonState, definition, curves),

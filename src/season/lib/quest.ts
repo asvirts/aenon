@@ -165,6 +165,24 @@ export type SpeakResult =
       reason: "not-present" | "not-offered" | "step-not-ready" | "pack-full" | "second-jesus-scene" | "scene-playing"
     }
 
+/** What stops a quest being offered now; the Adventurer can see each one. */
+export type QuestLock =
+  | { kind: "adventurer-level"; level: number }
+  | { kind: "skill"; skill: TrainedSkill; level: number }
+  | { kind: "quests"; questIds: readonly string[] }
+  | { kind: "other-work"; questId: string }
+  | { kind: "second-jesus-scene" }
+
+/** One of a townsperson's quests as the Adventurer stands with it now. */
+export type QuestStanding = {
+  questId: string
+  band: LevelBand
+  standing: "locked" | "available" | "active" | "finished"
+  line: string
+  finishedOnce: boolean
+  locks: readonly QuestLock[]
+}
+
 export type ReportResult =
   | { ok: true; questId: string; line: string; scene?: PlayingScene }
   | { ok: false; reason: "step-not-ready" | "second-jesus-scene" | "scene-playing" }
@@ -206,6 +224,65 @@ export function lookAtPerson(
     offeredQuests,
     currentLine: underway ? lineOf(definition, underway) : null,
   }
+}
+
+export function presentQuestStandings(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  curves: ExperienceCurves,
+  personId: string,
+): QuestStanding[] {
+  const person = personHere(state, definition, personId)
+  if (!person) return []
+  const underway = inProgressForGiver(state, definition, person.id)
+  return (definition.quests ?? [])
+    .filter((quest) => quest.giverId === person.id)
+    .map((quest): QuestStanding => {
+      const progress = state.questProgress.find((entry) => entry.questId === quest.id)
+      const shown = {
+        questId: quest.id,
+        band: bandOfQuest(definition, quest),
+        finishedOnce: progress?.finishedOnce === true,
+      }
+      if (progress && !progress.finished) {
+        return { ...shown, standing: "active", line: lineOf(definition, progress) ?? quest.finishedLine, locks: [] }
+      }
+      if (progress?.finished && !quest.repeatable) {
+        return { ...shown, standing: "finished", line: quest.finishedLine, locks: [] }
+      }
+      const locks = locksOn(state, definition, curves, quest)
+      if (locks.length === 0 && underway) locks.push({ kind: "other-work", questId: underway.questId })
+      if (locks.length === 0 && openingWouldOpenSecondJesus(state, definition, quest)) {
+        locks.push({ kind: "second-jesus-scene" })
+      }
+      const line = quest.steps[0]?.line ?? quest.finishedLine
+      return { ...shown, standing: locks.length > 0 ? "locked" : "available", line, locks }
+    })
+}
+
+/** The level, skill and quest requirements still unmet; it agrees with meetsOfferRules. */
+function locksOn(
+  state: SeasonState,
+  definition: SeasonDefinition,
+  curves: ExperienceCurves,
+  quest: QuestDefinition,
+): QuestLock[] {
+  const locks: QuestLock[] = []
+  const needed = Math.max(offerFloor(bandOfQuest(definition, quest)), requiredAdventurerLevel(quest))
+  if (readAdventurerLevel(curves.adventurer, state.adventurerExperience) < needed) {
+    locks.push({ kind: "adventurer-level", level: needed })
+  }
+  for (const requirement of quest.skills ?? []) {
+    if (!isTrainedSkill(requirement.skill)) continue
+    if (curves.trained(state.trainedExperience[requirement.skill]) < requirement.level) {
+      locks.push({ kind: "skill", skill: requirement.skill, level: requirement.level })
+    }
+  }
+  const missing = (quest.requiredQuestIds ?? []).filter(
+    (requiredId) => state.questProgress.find((entry) => entry.questId === requiredId)?.finishedOnce !== true,
+  )
+  if (missing.length > 0) locks.push({ kind: "quests", questIds: missing })
+  return locks
 }
 
 function offeredFor(
@@ -401,11 +478,13 @@ function blocksSecondJesusScene(state: SeasonState, definition: SeasonDefinition
   })
 }
 
+/** Without a questId this speaks about the quest underway, or starts the first one offered. */
 export function speakToPerson(
   state: SeasonState,
   definition: SeasonDefinition,
   curves: ExperienceCurves,
   personId: string,
+  questId?: string,
 ): SpeakResult {
   const person = personHere(state, definition, personId)
   if (!person) {
@@ -417,13 +496,18 @@ export function speakToPerson(
   }
 
   const underway = inProgressForGiver(state, definition, person.id)
-  if (underway) return speakToCurrentStep(state, definition, curves, underway)
+  if (underway && (questId === undefined || questId === underway.questId)) {
+    return speakToCurrentStep(state, definition, curves, underway)
+  }
+  if (underway) return { ok: false, reason: "not-offered" }
 
-  const quest = offeredFor(state, definition, curves, person.id)[0]
+  const offered = offeredFor(state, definition, curves, person.id)
+  const quest = questId === undefined ? offered[0] : offered.find((candidate) => candidate.id === questId)
   if (!quest || quest.steps.length === 0) {
     const blocked = (definition.quests ?? []).some(
       (candidate) =>
         candidate.giverId === person.id &&
+        (questId === undefined || candidate.id === questId) &&
         candidate.steps.length > 0 &&
         meetsOfferRules(state, definition, curves, candidate) &&
         openingWouldOpenSecondJesus(state, definition, candidate),

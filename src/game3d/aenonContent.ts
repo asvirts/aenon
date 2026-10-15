@@ -30,8 +30,8 @@ export const definition: SeasonDefinition = {
       { kind: 'defeat', hostileId: 'wolf', line: 'Drive off the wolf beside the northern river path.' },
       { kind: 'return', goodId: 'bone', count: 1, line: 'Hunt the fallen wolf, then bring a bone back to the potter.' },
     ], reward: { coin: 12, goods: [], adventurerExperience: 60 } },
-    { id: 'beside-the-water', giverId: 'potter', repeatable: false, requiredQuestIds: ['safe-river-path'], finishedLine: 'You have stood with the people beside the water.', steps: [
-      { kind: 'attend', sceneId: 'john-witness', line: 'Go to John near the water in Aenon and attend to the moment.' },
+    { id: 'beside-the-water', giverId: 'potter', repeatable: false, requiredQuestIds: ['safe-river-path'], finishedLine: 'So you heard John by the water. Thank you for the flax.', steps: [
+      { kind: 'attend', sceneId: 'john-witness', line: 'Go to John by the water in Aenon and attend his encounter.' },
       { kind: 'return', goodId: 'flax', count: 1, line: 'Bring a bundle of flax back to the potter after your visit to John.' },
     ], reward: { coin: 4, goods: [], adventurerExperience: 30 } },
   ],

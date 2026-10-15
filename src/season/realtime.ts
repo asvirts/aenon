@@ -4,7 +4,7 @@ import { experienceInsideBand, readAdventurerLevel } from "./lib/experience.ts"
 import { gatherAtSpot } from "./lib/gather.ts"
 import { takeOffPiece, wearPiece, wornGear } from "./lib/gear.ts"
 import { hunt, pickUp, receiveDrop } from "./lib/hunt.ts"
-import { completeCurrentDefeat, finishScene, presentQuestJournal, resolveAttendance, resolveReadySteps, speakToPerson } from "./lib/quest.ts"
+import { completeCurrentDefeat, finishScene, presentQuestJournal, presentQuestStandings, resolveAttendance, resolveReadySteps, speakToPerson } from "./lib/quest.ts"
 import { presentHere, resolveAcquaintance } from "./lib/scene.ts"
 import { packAfterGoods } from "./lib/pack.ts"
 import { eatMeal } from "./lib/meal.ts"
@@ -339,7 +339,7 @@ export function createGame(options: GameOptions): Game {
     if (pickup) {
       const id = pickup.id; cancel()
       const result = act({ type: "pick-up", id })
-      if (!result.ok) notice(result.reason === "pack-full" ? "Your pack is full. The Gear remains here." : result.reason ?? "Cannot pick up this Gear.")
+      if (!result.ok) notice(result.reason === "pack-full" ? "Your Inventory is full. The Gear stays where it is." : result.reason ?? "Cannot pick up this Gear.")
     } else if (carcass || object?.kind === "spot") {
       if (work) return
       if (inCombat()) { notice("Finish or escape every threat before gathering."); cancel(); return }
@@ -569,7 +569,7 @@ export function createGame(options: GameOptions): Game {
     else if (action.type === "speak") {
       const sceneId = objects.get(action.id)?.sceneId
       const scene = sceneId ? definition.setScenes?.find(candidate => candidate.id === sceneId) : undefined
-      result = speakToPerson(state, definition, curves, scene?.figure === "jesus" ? "Jesus" : action.id)
+      result = speakToPerson(state, definition, curves, scene?.figure === "jesus" ? "Jesus" : action.id, action.questId)
     }
     else if (action.type === "read") result = readScripture(state, definition, curves, action.id)
     else if (action.type === "cache") result = openCache(state, definition, action.id, () => {
@@ -674,6 +674,7 @@ export function createGame(options: GameOptions): Game {
     cancel,
     setPaused(value) { cancel(false); paused = value },
     act,
+    quests: personId => presentQuestStandings(state, definition, curves, personId),
     snapshot() {
       syncFight()
       const company = companyPresence()

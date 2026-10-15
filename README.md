@@ -66,7 +66,8 @@ Click the ground to run, or click a person, Spot, hostile, station, cache, carca
 | --- | --- |
 | WASD / arrow keys | Run; movement cancels the previous order |
 | Q / E / Space | Offensive technique / guard / reposition |
-| I or G / J / K | Gear / journals / skills |
+| C / B | Gear / Inventory |
+| J / K | Journals / skills |
 | M | Region map, routes and local work |
 | O | Settings, graphics quality and save controls |
 | Mouse wheel | Zoom around the Adventurer |

@@ -8,7 +8,8 @@ import { travelingCompany } from '../season/lib/scene.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
-import type { Gear, MaterialCost, SeasonDefinition, SellGood } from '../season/index.ts'
+import { actionBar, button, description, heading, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLine, stateRow } from './panelFrame.ts'
+import { gearTotals, previewWear, type Gear, type GearTotals, type MaterialCost, type PackEntry, type SeasonDefinition, type SellGood, type SpecialEffect } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
 export type UIOptions = {
@@ -22,35 +23,14 @@ export type UIOptions = {
 const pretty = (name: string) => gearDisplayNames[name] ?? name.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 const format = (value: number) => Math.floor(value).toLocaleString()
 const hitpoints = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 1 })
-function node<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text = ''): HTMLElementTagNameMap[K] {
-  const element = document.createElement(tag)
-  if (className) element.className = className
-  if (text) element.textContent = text
-  return element
-}
-function button(label: string, click: () => void, className = 'game-button', disabled = false): HTMLButtonElement {
-  const element = node('button', className, label)
-  element.type = 'button'
-  element.disabled = disabled
-  element.addEventListener('click', click)
-  return element
-}
-function description(text: string, className = 'panel-description'): HTMLParagraphElement { return node('p', className, text) }
-function heading(text: string): HTMLHeadingElement { return node('h3', 'section-title', text) }
-function row(title: string, detail: string, action?: HTMLElement, rarity?: string): HTMLDivElement {
-  const element = node('div', 'item-row')
-  const copy = node('div', 'item-copy')
-  copy.append(node('strong', '', title))
-  if (rarity) copy.append(node('span', `rarity-badge rarity-${rarity}`, pretty(rarity)))
-  if (detail) copy.append(node('span', '', detail))
-  element.append(copy)
-  if (action) element.append(action)
-  return element
+const signed = (value: number) => `${value >= 0 ? '+' : ''}${value}`
+function effectText(effect: SpecialEffect): string {
+  return effect.kind === 'second-hit' ? 'A second hit' : effect.kind === 'stun' ? 'Stuns for 1.2 seconds' : effect.kind === 'burn' ? `Burns for ${effect.damage} damage each second, ${effect.exchanges} seconds` : `Restores ${effect.amount} Hitpoints`
 }
 function gearDetail(piece: Gear): string {
   const value = piece.slot === 'weapon' ? `Strength +${piece.strengthModifier}` : `Defence ${piece.defence}`
   const form = piece.slot === 'weapon' ? `${pretty(piece.hold)} ${piece.kind}` : piece.slot === 'shield' ? 'Shield' : `${pretty(piece.armorWeight)} · ${pretty(piece.slot)}`
-  const effects = piece.effects?.map(effect => effect.kind === 'second-hit' ? 'A second hit' : effect.kind === 'stun' ? 'Stuns for 1.2 seconds' : effect.kind === 'burn' ? `Burns for ${effect.damage} damage each second, ${effect.exchanges} seconds` : `Restores ${effect.amount} Hitpoints`).join('; ')
+  const effects = piece.effects?.map(effectText).join('; ')
   return `${form} · ${pretty(piece.band)} band · ${value} · Accuracy ${piece.accuracyModifier >= 0 ? '+' : ''}${piece.accuracyModifier}${effects ? ` · On successful basic hits: ${effects}` : ''}`
 }
 
@@ -123,6 +103,7 @@ export function createUI(options: UIOptions) {
   let currentPanel: Panel | null = null
   let mapSelection: string | undefined
   let craftingRarity = 'all'
+  let inventorySelection: { index: number; key: string } | undefined
   let contextId: string | undefined
   let currentQuality = options.quality ?? 'high'
   let zoomDistance = options.zoom ?? cameraZoom.default
@@ -146,8 +127,8 @@ export function createUI(options: UIOptions) {
   const body = get('#game-panel-body')
   const close = get<HTMLButtonElement>('.panel-close')
   const navigation = get('.game-navigation')
-  const titles: Record<Panel, string> = { gear: 'Gear & provisions', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
-  for (const [panel, label, symbol] of [['map', 'Map', '⌖'], ['gear', 'Gear', '◇'], ['journal', 'Journal', '☷'], ['skills', 'Skills', '✧'], ['trade', 'Trade', '◈'], ['scripture', 'Scripture', '▤'], ['settings', 'Settings', '⚙']] as const) {
+  const titles: Record<Panel, string> = { gear: 'Gear', inventory: 'Inventory', journal: 'Your journals', skills: 'Skills', trade: 'Trade', scripture: 'Scripture', person: 'Conversation', craft: 'At the workbench', settings: 'World settings', credits: 'Credits', map: 'Galilee & the Jordan', travel: 'Lake crossings' }
+  for (const [panel, label, symbol] of [['map', 'Map', '⌖'], ['gear', 'Gear', '◇'], ['inventory', 'Inventory', '▦'], ['journal', 'Journal', '☷'], ['skills', 'Skills', '✧'], ['trade', 'Trade', '◈'], ['scripture', 'Scripture', '▤'], ['settings', 'Settings', '⚙']] as const) {
     const control = button('', () => openPanel(panel), 'nav-button')
     control.append(node('span', 'nav-symbol', symbol), node('span', '', label))
     control.setAttribute('aria-controls', 'game-panel')
@@ -192,7 +173,7 @@ export function createUI(options: UIOptions) {
       const id = person?.id ?? activeScene.sceneId
       if (currentPanel !== 'person' || contextId !== id) openPanel('person', id)
       else { snapshot = game.snapshot(); refreshPanel() }
-      const explanation = description('Finish this encounter to return to the world. Your progress will be recorded.', 'panel-note encounter-close-note')
+      const explanation = description('Finish the encounter to return to the world.', 'panel-note encounter-close-note')
       explanation.setAttribute('role', 'status')
       body.prepend(explanation)
       body.querySelector<HTMLButtonElement>('[data-finish-encounter]')?.focus()
@@ -222,18 +203,18 @@ export function createUI(options: UIOptions) {
     snapshot = game.snapshot()
     if (!result.ok) notice(reasonText(result.reason))
     else if (result.line) dialogueLine = result.line
-    else if (command.type === 'make') notice('Made and placed in your pack.')
-    else if (command.type === 'buy') notice('Bought and placed in your pack.')
+    else if (command.type === 'make') notice('Made and added to your Inventory.')
+    else if (command.type === 'buy') notice('Bought and added to your Inventory.')
     else if (command.type === 'sell') notice('Sold one good.')
     else if (command.type === 'eat') notice('Meal eaten.')
     else if (command.type === 'finish') notice('Encounter attended. Your quest journal is updated.')
-    else if (result.kind === 'short-word') notice('Read the nearby Scripture passage for John’s witness.')
+    else if (result.kind === 'short-word') notice('To hear John’s witness, read the Scripture passage nearby.')
     render(snapshot)
     refreshPanel()
     return result
   }
   function reasonText(reason?: string): string {
-    const reasons: Record<string, string> = { 'fight-underway': 'Finish or escape the fight first.', 'in-combat': 'Finish or escape the fight first.', 'not-present': 'Move closer to interact.', 'out-of-range': 'Move closer to interact.', 'cannot-afford': 'You need more coin.', 'pack-full': 'Your pack is full.', 'pool-full': 'Your Hitpoints are already full.', 'step-not-ready': 'Complete the current quest step first.', 'not-offered': 'There is no new work to take on here yet.', 'missing-materials': 'Gather the required materials first.', 'skill-too-low': 'Train this skill before attempting the recipe.', 'scene-playing': 'Finish the current encounter first.' }
+    const reasons: Record<string, string> = { 'fight-underway': 'Finish or escape the fight first.', 'in-combat': 'Finish or escape the fight first.', 'not-present': 'Move closer to interact.', 'out-of-range': 'Move closer to interact.', 'cannot-afford': 'You need more coin.', 'pack-full': 'Your Inventory is full.', 'pool-full': 'Your Hitpoints are already full.', 'step-not-ready': 'Complete the current quest step first.', 'not-offered': 'There is no work for you here yet.', 'missing-materials': 'Gather the required materials first.', 'skill-too-low': 'Your skill level is too low for this recipe.', 'scene-playing': 'Finish the current encounter first.' }
     return reasons[reason ?? ''] ?? (reason ? `${pretty(reason)}.` : 'That action is unavailable right now.')
   }
   function objectName(id: string): string { return layout.objects.find(object => object.id === id)?.name ?? pretty(id) }
@@ -313,27 +294,100 @@ export function createUI(options: UIOptions) {
     get('#game-panel-title').textContent = contextId && ['person', 'trade', 'craft'].includes(currentPanel) ? objectName(contextId) : titles[currentPanel]
     get('#game-panel-eyebrow').textContent = snapshot.inCombat ? 'Fight paused · threats remain' : 'A moment of stillness'
     get('.game-panel-footer').textContent = snapshot.adventurer.playingScene ? 'World paused · Finish the encounter to return to the world' : 'World paused · Close to return to the world'
-    const renderers: Record<Panel, () => void> = { gear: gearPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, credits: creditsPanel, map: mapPanel, travel: travelPanel }
+    const renderers: Record<Panel, () => void> = { gear: gearPanel, inventory: inventoryPanel, journal: journalPanel, skills: skillsPanel, trade: tradePanel, scripture: scripturePanel, person: personPanel, craft: craftPanel, settings: settingsPanel, credits: creditsPanel, map: mapPanel, travel: travelPanel }
     renderers[currentPanel]()
   }
   function gearPanel(): void {
-    if (snapshot.inCombat) body.append(description('You can inspect your Gear here. Finish or escape the fight before changing it or eating.', 'panel-note'))
-    body.append(heading('Worn Gear'))
+    if (snapshot.inCombat) body.append(description('You can look at your Gear during a fight. Change it once the fight is over.', 'panel-note'))
+    const slots = node('div', 'gear-slots')
     for (const slot of gearSlots) {
       const id = snapshot.adventurer.worn[slot]
       const piece = definition.gear?.find(candidate => candidate.id === id)
-      body.append(row(`${pretty(slot)} · ${id ? pretty(id) : 'None'}`, piece ? gearDetail(piece) : '', id ? button('Remove', () => action({ type: 'take-off', slot }), 'text-button', snapshot.inCombat) : undefined, piece?.rarity))
+      const card = node('article', 'gear-slot')
+      card.dataset.empty = String(!id)
+      const top = node('div', 'gear-slot-top')
+      top.append(node('span', 'gear-slot-name', pretty(slot)))
+      if (piece) top.append(rarityBadge(piece.rarity))
+      card.append(top, node('h4', 'gear-slot-piece', id ? pretty(id) : 'Empty'))
+      if (piece) card.append(node('p', 'gear-slot-detail', gearDetail(piece)))
+      if (id) card.append(button('Remove', () => action({ type: 'take-off', slot }), 'text-button', snapshot.inCombat))
+      slots.append(card)
     }
-    body.append(heading(`Pack · ${snapshot.adventurer.pack.length} / ${definition.packSize} spaces`))
-    if (!snapshot.adventurer.pack.length) body.append(description('Your pack is empty. Gather goods in the wilderness or speak with people in Aenon.'))
-    for (const [index, entry] of snapshot.adventurer.pack.entries()) {
-      const title = entry.kind === 'special-find' ? specialFindNames[entry.band] : pretty(entry.id)
-      const detail = entry.kind === 'gear' ? gearDetailOrKind(entry.id) : `${entry.count} carried · ${entry.kind === 'food' ? foodDetail(entry.id) : pretty(entry.kind)}`
-      const control = entry.kind === 'gear' ? button('Wear', () => action({ type: 'wear', id: entry.id }), 'text-button', snapshot.inCombat) : entry.kind === 'food' ? button('Eat one', () => action({ type: 'eat', target: { kind: 'food', id: entry.id } }), 'text-button', snapshot.inCombat || snapshot.adventurer.currentHitpoints >= snapshot.adventurer.combatLevels.Hitpoints) : undefined
-      const controls = node('div', 'item-actions'); if (control) controls.append(control)
-      controls.append(button('Discard…', () => { controls.replaceChildren(button('Discard one', () => action({ type: 'discard', index, count: 1 }), 'text-button danger', snapshot.inCombat), button('Keep', () => refreshPanel(), 'text-button')) }, 'text-button', snapshot.inCombat))
-      body.append(row(title, detail, controls, entry.kind === 'special-find' ? 'legendary' : itemRarity(entry.id)))
+    body.append(section('Worn', slots), section('Totals', ...totalsView(gearTotals(snapshot.adventurer.worn, definition))), actionBar(button('Open Inventory', () => openPanel('inventory'), 'game-button secondary')))
+  }
+  function totalsView(totals: GearTotals, compared?: GearTotals): HTMLElement[] {
+    const list = node('dl', 'gear-totals')
+    for (const [name, value, before] of [['Accuracy', totals.accuracyModifier, compared?.accuracyModifier], ['Strength', totals.strengthModifier, compared?.strengthModifier], ['Defence', totals.defence, compared?.defence]] as const) {
+      const item = node('div', 'gear-total')
+      const amount = node('dd', '', name === 'Defence' ? String(value) : signed(value))
+      if (before !== undefined && before !== value) {
+        item.dataset.change = value > before ? 'up' : 'down'
+        amount.append(node('span', 'gear-total-change', ` (${signed(value - before)})`))
+      }
+      item.append(node('dt', '', name), amount)
+      list.append(item)
     }
+    const effects = totals.effects.length ? `Legendary effects: ${totals.effects.map(effectText).join('; ')}` : 'No legendary effects'
+    return [list, description(effects, 'small-note')]
+  }
+  function entryKey(entry: PackEntry): string { return entry.kind === 'special-find' ? `special-find:${entry.band}` : `${entry.kind}:${entry.id}` }
+  function entryName(entry: PackEntry): string { return entry.kind === 'special-find' ? specialFindNames[entry.band] : pretty(entry.id) }
+  function inventoryPanel(): void {
+    const pack = snapshot.adventurer.pack
+    if (inventorySelection && pack[inventorySelection.index] && entryKey(pack[inventorySelection.index]!) !== inventorySelection.key) {
+      const moved = pack.findIndex(entry => entryKey(entry) === inventorySelection!.key)
+      inventorySelection = moved < 0 ? undefined : { index: moved, key: inventorySelection.key }
+    }
+    if (inventorySelection && !pack[inventorySelection.index]) inventorySelection = undefined
+    if (snapshot.inCombat) body.append(description('You can look through your Inventory during a fight. Wear, eat or discard once the fight is over.', 'panel-note'))
+    body.append(lead(`${pack.length} of ${definition.packSize} spaces used.`))
+    const grid = node('div', 'inventory-grid')
+    grid.setAttribute('aria-label', 'Inventory spaces')
+    for (let index = 0; index < definition.packSize; index++) {
+      const entry = pack[index]
+      if (!entry) { const empty = node('div', 'inventory-cell empty'); empty.setAttribute('aria-hidden', 'true'); grid.append(empty); continue }
+      const count = entry.kind === 'gear' ? 1 : entry.count
+      const cell = button('', () => {
+        inventorySelection = inventorySelection?.index === index ? undefined : { index, key: entryKey(entry) }
+        refreshPanel()
+        body.querySelector<HTMLButtonElement>(`[data-cell="${index}"]`)?.focus()
+      }, 'inventory-cell')
+      cell.dataset.cell = String(index)
+      const rarity = entry.kind === 'special-find' ? 'legendary' : itemRarity(entry.id)
+      if (rarity) cell.dataset.rarity = rarity
+      cell.setAttribute('aria-pressed', String(inventorySelection?.index === index))
+      cell.setAttribute('aria-label', `${entryName(entry)}${count > 1 ? `, ${count}` : ''}`)
+      cell.append(node('span', 'inventory-cell-name', entryName(entry)))
+      if (count > 1) { cell.classList.add('has-count'); cell.append(node('span', 'inventory-cell-count', String(count))) }
+      grid.append(cell)
+    }
+    body.append(grid)
+    const selected = inventorySelection ? pack[inventorySelection.index] : undefined
+    if (!selected || !inventorySelection) {
+      body.append(description(pack.length ? 'Select a space to see what it holds.' : 'Your Inventory is empty. Gather goods in the wilderness, or buy them from a Vendor.', 'small-note'))
+      return
+    }
+    const index = inventorySelection.index
+    const detail = node('section', 'inventory-detail')
+    const top = node('div', 'state-row-top')
+    const rarity = selected.kind === 'special-find' ? 'legendary' : itemRarity(selected.id)
+    if (rarity) top.append(rarityBadge(rarity))
+    detail.append(top, node('h4', 'state-row-title', entryName(selected)))
+    const count = selected.kind === 'gear' ? 1 : selected.count
+    detail.append(node('p', 'state-row-line', selected.kind === 'gear' ? gearDetailOrKind(selected.id) : `${count} carried · ${selected.kind === 'food' ? foodDetail(selected.id) : pretty(selected.kind)}`))
+    if (selected.kind === 'gear') {
+      const preview = previewWear(snapshot.adventurer.worn, definition, selected.id)
+      if (preview) detail.append(node('h5', 'inventory-compare-title', preview.replaces ? `If you wear it in place of ${pretty(preview.replaces)}` : 'If you wear it (nothing is worn in that slot)'), ...totalsView(preview.after, preview.before))
+    }
+    const controls = node('div', 'state-row-actions')
+    if (selected.kind === 'gear') controls.append(button(`Wear ${entryName(selected)}`, () => action({ type: 'wear', id: selected.id }), 'game-button', snapshot.inCombat))
+    const fullHitpoints = snapshot.adventurer.currentHitpoints >= snapshot.adventurer.combatLevels.Hitpoints
+    if (selected.kind === 'food') controls.append(button('Eat one', () => action({ type: 'eat', target: { kind: 'food', id: selected.id } }), 'game-button', snapshot.inCombat || fullHitpoints))
+    if (selected.kind === 'food' && fullHitpoints && !snapshot.inCombat) detail.append(node('p', 'state-row-note', 'Your Hitpoints are full.'))
+    const discard = button('Discard…', () => { controls.replaceChildren(button('Discard one', () => action({ type: 'discard', index, count: 1 }), 'text-button danger', snapshot.inCombat), button('Keep', () => refreshPanel(), 'text-button')); controls.querySelector('button')?.focus() }, 'text-button', snapshot.inCombat)
+    controls.append(discard)
+    detail.append(controls)
+    body.append(detail)
   }
   function itemRarity(id: string): string | undefined { return definition.gear?.find(g => g.id === id)?.rarity ?? definition.fish?.find(f => f.id === id)?.rarity ?? definition.foods?.find(f => f.id === id)?.rarity }
   function foodDetail(id: string): string {
@@ -373,104 +427,125 @@ export function createUI(options: UIOptions) {
   function tradePanel(): void {
     const vendor = definition.vendors?.find(candidate => candidate.personId === contextId)
     if (!vendor) {
-      body.append(description('Visit a Vendor to buy supplies or sell what you have gathered.'))
-      for (const candidate of definition.vendors ?? []) body.append(row(objectName(candidate.personId), 'Buy supplies and sell goods', button('Visit', () => goTo(candidate.personId), 'text-button', snapshot.inCombat)))
+      body.append(lead('Visit a Vendor to buy supplies or sell what you have gathered.'))
+      for (const candidate of definition.vendors ?? []) body.append(row(objectName(candidate.personId), 'Buys and sells goods', button('Visit', () => goTo(candidate.personId), 'text-button', snapshot.inCombat)))
       return
     }
-    if (!nearby(vendor.personId)) { body.append(description('Move closer to this Vendor to trade.'), button('Go to Vendor', () => goTo(vendor.personId))); return }
-    body.append(description(`${format(snapshot.adventurer.coin)} coin in your purse`), heading('Buy'))
+    if (!nearby(vendor.personId)) { body.append(lead('Move closer to this Vendor to trade.'), actionBar(button('Go to Vendor', () => goTo(vendor.personId)))); return }
+    const coin = snapshot.adventurer.coin
+    if (snapshot.inCombat) body.append(description('You can look at this Vendor’s goods during a fight. Buy or sell once the fight is over.', 'panel-note'))
+    body.append(lead(`You have ${format(coin)} coin.`))
+    const buying: HTMLElement[] = []
     for (const line of vendor.stock) {
       if (line.kind === 'special-find') continue
-      body.append(row(pretty(line.id), `${line.price} coin${line.kind === 'gear' ? ` · ${gearDetailOrKind(line.id)}` : ''}`, button('Buy one', () => action({ type: 'buy', vendorId: vendor.personId, good: { kind: line.kind, id: line.id } }), 'text-button', snapshot.inCombat || snapshot.adventurer.coin < line.price), itemRarity(line.id)))
+      const short = line.price - coin
+      buying.push(stateRow({
+        state: short > 0 ? 'locked' : 'available', compact: true, title: pretty(line.id), rarity: itemRarity(line.id),
+        lines: [`${line.price} coin${line.kind === 'gear' ? ` · ${gearDetailOrKind(line.id)}` : ''}`],
+        notes: short > 0 ? [`You need ${short} more coin`] : [],
+        actions: [short > 0 ? undefined : button('Buy one', () => action({ type: 'buy', vendorId: vendor.personId, good: { kind: line.kind, id: line.id } }), 'text-button', snapshot.inCombat)],
+      }))
     }
-    body.append(heading('Sell'))
-    let sellable = 0
+    const selling: HTMLElement[] = []
     for (const entry of snapshot.adventurer.pack) {
       const price = vendor.prices.find(p => p.kind === entry.kind && (p.kind === 'special-find' && entry.kind === 'special-find' ? p.band === entry.band : 'id' in p && 'id' in entry && p.id === entry.id))
       if (!price) continue
-      sellable += 1
       const good: SellGood = entry.kind === 'special-find' ? { kind: 'special-find', band: entry.band } : { kind: entry.kind, id: entry.id }
-      body.append(row(entry.kind === 'special-find' ? specialFindNames[entry.band] : pretty(entry.id), `${price.price} coin each · ${entry.kind === 'gear' ? 1 : entry.count} carried`, button('Sell one', () => action({ type: 'sell', vendorId: vendor.personId, good }), 'text-button', snapshot.inCombat), entry.kind === 'special-find' ? 'legendary' : itemRarity(entry.id)))
+      selling.push(stateRow({
+        state: 'available', compact: true, title: entry.kind === 'special-find' ? specialFindNames[entry.band] : pretty(entry.id), rarity: entry.kind === 'special-find' ? 'legendary' : itemRarity(entry.id),
+        lines: [`${price.price} coin each · ${entry.kind === 'gear' ? 1 : entry.count} carried`],
+        actions: [button('Sell one', () => action({ type: 'sell', vendorId: vendor.personId, good }), 'text-button', snapshot.inCombat)],
+      }))
     }
-    if (!sellable) body.append(description('This Vendor has no offer for the goods currently in your pack.'))
+    body.append(section('Buy', ...buying), section('Sell', ...(selling.length ? selling : [description('This Vendor buys none of the goods you carry.')])))
   }
   function personPanel(): void {
     if (contextId === '__acquaintance') {
       get('#game-panel-title').textContent = 'Along the road'
-      body.append(description(definition.acquaintance?.line ?? 'Jesus and the traveling company pass along the road.'), description(`With the traveling company: ${travelingCompany.join(', ')}.`, 'small-note'), description('An acquaintance, with no task or reward. Continue when you are ready.', 'panel-note'), button('Continue the journey', closePanel))
+      body.append(lead(definition.acquaintance?.line ?? 'Jesus and the traveling company pass along the road.'), description(`With the traveling company: ${travelingCompany.join(', ')}.`, 'small-note'), description('A meeting on the road. It has no task and no reward.', 'panel-note'), actionBar(button('Continue the journey', closePanel)))
       return
     }
     const actor = layout.objects.find(o => o.id === contextId)
     const active = snapshot.adventurer.playingScene?.sceneId ?? actor?.sceneId
     const narrative = active ? sceneNarratives[active] : undefined
-    if (snapshot.adventurer.playingScene && narrative) {
-      get('#game-panel-title').textContent = narrative.title
-      body.append(description(narrative.reference, 'scripture-version'))
-      for (const paragraph of narrative.summary) body.append(description(paragraph, 'conversation-line'))
-      body.append(description('Original narration. The matching NIV passage is available at the Scripture marker nearby.', 'small-note'))
-      const finish = button('Finish encounter', () => action({ type: 'finish' })); finish.dataset.finishEncounter = 'true'; body.append(finish)
-      return
-    }
-    if (narrative && snapshot.adventurer.playedSetScenes.includes(narrative.id)) {
-      get('#game-panel-title').textContent = narrative.title
-      body.append(description('You have witnessed this encounter. Its place in your Season is recorded.'), description(narrative.reference, 'scripture-version'))
-      const reading = definition.scriptureObjects.find(object => object.reference === narrative.reference)
-      if (reading) body.append(button(`Find ${narrative.reference}`, () => goTo(reading.id), 'game-button secondary'))
-      body.append(button('Return to the world', closePanel))
-      return
-    }
-    const scene = definition.setScenes?.find(candidate => candidate.id === contextId || candidate.id === snapshot.adventurer.playingScene?.sceneId)
-    const person = definition.people?.find(candidate => candidate.id === contextId) ?? (scene ? definition.people?.find(candidate => candidate.figure === scene.figure) : undefined)
     function finishControl(): HTMLButtonElement {
       const control = button('Finish encounter', () => action({ type: 'finish' }))
       control.dataset.finishEncounter = 'true'
       return control
     }
+    if (snapshot.adventurer.playingScene && narrative) {
+      get('#game-panel-title').textContent = narrative.title
+      body.append(stateLine('active', 'In progress', narrative.reference))
+      for (const paragraph of narrative.summary) body.append(spoken(paragraph))
+      body.append(description('This is a retelling, not the Bible text. Read the NIV passage at the Scripture marker nearby.', 'small-note'), actionBar(finishControl()))
+      return
+    }
+    if (narrative && snapshot.adventurer.playedSetScenes.includes(narrative.id)) {
+      get('#game-panel-title').textContent = narrative.title
+      const reading = definition.scriptureObjects.find(object => object.reference === narrative.reference)
+      body.append(stateLine('finished', 'Witnessed', narrative.reference), lead('You have already witnessed this encounter.'),
+        actionBar(button('Return to the world', closePanel), reading ? button(`Find ${narrative.reference}`, () => goTo(reading.id), 'game-button secondary') : undefined))
+      return
+    }
+    const scene = definition.setScenes?.find(candidate => candidate.id === contextId || candidate.id === snapshot.adventurer.playingScene?.sceneId)
+    const person = definition.people?.find(candidate => candidate.id === contextId) ?? (scene ? definition.people?.find(candidate => candidate.figure === scene.figure) : undefined)
     if (!person) {
-      if (snapshot.adventurer.playingScene) body.append(description('Attend to this moment, then finish the encounter to continue your journey.'), finishControl())
-      else body.append(description('Choose a person in the world to speak with them.'))
+      if (snapshot.adventurer.playingScene) body.append(lead('Finish the encounter to record it and return to the world.'), actionBar(finishControl()))
+      else body.append(lead('Choose a person in the world to speak with them.'))
       return
     }
     get('#game-panel-title').textContent = objectName(person.id)
     if (!snapshot.adventurer.playingScene && !nearby(person.id)) {
-      body.append(description(`Move closer to speak with ${objectName(person.id)}.`), button('Approach', () => goTo(person.id), 'game-button', snapshot.inCombat))
+      body.append(lead(`Move closer to speak with ${objectName(person.id)}.`), actionBar(button('Approach', () => goTo(person.id), 'game-button', snapshot.inCombat)))
       return
     }
     if (person.kind === 'biblical-figure') {
-      body.append(description(person.figure === 'john' ? 'John is here beside the Jordan. Read the nearby Scripture passage to hear his witness.' : 'An encounter in the Season.'))
+      body.append(lead(person.figure === 'john' ? 'John is here beside the Jordan. To hear his witness, read the Scripture passage nearby.' : `${objectName(person.id)} is here.`))
       if (snapshot.adventurer.playingScene) {
-        body.append(description('Attend to this moment, then continue your journey. The encounter is recorded when you finish.', 'panel-note'), finishControl())
-      } else {
-        body.append(button(`Speak with ${objectName(person.id)}`, () => action({ type: 'speak', id: person.id }), 'game-button', snapshot.inCombat))
+        body.append(stateLine('active', 'In progress'), description('Finish the encounter to record it and return to the world.', 'panel-note'), actionBar(finishControl()))
+        return
       }
       const scripture = definition.scriptureObjects.find(object => object.placeId === person.placeId)
-      if (scripture && !snapshot.adventurer.playingScene) body.append(button(`Find ${scripture.reference}`, () => goTo(scripture.id), 'game-button secondary', snapshot.inCombat))
+      body.append(actionBar(
+        button(`Speak with ${objectName(person.id)}`, () => action({ type: 'speak', id: person.id }), 'game-button', snapshot.inCombat),
+        scripture ? button(`Find ${scripture.reference}`, () => goTo(scripture.id), 'game-button secondary', snapshot.inCombat) : undefined,
+      ))
       return
     }
-    if (personStories[person.id]) body.append(description(personStories[person.id]))
-    if (dialogueLine) body.append(description(dialogueLine, 'conversation-line'))
-    const quests = definition.quests?.filter(quest => quest.giverId === person.id) ?? []
-    for (const quest of quests) {
-      const current = snapshot.adventurer.questJournal.find(entry => entry.questId === quest.id)
-      const level = definition.places.find(p => p.id === person.placeId)?.band === 'high' ? 40 : definition.places.find(p => p.id === person.placeId)?.band === 'middle' ? 20 : 1
-      const locked = !quest.repeatable && snapshot.adventurer.adventurerLevel < level
-      const missing = quest.requiredQuestIds?.filter(id => !snapshot.adventurer.questJournal.some(entry => entry.questId === id && entry.finished)) ?? []
-      body.append(row(pretty(quest.id), `${locked ? `Available at Adventurer level ${level}. ` : missing.length ? `First finish ${missing.map(pretty).join(', ')}. ` : ''}${current?.line ?? quest.steps[0]?.line ?? 'Speak to learn more.'}`))
+    if (personStories[person.id]) body.append(lead(personStories[person.id]))
+    if (dialogueLine) body.append(spoken(dialogueLine))
+    const standings = game.quests(person.id)
+    if (standings.length) {
+      const title = (questId: string) => questTitle(questId, person.placeId)
+      const rows = standings.map(standing => {
+        const quest = definition.quests?.find(candidate => candidate.id === standing.questId)
+        const label = questAction(standing, title(standing.questId))
+        const notes = standing.locks.map(lock => lockText(lock, title))
+        if (quest?.repeatable && standing.standing !== 'active') notes.push(standing.finishedOnce ? 'Repeatable · done before' : 'Repeatable')
+        return stateRow({
+          state: standing.standing, title: title(standing.questId), lines: [standing.line], notes,
+          actions: [label ? button(label, () => action({ type: 'speak', id: person.id, questId: standing.questId }), 'game-button', snapshot.inCombat) : undefined],
+        })
+      })
+      body.append(section('Quests', ...rows))
     }
-    body.append(button(quests.length ? 'Speak about the work' : 'Speak', () => action({ type: 'speak', id: person.id }), 'game-button', snapshot.inCombat))
-    if (person.vendor) body.append(button('Trade', () => openPanel('trade', person.id), 'game-button secondary', snapshot.inCombat))
+    body.append(actionBar(
+      standings.length ? undefined : button('Speak', () => action({ type: 'speak', id: person.id }), 'game-button', snapshot.inCombat),
+      person.vendor ? button('Trade', () => openPanel('trade', person.id), 'game-button secondary', snapshot.inCombat) : undefined,
+    ))
   }
   function materialCount(id: string): number { return snapshot.adventurer.pack.reduce((sum, entry) => sum + ('id' in entry && entry.id === id && 'count' in entry ? entry.count : 0), 0) }
   function craftPanel(): void {
     const station = definition.stations?.find(candidate => candidate.id === contextId)
-    if (!station) { body.append(description('Choose a forge, loom, tanning rack, or hearth in a settlement.')); return }
-    if (!nearby(station.id)) { body.append(description('Move closer to the station to make something.'), button('Go to station', () => goTo(station.id))); return }
+    if (!station) { body.append(lead('Choose a forge, loom, tanning rack, or hearth in a settlement.')); return }
+    if (!nearby(station.id)) { body.append(lead('Move closer to the station to make something.'), actionBar(button('Go to station', () => goTo(station.id)))); return }
     const band = definition.places.find(p => p.id === station.placeId)!.band
+    if (snapshot.inCombat) body.append(description('You can look at recipes during a fight. Make them once the fight is over.', 'panel-note'))
     const filter = node('select'); filter.setAttribute('aria-label', 'Recipe rarity')
     for (const rarity of ['all', ...rarities]) { const item = node('option', '', rarity === 'all' ? 'All rarities' : pretty(rarity)); item.value = rarity; filter.append(item) }
     filter.value = craftingRarity; filter.addEventListener('change', () => { craftingRarity = filter.value; refreshPanel() })
-    body.append(description(`${pretty(band)} band patterns · Known recipes are shared by settlements in this band.`), filter)
-    const recipeList = node('div', 'recipe-list')
+    body.append(lead(`${pretty(band)}-band recipes. Every ${band}-band settlement has the same ones.`), filter)
+    const recipes: HTMLElement[] = []
     function recipe(id: string, result: string, skill: string, level: number, costs: readonly MaterialCost[]): void {
       const trained = snapshot.adventurer.trainedSkills[skill as keyof typeof snapshot.adventurer.trainedSkills]
       const piece = definition.gear?.find(p => p.id === result)
@@ -478,15 +553,20 @@ export function createUI(options: UIOptions) {
       if (craftingRarity !== 'all' && rarity !== craftingRarity) return
       const findCount = snapshot.adventurer.pack.reduce((sum, entry) => sum + (entry.kind === 'special-find' && entry.band === band ? entry.count : 0), 0)
       const needsFind = piece?.rarity === 'legendary'
-      const ready = !snapshot.inCombat && (!needsFind || findCount > 0) && trained.level >= level && costs.every(cost => materialCount(cost.id) >= cost.count)
-      const card = node('article', 'recipe-card')
-      card.append(row(pretty(result), `${skill} level ${level}`, button('Make', () => action({ type: 'make', stationId: station!.id, recipeId: id }), 'text-button', !ready), rarity))
-      if (piece) card.append(description(gearDetail(piece), 'small-note'))
-      else if (definition.foods?.some(food => food.id === result)) card.append(description(foodDetail(result), 'small-note'))
+      const notes: string[] = []
+      if (trained.level < level) notes.push(`Needs ${skill} level ${level}`)
+      const missing = costs.filter(cost => materialCount(cost.id) < cost.count).map(cost => pretty(cost.id))
+      if (needsFind && findCount < 1) missing.push(specialFindNames[band])
+      if (missing.length) notes.push(`Missing ${missing.join(', ')}`)
       const materials = node('div', 'recipe-costs')
       for (const cost of costs) materials.append(node('span', materialCount(cost.id) >= cost.count ? 'available' : 'missing', `${pretty(cost.id)} ${materialCount(cost.id)}/${cost.count}`))
       if (needsFind) materials.append(node('span', findCount > 0 ? 'available' : 'missing', `${specialFindNames[band]} ${findCount}/1`))
-      card.append(materials); recipeList.append(card)
+      recipes.push(stateRow({
+        state: notes.length ? 'locked' : 'available', title: pretty(result), rarity,
+        lines: [`${skill} level ${level}`, piece ? gearDetail(piece) : definition.foods?.some(food => food.id === result) ? foodDetail(result) : ''],
+        details: [materials], notes,
+        actions: [notes.length ? undefined : button(`Make ${pretty(result)}`, () => action({ type: 'make', stationId: station!.id, recipeId: id }), 'game-button', snapshot.inCombat)],
+      }))
     }
     const skillFor = { forge: 'Blacksmithing', loom: 'Tailoring', 'tanning-rack': 'Leatherworking', hearth: 'Cooking' } as const
     for (const candidate of definition.gearRecipes ?? []) {
@@ -498,8 +578,8 @@ export function createUI(options: UIOptions) {
       if (candidate.stationId && candidate.stationId !== station.id) continue
       recipe(candidate.id, candidate.foodId, 'Cooking', candidate.requiredLevel, [candidate.fish, candidate.meat, candidate.herbs])
     }
-    if (!recipeList.childNodes.length) body.append(description('There are no recipes available at this station yet.'))
-    else body.append(description('Gather the listed materials, then make your supplies here.'), recipeList)
+    if (!recipes.length) body.append(description(craftingRarity === 'all' ? 'This station has no recipes yet.' : `This station has no ${craftingRarity} recipes.`))
+    else body.append(section('Recipes', ...recipes))
   }
   function scripturePanel(): void {
     if (snapshot.inCombat) { body.append(description('Finish or escape the fight before reading Scripture.')); return }

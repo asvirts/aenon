@@ -306,6 +306,25 @@ describe("a set scene plays for its attend step", () => {
     assert.equal(season.adventurer().coin, 0)
   })
 
+  it("refuses a chosen quest that would make a second unplayed set scene of Jesus current, and shows it as locked", () => {
+    const season = load(directSecondJesus())
+    assert.equal(season.speak("tanner", "see-salim").ok, true)
+    const saved = season.exportState()
+
+    assert.deepEqual(season.speak("miller", "see-nazareth"), { ok: false, reason: "second-jesus-scene" })
+    assert.deepEqual(season.exportState(), saved)
+    assert.deepEqual(season.quests("miller"), [
+      {
+        questId: "see-nazareth",
+        band: "low",
+        standing: "locked",
+        line: "Attend the visit to Nazareth.",
+        finishedOnce: false,
+        locks: [{ kind: "second-jesus-scene" }],
+      },
+    ])
+  })
+
   it("refuses to start a quest whose ready hold would open a second unplayed set scene of Jesus", () => {
     const season = load(holdThenJesus())
     assert.deepEqual(season.speak("tanner"), {

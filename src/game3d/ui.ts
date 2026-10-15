@@ -433,6 +433,7 @@ export function createUI(options: UIOptions) {
     }
     if (!nearby(vendor.personId)) { body.append(lead('Move closer to this Vendor to trade.'), actionBar(button('Go to Vendor', () => goTo(vendor.personId)))); return }
     const coin = snapshot.adventurer.coin
+    if (snapshot.inCombat) body.append(description('You can look at this Vendor’s goods during a fight. Buy or sell once the fight is over.', 'panel-note'))
     body.append(lead(`You have ${format(coin)} coin.`))
     const buying: HTMLElement[] = []
     for (const line of vendor.stock) {
@@ -539,6 +540,7 @@ export function createUI(options: UIOptions) {
     if (!station) { body.append(lead('Choose a forge, loom, tanning rack, or hearth in a settlement.')); return }
     if (!nearby(station.id)) { body.append(lead('Move closer to the station to make something.'), actionBar(button('Go to station', () => goTo(station.id)))); return }
     const band = definition.places.find(p => p.id === station.placeId)!.band
+    if (snapshot.inCombat) body.append(description('You can look at recipes during a fight. Make them once the fight is over.', 'panel-note'))
     const filter = node('select'); filter.setAttribute('aria-label', 'Recipe rarity')
     for (const rarity of ['all', ...rarities]) { const item = node('option', '', rarity === 'all' ? 'All rarities' : pretty(rarity)); item.value = rarity; filter.append(item) }
     filter.value = craftingRarity; filter.addEventListener('change', () => { craftingRarity = filter.value; refreshPanel() })

@@ -24,20 +24,35 @@ export const architectureShots = {
   pella: { position: { x: 210, z: -73 }, zoom: 'max' },
 } as const
 export type ArchitectureShot = keyof typeof architectureShots
-const allShots = { ...reviewShots, ...architectureShots }
+/** Supplemental coverage of Jesus with the traveling company, on the road and at a set scene with episode extras. */
+export const companyShots = {
+  'road-acquaintance': { position: { x: -.8, z: 171 }, zoom: 'default' },
+  'cana-wedding': { position: { x: -109, z: -236.5 }, zoom: 'default' },
+} as const
+export type CompanyShot = keyof typeof companyShots
+type AnyShot = ReviewShot | ArchitectureShot | CompanyShot
+const allShots = { ...reviewShots, ...architectureShots, ...companyShots }
 
 export function isReviewShot(name: string): name is ReviewShot { return Object.hasOwn(reviewShots, name) }
 export function isReviewPreset(name: string): name is ReviewPreset { return reviewPresets.some(preset => preset === name) }
 
 /** Real simulation and authored hostiles; no rules or save schema changes. */
-export function createShotGame(options: GameOptions, name: ReviewShot | ArchitectureShot): Game {
+export function createShotGame(options: GameOptions, name: AnyShot): Game {
   const position = allShots[name].position
   if (!options.canTraverse(position, position)) throw new Error(`Review shot ${name} is no longer on walkable ground.`)
   const fresh = { ...options, saved: undefined, legacy: undefined, random: () => .5 }
   const saved = createGame(fresh).exportSave()
   saved.runtime.position = { ...position }
   saved.season.placeId = options.layout.placeAt(position)
+  // Just outside Aenon on the road: the outing has begun and has not yet met the company.
+  if (name === 'road-acquaintance') saved.season.outing = 'open'
+  if (name === 'cana-wedding') saved.season.playingSceneId = 'cana-wedding'
   const game = createGame({ ...fresh, saved })
+  if (name === 'road-acquaintance') {
+    game.advance(1 / 60)
+    if (game.snapshot().company?.kind !== 'acquaintance') throw new Error('The review road no longer meets the traveling company.')
+  }
+  if (name === 'cana-wedding' && game.snapshot().company?.sceneId !== 'cana-wedding') throw new Error('The review wedding no longer plays at Cana.')
   if (name === 'fight') {
     // The authored Salim wolf is next to the low-road-0-5 camp. Fix the
     // simulation phase before its first return swing, then retain the pose.
@@ -108,7 +123,7 @@ export function frameSampler(seconds: number) {
   }
 }
 
-export type ReviewShotResult = { name: ReviewShot | ArchitectureShot; quality: ReviewPreset; zoom: number; position: Point; simulationTime: number; inCombat: boolean }
+export type ReviewShotResult = { name: AnyShot; quality: ReviewPreset; zoom: number; position: Point; simulationTime: number; inCombat: boolean }
 export type ReviewMeasurement = FrameMeasurement & {
   shot: ReviewShotResult
   renderSize: { width: number; height: number }
@@ -134,7 +149,7 @@ export function installReviewHarness(context: {
   style.textContent = '#game-notice { display: none !important; }'
   document.head.append(style)
 
-  async function applyShot(name: ReviewShot | ArchitectureShot, quality: ReviewPreset): Promise<ReviewShotResult> {
+  async function applyShot(name: AnyShot, quality: ReviewPreset): Promise<ReviewShotResult> {
     if (!isReviewPreset(quality)) throw new Error(`Unknown review preset: ${quality}`)
     if (busy) throw new Error(`A review ${busy} is already running.`)
     busy = 'shot'; settled = false
@@ -173,6 +188,10 @@ export function installReviewHarness(context: {
     if (!Object.hasOwn(architectureShots, name)) throw new Error(`Unknown architecture shot: ${name}`)
     return applyShot(name, quality)
   }
+  function companyShot(name: CompanyShot, quality: ReviewPreset = 'high') {
+    if (!Object.hasOwn(companyShots, name)) throw new Error(`Unknown company shot: ${name}`)
+    return applyShot(name, quality)
+  }
 
   async function measure(seconds = 10): Promise<ReviewMeasurement> {
     if (busy) throw new Error(`A review ${busy} is already running.`)
@@ -184,7 +203,7 @@ export function installReviewHarness(context: {
   }
 
   return {
-    reviewShot, architectureShot, measure,
+    reviewShot, architectureShot, companyShot, measure,
     reviewState: () => ({ shot: selected, settled, busy: busy ?? null }),
     /** Called after scene.render(), so counters belong to the completed frame. */
     afterFrame() {

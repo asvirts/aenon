@@ -276,7 +276,8 @@ export type SeasonDefinition = {
   people?: readonly Person[]
   quests?: readonly QuestDefinition[]
   setScenes?: readonly SetScene[]
-  acquaintance?: { line: string }
+  /** The road meeting. `line` is words of the Season's own; `passage` is Scripture Jesus speaks, read live by USFM. */
+  acquaintance?: { line?: string; passage?: { reference: string; usfm: string } }
   gear?: readonly Gear[]
   stations?: readonly Station[]
   gearPieces?: readonly GearPiece[]

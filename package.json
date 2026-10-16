@@ -7,12 +7,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "server": "node --env-file=.env src/server/passageServer.ts",
-    "build": "vite build",
+    "server": "node scripts/season-passages.ts && node --env-file=.env src/server/passageServer.ts",
+    "build": "node scripts/season-passages.ts && vite build",
     "preview": "vite preview",
-    "test": "node --test tests/**/*.test.ts",
-    "typecheck": "tsc --noEmit",
+    "test": "node scripts/season-passages.ts && node --test tests/**/*.test.ts",
+    "typecheck": "node scripts/season-passages.ts && tsc --noEmit",
     "size": "node scripts/first-load-size.ts",
+    "passages": "node scripts/season-passages.ts",
     "credits": "node scripts/art/credits.ts",
     "art:prepare-sample": "node scripts/art/prepare-compression-sample.mjs",
     "art:optimize": "node scripts/art/optimize.mjs"

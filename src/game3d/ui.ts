@@ -54,7 +54,7 @@ function safePassage(html: string): DocumentFragment {
   return fragment
 }
 
-function usfmFor(reference: string): string | undefined {
+export function usfmFor(reference: string): string | undefined {
   if (passageMetadata[reference]) return passageMetadata[reference].usfm
   const match = /^(Genesis|Exodus|Psalms?|Proverbs|Isaiah|Matthew|Mark|Luke|John|Acts)\s+(\d+)(?::(\d+(?:-\d+)?))?$/i.exec(reference)
   if (!match) return undefined

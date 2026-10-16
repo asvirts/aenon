@@ -350,7 +350,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .scripture-text::before { top: 0; background: linear-gradient(var(--game-paper), #f4edda00); }
 .scripture-text::after { bottom: 0; background: linear-gradient(#f4edda00, var(--game-paper)); }
 .scripture-text[data-more-above]::before, .scripture-text[data-more-below]::after { opacity: 1; }
-.scripture-passage { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 14px 26px 0; color: #3a4230; font: 400 19px / 1.8 Georgia, "Times New Roman", serif; font-kerning: normal; scrollbar-width: thin; scrollbar-color: #b7ac8e transparent; }
+.scripture-passage { color: #3a4230; font: 400 19px / 1.8 Georgia, "Times New Roman", serif; font-kerning: normal; }
+/* Only the reader's passage scrolls; a passage quoted elsewhere, such as on the road, keeps its natural height. */
+.scripture-text > .scripture-passage { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 14px 26px 0; scrollbar-width: thin; scrollbar-color: #b7ac8e transparent; }
 .scripture-passage:focus { outline: none; }
 .scripture-passage:focus-visible, .controller-input .scripture-passage:focus { outline: 2px solid #bc944b; outline-offset: 4px; border-radius: 3px; }
 .scripture-passage > * { max-width: 34em; }
@@ -371,7 +373,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .scripture-passage :is(.nd, .sc) { font-variant: small-caps; letter-spacing: .02em; }
 .scripture-passage :is(.it, .add, .tl, .qs) { font-style: italic; }
 .scripture-passage .bd { font-weight: 600; }
-.scripture-copyright { grid-area: credit; max-width: 62em; margin: 0; padding-top: 11px; color: #7f7560; border-top: 1px solid #ded3b8; font-size: 10px; line-height: 1.6; }
+.scripture-copyright { max-width: 62em; margin: 6px 0 0; color: #7f7560; font-size: 10px; line-height: 1.6; }
+.scripture-reader > .scripture-copyright { grid-area: credit; margin: 0; padding-top: 11px; border-top: 1px solid #ded3b8; }
 .scripture-actions.panel-actions { grid-area: actions; margin-top: 0; }
 .scripture-actions .game-button { margin-block: 0; }
 /* The reading card: a first reading arrives a moment after the text, slowly; a later reading sits quietly. */

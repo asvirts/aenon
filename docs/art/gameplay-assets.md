@@ -83,11 +83,17 @@ characters whose attire is recolored. The regional appearances reuse this game's
 original modeled assets; they do not import an external art pack.
 
 A single reusable ensemble represents Jesus and the 15 traveling companions at
-the current scene or acquaintance anchor. Muted tunic and cloak colors and modest
-scale differences distinguish the figures. Other Jesus scene-marker models stay
-hidden, so they do not create simultaneous copies. A separate pool of four
-original villager variants represents episode-only standing roles while that
-specific scene is playing. Group entries such as “Four friends,” “Wedding
+the current scene or acquaintance anchor. Each person has a fixed look in
+`src/game3d/company.ts`: a figure, a tunic color no one else wears on that
+figure, and their own mantle, head wrap, sash, hair, skin tone, height and build.
+Jesus alone wears John's long hair and robe in the group, and the hooded bandit
+figure stays with the hostiles. The company gathers loosely behind Jesus,
+everyone turned toward him and clear of the Adventurer, of each other and of
+nearby things. Other Jesus scene-marker models stay hidden, so they do not create
+simultaneous copies. A separate pool of up to six original looks represents
+episode-only standing roles while that specific scene is playing; they stand to
+either side of the Adventurer's way to Jesus, and women take the head-wrapped
+looks first. Group entries such as “Four friends,” “Wedding
 servants,” or a crowd use one representative figure per authored standing entry;
 they are not full modeled crowds. These appearances add no dialogue or quests.
 

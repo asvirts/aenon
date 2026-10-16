@@ -242,7 +242,7 @@ for (let z = -24; z <= 242; z += 13) for (const side of [-1, 1]) {
 export const definition: SeasonDefinition = {
   ...seed, ...economy, packSize: 24, places: regionPlaces.map(({ id, kind, band }) => ({ id, kind, band })),
   hostiles, people, quests, scriptureObjects, spots, stations, setScenes, vendors, caches,
-  acquaintance: { line: 'Jesus and the traveling company pause along the road. You are welcomed, then each continues the journey. This is original narration; read the nearby Scripture to hear the Gospel account.' },
+  acquaintance: { passage: { reference: 'Matthew 11:28', usfm: 'MAT.11.28' } },
   goods: [...seed.goods ?? [], ...economy.fish.filter(f => !seed.fish?.some(old => old.id === f.id)).map(f => ({ kind: 'fish' as const, id: f.id, rarity: f.rarity })), ...economy.foods.filter(f => !seed.foods?.some(old => old.id === f.id)).map(f => ({ kind: 'food' as const, id: f.id, rarity: f.rarity })), ...bands.map(band => ({ kind: 'special-find' as const, band, rarity: 'legendary' }))],
 }
 export const layout: WorldLayout = { objects, spawns, placeAt, journeys, revision: LOW_BAND_LAYOUT_VERSION }

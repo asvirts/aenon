@@ -5,6 +5,10 @@ export type MusicFile = { url: `/game-audio/${string}.mp3`; title: string }
 
 /**
  * Issue #40: one loop per state, played one at a time with Babylon's streaming option.
- * Empty until the maintainer approves the candidate tracks; until then the game plays effects only, and music is silence.
+ * Partial, so a state without a loop is silence rather than an error.
  */
-export const musicTracks: Partial<Record<MusicState, MusicFile>> = {}
+export const musicTracks: Partial<Record<MusicState, MusicFile>> = {
+  settlement: { url: '/game-audio/settlement-desert-city.mp3', title: 'Desert City' },
+  wilderness: { url: '/game-audio/wilderness-duduk-kanun.mp3', title: 'duduk, kanun. loop' },
+  fight: { url: '/game-audio/fight-desert-storm.mp3', title: 'Desert Storm' },
+}

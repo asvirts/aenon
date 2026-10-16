@@ -236,6 +236,38 @@ Changes: Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2
 
 Files: [public/game-assets/terrain/stones-normal.ktx2](<public/game-assets/terrain/stones-normal.ktx2>)
 
+## Music
+
+### [Action Music Loop 1 "Desert Storm" (Fight music)](<https://freesound.org/people/MathewHenry/sounds/685390/>)
+
+By [MathewHenry](<https://freesound.org/people/MathewHenry/>) · [CC-BY-4.0](<https://creativecommons.org/licenses/by/4.0/>) · Retrieved 2026-10-16
+
+Action Music Loop 1 "Desert Storm" by MathewHenry -- https://freesound.org/s/685390/ -- License: Attribution 4.0
+
+Changes: Taken from the public 128 kbps HQ preview MP3 (not the original WAV) and re-encoded at 128 kbps with ffmpeg; metadata removed. Not trimmed.
+
+Files: [public/game-audio/fight-desert-storm.mp3](<public/game-audio/fight-desert-storm.mp3>)
+
+### [Desert City (Settlement music)](<https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100564>)
+
+By [Kevin MacLeod](<https://incompetech.com/>) · [CC-BY-4.0](<https://creativecommons.org/licenses/by/4.0/>) · Retrieved 2026-10-16
+
+"Desert City" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/
+
+Changes: Re-encoded from the 320 kbps MP3 to 128 kbps MP3 with ffmpeg; metadata removed. Not trimmed.
+
+Files: [public/game-audio/settlement-desert-city.mp3](<public/game-audio/settlement-desert-city.mp3>)
+
+### [duduk, kanun. loop (Wilderness music)](<https://freesound.org/people/muri_kuri/sounds/690455/>)
+
+By [muri\_kuri](<https://freesound.org/people/muri_kuri/>) · [CC0-1.0](<https://creativecommons.org/publicdomain/zero/1.0/>) · Retrieved 2026-10-16
+
+duduk, kanun. loop.wav by muri\_kuri -- https://freesound.org/s/690455/ -- License: Creative Commons 0
+
+Changes: Taken from the public 128 kbps HQ preview MP3 (not the original WAV) and re-encoded at 128 kbps with ffmpeg; metadata removed. Not trimmed.
+
+Files: [public/game-audio/wilderness-duduk-kanun.mp3](<public/game-audio/wilderness-duduk-kanun.mp3>)
+
 ## Original models
 
 ### [Adventurer](<https://github.com/asvirts/aenon/blob/main/scripts/art/build_gameplay.py>)

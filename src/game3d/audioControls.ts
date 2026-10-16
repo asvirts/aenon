@@ -2,7 +2,6 @@
 // The sliders move in 5% steps, so arrow keys, the D-pad and the left stick each move one step; A clicks Mute.
 import type { GameAudio } from './audio.ts'
 import { percent, volumeSteps, type AudioSettings } from './audioSettings.ts'
-import { musicTracks } from './musicTracks.ts'
 import { button, description, heading, node } from './panelFrame.ts'
 
 export type AudioControlsTarget = Pick<GameAudio, 'settings' | 'change' | 'preview'>
@@ -38,8 +37,6 @@ export function audioControls(audio: AudioControlsTarget): HTMLElement[] {
   mute.id = 'game-mute'
   mute.setAttribute('aria-pressed', String(settings.muted))
   elements.push(mute)
-  const notes = ['Sound begins after your first click, key press or controller press. Volumes are kept apart from your Season, so importing a save or starting a new Season leaves them as they are.']
-  if (!Object.keys(musicTracks).length) notes.unshift('Music arrives in a later update; the Music volume is kept for it.')
-  for (const note of notes) elements.push(description(note, 'small-note'))
+  elements.push(description('Sound begins after your first click, key press or controller press. Volumes are kept apart from your Season, so importing a save or starting a new Season leaves them as they are.', 'small-note'))
   return elements
 }

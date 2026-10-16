@@ -85,8 +85,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .text-button:hover:not(:disabled) { color: #354724; background: #e5dfc8; border-color: #8f9770; }
 .text-button.danger { margin-top: 18px; color: #935b3e; border-color: #c5a88d; }
 .game-button.danger { background: #926544; border-color: #805237; }
-.skill-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 26px; }
-.skill-level { display: grid; place-items: center; width: 27px; height: 27px; border: 1px solid #b8b087; border-radius: 50%; color: #6b774c; font-size: 11px; font-weight: 500; }
 .conversation-line { margin: 21px 0; font: 400 20px / 1.65 Georgia, serif; color: #4a513c; }
 .recipe-card { margin: 14px 0; padding: 0 15px 13px; background: #eee6d0; border: 1px solid #ded1b3; border-radius: 5px; }
 .recipe-card .item-row { border: 0; }
@@ -140,7 +138,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   .game-panel-heading { padding: 22px 23px 18px; }
   .game-panel-heading h2 { font-size: 28px; }
   .game-panel-body { padding: 5px 23px 23px; }
-  .skill-grid { column-gap: 16px; }
   .paused-label { top: 161px; }
 }
 @media (max-height: 560px) and (min-width: 701px) {
@@ -252,6 +249,61 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   .inventory-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
+/* Journals, Skills, Settings and the Map on the shared frame (#68): tallies, level meters, settings groups and place lists. */
+.page-tally { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 16px 0 6px; }
+.page-tally.combat { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 14px 0 0; }
+.page-tally-item { min-width: 0; padding: 9px 12px; border: 1px solid #ddd2b5; border-radius: 6px; background: #efe7d2; }
+.page-tally-item dt { color: #6b5c3a; font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.page-tally-item dd { margin: 3px 0 0; color: #37402f; font: 400 20px / 1.2 Georgia, serif; }
+.level-card .page-tally-item { background: #f8f1df; }
+.quest-from { margin: 0; color: #6b5c3a; font-size: 10.5px; line-height: 1.5; }
+.state-row.compact .quest-from { order: 3; flex-basis: 100%; }
+.level-meter { height: 6px; margin: 10px 0 0; overflow: hidden; border-radius: 3px; background: #ddd2b5; }
+.level-meter-fill { display: block; height: 100%; border-radius: 3px; background: #626e46; }
+.level-card { margin: 12px 0 6px; padding: 16px 18px 18px; border: 1px solid #d9c48d; border-left: 3px solid #a8802f; border-radius: 6px; background: #f4e7c4; }
+.level-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.level-card-label { color: #6b5c3a; font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.level-card-value { color: #37402f; font: 400 34px / 1 Georgia, serif; }
+.level-card .level-meter { background: #e3d3a8; }
+.level-card .level-meter-fill { background: #a8802f; }
+.level-card-progress, .skill-card-progress { margin: 7px 0 0; color: #6f6a52; font-size: 11px; line-height: 1.5; }
+.skill-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 12px 0 6px; }
+.skill-card { min-width: 0; padding: 11px 13px 12px; border: 1px solid #ddd2b5; border-radius: 6px; background: #efe7d2; }
+.skill-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.skill-card-name { margin: 0; color: #37402f; font: 400 15px / 1.3 Georgia, serif; }
+.skill-card-level { flex-shrink: 0; color: #37402f; font: 400 17px / 1 Georgia, serif; }
+.skill-card-level small { margin-right: 2px; color: #6b5c3a; font: 600 9px / 1 sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.skill-card .level-meter { height: 4px; margin-top: 8px; }
+.skill-card-progress { font-size: 10px; }
+.settings-group { margin: 14px 0; padding: 2px 18px 16px; border: 1px solid #ddd2b5; border-radius: 6px; background: #efe7d2; }
+.settings-group > .section-title { margin: 14px 0 4px; font-size: 19px; }
+.settings-group .setting-label:first-of-type { margin-top: 14px; }
+.settings-group .setting-label { margin: 18px 0 8px; }
+.setting-detail { margin: 7px 0 4px; color: var(--game-muted); font-size: 11px; line-height: 1.65; }
+.settings-group .item-row { padding-bottom: 0; }
+.settings-group .state-line { margin: 12px 0 4px; color: #5d5843; font-size: 11px; letter-spacing: 0; text-transform: none; }
+.settings-group .panel-actions { margin-top: 8px; }
+.settings-group .restart-confirmation { background: #ece0c4; }
+.controller-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 10px; }
+.controller-group-title, .place-list-title { margin: 12px 0 8px; color: #6b5c3a; font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.controller-buttons { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: center; gap: 7px 12px; margin: 0; }
+.controller-buttons dt { justify-self: start; padding: 2px 7px; color: #4d5a39; border: 1px solid #c5baa0; border-radius: 4px; background: #f8f1df; font-size: 10px; font-weight: 600; }
+.controller-buttons dd { margin: 0; color: #5d5843; font-size: 11.5px; line-height: 1.45; }
+.place-list-title { margin-top: 20px; }
+.map-side .place-list { margin: 0 0 4px; }
+.credit-group .credit-entry:last-child { border-bottom: 0; }
+@media (max-width: 700px) {
+  .page-tally { gap: 6px; }
+  .page-tally-item { padding: 8px 10px; }
+  .page-tally-item dd { font-size: 18px; }
+  .page-tally.combat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-group { padding: 2px 14px 14px; }
+  .controller-columns { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+@media (max-width: 480px) {
+  .skill-cards { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* The Start menu, and the full-screen pages it reaches (#36). The world pauses behind every page. */
 .controller-input .game-panel :is(button, input, select, a):focus { outline: 2px solid #bc944b; outline-offset: 3px; }
 .menu-entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0 4px; }
@@ -279,7 +331,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   .page-view .inventory-columns { grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr); }
   .page-view .map-columns { grid-template-columns: minmax(0, 4fr) minmax(280px, 3fr); }
   .page-view .inventory-side { position: sticky; top: 14px; margin-top: 14px; }
-  .page-view .map-side > .section-title:first-child { margin-top: 14px; }
+  .page-view .map-side > .state-row:first-child { margin-top: 14px; }
 }
 @media (max-width: 700px) {
   .page-view .game-panel-heading, .page-view .page-tabs, .page-view .game-panel-body { padding-inline: 18px; }

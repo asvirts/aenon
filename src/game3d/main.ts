@@ -39,6 +39,9 @@ async function boot() {
   const { storage, temporaryStorage } = openStorage(Boolean(review), () => window.localStorage)
   let reviewHarness: ReviewHarness | undefined
   const loaded = loadGameSave(storage, definition, layout)
+  // A save that loads blocked is never overwritten. Keep its text now, so Export original save still has it if
+  // storage stops answering later.
+  const blockedOriginal = loaded.blocked && !loaded.unavailable ? (() => { try { return storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { return null } })() : null
   let savingBlocked = Boolean(loaded.blocked)
   const options = { definition, curves, layout, pathfind: (start: { x: number; z: number }, goal: { x: number; z: number }) => findPath(start, goal, navigation), canTraverse: (start: { x: number; z: number }, goal: { x: number; z: number }) => canTraverse(start, goal, navigation) }
   const game = createGame({ ...options, saved: loaded.saved, legacy: loaded.legacy })
@@ -224,9 +227,9 @@ async function boot() {
     anchor.href = url; anchor.download = `the-season-${new Date().toISOString().slice(0, 10)}.json`; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 5000)
   }
   function exportSave() {
-    let original: string | null = null
-    if (savingBlocked) try { original = storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { /* Export the live state if reading is blocked. */ }
-    download(original ?? JSON.stringify(prompts.attach(game.exportSave()), null, 2))
+    // A blocked load exports the original save as found. A save that failed during play exports the live game,
+    // since storage only holds the older copy.
+    download(blockedOriginal ?? JSON.stringify(prompts.attach(game.exportSave()), null, 2))
   }
   function reloadReplacedSave() {
     // pagehide, visibility and autosave still belong to the old running game.

@@ -282,3 +282,36 @@ test('a save from before the camps loads with every camp at home and every new c
   for (const cache of occupation.caches) assert.ok(!season.openedCaches.includes(cache.id))
   for (const key of ['placeId', 'coin', 'pack', 'openedCaches', 'questProgress', 'worn', 'adventurerExperience'] as const) assert.deepEqual(season[key], old.season[key], key)
 })
+
+test('a chasing hostile goes home once the Adventurer steps into a settlement', () => {
+  // The camp member nearest a settlement edge, and an ordinary hostile beside Hippus.
+  const towns = regionPlaces.filter(place => place.kind === 'settlement')
+  const gap = (point: Point) => Math.min(...towns.map(town => distance(point, town) - town.radius))
+  const member = [...members].sort((a, b) => gap(a) - gap(b))[0]!
+  for (const hostile of [member, object('hippus-threat-0')]) {
+    const town = [...towns].sort((a, b) => distance(hostile, a) - a.radius - (distance(hostile, b) - b.radius))[0]!
+    const saved = createGame(options).exportSave()
+    saved.season.placeId = hostile.placeId
+    saved.season.adventurerExperience = experienceForLevel(curves.adventurer, 54)
+    saved.season.currentHitpoints = 54
+    saved.season.worn = { weapon: 'galilee-rare-sword', shield: 'galilee-rare-shield', head: 'galilee-rare-leather-hood', body: 'galilee-rare-leather-coat', legs: 'galilee-rare-leather-leggings', feet: 'galilee-rare-leather-boots' }
+    // Stand between the hostile and the town, just outside its notice.
+    const toward = { x: (town.x - hostile.x) / distance(town, hostile), z: (town.z - hostile.z) / distance(town, hostile) }
+    saved.runtime.position = { x: hostile.x + toward.x * 5, z: hostile.z + toward.z * 5 }
+    const game = createGame({ ...options, saved })
+    const view = () => game.snapshot().hostiles.find(candidate => candidate.id === hostile.id)!
+    game.moveTo({ x: hostile.x + toward.x * 3, z: hostile.z + toward.z * 3 })
+    for (let t = 0; t < 5 && view().status === 'idle'; t += .05) game.advance(.05)
+    assert.notEqual(view().status, 'idle', `${hostile.id} never noticed the Adventurer`)
+    game.moveTo({ x: town.x, z: town.z })
+    let inside = false
+    for (let t = 0; t < 20 && !inside; t += .05) { game.advance(.05); inside = distance(game.snapshot().position, town) < town.radius }
+    assert.ok(inside, `the Adventurer never reached ${town.id}`)
+    assert.ok(distance(game.snapshot().position, hostile) <= hostile.leashRadius!, `${hostile.id} would drop the chase on its leash alone`)
+    game.advance(.05)
+    assert.equal(view().status, 'return', `${hostile.id} kept chasing inside ${town.id}`)
+    for (let t = 0; t < 20 && view().status !== 'idle'; t += .05) game.advance(.05)
+    assert.equal(view().status, 'idle')
+    assert.ok(distance(view(), hostile) < .5, `${hostile.id} did not reach home`)
+  }
+})

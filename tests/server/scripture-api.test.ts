@@ -2,8 +2,10 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import passageRoute from '../../api/passage.ts'
 import versionRoute from '../../api/version.ts'
-import { handleScriptureRequest } from '../../src/server/scriptureApi.ts'
+import { createScriptureApi, type ScriptureHandler } from '../../src/server/scriptureApi.ts'
 
+// A fresh handler per call, so the version cache and rate limit never carry between cases.
+const handleScriptureRequest: ScriptureHandler = (request, env) => createScriptureApi()(request, env)
 const env = { YVP_APP_KEY: 'synthetic-test-key', YVP_BIBLE_ID: '111' }
 const metadata = { title: 'New International Version', abbreviation: 'NIV11', copyright: 'Synthetic attribution.' }
 const request = (path: string, method = 'GET') => new Request(`https://game.example${path}`, { method })

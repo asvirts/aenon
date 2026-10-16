@@ -7,6 +7,7 @@ import { definition, curves, layout, navigation } from './content.ts'
 import { loadGameSave, saveGame, importGameSave, restartGameSave, SAVE_KEY, LEGACY_SAVE_KEY } from './persistence.ts'
 import { createUI } from './ui.ts'
 import { createObjectiveHud } from './objectiveHud.ts'
+import { createGameAudio } from './audio.ts'
 import { createWorld } from './world.ts'
 import { configureAssetDecoders } from './assetDecoders.ts'
 import { regionPlaces, regionRoads } from './region.ts'
@@ -226,9 +227,10 @@ async function boot() {
     savingBlocked = true
     location.reload()
   }
-  const ui = createUI({ game, definition, layout, quality, zoom,
+  const audio = createGameAudio({ storage, definition, scene })
+  const ui = createUI({ game, definition, layout, quality, zoom, audio,
     onQuality: setQuality, onZoom: applyZoom,
-    onPanel: open => { keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
+    onPanel: open => { audio.panel(open); keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
     onSaveExport: exportSave,
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
     onRestart: () => { const fresh = withSeenHints(createGame(options).exportSave(), []); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
@@ -293,6 +295,9 @@ async function boot() {
     const snapshot = game.snapshot(), events = game.drainEvents()
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
     if (!reviewHarness) pollGamepad(snapshot, dt)
+    // Issue #40: attack, damage, harvest and the other rules events play their cues; music follows place and Fight.
+    audio.events(events)
+    audio.update(snapshot, ui.panel(), dt, priorGamepadButtons?.some(Boolean) ?? false)
     world.events(events, snapshot)
     const playerHeight = heightAt(snapshot.position.x, snapshot.position.z)
     coverage = viewCoverage(zoom, engine.getRenderWidth() / engine.getRenderHeight(), playerHeight)

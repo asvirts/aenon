@@ -9,6 +9,8 @@ const artLicenses = new Set(['CC0-1.0', 'CC-BY-3.0', 'CC-BY-4.0', 'tool-terms', 
 const codeLicenses = new Set(['MIT', 'Apache-2.0', 'BSD-3-Clause'])
 const nonempty = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0
 const url = (value: unknown): boolean => { try { return nonempty(value) && ['https:', 'http:'].includes(new URL(value).protocol) } catch { return false } }
+/** Issue #40: music loops stream from public/game-audio/ as MP3, each at most 2 MB and together at most 8 MB. */
+export const gameAudio = { directory: 'public/game-audio/', fileBytes: 2_000_000, totalBytes: 8_000_000 } as const
 
 export function shippedFiles(root: string): string[] {
   function walk(directory: string): string[] {
@@ -49,7 +51,16 @@ export function validateCredits(manifest: CreditsManifest, root = repositoryRoot
       }
     }
   }
-  for (const file of shippedFiles(root)) if (registrations.get(file) !== 1) errors.push(`${file}: expected exactly one credit entry, found ${registrations.get(file) ?? 0}`)
+  const shipped = shippedFiles(root)
+  for (const file of shipped) if (registrations.get(file) !== 1) errors.push(`${file}: expected exactly one credit entry, found ${registrations.get(file) ?? 0}`)
+  let musicBytes = 0
+  for (const file of shipped.filter(path => path.startsWith(gameAudio.directory))) {
+    const bytes = statSync(join(root, file)).size
+    musicBytes += bytes
+    if (!file.endsWith('.mp3')) errors.push(`${file}: music must be MP3`)
+    if (bytes > gameAudio.fileBytes) errors.push(`${file}: ${bytes} bytes is over the ${gameAudio.fileBytes} byte limit for one loop`)
+  }
+  if (musicBytes > gameAudio.totalBytes) errors.push(`${gameAudio.directory}: ${musicBytes} bytes is over the ${gameAudio.totalBytes} byte limit for all music`)
   for (const [file, count] of registrations) if (count > 1) errors.push(`${file}: registered ${count} times`)
   if (checkGenerated) {
     const path = join(root, 'CREDITS.md')

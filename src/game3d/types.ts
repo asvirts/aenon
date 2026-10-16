@@ -1,4 +1,5 @@
-import type { Adventurer, BuyGood, SellGood, GearSlot, SeasonState, SeasonDefinition, ExperienceCurves, EatTarget, Good, QuestStanding } from '../season/index.ts'
+import type { Adventurer, BuyGood, SellGood, GearSlot, SeasonState, SeasonDefinition, ExperienceCurves, EatTarget, Good, QuestStanding, SpotSkill } from '../season/index.ts'
+import type { TrainedSkill } from '../season/lib/begin.ts'
 export type Point = { x: number; z: number }
 export type ObjectKind = 'hostile' | 'spot' | 'person' | 'scripture' | 'station' | 'cache' | 'travel'
 export type WorldLoot = { coin: number; gear?: readonly { id: string; chance: number }[]; goods?: readonly Good[]; goodsChance?: number }
@@ -15,7 +16,9 @@ export type CarcassView = Point & { id: string; hostileId: string }
 export type PickupView = Point & { id: string; gearId: string; placeId: string }
 export type GoodsPickupView = Point & { id: string; good: Good; placeId: string }
 export type GameSnapshot = { adventurer: Adventurer; position: Point; heading: number; moving: boolean; paused: boolean; inCombat: boolean; targetId: string | null; activity: 'idle' | 'run' | 'attack' | 'gather' | 'hunt' | 'technique'; progress: number; cooldowns: Record<Technique, number>; guardRemaining: number; time: number; hostiles: HostileView[]; spots: SpotView[]; carcasses: CarcassView[]; pickups: PickupView[]; goodsPickups?: GoodsPickupView[]; visiblePeople?: string[]; journey?: JourneyView; company?: CompanyView; route: Point[] }
-export type GameEvent = { kind: 'notice'; text: string } | { kind: 'panel'; panel: Panel; id?: string } | { kind: 'damage'; targetId: string; amount: number; point: Point } | { kind: 'harvest'; targetId: string; point: Point } | { kind: 'defeat' } | { kind: 'attack'; targetId: string; point: Point } | { kind: 'acquaintance'; line?: string }
+export type GameEvent = { kind: 'notice'; text: string } | { kind: 'panel'; panel: Panel; id?: string } | { kind: 'damage'; targetId: string; amount: number; point: Point } | { kind: 'harvest'; targetId: string; skill: SpotSkill; point: Point } | { kind: 'defeat' } | { kind: 'attack'; targetId: string; point: Point } | { kind: 'acquaintance'; line?: string }
+  | { kind: 'guard' } | { kind: 'buy' | 'sell'; vendorId: string } | { kind: 'read'; id: string } | { kind: 'craft' | 'cook'; recipeId: string }
+  | { kind: 'level-up'; skill: 'Adventurer' | TrainedSkill; level: number } | { kind: 'quest-step'; questId: string; stepIndex: number; finished: boolean }
 export type GameAction = { type: 'wear'; id: string } | { type: 'take-off'; slot: GearSlot } | { type: 'discard'; index: number; count?: number } | { type: 'eat'; target: EatTarget } | { type: 'buy'; vendorId: string; good: BuyGood } | { type: 'sell'; vendorId: string; good: SellGood } | { type: 'speak'; id: string; questId?: string } | { type: 'read' | 'cache' | 'pick-up' | 'travel'; id: string } | { type: 'make'; stationId: string; recipeId: string } | { type: 'finish' | 'finish-acquaintance' }
 export type ActionResult = { ok: boolean; reason?: string; line?: string; [key: string]: unknown }
 /** An omitted layoutRevision identifies saves written before world geometry was versioned. seenHints lists the one-time control prompts and quest hints already shown; see guidance.ts. */

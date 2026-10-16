@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict'
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, it } from 'node:test'
 import { credits, renderCredits } from '../../src/game3d/credits.ts'
 import type { Credit, CreditsManifest } from '../../src/game3d/credits.ts'
-import { validateCredits } from '../../scripts/art/credits.ts'
+import { gameAudio, repositoryRoot, validateCredits } from '../../scripts/art/credits.ts'
+import { musicTracks } from '../../src/game3d/musicTracks.ts'
 
 function withFixture(run: (root: string, manifest: CreditsManifest) => void): void {
   const root = mkdtempSync(join(tmpdir(), 'season-credits-'))
@@ -82,5 +83,37 @@ describe('shipped art provenance', () => {
       assert.match(failures, /invalid retrieved date/)
       assert.match(failures, /invalid source/)
     })
+  })
+
+  it('covers the music in public/game-audio: MP3 only, 2 MB a loop and 8 MB in all', () => {
+    withFixture((root, manifest) => {
+      mkdirSync(join(root, 'public/game-audio'))
+      const music = (name: string, bytes: number) => {
+        writeFileSync(join(root, `public/game-audio/${name}`), Buffer.alloc(bytes))
+        manifest.assets.push({ ...manifest.assets[0], category: 'Music', title: name, files: [`public/game-audio/${name}`] })
+      }
+      music('settlement.mp3', 1_400_000)
+      assert.deepEqual(validateCredits(manifest, root, false), [])
+      writeFileSync(join(root, 'public/game-audio/unlisted.mp3'), 'fixture')
+      assert.match(validateCredits(manifest, root, false).join('\n'), /game-audio\/unlisted\.mp3: expected exactly one credit entry, found 0/)
+      rmSync(join(root, 'public/game-audio/unlisted.mp3'))
+      music('wilderness.wav', 1000)
+      music('fight.mp3', gameAudio.fileBytes + 1)
+      const failures = validateCredits(manifest, root, false).join('\n')
+      assert.match(failures, /wilderness\.wav: music must be MP3/)
+      assert.match(failures, /fight\.mp3: 2000001 bytes is over the 2000000 byte limit for one loop/)
+      manifest.assets.splice(-2)
+      rmSync(join(root, 'public/game-audio/wilderness.wav')); rmSync(join(root, 'public/game-audio/fight.mp3'))
+      for (const name of ['a.mp3', 'b.mp3', 'c.mp3', 'd.mp3', 'e.mp3']) music(name, 1_400_000)
+      assert.deepEqual(validateCredits(manifest, root, false), [`public/game-audio/: 8400000 bytes is over the 8000000 byte limit for all music`])
+    })
+  })
+
+  it('ships every music loop the game plays, each with its credit', () => {
+    for (const file of Object.values(musicTracks)) {
+      const path = `public${file.url}`
+      assert.ok(existsSync(join(repositoryRoot, path)), `${path} is missing`)
+      assert.equal(credits.assets.filter(entry => entry.files.includes(path)).length, 1, `${path} needs one credit entry`)
+    }
   })
 })

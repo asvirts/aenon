@@ -21,12 +21,14 @@ import { nextFocus, type Direction } from './panelFocus.ts'
 import { openStorage } from './storage.ts'
 import type { ReviewHarness } from './review.ts'
 import { createLighting, lightingPresets } from './lighting.ts'
+import { createStartScreen, startSaveState } from './startScreen.ts'
 import { selectGraphicsQuality, type Quality } from './quality.ts'
 import { createEngine, showStartFailure, watchGraphicsContext } from './graphicsAlert.ts'
 import { createPrompts } from './prompts.ts'
 import { seenAtLoad, withSeenHints } from './guidance.ts'
 import './style.css'
 import './world.css'
+import './startScreen.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#world')!
 const loading = document.querySelector<HTMLElement>('#loading')!
@@ -40,6 +42,11 @@ async function boot() {
   let savingBlocked = Boolean(loaded.blocked)
   const options = { definition, curves, layout, pathfind: (start: { x: number; z: number }, goal: { x: number; z: number }) => findPath(start, goal, navigation), canTraverse: (start: { x: number; z: number }, goal: { x: number; z: number }) => canTraverse(start, goal, navigation) }
   const game = createGame({ ...options, saved: loaded.saved, legacy: loaded.legacy })
+  // The start screen waits in front while the world prepares. Until the Adventurer enters, the world holds still and
+  // nothing is written, so Continue opens exactly the save that was loaded.
+  const start = review ? undefined : createStartScreen({ ...startSaveState(loaded, temporaryStorage), onExport: () => exportSave(), onNewSeason: () => startNewSeason(), covered: () => !loading.hidden })
+  let starting = Boolean(start)
+  if (start) loading.hidden = true
   const engine = createEngine(canvas, true, { stencil: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' })
   const scene = new Scene(engine); scene.useRightHandedSystem = true
   const camera = createFollowCamera(scene)
@@ -208,7 +215,7 @@ async function boot() {
     list.splice(0, list.length, ...nearby)
   }
   function save() {
-    if (savingBlocked || temporaryStorage) return
+    if (starting || savingBlocked || temporaryStorage) return
     const result = saveGame(storage, prompts.attach(game.exportSave()), definition, layout)
     if (!result.ok) { savingBlocked = true; const warning = result.warning ?? 'Saving is unavailable. Export a copy of your progress.'; ui.setSaveStatus(warning, true); ui.notice(warning) }
   }
@@ -228,12 +235,18 @@ async function boot() {
     location.reload()
   }
   const audio = createGameAudio({ storage, definition, scene })
+  /** The one restart path, for Settings and the start screen: a verified backup, then the fresh save. Returns a warning when nothing changed. */
+  function startNewSeason(): string | undefined {
+    const fresh = withSeenHints(createGame(options).exportSave(), []), result = restartGameSave(storage, fresh, definition, layout)
+    if (result.ok) { reloadReplacedSave(); return undefined }
+    return result.warning ?? 'The previous save could not be backed up; no changes were made.'
+  }
   const ui = createUI({ game, definition, layout, quality, zoom, audio,
     onQuality: setQuality, onZoom: applyZoom,
     onPanel: open => { audio.panel(open); keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
     onSaveExport: exportSave,
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
-    onRestart: () => { const fresh = withSeenHints(createGame(options).exportSave(), []); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
+    onRestart: () => { const warning = startNewSeason(); if (warning) ui.notice(warning) },
   })
   const objective = createObjectiveHud({ game, definition, curves, layout, isPanelOpen: ui.isPanelOpen, openJournal: () => ui.openPanel('journal') })
   const prompts = createPrompts({ game, seen: seenAtLoad(loaded), enabled: !review, scene, camera, canvas, panel: () => ui.panel(), controller: () => gamepadWelcomed, zoom: () => zoom })
@@ -274,6 +287,7 @@ async function boot() {
   })
   canvas.addEventListener('wheel', event => { event.preventDefault(); applyZoom(zoom + Math.sign(event.deltaY) * .8) }, { passive: false })
   window.addEventListener('keydown', event => {
+    if (starting) return
     const key = event.key.toLowerCase()
     if (key === 'escape') { if (ui.isPanelOpen()) ui.closePanel(); else game.cancel(); keys.clear(); return }
     if (ui.isPanelOpen() || document.hidden || (event.target as HTMLElement).matches('input,select,textarea')) return
@@ -291,10 +305,10 @@ async function boot() {
   watchGraphicsContext(engine, { save: () => { save(); return !savingBlocked && !temporaryStorage }, exportSave, notice: ui.notice })
   engine.runRenderLoop(() => {
     const dt = Math.min(engine.getDeltaTime() / 1000, .05)
-    if (!reviewHarness) game.advance(dt)
+    if (!reviewHarness && !starting) game.advance(dt)
     const snapshot = game.snapshot(), events = game.drainEvents()
     for (const event of events) { if (event.kind === 'notice') ui.notice(event.text); else if (event.kind === 'panel') ui.openPanel(event.panel, event.id); else if (event.kind === 'acquaintance') ui.openPanel('person', '__acquaintance'); else if (event.kind === 'defeat') ui.notice('You wake in the settlement, rested and ready to begin again.') }
-    if (!reviewHarness) pollGamepad(snapshot, dt)
+    if (!reviewHarness && !starting) pollGamepad(snapshot, dt)
     // Issue #40: attack, damage, harvest and the other rules events play their cues; music follows place and Fight.
     audio.events(events)
     audio.update(snapshot, ui.panel(), dt, priorGamepadButtons?.some(Boolean) ?? false)
@@ -342,6 +356,12 @@ async function boot() {
     Object.assign(debug, { reviewShot: reviewHarness.reviewShot, architectureShot: reviewHarness.architectureShot, companyShot: reviewHarness.companyShot, measure: reviewHarness.measure, reviewState: reviewHarness.reviewState })
   }
   Object.defineProperty(window, '__aenonGame', { configurable: true, value: debug })
+  if (start) {
+    await start.worldReady()
+    starting = false
+    // The press that chose Continue must not also act in the world.
+    const pad = readGamepad(); priorGamepadButtons = pad ? pad.buttons.map(control => control.pressed) : null
+  }
   loading.hidden = true; canvas.focus(); ui.render(game.snapshot()); drawMap(game.snapshot()); save()
   if (import.meta.env.DEV && review && reviewHarness) {
     const params = new URLSearchParams(location.search), shot = params.get('shot') ?? 'aenon-square', preset = params.get('preset') ?? 'high'

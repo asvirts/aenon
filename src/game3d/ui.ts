@@ -5,8 +5,9 @@ import { cameraZoom } from './view.ts'
 import { sceneNarratives, personStories, curves } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
-import { creditGroups } from './credits.ts'
 import { audioControls, type AudioControlsTarget } from './audioControls.ts'
+import { creditsIntro, creditsList } from './creditsView.ts'
+import { newSeasonControl } from './newSeason.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
 import { actionBar, button, description, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLabels, stateLine, stateRow } from './panelFrame.ts'
 import { backTarget, footerText, isPage, menuEntries, pageTab, reachedFromMenu, turnPage } from './pages.ts'
@@ -759,33 +760,7 @@ export function createUI(options: UIOptions) {
     return [description(`${passage.reference} · New International Version`, 'scripture-version')]
   }
   function creditsPanel(): void {
-    const link = (label: string, href: string): HTMLAnchorElement => {
-      const element = node('a', '', label)
-      element.href = href; element.target = '_blank'; element.rel = 'noopener noreferrer'
-      return element
-    }
-    body.append(lead('The art and software in The Season, with their authors and licences.'), actionBar(button('Back to Settings', () => openPanel('settings'), 'game-button secondary')))
-    for (const [category, entries] of creditGroups()) {
-      const group = section(category)
-      group.classList.add('credit-group')
-      body.append(group)
-      for (const entry of entries) {
-        const article = node('article', 'credit-entry')
-        const title = node('h4'); title.append(link(entry.title, entry.source))
-        const byline = node('p', 'small-note')
-        byline.append('By ', entry.authorUrl ? link(entry.author, entry.authorUrl) : entry.author, ' · ', link(entry.license === 'original' ? 'Original work' : entry.license, entry.licenseUrl))
-        article.append(title, byline)
-        if (entry.attribution) article.append(description(entry.attribution, 'credit-attribution'))
-        article.append(description(entry.changes, 'small-note'))
-        if (entry.notes) article.append(description(entry.notes, 'small-note'))
-        if (entry.ai) {
-          const details = description(`Created with ${entry.ai.tool} (${entry.ai.plan}). `, 'small-note')
-          details.append(link('Tool terms', entry.ai.termsUrl))
-          article.append(details, description(`Prompt: ${entry.ai.prompt}`, 'small-note'))
-        }
-        group.append(article)
-      }
-    }
+    body.append(description(creditsIntro), button('Back to Settings', () => openPanel('settings'), 'game-button secondary'), ...creditsList())
   }
   // Settings is a column of groups. Each builder returns one; an Audio group (#40) slots in after Graphics.
   function settingsPanel(): void {
@@ -845,14 +820,7 @@ export function createUI(options: UIOptions) {
       controls.append(button('Import 3D save', () => input.click(), 'game-button secondary'), input)
     }
     const group = settingsGroup('Saves', status, controls, description('Importing backs up your current 3D save first. A save from the earlier 2D game is kept separately.', 'small-note'))
-    if (options.onRestart) {
-      const restart = button('Start a new Season…', () => {
-        const confirmation = node('div', 'restart-confirmation')
-        confirmation.append(description('Start again at Aenon? Your current Season is backed up first.'), button('Back up and start again', () => options.onRestart?.(), 'game-button danger'), button('Keep this Season', () => refreshPanel(), 'text-button'))
-        restart.replaceWith(confirmation)
-      }, 'text-button danger')
-      group.append(restart)
-    }
+    if (options.onRestart) group.append(newSeasonControl('Start a new Season…', 'text-button danger', () => options.onRestart?.(), () => refreshPanel()))
     return group
   }
   function creditsSettings(): HTMLElement {

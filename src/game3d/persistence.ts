@@ -62,6 +62,7 @@ export function validateGameSave(value: unknown, definition?: SeasonDefinition, 
   if (layout && (layout.revision ?? 1) !== revision && !(revision === 1 && layout.revision === 2)) return 'The saved world layout cannot be migrated to this Season.'
   const problem = stateProblem(value.season, definition)
   if (problem) return problem
+  if (value.seenHints !== undefined && !(Array.isArray(value.seenHints) && value.seenHints.length <= 64 && value.seenHints.every(id => typeof id === 'string' && /^[a-z0-9][a-z0-9:-]{0,63}$/.test(id)) && new Set(value.seenHints).size === value.seenHints.length)) return 'The saved prompts and hints are invalid.'
   const runtime = value.runtime
   if (!record(runtime) || !positive(runtime.time) || !point(runtime.position) || !positive(runtime.guardRemaining)) return 'The saved world position or clock is invalid.'
   if (!record(runtime.cooldowns) || !['offence', 'guard', 'dash'].every(key => positive((runtime.cooldowns as Record<string, unknown>)[key]))) return 'The saved technique cooldowns are invalid.'

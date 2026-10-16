@@ -918,6 +918,7 @@ export function createUI(options: UIOptions) {
     setPerformance(text: string) { performanceText = text; const output = root.querySelector('.performance-output'); if (output) output.textContent = text },
     setSaveStatus(text: string, blocked = false) { saveMessage = text; saveBlocked = blocked; if (currentPanel === 'settings') refreshPanel() },
     isPanelOpen: () => currentPanel !== null,
+    panel: () => currentPanel,
     destroy() { clearTimeout(noticeTimer); passageRequest?.abort(); roadRequest.abort(); root.remove() },
   }
 }

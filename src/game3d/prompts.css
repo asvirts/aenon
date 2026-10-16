@@ -10,4 +10,5 @@
 .guide-text kbd { display: inline-block; min-width: 19px; margin: 0 2px; padding: 1px 5px; border: 1px solid #d6bf8099; border-bottom-width: 2px; border-radius: 4px; background: #4a5537; color: #fff3d1; font: 600 10px / 1.5 inherit; text-align: center; }
 @keyframes guide-arrive { from { opacity: 0; transform: translateX(-10px); } }
 @media (prefers-reduced-motion: reduce) { .guide-card { animation: none; } .guide-cards { transition: none; } }
-@media (max-width: 700px) { .guide-cards { left: 18px; width: min(230px, calc(100% - 36px)); } .guide-text { font-size: 11px; } }
+/* Phones: right of the stacked navigation and above the target panel, below the Adventurer. */
+@media (max-width: 700px) { .guide-cards { left: auto; right: 16px; top: auto; bottom: 196px; transform: none; width: min(240px, calc(100% - 125px)); gap: 6px; } .guide-card { padding: 9px 12px 10px; } .guide-text { font-size: 11px; line-height: 1.5; } }

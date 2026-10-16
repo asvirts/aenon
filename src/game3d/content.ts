@@ -7,6 +7,7 @@ import { buildEconomy, bands, expandVendor, regionalVendor } from './economy.ts'
 import { dryLand, riverCenter, riverHalfWidth, roadDistance } from './terrain.ts'
 import { AENON_OFFSET, LOW_BAND_LAYOUT_VERSION } from './lowBand.ts'
 import { experienceForLevel } from '../season/lib/experience.ts'
+import { occupyWilderness } from './camps.ts'
 export { curves }
 
 const settlements = regionPlaces.filter(place => place.kind === 'settlement')
@@ -255,3 +256,7 @@ export const navigation: NavigationConfig = {
     ...landscapeDetails.filter(detail => detail.kind !== 'reeds').map(detail => ({ kind: 'circle' as const, x: detail.x, z: detail.z, radius: (detail.kind === 'rocks' ? 1.35 : detail.kind === 'waymarker' ? .45 : detail.kind === 'pottery' ? 1.5 : ['garden', 'market', 'terrace'].includes(detail.kind) ? 3.3 : 2.6) * (detail.scale ?? 1) })),
   ],
 }
+// Camps and caches occupy the wilderness roads and lake shores after every
+// authored object exists, so they keep clear of quest hostiles and old caches.
+export const occupation = occupyWilderness({ navigation, spawns, placeAt, objects, trees, details: landscapeDetails, journeys })
+hostiles.push(...occupation.hostiles); caches.push(...occupation.caches); objects.push(...occupation.objects)

@@ -6,7 +6,7 @@ import { definition as gearDefinition, houses, trees, objects, navigation, lands
 import { regionPlaces, ports } from './region.ts'
 import { specialFindNames } from './economy.ts'
 import { canTraverseRegion } from './regionNavigation.ts'
-import { travelingCompany } from '../season/lib/scene.ts'
+import { assignExtras, companyLooks, companyNames, episodeOnly, extraLooks, gatherAround, lookPart, type Look, type LookPart } from './company.ts'
 import { anchorHeight, plateKind, subtitleFor } from './nameplates.ts'
 import type { GameEvent, GameSnapshot, Point, WorldObject } from './types.ts'
 import type { ViewCoverage } from './view.ts'
@@ -129,19 +129,33 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
   await Promise.all(objects.filter(object => object.model === 'tree' && !plantedSpots.has(object.id)).map(async object => { const root = await staticModel('/art-sample/olive.glb', `olive-spot-${object.id}`, object, 1, 0, object.id); props.set(object.id, root); occlusionGroups.push(occlusionGroup(root)) }))
   const player = await actor('adventurer', '/game-assets/adventurer.glb', layout.spawns.aenon!, true)
   await Promise.all(objects.filter(o => o.kind === 'hostile' || o.kind === 'person').map(o => actor(o.id, `/game-assets/${o.model === 'villager' ? 'merchant' : o.model}.glb`, o)))
-  const companyColors = ['#ead9b8', '#a99068', '#7a8991', '#b48967', '#978b63', '#8e6350', '#768e7e', '#bea47c', '#677b85', '#977c88', '#b9ac86', '#8a735b', '#7d8b61', '#846c88', '#9f8068', '#6a9290']
-  const company = await Promise.all(['Jesus', ...travelingCompany].map(async (name, i) => {
-    const result = await actor(`company-${name}`, `/game-assets/${i === 0 ? 'john' : i % 3 === 0 || i > 12 ? 'merchant' : 'adventurer'}.glb`, { x: 0, z: 0 }, true)
-    for (const mat of attireMaterials(result.model.root)) {
-      if (/linen|robe|camel hair|shawl|sash|edging|head wrap/i.test(mat.name)) {
-        mat.albedoTexture = null; mat.albedoColor = Color3.FromHexString(companyColors[i]!).toLinearSpace(); mat.roughness = .94
-        if (/fold|edging/i.test(mat.name)) mat.albedoColor.scaleInPlace(.83)
-      }
+  function dress(model: Actor, look: Look) {
+    const color = (hex: string, shade = 1) => Color3.FromHexString(hex).toLinearSpace().scale(shade)
+    const colors: Record<Exclude<LookPart, 'skin'>, Color3> = {
+      tunic: color(look.tunic), 'tunic-fold': color(look.tunic, .83), 'tunic-edge': color(look.tunic, .72),
+      mantle: color(look.mantle), 'mantle-edge': color(look.mantle, .78), head: color(look.head), sash: color(look.sash),
+      legs: color(look.legs), hair: color(look.hair), 'hair-ridge': color(look.hair, 1.5),
     }
-    result.model.root.scaling.setAll(i === 0 ? 1.04 : .94 + (i % 5) * .025)
-    showActor(result.model, false)
+    for (const mat of attireMaterials(model.root)) {
+      const part = lookPart(mat.name.split('|').at(-1)!)
+      if (!part) continue
+      if (part === 'skin') { mat.albedoColor.scaleInPlace(look.skin); continue }
+      mat.albedoTexture = null; mat.albedoColor = colors[part].clone()
+      if (part !== 'hair' && part !== 'hair-ridge') mat.roughness = .94
+    }
+    model.root.scaling.set(look.build, look.height, look.build)
+  }
+  const company = await Promise.all(companyNames.map(async name => {
+    const look = companyLooks[name]
+    const result = await actor(`company-${name}`, `/game-assets/${look.model}.glb`, { x: 0, z: 0 }, true)
+    dress(result.model, look); showActor(result.model, false)
     return { name, ...result }
   }))
+  const isFree = (point: Point) => canTraverseRegion(point, point, navigation)
+  /** Townspeople, jars and other things already near Jesus, so nobody in the group stands inside one. */
+  const objectsNear = (anchor: Point): Point[] => objects
+    .filter(object => { const away = Math.hypot(object.x - anchor.x, object.z - anchor.z); return away > .5 && away < 14 })
+    .map(object => ({ x: object.x, z: object.z }))
   let companyKey = ''
   function positionCompany(snapshot: GameSnapshot, actorDistance: number) {
     const presence = snapshot.company
@@ -150,38 +164,28 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     const key = `${presence.kind}:${presence.sceneId ?? ''}:${presence.anchor.x}:${presence.anchor.z}`
     if (key !== companyKey) {
       companyKey = key
-      const anchor = presence.anchor, angle = Math.atan2(snapshot.position.x - anchor.x, snapshot.position.z - anchor.z)
-      const positions: Point[] = []
+      const anchor = presence.anchor, bearing = Math.atan2(snapshot.position.x - anchor.x, snapshot.position.z - anchor.z)
       const sceneObject = presence.sceneId ? objects.find(object => object.sceneId === presence.sceneId) : undefined
-      for (const [i, member] of company.entries()) {
-        let point: Point = { ...anchor }
-        const row = Math.floor((i - 1) / 5), side = ((i - 1) % 5 - 2) * 1.1
-        const desired = i ? { x: anchor.x + Math.cos(angle) * side - Math.sin(angle) * (1.8 + row * 1.2), z: anchor.z - Math.sin(angle) * side - Math.cos(angle) * (1.8 + row * 1.2) } : anchor
-        for (let step = 0; step < 80; step++) {
-          const radius = step ? .38 * Math.sqrt(step) : 0, turn = step * 2.4
-          const candidate = { x: desired.x + Math.cos(turn) * radius, z: desired.z + Math.sin(turn) * radius }
-          if (canTraverseRegion(candidate, candidate, navigation) && positions.every(p => Math.hypot(p.x - candidate.x, p.z - candidate.z) > .78)) { point = candidate; break }
-        }
-        positions.push(point); setPosition(member.model.root, point); member.model.root.rotation.y = angle
-        for (const mesh of member.model.root.getChildMeshes()) { mesh.isPickable = i === 0 && Boolean(sceneObject); mesh.metadata = i === 0 && sceneObject ? { objectId: sceneObject.id } : {} }
+      const [jesus, ...members] = company
+      const placements = gatherAround({ anchor, bearing, count: members.length, side: 'behind', key, isFree, occupied: [anchor, snapshot.position, ...objectsNear(anchor)] })
+      setPosition(jesus!.model.root, anchor); jesus!.model.root.rotation.y = bearing
+      for (const [i, member] of members.entries()) { setPosition(member.model.root, placements[i]!.point); member.model.root.rotation.y = placements[i]!.facing }
+      for (const [i, member] of company.entries()) for (const mesh of member.model.root.getChildMeshes()) {
+        mesh.isPickable = i === 0 && Boolean(sceneObject); mesh.metadata = i === 0 && sceneObject ? { objectId: sceneObject.id } : {}
       }
     }
     for (const member of company) showActor(member.model, true)
   }
-  const recurringPeople = new Set(['Jesus', 'John', 'John the Baptist', 'Judas son of James', ...travelingCompany].map(name => name.toLowerCase()))
-  const episodeStanding = (sceneId: string) => [...new Set(gearDefinition.setScenes?.find(item => item.id === sceneId)?.standing ?? [])].filter(name => !recurringPeople.has(name.toLowerCase()))
+  const episodeStanding = (sceneId: string) => episodeOnly(gearDefinition.setScenes?.find(item => item.id === sceneId)?.standing ?? [])
   const episodeCapacity = Math.max(0, ...(gearDefinition.setScenes ?? []).map(item => episodeStanding(item.id).length))
-  const episodePeople = await Promise.all(Array.from({ length: episodeCapacity }, async (_, i) => {
-    const result = await actor(`episode-extra-${i}`, `/game-assets/${i % 3 === 1 ? 'adventurer' : 'merchant'}.glb`, { x: 0, z: 0 }, true)
-    const color = Color3.FromHexString(['#8d8eae', '#ad9173', '#9b735d', '#7f9381'][i % 4]!).toLinearSpace()
-    for (const mat of attireMaterials(result.model.root)) if (/linen|robe|shawl|sash|edging|head wrap/i.test(mat.name)) {
-      mat.albedoTexture = null; mat.albedoColor = /fold|edging/i.test(mat.name) ? color.scale(.8) : color.clone(); mat.roughness = .94
-    }
-    result.model.root.scaling.setAll(.94 + (i % 4) * .025)
-    showActor(result.model, false)
+  if (episodeCapacity > extraLooks.length) throw new Error(`A set scene needs ${episodeCapacity} episode people, but only ${extraLooks.length} distinct looks exist.`)
+  const episodeLooks = extraLooks.slice(0, episodeCapacity)
+  const episodePeople = await Promise.all(episodeLooks.map(async (look, i) => {
+    const result = await actor(`episode-extra-${i}`, `/game-assets/${look.model}.glb`, { x: 0, z: 0 }, true)
+    dress(result.model, look); showActor(result.model, false)
     return result.model
   }))
-  let episodeKey = ''
+  let episodeKey = '', episodeShown = new Set<number>()
   function positionEpisodePeople(snapshot: GameSnapshot, actorDistance: number) {
     const sceneId = snapshot.adventurer.playingScene?.sceneId
     const names = sceneId ? episodeStanding(sceneId) : []
@@ -189,28 +193,23 @@ export async function createWorld(scene: Scene, interact: (id: string) => void) 
     const anchor = snapshot.company && snapshot.company.sceneId === sceneId ? snapshot.company.anchor : sceneObject
     if (!sceneId || !anchor || !names.length || Math.hypot(anchor.x - snapshot.position.x, anchor.z - snapshot.position.z) >= actorDistance) {
       for (const person of episodePeople) showActor(person, false)
-      episodeKey = ''; return
+      episodeKey = ''; episodeShown = new Set(); return
     }
     const key = `${sceneId}:${anchor.x}:${anchor.z}`
     if (key !== episodeKey) {
       episodeKey = key
-      const angle = Math.atan2(snapshot.position.x - anchor.x, snapshot.position.z - anchor.z)
-      const occupied: Point[] = [snapshot.position, ...company.filter(member => member.model.root.isEnabled()).map(member => member.model.root.position)]
-      for (const [i, person] of episodePeople.entries()) {
-        if (!names[i]) continue
-        const side = (i - (names.length - 1) / 2) * 1.12
-        const desired = { x: anchor.x + Math.cos(angle) * side + Math.sin(angle) * 1.75, z: anchor.z - Math.sin(angle) * side + Math.cos(angle) * 1.75 }
-        let point = desired
-        for (let step = 0; step < 100; step++) {
-          const radius = step ? .4 * Math.sqrt(step) : 0, turn = step * 2.4
-          const candidate = { x: desired.x + Math.cos(turn) * radius, z: desired.z + Math.sin(turn) * radius }
-          if (canTraverseRegion(candidate, candidate, navigation) && occupied.every(other => Math.hypot(other.x - candidate.x, other.z - candidate.z) > .8)) { point = candidate; break }
-        }
-        occupied.push(point); setPosition(person.root, point); person.root.rotation.y = Math.atan2(anchor.x - point.x, anchor.z - point.z)
-        person.root.metadata = { sceneId, personName: names[i] }
+      const bearing = Math.atan2(snapshot.position.x - anchor.x, snapshot.position.z - anchor.z)
+      const companyPoints = company.filter(member => member.model.root.isEnabled()).map(member => ({ x: member.model.root.position.x, z: member.model.root.position.z }))
+      const placements = gatherAround({ anchor, bearing, count: names.length, side: 'front', key, isFree, occupied: [anchor, snapshot.position, ...companyPoints, ...objectsNear(anchor)] })
+      const slots = assignExtras(names, episodeLooks)
+      for (const [i, name] of names.entries()) {
+        const person = episodePeople[slots[i]!]!
+        setPosition(person.root, placements[i]!.point); person.root.rotation.y = placements[i]!.facing
+        person.root.metadata = { sceneId, personName: name }
       }
+      episodeShown = new Set(slots)
     }
-    for (const [i, person] of episodePeople.entries()) showActor(person, Boolean(names[i]))
+    for (const [i, person] of episodePeople.entries()) showActor(person, episodeShown.has(i))
   }
 
   function box(parent: TransformNode, name: string, size: [number, number, number], position: [number, number, number], mat: PBRMaterial) {

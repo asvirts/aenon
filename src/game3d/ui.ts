@@ -4,7 +4,6 @@ import { lake, riverCenter, riverHalfWidth } from './terrain.ts'
 import { cameraZoom } from './view.ts'
 import { sceneNarratives, personStories, passageMetadata } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
-import { travelingCompany } from '../season/lib/scene.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
@@ -76,6 +75,17 @@ export function requireNivVersion(version: unknown): { bibleId: typeof nivBibleI
 }
 
 /** A missing deployed API often returns HTML or plain text rather than JSON. */
+/** One live NIV passage, checked and sanitized the same way wherever the game shows Scripture. */
+async function livePassage(usfm: string, signal: AbortSignal): Promise<{ reference?: string; passage: HTMLElement; copyright: string }> {
+  const response = await fetch(`/api/passage?usfm=${encodeURIComponent(usfm)}`, { signal })
+  const data = await readPassageResponse(response)
+  const passage = node('div', 'scripture-passage')
+  passage.append(safePassage(data.html))
+  if (!passage.textContent?.trim()) throw new Error('The live passage service returned no readable passage.')
+  const { copyright } = requireNivVersion(data.version)
+  return { ...(typeof data.reference === 'string' ? { reference: data.reference } : {}), passage, copyright }
+}
+
 export async function readPassageResponse(response: Response): Promise<{ html: string; reference?: unknown; version?: unknown }> {
   const unavailable = `The passage service is unavailable (HTTP ${response.status}).`
   const mediaType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? ''
@@ -119,6 +129,9 @@ export function createUI(options: UIOptions) {
   let saveBlocked = false
   let priorFocus: HTMLElement | null = null
   let passageRequest: AbortController | null = null
+  type RoadWord = { usfm: string; state: 'loading' | 'failed' } | { usfm: string; state: 'ready'; passage: HTMLElement; copyright: string }
+  let roadWord: RoadWord | undefined
+  const roadRequest = new AbortController()
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
   let dialogueLine = ''
   const focusable = 'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled)'
@@ -552,8 +565,12 @@ export function createUI(options: UIOptions) {
   }
   function personPanel(): void {
     if (contextId === '__acquaintance') {
-      get('#game-panel-title').textContent = 'Along the road'
-      body.append(lead(definition.acquaintance?.line ?? 'Jesus and the traveling company pass along the road.'), description(`With the traveling company: ${travelingCompany.join(', ')}.`, 'small-note'), description('A meeting on the road. It has no task and no reward.', 'panel-note'), actionBar(button('Continue the journey', closePanel)))
+      get('#game-panel-title').textContent = 'Met on the road'
+      const meeting = definition.acquaintance
+      body.append(lead('Jesus stops on the road and turns to you, and those traveling with him gather close.'))
+      if (meeting?.passage) body.append(...roadWordNodes(meeting.passage))
+      else if (meeting?.line) body.append(spoken(meeting.line))
+      body.append(description('The Twelve, Mary Magdalene, Joanna, and Susanna.', 'small-note'), description('He asks nothing of you, and soon they walk on.', 'panel-note'), actionBar(button('Go on your way', closePanel)))
       return
     }
     const actor = layout.objects.find(o => o.id === contextId)
@@ -695,23 +712,39 @@ export function createUI(options: UIOptions) {
     external.target = '_blank'; external.rel = 'noopener noreferrer'
     try {
       if (!usfm) throw new Error('This passage reference is not yet mapped for live reading.')
-      const response = await fetch(`/api/passage?usfm=${encodeURIComponent(usfm)}`, { signal: request.signal })
-      const data = await readPassageResponse(response)
+      const live = await livePassage(usfm, request.signal)
       if (request.signal.aborted || currentPanel !== 'scripture') return
-      const passage = node('div', 'scripture-passage')
-      passage.append(safePassage(data.html))
-      if (!passage.textContent?.trim()) throw new Error('The live passage service returned no readable passage.')
-      const version = requireNivVersion(data.version)
       let result: ActionResult | undefined
       if (scriptureId) result = game.act({ type: 'read', id: scriptureId })
       snapshot = game.snapshot()
-      body.replaceChildren(heading(typeof data.reference === 'string' ? data.reference : reference), description('New International Version', 'scripture-version'), passage, description(version.copyright, 'scripture-copyright'), external)
+      body.replaceChildren(heading(live.reference ?? reference), description('New International Version', 'scripture-version'), live.passage, description(live.copyright, 'scripture-copyright'), external)
       if (result && !result.ok) body.append(description(`${reasonText(result.reason)} This passage was not added to your progress.`, 'panel-note'))
       render(snapshot)
     } catch (error) {
       if (request.signal.aborted || currentPanel !== 'scripture') return
       body.replaceChildren(heading(reference), description('Passage unavailable', 'conversation-line'), description(error instanceof Error ? error.message : 'The live passage service could not be reached.'), description('No reading reward was granted. You can open the passage on Bible.com or try again here.', 'panel-note'), button('Try again', () => { void showPassage(reference, scriptureId) }), external)
     }
+  }
+  /**
+   * What Jesus says on the road, read live once and kept for later meetings. It is never filed in the
+   * reference journal and grants nothing; the Scripture page is where passages are read and filed.
+   */
+  function roadWordNodes(passage: { reference: string; usfm: string }): HTMLElement[] {
+    if (roadWord?.usfm !== passage.usfm) {
+      const loading: RoadWord = { usfm: passage.usfm, state: 'loading' }
+      roadWord = loading
+      livePassage(passage.usfm, roadRequest.signal)
+        .then(live => { if (roadWord === loading) roadWord = { usfm: passage.usfm, state: 'ready', passage: live.passage, copyright: live.copyright } })
+        .catch(() => { if (roadWord === loading) roadWord = { usfm: passage.usfm, state: 'failed' } })
+        .finally(() => { if (roadWord !== loading && currentPanel === 'person' && contextId === '__acquaintance') refreshPanel() })
+    }
+    const external = node('a', 'text-button', `Read ${passage.reference} on Bible.com`)
+    external.href = `https://www.bible.com/bible/${nivBibleId}/${encodeURIComponent(passage.usfm)}.NIV`
+    external.target = '_blank'; external.rel = 'noopener noreferrer'
+    const word = roadWord
+    if (word.state === 'ready') return [word.passage.cloneNode(true) as HTMLElement, description(`${passage.reference} · New International Version`, 'scripture-version'), description(word.copyright, 'scripture-copyright')]
+    if (word.state === 'failed') return [description(`${passage.reference} could not be opened just now.`, 'panel-note'), external, button('Try again', () => { roadWord = undefined; refreshPanel() }, 'text-button')]
+    return [description(`${passage.reference} · New International Version`, 'scripture-version')]
   }
   function creditsPanel(): void {
     const link = (label: string, href: string): HTMLAnchorElement => {
@@ -831,6 +864,6 @@ export function createUI(options: UIOptions) {
     setPerformance(text: string) { performanceText = text; const output = root.querySelector('.performance-output'); if (output) output.textContent = text },
     setSaveStatus(text: string, blocked = false) { saveMessage = text; saveBlocked = blocked; if (currentPanel === 'settings') refreshPanel() },
     isPanelOpen: () => currentPanel !== null,
-    destroy() { clearTimeout(noticeTimer); passageRequest?.abort(); root.remove() },
+    destroy() { clearTimeout(noticeTimer); passageRequest?.abort(); roadRequest.abort(); root.remove() },
   }
 }

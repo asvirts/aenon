@@ -2,14 +2,16 @@ import { gearSlots } from '../season/lib/types.ts'
 import { regionPlaces, regionRoads, regionBounds, ports } from './region.ts'
 import { lake, riverCenter, riverHalfWidth } from './terrain.ts'
 import { cameraZoom } from './view.ts'
-import { sceneNarratives, personStories, passageMetadata, curves } from './content.ts'
+import { sceneNarratives, personStories, curves } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
-import { actionBar, button, description, heading, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLabels, stateLine, stateRow } from './panelFrame.ts'
+import { actionBar, button, description, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLabels, stateLine, stateRow } from './panelFrame.ts'
 import { backTarget, footerText, isPage, menuEntries, pageTab, reachedFromMenu, turnPage } from './pages.ts'
 import { controllerButtons, journalTallies, levelMeter, levelProgress, progressText, questJournalRows, tally } from './pageContent.ts'
+import { outcomeCopy, PassageError, readingOutcome, readPassageResponse, requireNivVersion, scrollStep, unavailableReason, type ReadingLevels } from './scriptureReading.ts'
+import { bibleLink, loadingView, readerView, safePassage, unavailableView, usfmFor } from './scriptureView.ts'
 import { adventurerLevelCap, gearTotals, previewWear, trainedSkillLevelCap, type Gear, type GearTotals, type MaterialCost, type PackEntry, type SeasonDefinition, type SellGood, type SpecialEffect } from '../season/index.ts'
 import type { ActionResult, Game, GameAction, GameSnapshot, Panel, Technique, WorldLayout } from './types.ts'
 
@@ -35,47 +37,10 @@ function gearDetail(piece: Gear): string {
   return `${form} · ${pretty(piece.band)} band · ${value} · Accuracy ${piece.accuracyModifier >= 0 ? '+' : ''}${piece.accuracyModifier}${effects ? ` · On successful basic hits: ${effects}` : ''}`
 }
 
-/** Allow passage typography only; remove scripts, URLs, event handlers and foreign markup. */
-function safePassage(html: string): DocumentFragment {
-  const parsed = new DOMParser().parseFromString(html, 'text/html')
-  const fragment = document.createDocumentFragment()
-  const allowed = new Set(['P', 'DIV', 'SPAN', 'SUP', 'SUB', 'STRONG', 'EM', 'I', 'B', 'BR', 'H2', 'H3', 'H4', 'BLOCKQUOTE', 'UL', 'OL', 'LI'])
-  const discarded = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'SVG', 'MATH', 'FORM', 'INPUT', 'BUTTON', 'TEMPLATE'])
-  function copy(source: Node, target: Node): void {
-    if (source.nodeType === Node.TEXT_NODE) { target.appendChild(document.createTextNode(source.textContent ?? '')); return }
-    if (!(source instanceof Element) || discarded.has(source.tagName)) return
-    if (!allowed.has(source.tagName)) { for (const child of source.childNodes) copy(child, target); return }
-    const element = document.createElement(source.tagName.toLowerCase())
-    const className = source.getAttribute('class')
-    if (className && /^[a-zA-Z0-9_\s-]{1,120}$/.test(className)) element.className = className
-    for (const child of source.childNodes) copy(child, element)
-    target.appendChild(element)
-  }
-  for (const child of parsed.body.childNodes) copy(child, fragment)
-  return fragment
-}
+// The passage response checks live in scriptureReading.ts; they stay importable from here for existing callers.
+export { readPassageResponse, requireNivVersion } from './scriptureReading.ts'
+export { usfmFor } from './scriptureView.ts'
 
-export function usfmFor(reference: string): string | undefined {
-  if (passageMetadata[reference]) return passageMetadata[reference].usfm
-  const match = /^(Genesis|Exodus|Psalms?|Proverbs|Isaiah|Matthew|Mark|Luke|John|Acts)\s+(\d+)(?::(\d+(?:-\d+)?))?$/i.exec(reference)
-  if (!match) return undefined
-  const books: Record<string, string> = { genesis: 'GEN', exodus: 'EXO', psalm: 'PSA', psalms: 'PSA', proverbs: 'PRO', isaiah: 'ISA', matthew: 'MAT', mark: 'MRK', luke: 'LUK', john: 'JHN', acts: 'ACT' }
-  return `${books[match[1].toLowerCase()]}.${match[2]}${match[3] ? `.${match[3]}` : ''}`
-}
-
-/** Version identity is the Bible ID; the provider may label NIV as NIV11. */
-export function requireNivVersion(version: unknown): { bibleId: typeof nivBibleId; copyright: string } {
-  if (!version || typeof version !== 'object' || !('bibleId' in version) || typeof version.bibleId !== 'number') {
-    throw new Error('The passage service did not identify the Bible version. Restart the passage server and try again.')
-  }
-  if (version.bibleId !== nivBibleId) throw new Error('The passage service is not currently configured for NIV (Bible 111).')
-  if (!('copyright' in version) || typeof version.copyright !== 'string' || !version.copyright.trim()) {
-    throw new Error('The passage service did not provide the required version attribution.')
-  }
-  return { bibleId: nivBibleId, copyright: version.copyright }
-}
-
-/** A missing deployed API often returns HTML or plain text rather than JSON. */
 /** One live NIV passage, checked and sanitized the same way wherever the game shows Scripture. */
 async function livePassage(usfm: string, signal: AbortSignal): Promise<{ reference?: string; passage: HTMLElement; copyright: string }> {
   const response = await fetch(`/api/passage?usfm=${encodeURIComponent(usfm)}`, { signal })
@@ -85,28 +50,6 @@ async function livePassage(usfm: string, signal: AbortSignal): Promise<{ referen
   if (!passage.textContent?.trim()) throw new Error('The live passage service returned no readable passage.')
   const { copyright } = requireNivVersion(data.version)
   return { ...(typeof data.reference === 'string' ? { reference: data.reference } : {}), passage, copyright }
-}
-
-export async function readPassageResponse(response: Response): Promise<{ html: string; reference?: unknown; version?: unknown }> {
-  const unavailable = `The passage service is unavailable (HTTP ${response.status}).`
-  const mediaType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? ''
-  if (mediaType !== 'application/json' && !/^application\/[a-z0-9!#$&^_.+-]+\+json$/.test(mediaType)) {
-    throw new Error(response.status === 404
-      ? `${unavailable} The deployed passage API could not be found.`
-      : `${unavailable} The server did not return a JSON passage response.`)
-  }
-  let data: unknown
-  try {
-    data = await response.json()
-  } catch (error) {
-    if (!(error instanceof SyntaxError)) throw error
-    throw new Error(`${unavailable} The server returned an invalid passage response.`)
-  }
-  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error(`${unavailable} The server returned an invalid passage response.`)
-  if (!response.ok || !('html' in data) || typeof data.html !== 'string' || !data.html.trim()) {
-    throw new Error('error' in data && typeof data.error === 'string' && data.error.trim() ? data.error : unavailable)
-  }
-  return { html: data.html, reference: 'reference' in data ? data.reference : undefined, version: 'version' in data ? data.version : undefined }
 }
 
 export function createUI(options: UIOptions) {
@@ -135,7 +78,8 @@ export function createUI(options: UIOptions) {
   const roadRequest = new AbortController()
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
   let dialogueLine = ''
-  const focusable = 'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled)'
+  /** Controls focus can reach, plus a scrolling passage, so keys and the controller can scroll it. */
+  const focusable = 'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [data-scroll-region]'
   const root = node('div', 'game-ui')
   root.id = 'game-ui'
   root.innerHTML = `<header class="game-masthead"><div class="game-brand"><h1>The Season</h1><p id="game-place">Aenon <span>·</span> The Jordan valley</p></div><div class="adventurer-status"><div class="status-line"><strong>Adventurer <span id="game-level">1</span></strong><span id="game-coin">0 coin</span></div><div class="hitpoints-track" role="progressbar" aria-label="Current Hitpoints" id="hitpoints-bar"><span id="hitpoints-fill"></span></div><div class="status-line small"><span id="hitpoints-text"></span><span id="combat-status">At peace</span></div></div></header><nav class="game-navigation" aria-label="Game panels"></nav><aside class="game-map"><div class="map-title"><span id="map-place">Aenon</span><span>↑ N</span></div><canvas id="minimap" width="168" height="124" aria-label="Local map with the Adventurer’s position"></canvas><p>Galilee &amp; the Jordan</p></aside><div id="game-notice" class="game-notice" role="status" aria-live="polite"></div><div class="target-status" id="target-status" hidden><span id="target-kind"></span><strong id="target-name"></strong><span id="target-detail"></span><div class="activity-track" id="activity-track" hidden><span id="activity-fill"></span></div></div><div class="technique-bar" aria-label="Weapon techniques"></div><div class="game-controls-hint">Click to move &amp; act <span>·</span> WASD to run <span>·</span> Scroll to zoom <span>·</span> Esc to cancel <span>·</span> Controller: left stick runs <span>·</span> A acts <span>·</span> Start opens the menu</div><div class="paused-label" id="game-paused" hidden>Ⅱ World paused</div><div class="game-modal" id="game-panel" hidden><section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-panel-title"><header class="game-panel-heading"><div><p class="eyebrow" id="game-panel-eyebrow">A moment of stillness</p><h2 id="game-panel-title"></h2></div><button class="panel-close" type="button" aria-label="Close panel">×</button></header><nav class="page-tabs" aria-label="Pages" hidden></nav><div id="game-panel-body" class="game-panel-body"></div><footer class="game-panel-footer">World paused <span>·</span> Close to return to the world</footer></section></div>`
@@ -723,32 +667,71 @@ export function createUI(options: UIOptions) {
       else void showPassage(scripture.reference, scripture.id)
       return
     }
-    body.append(description('Find a Scripture object in the world, or return to a passage in your reference journal.'))
-    for (const object of definition.scriptureObjects) body.append(row(object.reference, `${pretty(object.placeId)} · Scripture`, button('Find passage', () => goTo(object.id), 'text-button')))
-    for (const filing of snapshot.adventurer.referenceJournal) body.append(row(filing.reference, 'Filed in your reference journal', button('Read again', () => { void showPassage(filing.reference) }, 'text-button')))
+    const filed = new Set(snapshot.adventurer.referenceJournal.map(filing => filing.reference))
+    const readAgain = (reference: string) => button('Read again', () => { void showPassage(reference) }, 'text-button')
+    const rows = definition.scriptureObjects.map(object => {
+      const place = regionPlaces.find(candidate => candidate.id === object.placeId)?.name ?? pretty(object.placeId)
+      return filed.has(object.reference)
+        ? stateRow({ state: 'finished', chip: 'Read', title: object.reference, lines: [`${place} · Filed in your Reference journal`], actions: [readAgain(object.reference)], compact: true })
+        : stateRow({ state: 'available', title: object.reference, lines: [`${place} · Not yet read`], actions: [button('Find passage', () => goTo(object.id), 'text-button')], compact: true })
+    })
+    // A filed passage whose Scripture object is no longer in the world can still be read again.
+    for (const reference of filed) if (!definition.scriptureObjects.some(object => object.reference === reference)) rows.push(stateRow({ state: 'finished', chip: 'Read', title: reference, lines: ['Filed in your Reference journal'], actions: [readAgain(reference)], compact: true }))
+    const read = definition.scriptureObjects.filter(object => filed.has(object.reference)).length
+    body.append(
+      lead('Each Scripture object in the world opens one NIV passage. The first reading files it in your Reference journal. You can read a filed passage again here.'),
+      section('Passages', description(`${read} of ${definition.scriptureObjects.length} passages filed.`), ...rows),
+    )
+  }
+  function readingLevels(): ReadingLevels {
+    return { scripture: snapshot.adventurer.trainedSkills.Scripture?.level ?? 1, adventurer: snapshot.adventurer.adventurerLevel }
+  }
+  /** Back from a passage to the list of passages. */
+  function listPassages(): void {
+    passageRequest?.abort(); passageRequest = null
+    contextId = undefined
+    refreshPanel()
+    body.querySelector<HTMLElement>(focusable)?.focus()
+  }
+  /** Moves focus into a passage view once it replaces the opening line, unless the player has already moved focus somewhere. */
+  function settleFocus(target: HTMLElement | null): void {
+    const active = document.activeElement
+    if (target && (!modal.contains(active) || active === close || (active instanceof HTMLElement && active.matches('.page-tab[aria-current="page"]')))) target.focus({ preventScroll: true })
   }
   async function showPassage(reference: string, scriptureId?: string): Promise<void> {
     if (snapshot.inCombat || currentPanel !== 'scripture') return
     passageRequest?.abort()
     const request = new AbortController(); passageRequest = request
-    body.replaceChildren(description('Opening the live Scripture passage…'))
+    body.replaceChildren(loadingView(reference))
     const usfm = usfmFor(reference)
-    const external = node('a', 'game-button secondary', 'Read on Bible.com')
-    external.href = usfm ? `https://www.bible.com/bible/111/${encodeURIComponent(usfm)}.NIV` : 'https://www.bible.com/bible/111'
-    external.target = '_blank'; external.rel = 'noopener noreferrer'
     try {
-      if (!usfm) throw new Error('This passage reference is not yet mapped for live reading.')
-      const live = await livePassage(usfm, request.signal)
+      if (!usfm) throw new PassageError('provider', 'This passage reference is not yet mapped for live reading.')
+      const response = await fetch(`/api/passage?usfm=${encodeURIComponent(usfm)}`, { signal: request.signal })
+      const data = await readPassageResponse(response)
       if (request.signal.aborted || currentPanel !== 'scripture') return
-      let result: ActionResult | undefined
-      if (scriptureId) result = game.act({ type: 'read', id: scriptureId })
+      const passage = safePassage(data.html)
+      if (!passage.textContent?.trim()) throw new PassageError('provider', 'The live passage service returned no readable passage.')
+      const version = requireNivVersion(data.version)
+      // Only a passage that has loaded and passed the NIV checks is read. A failed or abandoned load files and grants nothing.
+      const filedBefore = snapshot.adventurer.referenceJournal.some(filing => filing.reference === reference)
+      const before = readingLevels()
+      const result = scriptureId ? game.act({ type: 'read', id: scriptureId }) : undefined
       snapshot = game.snapshot()
-      body.replaceChildren(heading(live.reference ?? reference), description('New International Version', 'scripture-version'), live.passage, description(live.copyright, 'scripture-copyright'), external)
-      if (result && !result.ok) body.append(description(`${reasonText(result.reason)} This passage was not added to your progress.`, 'panel-note'))
+      const outcome = outcomeCopy(readingOutcome({ filedBefore, result, before, after: readingLevels() }))
+      const { view, text } = readerView({
+        reference: typeof data.reference === 'string' ? data.reference : reference,
+        passage, copyright: version.copyright, outcome,
+        actions: [bibleLink(usfm), button('All passages', listPassages, 'game-button secondary')],
+      })
+      body.replaceChildren(view)
+      settleFocus(text)
       render(snapshot)
     } catch (error) {
       if (request.signal.aborted || currentPanel !== 'scripture') return
-      body.replaceChildren(heading(reference), description('Passage unavailable', 'conversation-line'), description(error instanceof Error ? error.message : 'The live passage service could not be reached.'), description('No reading reward was granted. You can open the passage on Bible.com or try again here.', 'panel-note'), button('Try again', () => { void showPassage(reference, scriptureId) }), external)
+      const reason = unavailableReason(error, typeof navigator === 'undefined' || navigator.onLine !== false)
+      const retry = button('Try again', () => { void showPassage(reference, scriptureId) })
+      body.replaceChildren(unavailableView(reference, reason, error instanceof Error ? error.message : '', [retry, bibleLink(usfm)]))
+      settleFocus(retry)
     }
   }
   /**
@@ -919,6 +902,20 @@ export function createUI(options: UIOptions) {
     setSaveStatus(text: string, blocked = false) { saveMessage = text; saveBlocked = blocked; if (currentPanel === 'settings') refreshPanel() },
     isPanelOpen: () => currentPanel !== null,
     panel: () => currentPanel,
+    /** Up or down on a controller while a passage has focus: scrolls it a step, or returns false at its end so focus moves on. */
+    scrollFocused(direction: 1 | -1): boolean {
+      const active = document.activeElement
+      if (!(active instanceof HTMLElement) || !body.contains(active) || !active.matches('[data-scroll-region]')) return false
+      const top = scrollStep(active, direction)
+      if (top === null) return false
+      active.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+      return true
+    },
+    /** The right stick on a controller: scrolls the open passage, wherever focus is. */
+    scrollPanel(pixels: number) {
+      const region = currentPanel ? body.querySelector<HTMLElement>('[data-scroll-region]') : null
+      if (region) region.scrollTop += pixels
+    },
     destroy() { clearTimeout(noticeTimer); passageRequest?.abort(); roadRequest.abort(); root.remove() },
   }
 }

@@ -98,11 +98,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .save-controls { display: flex; flex-wrap: wrap; }
 .small-note { margin: 9px 0; color: #8e8066; font-size: 9px; line-height: 1.7; }
 .restart-confirmation { padding: 1px 14px 11px; border: 1px solid #c6aa84; border-radius: 5px; background: #ede0c7; margin-top: 19px; }
-.scripture-version { margin: 7px 0 24px; color: #8e7c56; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
-.scripture-passage { color: #414935; font: 400 20px / 1.9 Georgia, serif; }
-.scripture-passage p { margin: 1em 0; }
-.scripture-passage sup, .scripture-passage .label { margin-right: .3em; color: #9f885b; font: 400 10px / 1 sans-serif; }
-.scripture-copyright { margin: 25px 0 17px; color: #8d8068; font-size: 9px; line-height: 1.8; }
 
 /* These boot surfaces also work before the scene and UI have finished loading. */
 #loading { position: fixed; z-index: 50; inset: 0; display: grid; place-content: center; text-align: center; color: #ead9b0; background: radial-gradient(ellipse at 50% 40%, #505540, #2c3829 70%); }
@@ -168,7 +163,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .place-chip { border: 1px solid #b7ad8b; background: transparent; color: #49513a; border-radius: 20px; padding: 6px 10px; cursor: pointer; font: inherit; font-size: 12px; }
 .place-chip.selected { background: #637049; color: #fff9e9; border-color: #637049; }
 .item-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.scripture-passage .label { font-size: .65em; vertical-align: super; margin-right: .35em; color: #7a805f; }
 #minimap { cursor: pointer; pointer-events: auto; }
 
 /* The shared panel frame: leads, sections, state rows and chips (src/game3d/panelFrame.ts). */
@@ -339,4 +333,68 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 @media (max-width: 480px) {
   .menu-entries { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The Scripture page (#69). The passage reads like a page of a book. Only the text scrolls, so the reference,
+   the reading card, the version copyright and the actions stay in view beside it. */
+.scripture-head { margin-top: 18px; }
+.scripture-reference.section-title { margin: 0; color: #37402f; font-size: 27px; line-height: 1.2; letter-spacing: -.01em; }
+.scripture-version { margin: 6px 0 0; color: #8e7c56; font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.page-view .game-panel-body:has(> .scripture-reader) { display: flex; flex-direction: column; padding-bottom: 16px; }
+.page-view .game-panel[data-panel="scripture"] .game-panel-body > .scripture-reader { max-width: 960px; }
+.scripture-reader { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(min(160px, var(--passage-height, 160px)), max-content) auto auto; grid-template-areas: "head" "moment" "text" "credit" "actions"; align-content: start; row-gap: 12px; }
+.scripture-reader > .scripture-head { grid-area: head; }
+.scripture-reader > .scripture-moment { grid-area: moment; margin: 0; }
+.scripture-text { grid-area: text; position: relative; display: flex; flex-direction: column; min-height: 0; }
+.scripture-text::before, .scripture-text::after { content: ""; position: absolute; left: 0; right: 14px; z-index: 1; height: 36px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.scripture-text::before { top: 0; background: linear-gradient(var(--game-paper), #f4edda00); }
+.scripture-text::after { bottom: 0; background: linear-gradient(#f4edda00, var(--game-paper)); }
+.scripture-text[data-more-above]::before, .scripture-text[data-more-below]::after { opacity: 1; }
+.scripture-passage { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 14px 26px 0; color: #3a4230; font: 400 19px / 1.8 Georgia, "Times New Roman", serif; font-kerning: normal; scrollbar-width: thin; scrollbar-color: #b7ac8e transparent; }
+.scripture-passage:focus { outline: none; }
+.scripture-passage:focus-visible, .controller-input .scripture-passage:focus { outline: 2px solid #bc944b; outline-offset: 4px; border-radius: 3px; }
+.scripture-passage > * { max-width: 34em; }
+/* YouVersion's passage markup: paragraphs, poetry lines, headings and verse numbers. */
+.scripture-passage :is(p, .p, .m, .nb, .pi, .mi, .pc) { margin: 0 0 .9em; }
+.scripture-passage :is(.pi, .mi) { padding-left: 1.4em; }
+.scripture-passage .pc { text-align: center; }
+.scripture-passage :is(.q, .q1, .q2, .q3) { margin: 0; padding-left: 2.2em; text-indent: -1.2em; }
+.scripture-passage .q2 { padding-left: 3.4em; }
+.scripture-passage .q3 { padding-left: 4.6em; }
+.scripture-passage :is(.q, .q1, .q2, .q3) + :is(p, .p, .m, .nb) { margin-top: .9em; }
+.scripture-passage .qr { margin: 0 0 .9em; font-style: italic; text-align: right; }
+.scripture-passage .b { height: .9em; }
+.scripture-passage :is(h2, h3, h4, .s, .s1, .s2, .s3, .ms, .ms1, .ms2, .sp) { margin: 1.4em 0 .5em; color: #5a6146; font: italic 400 .95em / 1.4 Georgia, "Times New Roman", serif; }
+.scripture-passage :is(.r, .mr, .d) { margin: -.2em 0 .7em; color: #857b62; font: 400 .7em / 1.5 "Avenir Next", Avenir, "Segoe UI", sans-serif; }
+.scripture-passage > :first-child > :first-child, .scripture-passage > :first-child:not(div) { margin-top: 0; }
+.scripture-passage :is(.yv-vlbl, .label, sup) { margin-right: .22em; color: #a0874f; font: 600 .55em / 1 "Avenir Next", Avenir, "Segoe UI", sans-serif; letter-spacing: .02em; vertical-align: .65em; }
+.scripture-passage :is(.nd, .sc) { font-variant: small-caps; letter-spacing: .02em; }
+.scripture-passage :is(.it, .add, .tl, .qs) { font-style: italic; }
+.scripture-passage .bd { font-weight: 600; }
+.scripture-copyright { grid-area: credit; max-width: 62em; margin: 0; padding-top: 11px; color: #7f7560; border-top: 1px solid #ded3b8; font-size: 10px; line-height: 1.6; }
+.scripture-actions.panel-actions { grid-area: actions; margin-top: 0; }
+.scripture-actions .game-button { margin-block: 0; }
+/* The reading card: a first reading arrives a moment after the text, slowly; a later reading sits quietly. */
+.scripture-moment .state-row-line { font-size: 12.5px; }
+.scripture-moment[data-state="active"] { animation: scripture-moment .9s ease-out .4s both; }
+@keyframes scripture-moment { from { opacity: 0; transform: translateY(6px); } }
+.scripture-status { padding-bottom: 8px; }
+.scripture-status .scripture-unavailable { max-width: 600px; margin-top: 20px; }
+.scripture-loading { margin: 20px 0 16px; }
+.scripture-placeholder { display: grid; gap: 15px; max-width: 34em; }
+.scripture-placeholder span { height: 11px; border-radius: 6px; background: linear-gradient(90deg, #e7ddc4 30%, #efe7d2 50%, #e7ddc4 70%); background-size: 300% 100%; animation: scripture-placeholder 1.8s ease-in-out infinite; }
+.scripture-placeholder span:nth-child(2) { width: 94%; }
+.scripture-placeholder span:nth-child(3) { width: 97%; }
+.scripture-placeholder span:nth-child(4) { width: 56%; }
+@keyframes scripture-placeholder { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (min-width: 900px) {
+  .scripture-reader { grid-template-columns: minmax(0, 1fr) minmax(240px, 280px); grid-template-rows: auto minmax(min(160px, var(--passage-height, 160px)), max-content) auto auto; grid-template-areas: "head moment" "text moment" "credit moment" "actions moment"; column-gap: 52px; }
+  .scripture-reader > .scripture-moment { align-self: start; margin-top: 18px; }
+}
+@media (max-width: 700px) {
+  .scripture-reference.section-title { font-size: 23px; }
+  .scripture-reader { row-gap: 10px; }
+  .scripture-passage { padding-right: 8px; font-size: 18px; line-height: 1.75; }
+  .scripture-text::before, .scripture-text::after { right: 8px; height: 28px; }
+  .scripture-moment.state-row { gap: 8px; padding: 11px 14px 12px; }
 }

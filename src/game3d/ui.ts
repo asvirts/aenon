@@ -336,7 +336,7 @@ export function createUI(options: UIOptions) {
     }))
     for (const [kind, title] of [['settlement', 'Settlements'], ['wilderness', 'Wilderness']] as const) {
       const list = node('div', 'place-list')
-      for (const p of regionPlaces.filter(place => place.kind === kind)) list.append(button(p.name, () => { mapSelection = p.id; refreshPanel() }, `place-chip ${p.id === selected.id ? 'selected' : ''}`))
+      for (const p of regionPlaces.filter(place => place.kind === kind)) { const chip = button(p.name, () => { mapSelection = p.id; refreshPanel() }, `place-chip ${p.id === selected.id ? 'selected' : ''}`); chip.setAttribute('aria-pressed', String(p.id === selected.id)); list.append(chip) }
       side.append(node('h4', 'place-list-title', title), list)
     }
     body.append(description('Distances are shorter than in life, and Gospel episodes from different times share one Season. The map is not an archaeological reconstruction.', 'small-note'))

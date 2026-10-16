@@ -48,7 +48,9 @@ const server = createServer((request, response) => {
   void (async () => {
     const url = new URL(request.url ?? "/", "http://localhost")
     if (url.pathname.startsWith('/api/')) {
-      const result = await handleScriptureRequest(new Request(url, { method: request.method }))
+      // The socket address, not a client-sent header, identifies the client for the rate limit.
+      const headers = { 'x-forwarded-for': request.socket.remoteAddress ?? 'unknown' }
+      const result = await handleScriptureRequest(new Request(url, { method: request.method, headers }))
       response.writeHead(result.status, Object.fromEntries(result.headers))
       response.end(await result.text())
       return

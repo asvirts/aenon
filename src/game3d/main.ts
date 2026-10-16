@@ -1,4 +1,4 @@
-import { Engine, Scene, Vector3 } from '@babylonjs/core'
+import { Scene, Vector3 } from '@babylonjs/core'
 import { createEnvironment, heightAt, riverCenter, riverHalfWidth } from './terrain.ts'
 import { lockCameraToPlayer } from '../art-sample/camera.ts'
 import { canTraverseRegion as canTraverse, findRegionPath as findPath } from './regionNavigation.ts'
@@ -20,6 +20,7 @@ import { openStorage } from './storage.ts'
 import type { ReviewHarness } from './review.ts'
 import { createLighting, lightingPresets } from './lighting.ts'
 import { selectGraphicsQuality, type Quality } from './quality.ts'
+import { createEngine, showStartFailure, watchGraphicsContext } from './graphicsAlert.ts'
 import './style.css'
 import './world.css'
 
@@ -35,7 +36,7 @@ async function boot() {
   let savingBlocked = Boolean(loaded.blocked)
   const options = { definition, curves, layout, pathfind: (start: { x: number; z: number }, goal: { x: number; z: number }) => findPath(start, goal, navigation), canTraverse: (start: { x: number; z: number }, goal: { x: number; z: number }) => canTraverse(start, goal, navigation) }
   const game = createGame({ ...options, saved: loaded.saved, legacy: loaded.legacy })
-  const engine = new Engine(canvas, true, { stencil: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' })
+  const engine = createEngine(canvas, true, { stencil: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' })
   const scene = new Scene(engine); scene.useRightHandedSystem = true
   const camera = createFollowCamera(scene)
   const lighting = createLighting(scene, engine, camera)
@@ -208,6 +209,11 @@ async function boot() {
     const url = URL.createObjectURL(new Blob([raw], { type: 'application/json' })), anchor = document.createElement('a')
     anchor.href = url; anchor.download = `the-season-${new Date().toISOString().slice(0, 10)}.json`; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 5000)
   }
+  function exportSave() {
+    let original: string | null = null
+    if (savingBlocked) try { original = storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { /* Export the live state if reading is blocked. */ }
+    download(original ?? JSON.stringify(game.exportSave(), null, 2))
+  }
   function reloadReplacedSave() {
     // pagehide, visibility and autosave still belong to the old running game.
     // Stop those writes before reloading a deliberately imported or fresh save.
@@ -217,7 +223,7 @@ async function boot() {
   const ui = createUI({ game, definition, layout, quality, zoom,
     onQuality: setQuality, onZoom: applyZoom,
     onPanel: open => { keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
-    onSaveExport: () => { let original: string | null = null; if (savingBlocked) try { original = storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { /* Export the live state if reading is blocked. */ } download(original ?? JSON.stringify(game.exportSave(), null, 2)) },
+    onSaveExport: exportSave,
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
     onRestart: () => { const fresh = createGame(options).exportSave(); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
   })
@@ -272,6 +278,7 @@ async function boot() {
   window.addEventListener('pagehide', save); window.addEventListener('resize', resize)
   let uiTime = 0, saveTime = 0, meterTime = 0, fadeTime = 0
   const fpsSamples: number[] = []
+  watchGraphicsContext(engine, { save: () => { save(); return !savingBlocked && !temporaryStorage }, exportSave, notice: ui.notice })
   engine.runRenderLoop(() => {
     const dt = Math.min(engine.getDeltaTime() / 1000, .05)
     if (!reviewHarness) game.advance(dt)
@@ -331,5 +338,6 @@ async function boot() {
 }
 boot().catch(error => {
   console.error(error); loading.hidden = false; loadingDetail.textContent = 'The Season could not start.'
+  if (showStartFailure(error)) return
   const panel = document.querySelector<HTMLElement>('#load-error')!; panel.hidden = false; panel.textContent = error instanceof Error ? error.message : 'Reload the page to try again.'
 })

@@ -1,0 +1,25 @@
+/* The current-step line under the masthead and its marker in the world (#72). */
+.objective-line { pointer-events: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 236px; margin: 0; padding: 9px 11px 10px; border: 1px solid #e5d5a734; border-radius: 4px; color: #f8edcf; background: #2d3827c9; backdrop-filter: blur(12px); box-shadow: 0 2px 6px #15200f1a; text-align: left; text-shadow: 0 1px 4px #1c2716; transition: opacity 160ms ease; }
+.objective-line:hover { background: #435035ed; border-color: #d8c28b9e; }
+.objective-eyebrow { color: #d6c08a; font-size: 8px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.objective-eyebrow:empty, .objective-where:empty { display: none; }
+.objective-text { font-size: 12px; line-height: 1.45; }
+.objective-where { display: flex; align-items: center; gap: 7px; color: #f0d796; font-size: 10px; letter-spacing: .03em; }
+.objective-where::before { content: ""; flex: none; width: 6px; height: 6px; background: #e2c27a; box-shadow: 0 0 0 1px #2d3827; transform: rotate(45deg); }
+.objective-line.in-fight { opacity: .55; }
+.objective-line.in-fight:hover, .objective-line.in-fight:focus-visible { opacity: 1; }
+
+.objective-layer { position: fixed; z-index: 2; inset: 0; overflow: hidden; pointer-events: none; transition: opacity 160ms ease; }
+.objective-layer.in-fight { opacity: .45; }
+.objective-marker, .objective-arrow { position: absolute; top: 0; left: 0; will-change: transform; }
+.objective-bob { position: absolute; left: 0; bottom: 0; display: block; animation: objective-bob 1.8s ease-in-out infinite; }
+.objective-diamond { display: block; width: 15px; height: 15px; margin-left: -7.5px; background: linear-gradient(135deg, #f4dc9c, #cfa95c); border: 2px solid #2d3827; border-radius: 2px; box-shadow: 0 0 0 1px #f7ecd4b3, 0 3px 9px #141d10a6; transform: rotate(45deg); }
+.objective-arrow { width: 32px; height: 32px; margin: -16px 0 0 -16px; border: 1.5px solid #e2c98e; border-radius: 50%; background: #2a3524e6; box-shadow: 0 2px 10px #141d10a6; }
+.objective-arrow-head { position: absolute; inset: 0; display: block; }
+.objective-arrow-head::before { content: ""; position: absolute; top: 9px; left: 10px; width: 13px; height: 12px; background: #ecd08f; clip-path: polygon(0 0, 100% 50%, 0 100%, 28% 50%); }
+@keyframes objective-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+@media (max-width: 700px) {
+  .objective-line { width: 175px; padding: 7px 9px 8px; }
+  .objective-text { font-size: 11px; }
+}

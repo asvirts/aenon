@@ -173,25 +173,29 @@ for (const place of settlements) {
   // silently change the defeat step already shown in an existing journal.
   const roadThreats: Record<string, string> = { aenon: 'salim-threat-0', salim: 'salim-threat-0', scythopolis: 'gilboa-threat-2', pella: 'pella-threat-0', gadara: 'gadara-threat-0', nazareth: 'nazareth-threat-0', cana: 'cana-threat-0', sepphoris: 'sepphoris-threat-0', 'gath-hepher': 'cana-threat-0', nain: 'moreh-threat-1', legio: 'legio-threat-0', jotapata: 'jotapata-threat-0', tiberias: 'tiberias-threat-0', magdala: 'gennesaret-threat-0', capernaum: 'capernaum-threat-0', bethsaida: 'bethsaida-threat-0', gamla: 'gamla-threat-0', hippus: 'hippus-threat-0' }
   const nearestThreat = hostiles.find(hostile => hostile.id === roadThreats[place.id])!
+  const targetName = objects.find(o => o.id === nearestThreat.id)!.name
   const firstRequired = place.id === 'aenon' ? ['beside-the-water'] : undefined
-  quests.push({ id: firstId, giverId, repeatable: false, requiredQuestIds: firstRequired, finishedLine: `${source.name} has the supplies needed for the ${source.trade.toLowerCase()}'s work.`,
-    steps: [{ kind: 'hold', goodId, count: 4, line: `${source.lines[0]} Bring four ${goodId}.` }, { kind: 'return', goodId, count: 4, line: `Return to ${source.name} with four ${goodId}.` }],
+  // Every line is authored per settlement in region.ts; counts and goods there must match these steps.
+  quests.push({ id: firstId, giverId, repeatable: false, requiredQuestIds: firstRequired, finishedLine: source.finished[0],
+    steps: [{ kind: 'hold', goodId, count: 4, line: source.lines[0] }, { kind: 'return', goodId, count: 4, line: source.returns[0] }],
     reward: { coin: 30 * (b + 1), goods: [], adventurerExperience: courseGrant(place, 0), gear: [{ id: `${['jordan', 'hill-country', 'galilee'][b]}-common-sword`, rarity: 'common' }] } })
-  quests.push({ id: secondId, giverId, repeatable: false, requiredQuestIds: [firstId], finishedLine: `${source.name} thanks you for opening the nearby road.`,
-    steps: [{ kind: 'defeat', hostileId: nearestThreat.id, line: `${source.lines[1]} Deal with ${objects.find(o => o.id === nearestThreat.id)!.name}.` }, { kind: 'return', goodId: 'wood', count: 1, line: `Bring a bundle of wood to ${source.name} for the roadside shelter.` }],
+  quests.push({ id: secondId, giverId, repeatable: false, requiredQuestIds: [firstId], finishedLine: source.finished[1],
+    steps: [{ kind: 'defeat', hostileId: nearestThreat.id, line: source.lines[1].replace('{target}', targetName) }, { kind: 'return', goodId: 'wood', count: 1, line: source.returns[1] }],
     reward: { coin: 45 * (b + 1), goods: [], adventurerExperience: courseGrant(place, 1), gear: [{ id: `${['jordan', 'hill-country', 'galilee'][b]}-uncommon-leather-coat`, rarity: 'uncommon' }] } })
   const scene = place.scenes?.[0] ?? (place.id === 'magdala' ? sceneNarratives['gennesaret-nets'] : place.id === 'tiberias' ? sceneNarratives['lake-stillness'] : undefined)
-  quests.push({ id: lastId, giverId, repeatable: false, requiredQuestIds: [secondId], finishedLine: `Your work with ${source.name} has strengthened the ordinary life of ${place.name}.`,
-    steps: [...(scene ? [{ kind: 'attend' as const, sceneId: scene.id, line: `Attend ${scene.title.toLowerCase()}. ${source.lines[2]}` }] : [{ kind: 'hold' as const, goodId: neighborGood, count: 3, line: `${source.lines[2]} Gather three ${neighborGood}.` }]), { kind: 'return', goodId: neighborGood, count: 3, line: `Return to ${source.name} with three ${neighborGood} for the neighbors.` }],
+  quests.push({ id: lastId, giverId, repeatable: false, requiredQuestIds: [secondId], finishedLine: source.finished[2],
+    steps: [...(scene ? [{ kind: 'attend' as const, sceneId: scene.id, line: source.lines[2] }] : [{ kind: 'hold' as const, goodId: neighborGood, count: 3, line: source.lines[2] }]), { kind: 'return', goodId: neighborGood, count: 3, line: source.returns[2] }],
     reward: { coin: 60 * (b + 1), goods: [], adventurerExperience: courseGrant(place, 2), gear: [{ id: `${['jordan', 'hill-country', 'galilee'][b]}-rare-shield`, rarity: 'rare' }] } })
   let prerequisite = lastId
   for (const scene of place.scenes?.slice(1) ?? []) {
     const id = `${place.id}-${scene.id}-visit`
-    quests.push({ id, giverId, repeatable: false, requiredQuestIds: [prerequisite], finishedLine: `You have witnessed ${scene.title.toLowerCase()} and returned to ${source.name}.`,
-      steps: [{ kind: 'attend', sceneId: scene.id, line: `Attend ${scene.title.toLowerCase()}.` }, { kind: 'return', goodId: 'flax', count: 1, line: `Return to ${source.name} with a bundle of flax.` }], reward: { coin: 30 * (b + 1), goods: [], adventurerExperience: courseGrant(place, 0) } }); prerequisite = id
+    const visit = source.visits?.[scene.id]
+    if (!visit) throw new Error(`${place.id} needs authored visit lines for ${scene.id}`)
+    quests.push({ id, giverId, repeatable: false, requiredQuestIds: [prerequisite], finishedLine: visit[2],
+      steps: [{ kind: 'attend', sceneId: scene.id, line: visit[0] }, { kind: 'return', goodId: 'flax', count: 1, line: visit[1] }], reward: { coin: 30 * (b + 1), goods: [], adventurerExperience: courseGrant(place, 0) } }); prerequisite = id
   }
-  quests.push({ id: `${place.id}-daily-provisions`, giverId, repeatable: true, requiredQuestIds: [prerequisite], finishedLine: `${source.name} has enough provisions for now. More will always be welcome.`,
-    steps: [{ kind: 'hold', goodId, count: 3, line: `${place.name} still needs ${goodId}. Bring three when you have some to spare.` }, { kind: 'return', goodId, count: 3, line: `Give the three ${goodId} to ${source.name}.` }], reward: { coin: 15 * (b + 1), goods: [] } })
+  quests.push({ id: `${place.id}-daily-provisions`, giverId, repeatable: true, requiredQuestIds: [prerequisite], finishedLine: source.daily[2],
+    steps: [{ kind: 'hold', goodId, count: 3, line: source.daily[0] }, { kind: 'return', goodId, count: 3, line: source.daily[1] }], reward: { coin: 15 * (b + 1), goods: [] } })
 }
 
 export const journeys: WorldJourney[] = ports.flatMap(from => from.destinationIds.map(destination => {

@@ -177,6 +177,7 @@ describe('recoverable browser saves', () => {
   it('reports unavailable browser storage without pretending the save succeeded', () => {
     const unavailable = { getItem() { throw new Error('Denied') }, setItem() { throw new Error('Denied') }, removeItem() { throw new Error('Denied') } }
     assert.equal(loadGameSave(unavailable).blocked, true)
+    assert.equal(loadGameSave(unavailable).unavailable, true)
     assert.equal(saveGame(unavailable, savedGame()).ok, false)
   })
 })

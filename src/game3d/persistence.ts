@@ -8,7 +8,8 @@ export const LEGACY_SAVE_KEY = 'aenon-season-save-v2'
 export const BACKUP_PREFIX = 'aenon-season-save-v3-backup-'
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 export type SaveResult = { ok: boolean; warning?: string; blocked?: boolean; backupKey?: string }
-export type LoadedSave = { saved?: SavedGame; legacy?: SeasonState; warning?: string; blocked?: boolean; backupKey?: string }
+/** `unavailable` marks a blocked load where browser storage itself could not be read, so there is no original to export. */
+export type LoadedSave = { saved?: SavedGame; legacy?: SeasonState; warning?: string; blocked?: boolean; unavailable?: boolean; backupKey?: string }
 
 const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
 const text = (v: unknown): v is string => typeof v === 'string' && v.length > 0 && v.length < 2000
@@ -201,7 +202,7 @@ export function loadGameSave(storage: SaveStorage, definition?: SeasonDefinition
     try { legacy = parse(legacyRaw) } catch { return { blocked: true, warning: preserve('The earlier save could not be read.') } }
     const problem = stateProblem(legacy, definition)
     return problem ? { blocked: true, warning: preserve(problem) } : { legacy: legacy as SeasonState, warning: 'Your earlier progress is ready to continue. The original save is kept unchanged.' }
-  } catch { return { blocked: true, warning: 'Browser storage is unavailable. Progress cannot be saved; export your Season before leaving.' } }
+  } catch { return { blocked: true, unavailable: true, warning: 'Browser storage is unavailable. Progress cannot be saved; export your Season before leaving.' } }
 }
 
 export function saveGame(storage: SaveStorage, saved: SavedGame, definition?: SeasonDefinition, layout?: WorldLayout): SaveResult {

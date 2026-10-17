@@ -1,6 +1,6 @@
 import { loadSeason, type Hostile, type SeasonState } from "./index.ts"
-import { copyState, presentAdventurer } from "./lib/begin.ts"
-import { experienceInsideBand, readAdventurerLevel } from "./lib/experience.ts"
+import { copyState, presentAdventurer, trainedSkills, type QuestProgress, type TrainedSkill } from "./lib/begin.ts"
+import { experienceInsideBand, readAdventurerLevel, readTrainedLevel } from "./lib/experience.ts"
 import { gatherAtSpot } from "./lib/gather.ts"
 import { takeOffPiece, wearPiece, wornGear } from "./lib/gear.ts"
 import { hunt, pickUp, receiveDrop } from "./lib/hunt.ts"
@@ -25,6 +25,8 @@ type RuntimeSave = SavedGame["runtime"] & {
 type Enemy = { view: HostileView; object: WorldObject; definition: Hostile; attackIn: number; burns: Burn[]; path: Point[]; repathIn: number }
 type Work = { kind: "gather" | "hunt"; id: string; elapsed: number; duration: number }
 type Journey = { definition: WorldJourney; path: Point[]; progress: number; duration: number }
+/** The levels and quest steps the last emitted events describe. */
+type ProgressMark = { level: number; skills: Record<TrainedSkill, number>; quests: Map<string, QuestProgress> }
 
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.z - b.z)
 const point = (p: Point): Point => ({ x: p.x, z: p.z })
@@ -380,7 +382,8 @@ export function createGame(options: GameOptions): Game {
       if (result.ok) { carcasses = carcasses.filter(candidate => candidate.id !== carcass.id); syncCarcasses() }
     }
     if (!result.ok) { notice(result.reason ?? "Cannot harvest here."); cancel(); return }
-    events.push({ kind: "harvest", targetId: completed.id, point: point(position) })
+    const skill = completed.kind === "hunt" ? "Hunting" : definition.spots.find(spot => spot.id === completed.id)!.skill
+    events.push({ kind: "harvest", targetId: completed.id, skill, point: point(position) })
     resolveProgress()
     if (completed.kind === "hunt" || spots.find(spot => spot.id === completed.id)!.stock <= 0) {
       if (completed.kind === "gather") notice("The Spot is depleted. Choose another task while it replenishes.")
@@ -399,7 +402,7 @@ export function createGame(options: GameOptions): Game {
         hurtEnemy(victim, basicDamage(victim) * (mace ? 2.5 : 1.8))
         if (mace && victim.view.status !== "dead") { victim.view.stunned = 0.8; victim.view.windup = 0; victim.view.attackPoint = null; victim.view.status = "chase" }
       }
-    } else if (cast.kind === "guard") { cooldowns.guard = mace ? 10 : 9; guardRemaining = mace ? 3 : 2.5 }
+    } else if (cast.kind === "guard") { cooldowns.guard = mace ? 10 : 9; guardRemaining = mace ? 3 : 2.5; events.push({ kind: "guard" }) }
     else {
       const toward = cast.point ?? { x: position.x + Math.sin(heading) * 4, z: position.z + Math.cos(heading) * 4 }
       const direction = { x: toward.x - position.x, z: toward.z - position.z }
@@ -529,7 +532,29 @@ export function createGame(options: GameOptions): Game {
     syncFight()
     acquaintance()
   }
+  function progressMark(): ProgressMark {
+    const skills = {} as Record<TrainedSkill, number>
+    for (const skill of trainedSkills) skills[skill] = readTrainedLevel(curves.trained, state.trainedExperience[skill])
+    return { level: maxHitpoints(), skills, quests: new Map(state.questProgress.map(progress => [progress.questId, { ...progress }])) }
+  }
+  /** Reads level-ups and quest steps from the Season state, so every rule that grants experience or moves a quest emits them. */
+  function noteProgress() {
+    const next = progressMark()
+    if (next.level > mark.level) events.push({ kind: "level-up", skill: "Adventurer", level: next.level })
+    for (const skill of trainedSkills) if (next.skills[skill] > mark.skills[skill]) events.push({ kind: "level-up", skill, level: next.skills[skill] })
+    for (const progress of next.quests.values()) {
+      const before = mark.quests.get(progress.questId)
+      // Starting, advancing, and finishing a quest each move its journal line.
+      if (!before || before.stepIndex !== progress.stepIndex || before.finished !== progress.finished) events.push({ kind: "quest-step", questId: progress.questId, stepIndex: progress.stepIndex, finished: progress.finished })
+    }
+    mark = next
+  }
   function act(action: GameAction): ActionResult {
+    const result = perform(action)
+    noteProgress()
+    return result
+  }
+  function perform(action: GameAction): ActionResult {
     if (action.type === "finish-acquaintance") { acquaintanceAnchor = null; return { ok: true } }
     syncFight()
     if (state.playingSceneId && action.type !== "finish") return { ok: false, reason: "scene-playing" }
@@ -601,6 +626,9 @@ export function createGame(options: GameOptions): Game {
       if (food && definition.restoreShares) state.currentHitpoints = Math.min(maxHitpoints(), beforeHitpoints + maxHitpoints() * definition.restoreShares[food.rarity])
     }
     if (result.ok) {
+      if (action.type === "buy" || action.type === "sell") events.push({ kind: action.type, vendorId: action.vendorId })
+      else if (action.type === "read") events.push({ kind: "read", id: action.id })
+      else if (action.type === "make") events.push({ kind: definition.cookingRecipes?.some(recipe => recipe.id === action.recipeId) ? "cook" : "craft", recipeId: action.recipeId })
       if (action.type === "cache") {
         const origin = objects.get(action.id) ?? position
         for (const dropped of state.pickups.slice(previousPickupCount)) pickups.push({ ...dropped, id: `pickup:${pickupSequence++}:${dropped.gearId}`, ...point(origin) })
@@ -625,11 +653,12 @@ export function createGame(options: GameOptions): Game {
   if (state.playingSceneId) {
     openPanel("person", sceneObjects(state.playingSceneId)[0]?.id ?? state.playingSceneId)
   }
+  let mark = progressMark()
   return {
     advance(seconds) {
       if (paused || state.playingSceneId || !Number.isFinite(seconds) || seconds <= 0) return
       let remaining = seconds
-      while (remaining > 1e-9 && !paused && !state.playingSceneId) { const step = Math.min(0.05, remaining); tick(step); remaining -= step }
+      while (remaining > 1e-9 && !paused && !state.playingSceneId) { const step = Math.min(0.05, remaining); tick(step); noteProgress(); remaining -= step }
     },
     moveTo(destination) {
       if (paused || state.playingSceneId) return
@@ -656,7 +685,7 @@ export function createGame(options: GameOptions): Game {
       const next = planApproach(destination, enemyById(id) ? meleeRange : interactionRange)
       if (!next) { notice("There is no clear path to that."); cancel(); return }
       route = next; repathIn = 0.4
-      if (!route.length) startInteraction()
+      if (!route.length) { startInteraction(); noteProgress() }
     },
     technique(kind, destination) {
       if (paused || journey || state.playingSceneId || cooldowns[kind] > 0 || (destination && !validPoint(destination))) return
@@ -669,7 +698,7 @@ export function createGame(options: GameOptions): Game {
         if (kind === "guard" && previousTarget && selected && selected.view.status !== "dead") targetId = selected.view.id
         commitTechnique({ kind, remaining: 0, ...(destination ? { point: point(destination) } : {}) })
       }
-      syncFight()
+      syncFight(); noteProgress()
     },
     cancel,
     setPaused(value) { cancel(false); paused = value },

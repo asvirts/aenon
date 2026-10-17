@@ -6,6 +6,7 @@ import { sceneNarratives, personStories, curves } from './content.ts'
 import { gearDisplayNames, specialFindNames, rarities } from './economy.ts'
 import { nivBibleId } from '../season/lib/begin.ts'
 import { creditGroups } from './credits.ts'
+import { audioControls, type AudioControlsTarget } from './audioControls.ts'
 import { qualities, qualityDescriptions, type Quality } from './quality.ts'
 import { actionBar, button, description, lead, lockText, node, questAction, questTitle, rarityBadge, row, section, spoken, stateLabels, stateLine, stateRow } from './panelFrame.ts'
 import { backTarget, footerText, isPage, menuEntries, pageTab, reachedFromMenu, turnPage } from './pages.ts'
@@ -21,6 +22,8 @@ export type UIOptions = {
   onPanel: (open: boolean) => void; onSaveExport: () => void
   onSaveImport?: (raw: string) => void | Promise<void>; onRestart?: () => void
   quality?: Quality; zoom?: number
+  /** Issue #40: the Sound group in Settings. */
+  audio?: AudioControlsTarget
 }
 
 const pretty = (name: string) => gearDisplayNames[name] ?? name.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
@@ -786,7 +789,7 @@ export function createUI(options: UIOptions) {
   }
   // Settings is a column of groups. Each builder returns one; an Audio group (#40) slots in after Graphics.
   function settingsPanel(): void {
-    body.append(graphicsSettings(), controllerSettings(), saveSettings(), creditsSettings())
+    body.append(graphicsSettings(), ...(options.audio ? [audioSettings(options.audio)] : []), controllerSettings(), saveSettings(), creditsSettings())
   }
   function settingsGroup(title: string, ...children: HTMLElement[]): HTMLElement {
     const group = section(title, ...children)
@@ -806,6 +809,10 @@ export function createUI(options: UIOptions) {
     const zoom = node('input'); zoom.type = 'range'; zoom.id = 'game-zoom'; zoom.min = String(cameraZoom.min); zoom.max = String(cameraZoom.max); zoom.step = '1'; zoom.value = String(zoomDistance)
     zoom.addEventListener('input', () => { zoomDistance = Number(zoom.value); options.onZoom(zoomDistance) })
     return settingsGroup('Graphics', label, select, qualityDetail, zoomLabel, zoom, row('Live performance', 'Frame rate and render size on this device.', node('output', 'performance-output', performanceText)))
+  }
+  /** The Audio group (#40): the sound-effect and music settings. */
+  function audioSettings(audio: AudioControlsTarget): HTMLElement {
+    return settingsGroup('Audio', ...audioControls(audio))
   }
   function controllerSettings(): HTMLElement {
     const connectedPads = typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function' ? [] : [...navigator.getGamepads()].filter((pad): pad is Gamepad => pad !== null)

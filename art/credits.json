@@ -492,6 +492,51 @@
       "licenseUrl": "https://3dtextures.me/about/",
       "retrieved": "2026-10-11",
       "changes": "Resampled from 1024 to 512 pixels with mipmaps using KTX-Software 4.4.2. UASTC with Zstd, normalized linear RGB normal vectors; no channel swizzle. Original source maps, checksums and license declaration retained in art/vendor/3dtextures/ground. Warm pigment tint and anti-tiling blending are applied at runtime."
+    },
+    {
+      "files": [
+        "public/game-audio/settlement-desert-city.mp3"
+      ],
+      "category": "Music",
+      "title": "Desert City (Settlement music)",
+      "author": "Kevin MacLeod",
+      "authorUrl": "https://incompetech.com/",
+      "source": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100564",
+      "license": "CC-BY-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved": "2026-10-16",
+      "attribution": "\"Desert City\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/",
+      "changes": "Re-encoded from the 320 kbps MP3 to 128 kbps MP3 with ffmpeg; metadata removed. Not trimmed."
+    },
+    {
+      "files": [
+        "public/game-audio/wilderness-duduk-kanun.mp3"
+      ],
+      "category": "Music",
+      "title": "duduk, kanun. loop (Wilderness music)",
+      "author": "muri_kuri",
+      "authorUrl": "https://freesound.org/people/muri_kuri/",
+      "source": "https://freesound.org/people/muri_kuri/sounds/690455/",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "retrieved": "2026-10-16",
+      "attribution": "duduk, kanun. loop.wav by muri_kuri -- https://freesound.org/s/690455/ -- License: Creative Commons 0",
+      "changes": "Taken from the public 128 kbps HQ preview MP3 (not the original WAV) and re-encoded at 128 kbps with ffmpeg; metadata removed. Not trimmed."
+    },
+    {
+      "files": [
+        "public/game-audio/fight-desert-storm.mp3"
+      ],
+      "category": "Music",
+      "title": "Action Music Loop 1 \"Desert Storm\" (Fight music)",
+      "author": "MathewHenry",
+      "authorUrl": "https://freesound.org/people/MathewHenry/",
+      "source": "https://freesound.org/people/MathewHenry/sounds/685390/",
+      "license": "CC-BY-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "retrieved": "2026-10-16",
+      "attribution": "Action Music Loop 1 \"Desert Storm\" by MathewHenry -- https://freesound.org/s/685390/ -- License: Attribution 4.0",
+      "changes": "Taken from the public 128 kbps HQ preview MP3 (not the original WAV) and re-encoded at 128 kbps with ffmpeg; metadata removed. Not trimmed."
     }
   ],
   "software": [

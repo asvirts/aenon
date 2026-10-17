@@ -6,6 +6,7 @@ import { createGame } from '../season/realtime.ts'
 import { definition, curves, layout, navigation } from './content.ts'
 import { loadGameSave, saveGame, importGameSave, restartGameSave, SAVE_KEY, LEGACY_SAVE_KEY } from './persistence.ts'
 import { createUI } from './ui.ts'
+import { createObjectiveHud } from './objectiveHud.ts'
 import { createWorld } from './world.ts'
 import { configureAssetDecoders } from './assetDecoders.ts'
 import { regionPlaces, regionRoads } from './region.ts'
@@ -227,6 +228,7 @@ async function boot() {
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
     onRestart: () => { const fresh = createGame(options).exportSave(); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
   })
+  const objective = createObjectiveHud({ game, definition, curves, layout, isPanelOpen: ui.isPanelOpen, openJournal: () => ui.openPanel('journal') })
   if (review) ui.setSaveStatus('Review session. Progress and graphics preferences stay in memory.')
   else if (temporaryStorage) ui.setSaveStatus('Browser storage is unavailable. Export your progress before leaving.', true)
   else if (loaded.warning) ui.setSaveStatus(loaded.warning, savingBlocked)
@@ -293,6 +295,7 @@ async function boot() {
     lockCameraToPlayer(camera, new Vector3(snapshot.position.x, playerHeight, snapshot.position.z))
     scene.updateTransformMatrix()
     world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight, coverage)
+    objective.update(snapshot, scene.getTransformMatrix().m, canvas.clientWidth, canvas.clientHeight)
     lighting.update(snapshot.position, playerHeight, zoom, engine.getRenderWidth() / engine.getRenderHeight())
     scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt
@@ -334,7 +337,8 @@ async function boot() {
     await reviewHarness.reviewShot(shot, preset)
   }
   else if (savingBlocked || temporaryStorage) ui.openPanel('settings')
-  else ui.notice(loaded.legacy ? 'Your progress is preserved. Welcome back to the Season.' : loaded.saved ? 'Welcome back. Open the journal to continue your work, or the map to explore.' : 'Welcome to Aenon. Speak to the potter to begin, or explore the riverbank.')
+  // A fresh Season starts with the objective line under the masthead instead of a welcome notice.
+  else if (loaded.legacy || loaded.saved) ui.notice(loaded.legacy ? 'Your progress is preserved. Welcome back to the Season.' : 'Welcome back. Open the journal to continue your work, or the map to explore.')
 }
 boot().catch(error => {
   console.error(error); loading.hidden = false; loadingDetail.textContent = 'The Season could not start.'

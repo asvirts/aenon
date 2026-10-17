@@ -78,14 +78,15 @@ async function boot() {
     return candidates
   }
   function movePanelFocus(direction: Direction): void {
-    const controls = [...document.querySelectorAll<HTMLElement>('#game-panel button:not(:disabled), #game-panel a[href], #game-panel input:not(:disabled), #game-panel select:not(:disabled), #game-panel textarea:not(:disabled)')].filter(element => element.offsetParent !== null)
+    const controls = [...document.querySelectorAll<HTMLElement>('#game-panel button:not(:disabled), #game-panel a[href], #game-panel input:not(:disabled), #game-panel select:not(:disabled), #game-panel textarea:not(:disabled), #game-panel [data-scroll-region]')].filter(element => element.offsetParent !== null)
     if (!controls.length) return
     const index = nextFocus(controls.map(element => element.getBoundingClientRect()), controls.indexOf(document.activeElement as HTMLElement), direction)
     controls[index]?.focus()
   }
-  /** Left and right change a focused list or slider; up and down always move on, so a list never traps focus. */
+  /** Left and right change a focused list or slider. Up and down scroll a focused passage to its end, then move on, so nothing traps focus. */
   function navigatePanel(direction: Direction): void {
     if ((direction === 'left' || direction === 'right') && stepPanelValue(direction === 'left' ? -1 : 1)) return
+    if ((direction === 'up' || direction === 'down') && ui.scrollFocused(direction === 'up' ? -1 : 1)) return
     movePanelFocus(direction)
   }
   function stepPanelValue(delta: 1 | -1): boolean {
@@ -144,6 +145,8 @@ async function boot() {
       // LB and RB turn pages here, so they never guard or reposition while the world is paused.
       if (intents.previousPage) ui.turnPage(-1)
       else if (intents.nextPage) ui.turnPage(1)
+      // The right stick, which zooms in the world, scrolls an open passage.
+      if (intents.zoomAxis !== 0) ui.scrollPanel(intents.zoomAxis * dt * 900)
       if (intents.menu) ui.closePanel()
       else if (intents.cancel) ui.back()
       return

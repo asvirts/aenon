@@ -22,6 +22,8 @@ import type { ReviewHarness } from './review.ts'
 import { createLighting, lightingPresets } from './lighting.ts'
 import { selectGraphicsQuality, type Quality } from './quality.ts'
 import { createEngine, showStartFailure, watchGraphicsContext } from './graphicsAlert.ts'
+import { createPrompts } from './prompts.ts'
+import { seenAtLoad, withSeenHints } from './guidance.ts'
 import './style.css'
 import './world.css'
 
@@ -203,7 +205,7 @@ async function boot() {
   }
   function save() {
     if (savingBlocked || temporaryStorage) return
-    const result = saveGame(storage, game.exportSave(), definition, layout)
+    const result = saveGame(storage, prompts.attach(game.exportSave()), definition, layout)
     if (!result.ok) { savingBlocked = true; const warning = result.warning ?? 'Saving is unavailable. Export a copy of your progress.'; ui.setSaveStatus(warning, true); ui.notice(warning) }
   }
   function download(raw: string) {
@@ -213,7 +215,7 @@ async function boot() {
   function exportSave() {
     let original: string | null = null
     if (savingBlocked) try { original = storage.getItem(SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY) } catch { /* Export the live state if reading is blocked. */ }
-    download(original ?? JSON.stringify(game.exportSave(), null, 2))
+    download(original ?? JSON.stringify(prompts.attach(game.exportSave()), null, 2))
   }
   function reloadReplacedSave() {
     // pagehide, visibility and autosave still belong to the old running game.
@@ -226,9 +228,10 @@ async function boot() {
     onPanel: open => { keys.clear(); game.setPaused(open || document.hidden); scene.animationTimeScale = open || document.hidden ? 0 : 1; if (!open) canvas.focus(); save() },
     onSaveExport: exportSave,
     onSaveImport: raw => { const result = importGameSave(storage, raw, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'This save could not be restored.') },
-    onRestart: () => { const fresh = createGame(options).exportSave(); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
+    onRestart: () => { const fresh = withSeenHints(createGame(options).exportSave(), []); const result = restartGameSave(storage, fresh, definition, layout); if (result.ok) reloadReplacedSave(); else ui.notice(result.warning ?? 'The previous save could not be backed up; no changes were made.') },
   })
   const objective = createObjectiveHud({ game, definition, curves, layout, isPanelOpen: ui.isPanelOpen, openJournal: () => ui.openPanel('journal') })
+  const prompts = createPrompts({ game, seen: seenAtLoad(loaded), enabled: !review, scene, camera, canvas, panel: () => ui.panel(), controller: () => gamepadWelcomed, zoom: () => zoom })
   if (review) ui.setSaveStatus('Review session. Progress and graphics preferences stay in memory.')
   else if (temporaryStorage) ui.setSaveStatus('Browser storage is unavailable. Export your progress before leaving.', true)
   else if (loaded.warning) ui.setSaveStatus(loaded.warning, savingBlocked)
@@ -296,6 +299,7 @@ async function boot() {
     scene.updateTransformMatrix()
     world.update(snapshot, camera, canvas.clientWidth, canvas.clientHeight, coverage)
     objective.update(snapshot, scene.getTransformMatrix().m, canvas.clientWidth, canvas.clientHeight)
+    prompts.frame(snapshot)
     lighting.update(snapshot.position, playerHeight, zoom, engine.getRenderWidth() / engine.getRenderHeight())
     scene.animationTimeScale = (reviewHarness ? document.hidden || ui.isPanelOpen() : snapshot.paused) ? 0 : 1
     fadeTime += dt

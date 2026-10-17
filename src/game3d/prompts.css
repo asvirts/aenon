@@ -1,0 +1,14 @@
+/* One-time control prompts and quest hints (prompts.ts). Beneath the nameplate layer (z-index 2) and the HUD (3),
+   so nameplates and HUD controls are never covered; left of centre, clear of the Adventurer and the technique bar. */
+.guide-cards { position: fixed; z-index: 1; left: 29px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; width: min(292px, calc(100% - 48px)); pointer-events: none; transition: opacity 90ms ease; }
+.guide-cards.yielding { opacity: 0; }
+.guide-card { padding: 12px 16px 13px; border: 1px solid #e7d7ae50; border-left: 2px solid #d1b171; border-radius: 6px; background: #303b27e8; color: #f8ecd0; box-shadow: 0 3px 20px #1f301c33; backdrop-filter: blur(9px); animation: guide-arrive 260ms ease-out; }
+.guide-card.hint { background: #3a3f2be8; }
+.guide-title { display: block; margin-bottom: 6px; color: #dcc895; font-size: 8px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.guide-text { margin: 0; font-size: 12px; line-height: 1.65; }
+.guide-keys { white-space: nowrap; }
+.guide-text kbd { display: inline-block; min-width: 19px; margin: 0 2px; padding: 1px 5px; border: 1px solid #d6bf8099; border-bottom-width: 2px; border-radius: 4px; background: #4a5537; color: #fff3d1; font: 600 10px / 1.5 inherit; text-align: center; }
+@keyframes guide-arrive { from { opacity: 0; transform: translateX(-10px); } }
+@media (prefers-reduced-motion: reduce) { .guide-card { animation: none; } .guide-cards { transition: none; } }
+/* Phones: right of the stacked navigation and above the target panel, below the Adventurer. */
+@media (max-width: 700px) { .guide-cards { left: auto; right: 16px; top: auto; bottom: 196px; transform: none; width: min(240px, calc(100% - 125px)); gap: 6px; } .guide-card { padding: 9px 12px 10px; } .guide-text { font-size: 11px; line-height: 1.5; } }

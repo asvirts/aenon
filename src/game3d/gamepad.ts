@@ -33,6 +33,31 @@ export type GamepadIntents = {
   right: boolean
 }
 
+/** Button names on the standard mapping, as printed on an Xbox-layout controller. */
+export const standardButtonNames = ['A', 'B', 'X', 'Y', 'LB', 'RB', 'LT', 'RT', 'Back', 'Start', 'Left stick', 'Right stick', 'D-pad up', 'D-pad down', 'D-pad left', 'D-pad right'] as const
+
+export type GamepadButtonIntent = Exclude<keyof GamepadIntents, 'move' | 'zoomAxis'>
+/**
+ * The standard-mapping buttons that raise each intent. decodeGamepad reads this table,
+ * and on-screen wording names the first button listed, so the two cannot drift apart.
+ */
+export const gamepadButtons: Readonly<Record<GamepadButtonIntent, readonly number[]>> = {
+  interact: [0], cancel: [1, 8], offence: [2, 7], guard: [3, 4], dash: [5], menu: [9],
+  previousPage: [4], nextPage: [5], up: [12], down: [13], left: [14], right: [15],
+}
+/** Which stick runs and which zooms; zoom reads the stick's vertical axis. */
+export const gamepadSticks = { move: 'left', zoom: 'right' } as const
+const stickAxes = { left: { x: 0, y: 1 }, right: { x: 2, y: 3 } } as const
+
+/** The name printed on the button that raises an intent, for on-screen wording. */
+export function gamepadButtonName(intent: GamepadButtonIntent): string {
+  return standardButtonNames[gamepadButtons[intent][0]!]!
+}
+/** "left stick" or "right stick", for on-screen wording. */
+export function gamepadStickName(use: keyof typeof gamepadSticks): string {
+  return `${gamepadSticks[use]} stick`
+}
+
 function pressedAt(buttons: readonly { pressed: boolean }[], index: number): boolean {
   return buttons[index]?.pressed ?? false
 }
@@ -77,23 +102,25 @@ export function decodeGamepad(
   current: GamepadSnapshot,
   previous: GamepadSnapshot | readonly boolean[] | null | undefined,
 ): GamepadIntents {
-  const ax = current.axes[0] ?? 0
-  const ay = current.axes[1] ?? 0
+  const run = stickAxes[gamepadSticks.move], zoom = stickAxes[gamepadSticks.zoom]
+  const ax = current.axes[run.x] ?? 0
+  const ay = current.axes[run.y] ?? 0
+  const pressed = (intent: GamepadButtonIntent) => gamepadButtons[intent].some(index => edge(current, previous, index))
   return {
     move: stickMove(ax, ay),
-    zoomAxis: scaledDeflection(current.axes[3] ?? 0),
-    interact: edge(current, previous, 0),
-    offence: edge(current, previous, 2) || edge(current, previous, 7),
-    guard: edge(current, previous, 3) || edge(current, previous, 4),
-    dash: edge(current, previous, 5),
-    cancel: edge(current, previous, 1) || edge(current, previous, 8),
-    menu: edge(current, previous, 9),
-    previousPage: edge(current, previous, 4),
-    nextPage: edge(current, previous, 5),
-    up: edge(current, previous, 12),
-    down: edge(current, previous, 13),
-    left: edge(current, previous, 14),
-    right: edge(current, previous, 15),
+    zoomAxis: scaledDeflection(current.axes[zoom.y] ?? 0),
+    interact: pressed('interact'),
+    offence: pressed('offence'),
+    guard: pressed('guard'),
+    dash: pressed('dash'),
+    cancel: pressed('cancel'),
+    menu: pressed('menu'),
+    previousPage: pressed('previousPage'),
+    nextPage: pressed('nextPage'),
+    up: pressed('up'),
+    down: pressed('down'),
+    left: pressed('left'),
+    right: pressed('right'),
   }
 }
 
